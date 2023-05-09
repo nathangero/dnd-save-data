@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import firebase from 'firebase/app';
 import { getAnalytics } from "firebase/analytics";
 const admin = require('firebase-admin');
 
@@ -23,7 +23,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
+firebase.initializeApp(firebaseConfig)
 
-const db = app.database()
-
-export default db
+export const db = app.database()
+export const auth = firebase.auth()
