@@ -43,8 +43,9 @@
 </template>
   
 <script>
-import firebase from 'firebase/app'
+import firebase from 'firebase/compat/app'
 import 'firebase/auth'
+import store from '@/store'
 
 export default {
   name: 'LoginScreen',
@@ -55,6 +56,7 @@ export default {
     return {
       email: '',
       password: '',
+      confirmPassword: '',
       error: null,
       showSignup: false
     }
@@ -68,6 +70,20 @@ export default {
       } catch (error) {
         this.error = error.message
       }
+    },
+    async signup() {
+        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        .then((userCredential) => {
+          // Signed up successfully
+          const user = userCredential.user;
+          store.setUser(user)
+        })
+        .catch((error) => {
+          // Handle errors
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert("error:" + errorCode + errorMessage)
+        });
     },
     showSignupPopup() {
       // Set the showSignup data property to true to display the popup

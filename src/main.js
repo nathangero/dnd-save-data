@@ -1,7 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import store from './store';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
 
-createApp(App).mount('#app')
-document.title = "DND Save Data";
+const app = createApp(App)
+app.use(store)
+app.mount('#app')

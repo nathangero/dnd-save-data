@@ -14,6 +14,10 @@ export default {
   name: 'App',
   components: {
     LoginScreen
+  },
+  mounted() {
+    
+    document.title = "DND Save Data";
   }
 }
 </script>
