@@ -1,15 +1,16 @@
 <template>
   <div>
+    <h1>DND Save Data</h1>
     <div class="center-container">
       <div class="login-screen-container">
-        <form @submit.prevent="login">
-          <input type="email" id="email" v-model="email" placeholder="Email" required>
+        <div class="form">
+          <input type="email" id="email" v-model="emailLogin" placeholder="Email" required>
           <br>
-          <input type="password" id="password" v-model="password" placeholder="Password" required>
+          <input type="password" id="password" v-model="passwordLogin" placeholder="Password" required>
           <br>
-          <button class="login-button" type="submit">Login</button>
+          <button class="login-button" @click="login">Login</button>
           <div v-if="error" class="error">{{ error }}</div>
-        </form>
+        </div>
 
         <p class="sign-up-text">New user? Please make a new account <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a>.</p>
 
@@ -17,21 +18,23 @@
         <transition name="fade" appear>
           <div class="overlay" v-if="showSignup">
             <div class="popup">
-              <form>
+              <div class="form">
                 <h2>Sign up</h2>
+                <input type="text" id="name" v-model="name" placeholder="Name" required>
                 <br>
-                <input type="email" id="email" v-model="email" placeholder="Email" required>
+                <input type="email" id="email" v-model="emailSignup" placeholder="Email" required>
                 <br>
-                <input type="password" id="password" v-model="password" placeholder="Password" required>
+                <input type="password" id="password" v-model="passwordSignup" placeholder="Password" required>
                 <br>
-                <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="Confirm Password" required>
+                <input type="password" id="passwordConfirm" v-model="passwordConfirm" placeholder="Confirm Password" required>
                 <br>
+                <p>Password must be at least 6 characters</p>
                 <div class="signup-buttons">
-                  <button @click="hideSignupPopup" type="reset">Cancel</button>
-                  <button class="sign-up-button" type="submit">Sign Up</button>
+                  <button @click="hideSignupPopup">Cancel</button>
+                  <button class="sign-up-button" @click="signup">Sign Up</button>
                 </div>
                 <div v-if="error" class="error">{{ error }}</div>
-              </form>
+              </div>
               
             </div>
           </div>
@@ -43,9 +46,11 @@
 </template>
   
 <script>
-import firebase from 'firebase/compat/app'
+// import firebase from 'firebase/compat/app'
+import { auth } from "@/firebase.js"
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword  } from "firebase/auth";
 import 'firebase/auth'
-import store from '@/store'
+import { useStore } from 'vuex';
 
 export default {
   name: 'LoginScreen',
@@ -54,44 +59,83 @@ export default {
   },
   data() {
     return {
-      email: '',
-      password: '',
-      confirmPassword: '',
+      store: useStore(),
+      name: '',
+      emailLogin: '',
+      passwordLogin: '',
+      emailSignup: '',
+      passwordSignup: '',
+      passwordConfirm: '',
       error: null,
       showSignup: false
     }
   },
+  setup() {
+    
+  },
   methods: {
     async login() {
       try {
-        await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-        // Redirect the user to the dashboard after successful login
-        this.$router.push('/dashboard')
-      } catch (error) {
-        this.error = error.message
-      }
-    },
-    async signup() {
-        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        await signInWithEmailAndPassword(auth, this.emailLogin, this.passwordLogin)
         .then((userCredential) => {
-          // Signed up successfully
           const user = userCredential.user;
-          store.setUser(user)
+          if (user.email != '') {
+            // Redirect the user to the dashboard after successful login
+            this.store.commit('setUser', user)
+            this.store.commit('setIsLoggedIn', true)
+            this.$router.push('/dashboard')
+          } else {
+            alert("Invalid email/password")
+          }
         })
         .catch((error) => {
           // Handle errors
           const errorCode = error.code;
           const errorMessage = error.message;
-          alert("error:" + errorCode + errorMessage)
-        });
+          console.info("error:" + errorCode + errorMessage)
+          alert(errorCode)
+        })
+        
+      } catch (error) {
+        this.error = error.message
+      }
+    },
+    async signup() {
+      await createUserWithEmailAndPassword(auth, this.emailSignup, this.passwordSignup)
+      .then((userCredential) => {
+        // Signed up successfully
+        const user = userCredential.user;
+        console.info('user: ' + JSON.stringify(user))
+
+        this.store.commit('setUser', user)
+        this.store.commit('setIsLoggedIn', true)
+        this.$router.push('/dashboard')
+      })
+      .catch((error) => {
+        // Handle errors
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.info("error:" + errorCode + errorMessage)
+        alert(errorCode)
+      }).finally(() => {
+        this.hideSignupPopup()
+      });
     },
     showSignupPopup() {
       // Set the showSignup data property to true to display the popup
       this.showSignup = true
+      this.name = ''
+      this.emailSignup = ''
+      this.passwordSignup = ''
+      this.passwordConfirm = ''
     },
     hideSignupPopup() {
       // Set the showSignup data property to false to hide the popup
       this.showSignup = false
+      this.name = ''
+      this.emailSignup = ''
+      this.passwordSignup = ''
+      this.passwordConfirm = ''
     }
   }
 }
@@ -107,15 +151,15 @@ export default {
   text-align: left;
 }
 
-form {
+.form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-form label,
-form input,
-form button {
+.form label,
+.form input,
+.form button {
   margin: 0em 0;
 }
 

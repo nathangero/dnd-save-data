@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import firebase from 'firebase/compat/app';
+// import firebase from 'firebase/compat/app';
 
 const store = createStore({
     state: {
@@ -15,21 +15,7 @@ const store = createStore({
         }
     },
     actions: {
-        signupUser({ commit }, payload) {
-            firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-              .then(response => {
-                const newUser = {
-                  id: response.user.uid,
-                  email: response.user.email,
-                  
-                };
-                commit('setUser', newUser);
-                commit('setIsLoggedIn', true);
-              })
-              .catch(error => {
-                console.log(error);
-              });
-          },
+        
     },
     getters: {
         // This is where you define functions to retrieve state variables in a modified form
