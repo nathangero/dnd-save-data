@@ -1,21 +1,23 @@
 <template>
   <div id="app">
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <h1 class="title">DND Save Data</h1>
-    <LoginScreen />
+    <router-view />
   </div>
   
 </template>
 
 <script>
-import LoginScreen from './components/LoginScreen.vue'
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    LoginScreen
+    
   },
-  mounted() {
+  computed: {
+    ...mapState(['isLoggedIn'])
+  },
+  created() {
     
     document.title = "DND Save Data";
   }
