@@ -13,8 +13,9 @@
         </div>
 
         <p class="sign-up-text">New user? Please make a new account <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a>.</p>
+        <p class="password-reset-text">Forget your password? Reset <a href="#" class="signup-link" @click.prevent="showResetPasswordPopup">here</a>.</p>
 
-        <!-- Popup container -->
+        <!-- Sign Up Popup -->
         <transition name="fade" appear>
           <div class="overlay" v-if="showSignup">
             <div class="popup">
@@ -40,6 +41,25 @@
           </div>
         </transition>
 
+        <!-- Reset Email Popup -->
+        <transition name="fade" appear>
+          <div class="overlay" v-if="showResetPassword">
+            <div class="popup">
+              <div class="form">
+                <h2>Password Reset</h2>
+                <input type="email" id="email" v-model="emailReset" placeholder="Email">
+                <br>
+                <div class="signup-buttons">
+                  <button @click="hideResetPasswordPopup">Cancel</button>
+                  <button class="sign-up-button" @click="resetPassword">Reset</button>
+                </div>
+                <div v-if="error" class="error">{{ error }}</div>
+              </div>
+              
+            </div>
+          </div>
+        </transition>
+
       </div>
     </div>
   </div>
@@ -49,7 +69,7 @@
 import { ROUTER_PATHS } from '@/enums/router-paths'
 import { auth } from "@/firebase.js"
 import { useStore } from 'vuex'
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword  } from "firebase/auth"
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"
 import 'firebase/auth'
 import { writeUserInDb } from "@/functions/rtdb.js"
 
@@ -65,10 +85,12 @@ export default {
       emailLogin: '',
       passwordLogin: '',
       emailSignup: '',
+      emailReset: '',
       passwordSignup: '',
       passwordConfirm: '',
       error: null,
-      showSignup: false
+      showSignup: false,
+      showResetPassword: false
     }
   },
   mounted() {
@@ -83,6 +105,22 @@ export default {
     }
   },
   methods: {
+    async resetPassword() {
+      if (this.emailReset !== '') {
+        await sendPasswordResetEmail(auth, this.emailReset).then(() => {
+          alert('Password reset email sent. Please check your email')
+          this.hideResetPasswordPopup()
+        })
+        .catch((error) => {
+          console.error(error)
+          alert("Email doesn't exist")
+          this.hideResetPasswordPopup()
+        });
+      } else {
+        alert("Fill in an email")
+      }
+      
+    },
     async login() {
       try {
         await signInWithEmailAndPassword(auth, this.emailLogin, this.passwordLogin)
@@ -167,6 +205,10 @@ export default {
       this.passwordSignup = ''
       this.passwordConfirm = ''
     },
+    showResetPasswordPopup() {
+      this.showResetPassword = true
+      this.emailReset = ''
+    },
     hideSignupPopup() {
       // Set the showSignup data property to false to hide the popup
       this.showSignup = false
@@ -174,6 +216,10 @@ export default {
       this.emailSignup = ''
       this.passwordSignup = ''
       this.passwordConfirm = ''
+    },
+    hideResetPasswordPopup() {
+      this.showResetPassword = false
+      this.emailReset = ''
     }
   }
 }
