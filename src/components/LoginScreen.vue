@@ -4,9 +4,9 @@
     <div class="center-container">
       <div class="login-screen-container">
         <div class="form">
-          <input type="email" id="email" v-model="emailLogin" placeholder="Email" required>
+          <input type="email" id="email" v-model="emailLogin" placeholder="Email">
           <br>
-          <input type="password" id="password" v-model="passwordLogin" placeholder="Password" required>
+          <input type="password" id="password" v-model="passwordLogin" placeholder="Password">
           <br>
           <button class="login-button" @click="login">Login</button>
           <div v-if="error" class="error">{{ error }}</div>
@@ -20,13 +20,13 @@
             <div class="popup">
               <div class="form">
                 <h2>Sign up</h2>
-                <input type="text" id="name" v-model="name" placeholder="Name" required>
+                <input type="text" id="name" v-model="name" placeholder="Name">
                 <br>
-                <input type="email" id="email" v-model="emailSignup" placeholder="Email" required>
+                <input type="email" id="email" v-model="emailSignup" placeholder="Email">
                 <br>
-                <input type="password" id="password" v-model="passwordSignup" placeholder="Password" required>
+                <input type="password" id="password" v-model="passwordSignup" placeholder="Password">
                 <br>
-                <input type="password" id="passwordConfirm" v-model="passwordConfirm" placeholder="Confirm Password" required>
+                <input type="password" id="passwordConfirm" v-model="passwordConfirm" placeholder="Confirm Password">
                 <br>
                 <p>Password must be at least 6 characters</p>
                 <div class="signup-buttons">
@@ -46,12 +46,12 @@
 </template>
   
 <script>
-import { ROUTER_PAGES } from '@/enum/router-pages.js'
+import { ROUTER_PATHS } from '@/enums/router-paths'
 import { auth } from "@/firebase.js"
 import { useStore } from 'vuex'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword  } from "firebase/auth"
 import 'firebase/auth'
-import { writeUserInDb, readUserInDb } from "@/functions/rtdb.js"
+import { writeUserInDb } from "@/functions/rtdb.js"
 
 export default {
   name: 'LoginScreen',
@@ -71,8 +71,16 @@ export default {
       showSignup: false
     }
   },
-  setup() {
-    
+  mounted() {
+    console.info('@LoginScreen')
+  },
+  watch: {
+    '$store.state.isLoggedIn'(newValue, oldValue) {
+      // Wait till the user is logged in before going to the dashboard
+      if (newValue && !oldValue) {
+        this.$router.push(ROUTER_PATHS.DASHBOARD)
+      }
+    }
   },
   methods: {
     async login() {
@@ -80,14 +88,9 @@ export default {
         await signInWithEmailAndPassword(auth, this.emailLogin, this.passwordLogin)
         .then((userCredential) => {
           const firebaseUser = userCredential.user
-
-          readUserInDb(firebaseUser.uid).then((user) => {
-            if (user.email != '') {
-              // Redirect the user to the dashboard after successful login
-              this.store.commit('setUser', user)
-              this.store.commit('setIsLoggedIn', true)
-              this.$router.push(ROUTER_PAGES.DASHBOARD)
-            } else {
+          console.info('signed in')
+          this.store.dispatch('getUserInfo', firebaseUser.uid).then((success) => {
+            if (!success) {
               alert("Invalid email/password")
             }
           }).catch(() => {
@@ -108,26 +111,53 @@ export default {
       }
     },
     async signup() {
-      await createUserWithEmailAndPassword(auth, this.emailSignup, this.passwordSignup)
-      .then((userCredential) => {
-        // Signed up successfully
-        const user = userCredential.user
-        console.info('user: ' + JSON.stringify(user))
+      if (this.isInfoValid()) {
+        await createUserWithEmailAndPassword(auth, this.emailSignup, this.passwordSignup)
+        .then((userCredential) => {
+          // Signed up successfully
+          const user = userCredential.user
 
-        writeUserInDb(user, this.name)
-        this.store.commit('setUser', user)
-        this.store.commit('setIsLoggedIn', true)
-        this.$router.push('/dashboard')
-      })
-      .catch((error) => {
-        // Handle errors
-        const errorCode = error.code
-        const errorMessage = error.message
-        console.info("error:" + errorCode + errorMessage)
-        alert(errorCode)
-      }).finally(() => {
-        this.hideSignupPopup()
-      })
+          writeUserInDb(user.uid, this.name, this.emailSignup).then(() => {
+            this.store.dispatch('getUserInfo', user.uid)
+          })
+          
+        })
+        .catch((error) => {
+          // Handle errors
+          let errorCode = error.code
+          console.info("error: " + error.code + " " + error.message)
+          
+          if (error.code == "auth/invalid-email") {
+            errorCode = "Invalid Email"
+          } else if (error.code == "auth/missing-email") {
+            errorCode = "Fill out your email"
+          }
+          alert(errorCode)
+
+        }).finally(() => {
+          if (this.name !== '' && this.emailSignup !== '' && this.passwordSignup !== '' && this.passwordConfirm !== '') {
+            this.hideSignupPopup()
+          }
+          
+        })
+      }
+    },
+    isInfoValid() {
+      if (this.name === '') {
+        alert("Fill in your name")
+        return false
+      } else if (this.emailSignup === '') {
+        alert("Fill out your email")
+        return false
+      } else if (this.passwordSignup.length < 6) {
+        alert("Password must be at least 6 characters")
+        return false
+      } else if (this.passwordSignup !== this.passwordConfirm) {
+        alert("Passwords do not match")
+        return false
+      }
+
+      return true
     },
     showSignupPopup() {
       // Set the showSignup data property to true to display the popup

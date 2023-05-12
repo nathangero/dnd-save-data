@@ -1,6 +1,6 @@
-const ROUTER_PAGES = {
+const ROUTER_PATHS = {
     LOGIN: "/",
     DASHBOARD: '/dashboard',
 }
 
-export { ROUTER_PAGES }
+export { ROUTER_PATHS }

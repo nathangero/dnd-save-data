@@ -4,18 +4,24 @@
 import { ref, set, get, child } from "firebase/database"
 import { db } from "@/firebase.js"
 import User from "@/models/user"
-// import { error } from "jquery"
 
-export async function writeUserInDb(user, name) {
-    const uid = user.uid
-    const email = user.email
-
+export async function writeUserInDb(uid, name, email) {
     const dbRef = 'users/' + uid
     const values = {
         name: name,
         email: email,
+        timeRegistered: new Date().getTime()
     }
-    set(ref(db, dbRef), values)
+
+    return new Promise((resolve, reject) => {
+        set(ref(db, dbRef), values).then((success) => {
+            console.info('wrote new user in db')
+            resolve(success)
+        })
+        .catch ((error) => {
+            reject(error)
+        })
+    })
 }
 
 

@@ -7,9 +7,10 @@
 </template>
 
 <script>
-import { ROUTER_PAGES } from '@/enum/router-pages.js'
+// import { ROUTER_PATHS } from '@/enums/router-paths'
 import { useStore } from 'vuex'
-import { auth } from '@/firebase'
+import Cookies from 'js-cookie'
+import { COOKIE_NAMES } from '@/enums/cookie-names'
 
 export default {
     name: 'DashBoard',
@@ -18,8 +19,13 @@ export default {
             store: useStore()
         }
     },
-    created() {
-        
+    watch: {
+      
+    },
+    mounted() {
+      if (this.store.getters.getUser.id === '') {
+        this.store.commit('setUser', JSON.parse(Cookies.get(COOKIE_NAMES.USER))) // Get backup if any
+      }
     },
     computed: {
       getUserInfo() {
@@ -31,8 +37,6 @@ export default {
     methods: {
       signOut() {
         this.store.commit('signOut')
-        auth.signOut()
-        this.$router.push(ROUTER_PAGES.LOGIN)
       }
     }
 }

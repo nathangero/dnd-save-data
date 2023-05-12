@@ -16,4 +16,13 @@ export default class User {
     getName() {
         return this.name
     }
+
+    static getUserForCookie(user) {
+        return {
+            id: user.id,
+            name: user.name,
+            // characters: user.characters,
+            // sessions: user.sessions
+        }
+    }
 }
