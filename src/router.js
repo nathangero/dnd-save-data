@@ -1,20 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ROUTER_PAGES } from '@/enum/router-pages.js'
 
 import LoginScreen from './components/LoginScreen.vue'
 import DashBoard from './components/DashBoard.vue'
-// import About from './views/Dashboard.vue'
 
 const routes = [
   {
-    path: '/',
+    path: ROUTER_PAGES.LOGIN,
     name: '',
     component: LoginScreen
   },
   {
-    path: '/dashboard',
+    path: ROUTER_PAGES.DASHBOARD,
     name: 'dashboard',
     component: DashBoard
-  }
+  },
+  // {
+  //   path: '',
+  //   name: '',
+  //   component: 
+  // }
 ]
 
 const router = createRouter({

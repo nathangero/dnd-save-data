@@ -46,11 +46,12 @@
 </template>
   
 <script>
-// import firebase from 'firebase/compat/app'
+import { ROUTER_PAGES } from '@/enum/router-pages.js'
 import { auth } from "@/firebase.js"
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword  } from "firebase/auth";
+import { useStore } from 'vuex'
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword  } from "firebase/auth"
 import 'firebase/auth'
-import { useStore } from 'vuex';
+import { writeUserInDb, readUserInDb } from "@/functions/rtdb.js"
 
 export default {
   name: 'LoginScreen',
@@ -78,20 +79,26 @@ export default {
       try {
         await signInWithEmailAndPassword(auth, this.emailLogin, this.passwordLogin)
         .then((userCredential) => {
-          const user = userCredential.user;
-          if (user.email != '') {
-            // Redirect the user to the dashboard after successful login
-            this.store.commit('setUser', user)
-            this.store.commit('setIsLoggedIn', true)
-            this.$router.push('/dashboard')
-          } else {
-            alert("Invalid email/password")
-          }
+          const firebaseUser = userCredential.user
+
+          readUserInDb(firebaseUser.uid).then((user) => {
+            if (user.email != '') {
+              // Redirect the user to the dashboard after successful login
+              this.store.commit('setUser', user)
+              this.store.commit('setIsLoggedIn', true)
+              this.$router.push(ROUTER_PAGES.DASHBOARD)
+            } else {
+              alert("Invalid email/password")
+            }
+          }).catch(() => {
+            alert("User doesn't exist")
+          })
+          
         })
         .catch((error) => {
           // Handle errors
-          const errorCode = error.code;
-          const errorMessage = error.message;
+          const errorCode = error.code
+          const errorMessage = error.message
           console.info("error:" + errorCode + errorMessage)
           alert(errorCode)
         })
@@ -104,22 +111,23 @@ export default {
       await createUserWithEmailAndPassword(auth, this.emailSignup, this.passwordSignup)
       .then((userCredential) => {
         // Signed up successfully
-        const user = userCredential.user;
+        const user = userCredential.user
         console.info('user: ' + JSON.stringify(user))
 
+        writeUserInDb(user, this.name)
         this.store.commit('setUser', user)
         this.store.commit('setIsLoggedIn', true)
         this.$router.push('/dashboard')
       })
       .catch((error) => {
         // Handle errors
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        const errorCode = error.code
+        const errorMessage = error.message
         console.info("error:" + errorCode + errorMessage)
         alert(errorCode)
       }).finally(() => {
         this.hideSignupPopup()
-      });
+      })
     },
     showSignupPopup() {
       // Set the showSignup data property to true to display the popup

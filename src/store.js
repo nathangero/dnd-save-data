@@ -1,12 +1,17 @@
 import { createStore } from 'vuex'
+import User from './models/user'
 // import firebase from 'firebase/compat/app';
 
 const store = createStore({
     state: {
-        user: null,
+        user: new User(),
         isLoggedIn: false,
     },
     mutations: {
+        signOut() {
+            this.user = new User()
+            this.isLoggedIn = false
+        },
         setUser(state, user) {
             state.user = user
         },
@@ -23,7 +28,7 @@ const store = createStore({
             return state.user
         },
         isLoggedIn(state) {
-          return state.isLoggedIn;
+          return state.isLoggedIn
         },
         
     }
