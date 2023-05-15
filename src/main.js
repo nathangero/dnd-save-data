@@ -37,15 +37,15 @@ auth.onAuthStateChanged(() => {
     // Redirect to the login page if the user is not authenticated
     router.push({ name: ROUTER_NAMES.LOGIN })
   } else {
-    router.push({ name: ROUTER_NAMES.DASHBOARD }); // If user is already authenticated then go to dashboard
     try {
       const user = JSON.parse(Cookies.get(COOKIE_NAMES.USER))
-      if (user.id !== '') {
+      if (user.id !== '' && store.getters.getUser.id == '') { // Only get the user info again upon refresh. Prevent getting user info twice on login
+        router.push({ name: ROUTER_NAMES.DASHBOARD }); // If user is already authenticated then go to dashboard
         const uid = auth.currentUser.uid
         store.dispatch('getUserInfo', uid)
       }
     } catch (error) {
-      console.info('signed out')
+      // console.info('signed out')
     }
   }
 });

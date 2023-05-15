@@ -60,6 +60,16 @@
           </div>
         </transition>
 
+        <!-- Loading Spinner -->
+        <div class="v-spinner" v-show="isLoggingIn">
+          <div class="spinner-background">
+            <div class="v-clip" v-bind:style="spinnerStyle">
+            </div>
+            <p class="logging-in-text">Logging In</p>
+          </div>
+        </div>
+        
+
       </div>
     </div>
   </div>
@@ -70,13 +80,13 @@ import { ROUTER_PATHS } from '@/enums/router-paths'
 import { auth } from "@/firebase.js"
 import { useStore } from 'vuex'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"
-import 'firebase/auth'
+// import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min.js'
 import { writeUserInDb } from "@/functions/rtdb.js"
 
 export default {
   name: 'LoginScreen',
   components: {
-    
+    // PulseLoader: PulseLoader
   },
   data() {
     return {
@@ -90,17 +100,23 @@ export default {
       passwordConfirm: '',
       error: null,
       showSignup: false,
-      showResetPassword: false
+      showResetPassword: false,
+      isLoggingIn: false
     }
   },
   mounted() {
-    console.info('@LoginScreen')
+    // console.info('@LoginScreen')
   },
   watch: {
     '$store.state.isLoggedIn'(newValue, oldValue) {
       // Wait till the user is logged in before going to the dashboard
       if (newValue && !oldValue) {
-        this.$router.push(ROUTER_PATHS.DASHBOARD)
+        // When at login, give time to load the user profile before switching to the dashboard
+        setTimeout(() => {
+          this.isLoggingIn = false
+          this.$router.push(ROUTER_PATHS.DASHBOARD)
+        }, 1500)
+        
       }
     }
   },
@@ -123,20 +139,23 @@ export default {
     },
     async login() {
       try {
+        this.isLoggingIn = true
         await signInWithEmailAndPassword(auth, this.emailLogin, this.passwordLogin)
         .then((userCredential) => {
           const firebaseUser = userCredential.user
-          console.info('signed in')
+          // console.info('signed in')
           this.store.dispatch('getUserInfo', firebaseUser.uid).then((success) => {
             if (!success) {
               alert("Invalid email/password")
             }
           }).catch(() => {
+            this.isLoggingIn = false
             alert("User doesn't exist")
           })
           
         })
         .catch((error) => {
+          this.isLoggingIn = false
           // Handle errors
           const errorCode = error.code
           const errorMessage = error.message
@@ -145,11 +164,13 @@ export default {
         })
         
       } catch (error) {
+        this.isLoggingIn = false
         this.error = error.message
       }
     },
     async signup() {
       if (this.isInfoValid()) {
+        this.isLoggingIn = true
         await createUserWithEmailAndPassword(auth, this.emailSignup, this.passwordSignup)
         .then((userCredential) => {
           // Signed up successfully
@@ -161,6 +182,7 @@ export default {
           
         })
         .catch((error) => {
+          this.isLoggingIn = false
           // Handle errors
           let errorCode = error.code
           console.info("error: " + error.code + " " + error.message)
@@ -173,6 +195,7 @@ export default {
           alert(errorCode)
 
         }).finally(() => {
+          this.isLoggingIn = false
           if (this.name !== '' && this.emailSignup !== '' && this.passwordSignup !== '' && this.passwordConfirm !== '') {
             this.hideSignupPopup()
           }
@@ -220,6 +243,19 @@ export default {
     hideResetPasswordPopup() {
       this.showResetPassword = false
       this.emailReset = ''
+    }
+  }, // height: 100px; width: 100px; border-width: 5px; border-style: solid; border-color: rgb(93, 197, 150) rgb(93, 197, 150) transparent; border-radius: 100%; background: transparent;
+  computed: {
+    spinnerStyle () {
+      return {
+        height: '100px',
+        width: '100px',
+        borderWidth: '5px',
+        borderStyle: 'solid',
+        borderColor: '#5dc596' + ' ' + '#5dc596' + ' transparent',
+        borderRadius: '100%',
+        background: 'transparent'
+      }
     }
   }
 }
@@ -330,5 +366,69 @@ input {
 .signup-buttons button {
   margin-right: 10px;
   margin-left: 10px;
+}
+
+.spinner-background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.v-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  color: black;
+}
+
+.v-spinner .v-clip {
+  -webkit-animation: v-clipDelay 1.25s 0s infinite linear;
+  animation: v-clipDelay 1.25s 0s infinite linear;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  display: inline-block;
+  height: 100px;
+  width: 100px;
+  border: 5px solid #5dc596;
+  border-radius: 50%;
+  background-color: #fff;
+  position: relative;
+}
+
+.logging-in-text {
+  color: black;
+  margin-top: 20px;
+}
+
+@-webkit-keyframes v-clipDelay
+{
+  100%
+  {
+    -webkit-transform: rotate(360deg) scale(1);
+            transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes v-clipDelay
+{
+  100%
+  {
+    -webkit-transform: rotate(360deg) scale(1);
+            transform: rotate(360deg) scale(1);
+  }
 }
 </style>

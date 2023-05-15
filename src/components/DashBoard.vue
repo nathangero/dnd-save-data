@@ -24,7 +24,18 @@ export default {
     },
     mounted() {
       if (this.store.getters.getUser.id === '') {
-        this.store.commit('setUser', JSON.parse(Cookies.get(COOKIE_NAMES.USER))) // Get backup if any
+        try {
+          const userCookie = Cookies.get(COOKIE_NAMES.USER)
+          if (userCookie != undefined) {
+            const userJson = JSON.parse(userCookie)
+            // console.info('userCookie: ' + JSON.stringify(userJson))
+            this.store.commit('setUser', userJson)
+          }
+          
+        } catch (error) {
+          console.info(error)
+        }
+        
       }
     },
     computed: {

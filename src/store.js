@@ -15,18 +15,18 @@ const store = createStore({
             state.user = new User()
             state.isLoggedIn = false
             
-            Cookies.set(COOKIE_NAMES.USER, JSON.stringify(new User))
-            Cookies.set(COOKIE_NAMES.LOGGED_IN, false)
+            Cookies.remove(COOKIE_NAMES.USER)
             auth.signOut()
         },
         setUser(state, user) {
             state.user = user
             const limitedUser = User.getUserForCookie(user)
             Cookies.set(COOKIE_NAMES.USER, JSON.stringify(limitedUser), { secure: true })
+            // console.info('set the user')
         },
         setIsLoggedIn(state, loggedIn) {
             state.isLoggedIn = loggedIn
-            Cookies.set(COOKIE_NAMES.LOGGED_IN, loggedIn)
+            // console.info('set logged in as: ' + loggedIn)
         }
     },
     actions: {
@@ -36,6 +36,7 @@ const store = createStore({
                 readUserInDb(uid).then((user) => {
                     this.commit('setUser', user)
                     this.commit('setIsLoggedIn', true)
+                    
                     resolve(true)
                 })
                 .catch ((error) => {
