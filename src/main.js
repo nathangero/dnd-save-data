@@ -39,7 +39,7 @@ auth.onAuthStateChanged(() => {
   } else {
     try {
       const user = JSON.parse(Cookies.get(COOKIE_NAMES.USER))
-      if (user.id !== '' && store.getters.getUser.id == '') { // Only get the user info again upon refresh. Prevent getting user info twice on login
+      if (user.id !== '') {
         router.push({ name: ROUTER_NAMES.DASHBOARD }); // If user is already authenticated then go to dashboard
         const uid = auth.currentUser.uid
         store.dispatch('getUserInfo', uid)
