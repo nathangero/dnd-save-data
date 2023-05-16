@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 /dist
-
+dnd-save-data-firebase-admin.json
 
 # local env files
 .env
