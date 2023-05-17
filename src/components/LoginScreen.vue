@@ -69,7 +69,9 @@
           </div>
         </div>
         
-
+        <footer class="footer">
+          <a target="_blank" href="https://icons8.com/icon/104704/dungeons-and-dragons">Dungeons and Dragons</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+        </footer>
       </div>
     </div>
   </div>
@@ -431,4 +433,16 @@ input {
             transform: rotate(360deg) scale(1);
   }
 }
+
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #f5f5f5;
+  text-align: center;
+  padding: 10px;
+}
+
 </style>
