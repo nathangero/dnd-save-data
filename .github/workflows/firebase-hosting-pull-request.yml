@@ -17,7 +17,7 @@ jobs:
       - name: Check Firebase CLI version
         run: firebase --version
       - name: Firebase login
-        run: firebase login
+        run: firebase login:ci --token "${{ secrets.FIREBASE_TOKEN }}"
       - name: Validate Firebase authentication
         run: firebase whoami
       - uses: FirebaseExtended/action-hosting-deploy@v0
