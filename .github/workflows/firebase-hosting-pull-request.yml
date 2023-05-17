@@ -16,8 +16,6 @@ jobs:
         run: npm install -g firebase-tools
       - name: Check Firebase CLI version
         run: firebase --version
-      - name: Validate Firebase authentication
-        run: firebase whoami
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
