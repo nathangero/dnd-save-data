@@ -16,8 +16,6 @@ jobs:
         run: npm install -g firebase-tools
       - name: Check Firebase CLI version
         run: firebase --version
-      - name: Firebase login
-        run: firebase login:ci --token "${{ secrets.FIREBASE_TOKEN }}"
       - name: Validate Firebase authentication
         run: firebase whoami
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -27,4 +25,5 @@ jobs:
           expires: 1d
           projectId: dnd-save-data
         env:
+          FIREBASE_CLI_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_CLI_EXPERIMENTS: webframeworks
