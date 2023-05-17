@@ -27,3 +27,4 @@ jobs:
           expires: 1d
           projectId: dnd-save-data
         env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
