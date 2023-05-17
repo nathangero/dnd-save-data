@@ -1,15 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+    <router-view />
+  </div>
+  
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    
+  },
+  computed: {
+    ...mapState(['isLoggedIn'])
+  },
+  created() {
+    
+    document.title = "DND Save Data";
   }
 }
 </script>
@@ -23,4 +33,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.title {
+  margin: 1.5em 0;
+}
+
 </style>

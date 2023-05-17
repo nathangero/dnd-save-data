@@ -2,7 +2,7 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on merge
-'on':
+on:
   push:
     branches:
       - main
@@ -18,3 +18,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DND_SAVE_DATA }}'
           channelId: live
           projectId: dnd-save-data
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
