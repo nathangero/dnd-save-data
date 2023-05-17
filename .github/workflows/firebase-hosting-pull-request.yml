@@ -12,6 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: npm ci && npm run build
+      - name: Check Firebase CLI version
+        run: firebase --version
+      - name: Firebase login
+        run: firebase login
+      - name: Validate Firebase authentication
+        run: firebase whoami
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
