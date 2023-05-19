@@ -91,7 +91,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 .bottom-navigation ul {
@@ -118,7 +118,7 @@ export default {
 }
 
 .bottom-navigation li i {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .bottom-navigation li.active {

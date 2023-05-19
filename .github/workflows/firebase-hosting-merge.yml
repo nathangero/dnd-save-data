@@ -27,3 +27,5 @@ jobs:
         env:
           FIREBASE_CLI_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_CLI_EXPERIMENTS: webframeworks
+      - name: Build and Deploy Site
+        run: npm run build-deploy
