@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h1>Dashboard</h1>
-    <p>Hello {{ getUserInfo.name }}</p>
-    <button @click="signOut">Sign Out</button>
+    <h1>{{ getUserInfo.name }}'s characters</h1>
+
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navigation">
@@ -25,19 +24,16 @@
 
 <script>
 import { useStore } from 'vuex'
-import { COOKIE_NAMES } from '@/enums/cookie-names'
 import { ROUTER_NAMES } from '@/enums/router-names'
+import { COOKIE_NAMES } from '@/enums/cookie-names'
 import Cookies from 'js-cookie'
 
 export default {
-    name: 'DashBoard',
+    name: ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1),
     data() {
         return {
-            store: useStore()
+            store: useStore(),
         }
-    },
-    watch: {
-      
     },
     mounted() {
       if (this.store.getters.getUser.id === '') {
@@ -70,9 +66,6 @@ export default {
       }
     },
     methods: {
-      signOut() {
-        this.store.commit('signOut')
-      },
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
       }
@@ -81,47 +74,5 @@ export default {
 </script>
 
 <style>
-.bottom-navigation {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #f1f1f1;
-  border-top: 1px solid #ccc;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px 0;
-}
 
-.bottom-navigation ul {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0;
-  margin: 20;
-}
-
-.bottom-navigation li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 15px;
-  color: #777;
-  cursor: pointer;
-  margin-right: 40px;
-}
-
-.bottom-navigation li:last-child {
-  margin-right: 0; /* Remove margin from the last element */
-}
-
-.bottom-navigation li i {
-  margin-bottom: 10px;
-}
-
-.bottom-navigation li.active {
-  color: #333;
-}
 </style>

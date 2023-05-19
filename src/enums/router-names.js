@@ -1,6 +1,9 @@
 const ROUTER_NAMES = {
     LOGIN: 'login',
-    DASHBOARD: 'dashboard'
+    DASHBOARD: 'dashboard',
+    CAMPAIGNS: 'campaigns',
+    CHARACTERS: 'characters',
+    SESSIONS: 'sessions',
 }
 
 export { ROUTER_NAMES }
