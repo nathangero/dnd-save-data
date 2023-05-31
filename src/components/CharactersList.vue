@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>{{ getUserInfo.name }}'s characters</h1>
-
+    <div class="top-bottoms">
+      <button class="button-create" @click="createCharacter">Create Character</button>
+    </div>
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navigation">
@@ -68,6 +70,9 @@ export default {
     methods: {
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
+      },
+      createCharacter() {
+
       }
     }
 }

@@ -1,0 +1,7 @@
+const LANGUAGE_PROFICIENCY = {
+    WRITTEN: 0,
+    SPOKEN: 1,
+    WRITTEN_SPOKEN: 2
+}
+
+export { LANGUAGE_PROFICIENCY }
