@@ -1,9 +1,20 @@
 <template>
-  <div>
+  <div class="body">
     <h1>{{ getUserInfo.name }}'s characters</h1>
-    <div class="top-bottoms">
-      <button class="button-create" @click="createCharacter">Create Character</button>
+    <div class="top-buttons">
+      <button class="button-create" @click="toggleModal">Create Character</button>
     </div>
+
+    <transition name="slide-up" mode="out-in">
+      <template v-if="showModal">
+        <div class="modal-page">
+          <button class="button-close" @click="toggleModal">Close</button>
+
+          <h2>New Character</h2>
+          <input type="text" v-model="characterName" placeholder="Character Name">
+        </div>
+      </template>
+    </transition>
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navigation">
@@ -35,6 +46,8 @@ export default {
     data() {
         return {
             store: useStore(),
+            showModal: false,
+            characterName: '',
         }
     },
     mounted() {
@@ -71,13 +84,47 @@ export default {
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
       },
-      createCharacter() {
-
-      }
+      toggleModal() {
+        this.showModal = !this.showModal
+      },
     }
 }
 </script>
 
 <style>
+.slide-up-enter-active {
+transition: transform 0.3s;
+}
 
+.slide-up-leave-active {
+  transition: transform 0.4s;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translateY(100%);
+}
+
+.slide-up-enter-to,
+.slide-up-leave {
+  transform: translateY(0);
+}
+
+.modal-page {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+  background-color: white;
+}
+
+.button-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+}
+
+h2 {
+  padding-top: 50px;
+}
 </style>

@@ -309,7 +309,7 @@ input {
   transition: opacity 200ms ease-in-out;
 }
 
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
