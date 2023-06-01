@@ -141,7 +141,7 @@
     </transition>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="bottom-navigation">
+    <nav class="bottom-navigation" v-if="!showModal">
       <ul>
         <li @click="navigateTo(ROUTER_NAMES.Campaigns)" :class="{ active: currentRoute === ROUTER_NAMES.Campaigns }">
           <i class="fas fa-campaigns"></i>
@@ -251,9 +251,13 @@ transition: transform 0.3s;
   transform: translateY(0);
 }
 
+.body {
+  height: 110dvh;
+}
+
 .modal-page.scrollable {
   overflow-y: scroll;
-  height: 100%;
+  height: 100dvh;
 }
 
 .modal-page-overlay {
@@ -301,12 +305,12 @@ h2 {
 }
 
 .input-stats {
-  width: 80px; /* Adjust the width as needed */
-  margin-left: 10px; /* Adjust the spacing between the label and input */
+  width: 70px; /* Adjust the width as needed */
+  margin-left: 5px; /* Adjust the spacing between the label and input */
   border: none; /* Remove the default border */
   border-bottom: 1px solid black; /* Add a bottom border */
   outline: none;
-  text-align: left;
+  text-align: center;
   padding-bottom: 5px;
 }
 
