@@ -9,11 +9,94 @@
       <template v-if="showModal">
         <div class="modal-page-overlay">
           <div class="modal-page">
-          <button class="button-close" @click="toggleModal">Close</button>
+            <button class="button-close" @click="toggleModal">Close</button>
 
-          <h2>New Character</h2>
-          <input type="text" v-model="characterName" placeholder="Character Name">
-        </div>
+            <h2>New Character</h2>
+            
+            <div class="input-container">
+              <input type="text" v-model="characterName" placeholder="Name">
+              <input type="text" v-model="alignment" placeholder="Alignment">
+              <input type="text" v-model="background" placeholder="Background">
+              <input type="text" v-model="charClass" placeholder="Class">
+              <input type="text" v-model="race" placeholder="Race">
+            </div>
+            
+            <br>
+            <h3>Base Stats</h3>
+
+            <div class="flex-container-stat">
+              <div class="container-stat">
+                <label for="stats-str" class="label-stats">Strength:</label>
+                <input type="number" id="stats-str" style="margin-left: 31px;" v-model="statsStr" class="input-stats" inputmode="numeric">
+              </div>
+
+              <div class="container-stat-bonus">
+                <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-str-bonus" v-model="statsStrBonus" class="input-stats" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="flex-container-stat">
+              <div class="container-stat">
+                <label for="stats-dex" class="label-stats">Dexterity: </label>
+                <input type="number" id="stats-dex" style="margin-left: 29px;" v-model="statsDex" class="input-stats" inputmode="numeric">
+              </div>
+
+              <div class="container-stat-bonus">
+                <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-dex-bonus" v-model="statsDexBonus" class="input-stats" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="flex-container-stat">
+              <div class="container-stat">
+                <label for="stats-con" class="label-stats">Consitution: </label>
+                <input type="number" id="stats-con" style="margin-left: 12px;" v-model="statsCon" class="input-stats" inputmode="numeric">
+              </div>
+              
+              <div class="container-stat-bonus">
+                <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-con-bonus" v-model="statsConBonus" class="input-stats" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="flex-container-stat">
+              <div class="container-stat">
+                <label for="stats-int" class="label-stats">Intelligence: </label>
+                <input type="number" id="stats-int" style="margin-left: 12px;" v-model="statsInt" class="input-stats" inputmode="numeric">
+              </div>
+              
+              <div class="container-stat-bonus">
+                <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-int-bonus" v-model="statsIntBonus" class="input-stats" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="flex-container-stat">
+              <div class="container-stat">
+                <label for="stats-wis" class="label-stats">Wisdom: </label>
+                <input type="number" id="stats-wis" style="margin-left: 36px;" v-model="statsWis" class="input-stats" inputmode="numeric">
+              </div>
+              
+              <div class="container-stat-bonus">
+                <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-wis-bonus" v-model="statsWisBonus" class="input-stats" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="flex-container-stat">
+              <div class="container-stat">
+                <label for="stats-cha" class="label-stats">Charisma: </label>
+                <input type="number" id="stats-cha" style="margin-left: 25px;" v-model="statsCha" class="input-stats" inputmode="numeric">
+              </div>
+              
+              <div class="container-stat-bonus">
+                <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-cha-bonus" v-model="statsChaBonus" class="input-stats" inputmode="numeric">
+              </div>
+            </div>
+
+          </div>
         </div>
       </template>
     </transition>
@@ -47,9 +130,26 @@ export default {
     name: ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1),
     data() {
         return {
-            store: useStore(),
-            showModal: false,
-            characterName: '',
+          store: useStore(),
+          showModal: false,
+          alignment: '',
+          background: '',
+          characterName: '',
+          charClass: '',
+          statsStr: '',
+          statsStrBonus: '',
+          statsDex: '',
+          statsDexBonus: '',
+          statsCon: '',
+          statsConBonus: '',
+          statsInt: '',
+          statsIntBonus: '',
+          statsWis: '',
+          statsWisBonus: '',
+          statsCha: '',
+          statsChaBonus: '',
+          race: '',
+
         }
     },
     mounted() {
@@ -141,5 +241,44 @@ transition: transform 0.3s;
 
 h2 {
   padding-top: 50px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 300px; /* Adjust the height as needed */
+}
+
+.input-field {
+  width: 200px; /* Adjust the width as needed */
+  margin-bottom: 10px; /* Adjust the spacing between input fields as needed */
+}
+
+.input-stats {
+  width: 80px; /* Adjust the width as needed */
+  margin-left: 10px; /* Adjust the spacing between the label and input */
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  text-align: left;
+  padding-bottom: 5px;
+}
+
+.flex-container-stat {
+  display: flex;
+  flex-direction: row;
+}
+
+.container-stat {
+  text-align: left;
+  padding-left: 7%;
+}
+
+.container-stat-bonus {
+  text-align: right;
+  padding-right: 7%;
+  margin-left: auto;
 }
 </style>
