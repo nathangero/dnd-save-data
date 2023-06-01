@@ -14,86 +14,123 @@
             <h2>New Character</h2>
             
             <div class="input-container">
-              <input type="text" v-model="characterName" placeholder="Name">
-              <input type="text" v-model="alignment" placeholder="Alignment">
-              <input type="text" v-model="background" placeholder="Background">
-              <input type="text" v-model="charClass" placeholder="Class">
-              <input type="text" v-model="race" placeholder="Race">
+              <input type="text" v-model="characterName" placeholder="Name" required>
+              <input type="text" v-model="alignment" placeholder="Alignment" required>
+              <input type="text" v-model="background" placeholder="Background" required>
+              <input type="text" v-model="charClass" placeholder="Class" required>
+              <input type="text" v-model="race" placeholder="Race" required>
             </div>
             
             <br>
             <h3>Base Stats</h3>
+            <div id="base-stats">
+              <div class="flex-container-stat">
+                <div class="container-stat">
+                  <label for="stats-str" class="label-stats">Strength:</label>
+                  <input type="number" id="stats-str" style="margin-left: 31px;" v-model="statsStr" class="input-stats" inputmode="numeric" required>
+                </div>
 
-            <div class="flex-container-stat">
-              <div class="container-stat">
-                <label for="stats-str" class="label-stats">Strength:</label>
-                <input type="number" id="stats-str" style="margin-left: 31px;" v-model="statsStr" class="input-stats" inputmode="numeric">
+                <div class="container-stat-bonus">
+                  <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
+                  <input type="number" id="stats-str-bonus" v-model="statsStrBonus" class="input-stats" inputmode="numeric" required>
+                </div>
               </div>
 
-              <div class="container-stat-bonus">
-                <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-str-bonus" v-model="statsStrBonus" class="input-stats" inputmode="numeric">
+              <div class="flex-container-stat">
+                <div class="container-stat">
+                  <label for="stats-dex" class="label-stats">Dexterity: </label>
+                  <input type="number" id="stats-dex" style="margin-left: 29px;" v-model="statsDex" class="input-stats" inputmode="numeric" required>
+                </div>
+
+                <div class="container-stat-bonus">
+                  <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
+                  <input type="number" id="stats-dex-bonus" v-model="statsDexBonus" class="input-stats" inputmode="numeric" required>
+                </div>
+              </div>
+
+              <div class="flex-container-stat">
+                <div class="container-stat">
+                  <label for="stats-con" class="label-stats">Consitution: </label>
+                  <input type="number" id="stats-con" style="margin-left: 12px;" v-model="statsCon" class="input-stats" inputmode="numeric" required>
+                </div>
+                
+                <div class="container-stat-bonus">
+                  <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
+                  <input type="number" id="stats-con-bonus" v-model="statsConBonus" class="input-stats" inputmode="numeric" required>
+                </div>
+              </div>
+
+              <div class="flex-container-stat">
+                <div class="container-stat">
+                  <label for="stats-int" class="label-stats">Intelligence: </label>
+                  <input type="number" id="stats-int" style="margin-left: 12px;" v-model="statsInt" class="input-stats" inputmode="numeric" required>
+                </div>
+                
+                <div class="container-stat-bonus">
+                  <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
+                  <input type="number" id="stats-int-bonus" v-model="statsIntBonus" class="input-stats" inputmode="numeric" required>
+                </div>
+              </div>
+
+              <div class="flex-container-stat">
+                <div class="container-stat">
+                  <label for="stats-wis" class="label-stats">Wisdom: </label>
+                  <input type="number" id="stats-wis" style="margin-left: 36px;" v-model="statsWis" class="input-stats" inputmode="numeric" required>
+                </div>
+                
+                <div class="container-stat-bonus">
+                  <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
+                  <input type="number" id="stats-wis-bonus" v-model="statsWisBonus" class="input-stats" inputmode="numeric" required>
+                </div>
+              </div>
+
+              <div class="flex-container-stat">
+                <div class="container-stat">
+                  <label for="stats-cha" class="label-stats">Charisma: </label>
+                  <input type="number" id="stats-cha" style="margin-left: 25px;" v-model="statsCha" class="input-stats" inputmode="numeric" required>
+                </div>
+                
+                <div class="container-stat-bonus">
+                  <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
+                  <input type="number" id="stats-cha-bonus" v-model="statsChaBonus" class="input-stats" inputmode="numeric" required>
+                </div>
               </div>
             </div>
-
-            <div class="flex-container-stat">
-              <div class="container-stat">
-                <label for="stats-dex" class="label-stats">Dexterity: </label>
-                <input type="number" id="stats-dex" style="margin-left: 29px;" v-model="statsDex" class="input-stats" inputmode="numeric">
-              </div>
-
-              <div class="container-stat-bonus">
-                <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-dex-bonus" v-model="statsDexBonus" class="input-stats" inputmode="numeric">
-              </div>
-            </div>
-
-            <div class="flex-container-stat">
-              <div class="container-stat">
-                <label for="stats-con" class="label-stats">Consitution: </label>
-                <input type="number" id="stats-con" style="margin-left: 12px;" v-model="statsCon" class="input-stats" inputmode="numeric">
-              </div>
+            
+            <br>
+            <h3>Saving Throws</h3>
+            <div id="saving-throws">
               
-              <div class="container-stat-bonus">
-                <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-con-bonus" v-model="statsConBonus" class="input-stats" inputmode="numeric">
-              </div>
             </div>
 
-            <div class="flex-container-stat">
-              <div class="container-stat">
-                <label for="stats-int" class="label-stats">Intelligence: </label>
-                <input type="number" id="stats-int" style="margin-left: 12px;" v-model="statsInt" class="input-stats" inputmode="numeric">
-              </div>
-              
-              <div class="container-stat-bonus">
-                <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-int-bonus" v-model="statsIntBonus" class="input-stats" inputmode="numeric">
-              </div>
+            <br>
+            <h3>Skills</h3>
+            <div id="skills">
+              <!-- be able to make a list and add new skills -->
             </div>
 
-            <div class="flex-container-stat">
-              <div class="container-stat">
-                <label for="stats-wis" class="label-stats">Wisdom: </label>
-                <input type="number" id="stats-wis" style="margin-left: 36px;" v-model="statsWis" class="input-stats" inputmode="numeric">
-              </div>
-              
-              <div class="container-stat-bonus">
-                <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-wis-bonus" v-model="statsWisBonus" class="input-stats" inputmode="numeric">
-              </div>
+            <br>
+            <h3>Features & Traits</h3>
+            <div id="features-and-traits">
+              <!-- be able to make a list and add new feats -->
             </div>
 
-            <div class="flex-container-stat">
-              <div class="container-stat">
-                <label for="stats-cha" class="label-stats">Charisma: </label>
-                <input type="number" id="stats-cha" style="margin-left: 25px;" v-model="statsCha" class="input-stats" inputmode="numeric">
-              </div>
+            <br>
+            <h3>Equipment</h3>
+            <div id="equipment">
+              <!-- be able to make a list and add new equipments -->
+            </div>
+            
+            <br>
+            <h3>Languages</h3>
+            <div id="languages">
               
-              <div class="container-stat-bonus">
-                <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-cha-bonus" v-model="statsChaBonus" class="input-stats" inputmode="numeric">
-              </div>
+            </div>
+            
+            <br>
+            <h3>Proficiencies</h3>
+            <div id="proficiencies">
+              
             </div>
 
           </div>
