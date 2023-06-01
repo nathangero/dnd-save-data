@@ -26,7 +26,7 @@
     <div class="content" ref="contentRef">
       <h1>{{ getUserInfo.name }}'s characters</h1>
       <div class="top-buttons">
-        <button class="button-create" @click="toggleModal">Create Character</button>
+        <button class="button-open-modal" @click="toggleModal">Create Character</button>
       </div>
 
       <transition name="slide-up" mode="out-in">
@@ -185,6 +185,9 @@
                 
               </div>
 
+
+              <button class="button-create-character" @click="createCharacter">Create Character</button>
+
             </div>
           </div>
         </template>
@@ -215,6 +218,13 @@ import { useStore } from 'vuex'
 import { ROUTER_NAMES } from '@/enums/router-names'
 import { COOKIE_NAMES } from '@/enums/cookie-names'
 import Cookies from 'js-cookie'
+
+// TODO: Will be replaced by Firebase Remote Config
+const MAX_VALUES = {
+  STATS: 20,
+  STATS_BONUS: 5,
+  SAVING_THROWS: 5,
+}
 
 export default {
     name: ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1),
@@ -279,6 +289,57 @@ export default {
       }
     },
     methods: {
+      checkIfAllValid() {
+        console.info("@checkIfAllValid")
+        if (!this.checkIfStatsValid()) {
+          alert(`Stats cannot be blank or greater than ${MAX_VALUES.STATS} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
+          return false
+        }
+
+        if (!this.checkIfThrowsValid()) {
+          alert(`Saving Throws cannot be blank or greater than ${MAX_VALUES.SAVING_THROWS}`)
+          return false
+        }
+
+        return true
+      },
+      checkIfStatsValid() {
+        console.info("@checkIfStatsValid")
+        if (this.statsStr == '' || this.statsDex == '' || this.statsCon == '' || this.statsInt == '' || this.statsWis == '' || this.statsCha == '' ||
+            this.statsStrBonus == '' || this.statsDexBonus == '' || this.statsConBonus == '' || this.statsIntBonus == '' || this.statsWisBonus == '' || this.statsChaBonus == '') {
+              return false
+        }
+
+        if (this.statsStr > MAX_VALUES.STATS && this.statsDex > MAX_VALUES.STATS && this.statsCon > MAX_VALUES.STATS && this.statsInt > MAX_VALUES.STATS && this.statsWis > MAX_VALUES.STATS && this.statsCha > MAX_VALUES.STATS &&
+            this.statsStrBonus > MAX_VALUES.STATS_BONUS && this.statsDexBonus > MAX_VALUES.STATS_BONUS && this.statsConBonus > MAX_VALUES.STATS_BONUS && this.statsIntBonus > MAX_VALUES.STATS_BONUS && this.statsWisBonus > MAX_VALUES.STATS_BONUS && this.statsChaBonus > MAX_VALUES.STATS_BONUS) {
+          return false
+
+        }
+        
+        return true
+
+      },
+      checkIfThrowsValid() {
+        console.info("@checkIfThrowsValid")
+        if (this.savingStr == '' || this.savingDex == '' || this.savingCon == '' || this.savingInt == '' || this.savingWis == '' || this.savingCha == '') {
+          return false
+        }
+        
+        if (this.savingStr > MAX_VALUES.SAVING_THROWS && this.savingDex > MAX_VALUES.SAVING_THROWS && this.savingCon > MAX_VALUES.SAVING_THROWS && this.savingInt > MAX_VALUES.SAVING_THROWS && this.savingWis > MAX_VALUES.SAVING_THROWS && this.savingCha > MAX_VALUES.SAVING_THROWS) {
+          return false
+        }
+
+        return true
+      },
+      createCharacter() {
+        console.info("@createCharacter")
+        if (this.checkIfAllValid()) {
+          alert("New Character created!")
+          this.toggleModal()
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        }
+      },
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
       },
@@ -400,7 +461,7 @@ transition: transform 0.3s;
 }
 
 .list-side-menu li {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
   font-size: xx-large;
   margin-bottom: 10%;
 }
@@ -491,5 +552,14 @@ h2 {
   justify-content: center;
   /* align-items: center; */
   /* text-align: center; */
+}
+
+
+
+
+.button-create-character {
+  font-size: x-large;
+  margin-top: 10%;
+  margin-bottom: 10%;
 }
 </style>
