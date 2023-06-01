@@ -111,7 +111,7 @@
                 <div class="flex-container-stat">
                   <div class="container-stat">
                     <label for="stats-cha" class="label-stats">Charisma: </label>
-                    <input type="number" id="stats-cha" style="margin-left: 25px;" v-model="statsCha" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-cha" style="margin-left: 28px;" v-model="statsCha" class="input-stats" inputmode="numeric" required>
                   </div>
                   
                   <div class="container-stat-bonus">
@@ -123,8 +123,36 @@
               
               <br>
               <h3>Saving Throws</h3>
-              <div id="saving-throws">
+              <div class="saving-throws">
+                <div class="container-saving-throws">
+                  <label for="stats-str" class="label-stats">Strength:</label>
+                  <input type="number" id="stats-str" style="margin-left: 31px;" v-model="savingStr" class="input-stats" inputmode="numeric" required>
+                </div>
                 
+                <div class="container-saving-throws">
+                  <label for="stats-dex" class="label-stats">Dexterity: </label>
+                  <input type="number" id="stats-dex" style="margin-left: 29px;" v-model="savingDex" class="input-stats" inputmode="numeric" required>
+                </div>
+
+                <div class="container-saving-throws">
+                  <label for="stats-con" class="label-stats">Consitution: </label>
+                  <input type="number" id="stats-con" style="margin-left: 12px;" v-model="savingCon" class="input-stats" inputmode="numeric" required>
+                </div>
+                
+                <div class="container-saving-throws">
+                  <label for="stats-int" class="label-stats">Intelligence: </label>
+                  <input type="number" id="stats-int" style="margin-left: 12px;" v-model="savingInt" class="input-stats" inputmode="numeric" required>
+                </div>
+                
+                <div class="container-saving-throws">
+                  <label for="stats-wis" class="label-stats">Wisdom: </label>
+                  <input type="number" id="stats-wis" style="margin-left: 36px;" v-model="savingWis" class="input-stats" inputmode="numeric" required>
+                </div>
+                
+                <div class="container-saving-throws">
+                  <label for="stats-cha" class="label-stats">Charisma: </label>
+                  <input type="number" id="stats-cha" style="margin-left: 25px;" v-model="savingCha" class="input-stats" inputmode="numeric" required>
+                </div>
               </div>
 
               <br>
@@ -195,10 +223,11 @@ export default {
           store: useStore(),
           showModal: false,
           showMenu: false,
+          characterName: '',
           alignment: '',
           background: '',
-          characterName: '',
           charClass: '',
+          race: '',
           statsStr: '',
           statsStrBonus: '',
           statsDex: '',
@@ -211,8 +240,12 @@ export default {
           statsWisBonus: '',
           statsCha: '',
           statsChaBonus: '',
-          race: '',
-
+          savingStr: '',
+          savingDex: '',
+          savingCon: '',
+          savingInt: '',
+          savingWis: '',
+          savingCha: '',
         }
     },
     mounted() {
@@ -423,7 +456,7 @@ h2 {
 }
 
 .input-stats {
-  width: 70px; /* Adjust the width as needed */
+  width: 65px; /* Adjust the width as needed */
   margin-left: 5px; /* Adjust the spacing between the label and input */
   border: none; /* Remove the default border */
   border-bottom: 1px solid black; /* Add a bottom border */
@@ -446,5 +479,17 @@ h2 {
   text-align: right;
   padding-right: 7%;
   margin-left: auto;
+}
+
+.saving-throws {
+  text-align: center;
+}
+
+.container-saving-throws {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* align-items: center; */
+  /* text-align: center; */
 }
 </style>
