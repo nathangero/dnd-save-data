@@ -1,15 +1,38 @@
 <template>
-  <div class="body">
-    <h1>{{ getUserInfo.name }}'s characters</h1>
-    <div class="top-buttons">
-      <button class="button-create" @click="toggleModal">Create Character</button>
+  <div class="body" ref="bodyRef">
+    <div class="hamburger-menu" ref="menuRef" @click="toggleMenu">
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
     </div>
 
-    <transition name="slide-up" mode="out-in">
-      <template v-if="showModal">
-        <div class="modal-page-overlay">
-          <div class="modal-page scrollable">
-            <div class="modal-page" :class="{ 'scrollable': showModal }">
+    <transition name="slide-right" mode="out-in">
+      <template v-if="showMenu">
+        <div class="side-menu-overlay">
+          <div class="side-menu">
+            <h1 class="menu-close" @click="toggleMenu">X</h1>
+
+            <ul class="list-side-menu">
+              <li>Profile</li>
+              <li>Settings</li>
+              <li @click="logOut">Log Out</li>
+            </ul>
+          </div>
+        </div>
+      </template>
+    </transition>
+    
+
+    <div class="content" ref="contentRef">
+      <h1>{{ getUserInfo.name }}'s characters</h1>
+      <div class="top-buttons">
+        <button class="button-create" @click="toggleModal">Create Character</button>
+      </div>
+
+      <transition name="slide-up" mode="out-in">
+        <template v-if="showModal">
+          <div class="modal-page-overlay">
+            <div class="modal-page scrollable">
               <button class="button-close" @click="toggleModal">Close</button>
 
               <h2>New Character</h2>
@@ -136,9 +159,9 @@
 
             </div>
           </div>
-        </div>
-      </template>
-    </transition>
+        </template>
+      </transition>
+    </div>
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navigation" v-if="!showModal">
@@ -171,6 +194,7 @@ export default {
         return {
           store: useStore(),
           showModal: false,
+          showMenu: false,
           alignment: '',
           background: '',
           characterName: '',
@@ -228,6 +252,19 @@ export default {
       toggleModal() {
         this.showModal = !this.showModal
       },
+      toggleMenu() {
+        this.showMenu = !this.showMenu
+        if (this.showMenu) {
+          this.$refs.contentRef.style.backgroundColor = 'gray';
+          // this.$refs.bodyRef.style.height = 100%
+          
+        } else {
+          this.$refs.contentRef.style.backgroundColor = ''
+        }
+      },
+      logOut() {
+        this.store.commit('signOut')
+      },
     }
 }
 </script>
@@ -251,9 +288,90 @@ transition: transform 0.3s;
   transform: translateY(0);
 }
 
+.slide-right-enter-active {
+transition: transform 0.3s;
+}
+
+.slide-right-leave-active {
+  transition: transform 0.4s;
+}
+
+.slide-right-enter-from,
+.slide-right-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-right-enter-to,
+.slide-right-leave {
+  transform: translateX(0);
+}
+
 .body {
+  margin: 0%;
   height: 110dvh;
 }
+
+.content {
+  height: 100%;
+}
+
+.hamburger-menu {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 30px;
+  height: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  /* z-index: 9999; */
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 3px;
+  background-color: #000;
+}
+
+
+.side-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70%;
+  height: 100%;
+  background-color: white;
+}
+
+.side-menu {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.side-menu h1 {
+  padding: 20px 12%;
+  margin-bottom: 30px;
+  
+}
+
+.menu-close {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  color: #007aff;
+}
+
+.list-side-menu {
+  list-style: none;
+}
+
+.list-side-menu li {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: xx-large;
+  margin-bottom: 10%;
+}
+
 
 .modal-page.scrollable {
   overflow-y: scroll;
