@@ -54,9 +54,7 @@ export async function createNewCharacter(userId, characterInfo) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
     return new Promise((resolve, reject) => {
         const newKey = push(ref(db, dbRef)).key
-        console.info("newKey:", newKey)
         dbRef += newKey
-        console.info('new dbref:', dbRef)
         set(ref(db, dbRef), characterInfo).then((success) => {
             console.info(`created a new character for user: ${userId}`)
             resolve(success)

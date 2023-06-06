@@ -38,11 +38,11 @@
               <h2>New Character</h2>
               
               <div class="input-container">
-                <input type="text" v-model="characterName" placeholder="Name" required>
-                <input type="text" v-model="alignment" placeholder="Alignment" required>
-                <input type="text" v-model="background" placeholder="Background" required>
-                <input type="text" v-model="charClass" placeholder="Class" required>
-                <input type="text" v-model="race" placeholder="Race" required>
+                <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
+                <input class="character-description" type="text" v-model="alignment" placeholder="Alignment" required>
+                <input class="character-description" type="text" v-model="background" placeholder="Background" required>
+                <input class="character-description" type="text" v-model="charClass" placeholder="Class" required>
+                <input class="character-description" type="text" v-model="race" placeholder="Race" required>
               </div>
               
               <br>
@@ -298,7 +298,27 @@
               <br>
               <h3>Equipment</h3>
               <div id="equipment">
-                <!-- be able to make a list and add new equipments -->
+                <div>
+                  <label for="equipment-gold" class="label-stats">Starting Gold:</label>
+                  <input type="number" id="equipment-gold" v-model="gold" class="input-stats" inputmode="numeric" required>
+                </div>
+
+                <div class="equipment-container" v-for="(item, key) in equipment" :key="key">
+                  <div class="equipment-title">
+                    <label class="equipment-name">{{ key }}</label>
+                    <label class="equipment-amount">x{{ getEquipmentAmount(key) }}</label>
+                  </div>
+                  <label class="equipment-description">{{ getEquipmentDescription(key) }}</label>
+                  <br>
+                  <button @click="onPressDeleteEquipment(key)">Delete</button>
+                </div>
+                <div class="equipment-container">
+                  <input class="equipment-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
+                  <input class="equipment-input" style="width=10%;" type="number" v-model="equipmentTempAmount" placeholder="Item amount">
+                  <textarea class="equipment-textarea" v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+                  <br>
+                  <button @click="onPressAddEquipment" style="margin-top: 10px;">Add</button>
+                </div>
               </div>
               
               <br>
@@ -348,6 +368,7 @@ import Character from '@/models/character'
 import ROUTER_NAMES from '@/enums/router-names'
 import COOKIE_NAMES from '@/enums/cookie-names'
 import DIE_TYPE from '@/enums/die-type'
+import EQUIPMENT_KEYS from '@/enums/equipment-keys'
 import Cookies from 'js-cookie'
 
 // TODO: Will be replaced by Firebase Remote Config
@@ -395,7 +416,11 @@ export default {
           hitDieType: '', // d10
           hitDieAmount: '', // 3
           equipment: {},
+          equipmentTempName: '',
+          equipmentTempAmount: '',
+          equipmentTempDescription: '',
           featuresTraits: {},
+          gold: '', // TODO
           languages: {},
           stats: {
             statsStr: '',
@@ -477,6 +502,23 @@ export default {
       }
     },
     methods: {
+      onPressAddEquipment() {
+        const newItem = {
+          amount: this.equipmentTempAmount,
+          description: this.equipmentTempDescription
+        }
+
+        this.equipment[this.equipmentTempName] = newItem
+        console.info("this.equipment:", this.equipment)
+        this.equipmentTempName = ''
+        this.equipmentTempAmount = ''
+        this.equipmentTempDescription = ''
+      },
+      onPressDeleteEquipment(key) {
+        if (key in this.equipment) {
+          delete this.equipment[key]
+        }
+      },
       checkIfAllValid() {
         console.info("@checkIfAllValid")
         if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
@@ -583,11 +625,13 @@ export default {
       createCharacterDictionary() {
         var newCharacter = new Character(
           this.alignment,
+          this.armorClass,
           this.background,
           this.charClass,
           this.deathSaves,
           this.equipment,
           this.featuresTraits,
+          this.gold,
           this.hp,
           this.initiative,
           this.languages,
@@ -600,6 +644,18 @@ export default {
         )
 
         return newCharacter
+      },
+      getEquipmentAmount(key) {
+        console.info('@getEquipmentAmount')
+        console.info('key:', key)
+        const item = this.equipment[key]
+        console.info('item:', item)
+        console.info('item[EQUIPMENT_KEYS.AMOUNT]:', item[EQUIPMENT_KEYS.AMOUNT])
+        return item[EQUIPMENT_KEYS.AMOUNT]
+      },
+      getEquipmentDescription(key) {
+        const item = this.equipment[key]
+        return item[EQUIPMENT_KEYS.DESCRIPTION]
       },
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
@@ -772,6 +828,15 @@ h2 {
   height: 300px; /* Adjust the height as needed */
 }
 
+.character-description {
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  text-align: left;
+  padding-left: 0;
+  padding-bottom: 5px;
+}
+
 .input-field {
   width: 200px; /* Adjust the width as needed */
   margin-bottom: 10px; /* Adjust the spacing between input fields as needed */
@@ -799,29 +864,56 @@ h2 {
   width: 70px;
 }
 
-/* .container-stat {
-  text-align: left;
-  padding-left: 7%;
-}
-
-.container-stat-bonus {
-  text-align: right;
-  padding-right: 7%;
-  margin-left: auto;
-} */
-
-.container-saving-throws {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  /* align-items: center; */
-  /* text-align: center; */
-}
-
+/* SKILLS STYLE */
 
 .skills {
   display: flex;
   flex-direction: column;
+}
+
+
+/* EQUIPMENT STYLE */
+
+.equipment-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.equipment-input {
+  margin-left: 5px; /* Adjust the spacing between the label and input */
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  padding-left: 0;
+  margin-bottom: 10px;
+}
+
+.equipment-textarea {
+  width: 80%;
+  text-align: left;
+}
+
+
+.equipment-style {
+  display: flex;
+  flex-direction: row;
+}
+
+.equipment-name {
+  font-weight: bold;
+  font-size: larger;
+  margin-right: 20px;
+}
+
+.equipment-amount {
+  font-size: large;
+}
+
+.equipment-description {
+  width: 80%;
+  font-size: large;
+  text-align: left;
 }
 
 .button-create-character {
