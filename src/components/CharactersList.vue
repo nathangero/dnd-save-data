@@ -56,91 +56,106 @@
                 <div style="display: flex; justify-content: center;">
                   <div>
                     <label for="stats-hp" class="label-stats">Hit Points (HP):</label>
-                    <input type="number" id="stats-hp" v-model="hp" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-hp" v-model="hp.max" class="input-stats" inputmode="numeric" required>
                   </div>
 
                   <div>
                     <label for="stats-hit-die" style="margin-left: 10px;">Hit Die: </label>
-                    <input type="number" id="stats-hit-die" v-model="hitDieAmount" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-hit-die" v-model="hp.dieAmount" class="input-stats" inputmode="numeric" required>
                   </div>
                 </div>
 
                 <div>
                   <label for="stats-hit-die-type">Hit Die Type: </label>
-                  <select class="hit-die-picker" v-model="hitDieType">
+                  <select class="hit-die-picker" v-model="hp.die">
                     <option v-for="die in hitDieTypes" :key="die" :value="die">{{ die }}</option>
                   </select>
+                </div>
+
+                <div>
+                  <label for="stats-armor-class">Armor Class: </label>
+                  <input type="number" id="stats-armor-class" v-model="armorClass" class="input-stats" inputmode="numeric" required>
+                </div>
+
+                <div>
+                  <label for="stats-initiative">Initiative: </label>
+                  <input type="number" id="stats-hit-die" v-model="initiative" class="input-stats" inputmode="numeric" required>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                  <label for="stats-speed">Speed: </label>
+                  <input type="number" id="stats-speed" v-model="speed" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div class="flex-container-stat">
                   <div class="container-stat">
                     <label for="stats-str" class="label-stats">Strength:</label>
-                    <input type="number" id="stats-str" style="margin-left: 31px;" v-model="statsStr" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-str" style="margin-left: 31px;" v-model="stats.statsStr" class="input-stats" inputmode="numeric" required>
                   </div>
 
                   <div class="container-stat-bonus">
                     <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-str-bonus" v-model="statsStrBonus" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-str-bonus" v-model="stats.statsStrBonus" class="input-stats" inputmode="numeric" required>
                   </div>
                 </div>
 
                 <div class="flex-container-stat">
                   <div class="container-stat">
                     <label for="stats-dex" class="label-stats">Dexterity: </label>
-                    <input type="number" id="stats-dex" style="margin-left: 29px;" v-model="statsDex" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-dex" style="margin-left: 29px;" v-model="stats.statsDex" class="input-stats" inputmode="numeric" required>
                   </div>
 
                   <div class="container-stat-bonus">
                     <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-dex-bonus" v-model="statsDexBonus" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-dex-bonus" v-model="stats.statsDexBonus" class="input-stats" inputmode="numeric" required>
                   </div>
                 </div>
 
                 <div class="flex-container-stat">
                   <div class="container-stat">
                     <label for="stats-con" class="label-stats">Consitution: </label>
-                    <input type="number" id="stats-con" style="margin-left: 12px;" v-model="statsCon" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-con" style="margin-left: 12px;" v-model="stats.statsCon" class="input-stats" inputmode="numeric" required>
                   </div>
                   
                   <div class="container-stat-bonus">
                     <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-con-bonus" v-model="statsConBonus" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-con-bonus" v-model="stats.statsConBonus" class="input-stats" inputmode="numeric" required>
                   </div>
                 </div>
 
                 <div class="flex-container-stat">
                   <div class="container-stat">
                     <label for="stats-int" class="label-stats">Intelligence: </label>
-                    <input type="number" id="stats-int" style="margin-left: 12px;" v-model="statsInt" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-int" style="margin-left: 12px;" v-model="stats.statsInt" class="input-stats" inputmode="numeric" required>
                   </div>
                   
                   <div class="container-stat-bonus">
                     <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-int-bonus" v-model="statsIntBonus" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-int-bonus" v-model="stats.statsIntBonus" class="input-stats" inputmode="numeric" required>
                   </div>
                 </div>
 
                 <div class="flex-container-stat">
                   <div class="container-stat">
                     <label for="stats-wis" class="label-stats">Wisdom: </label>
-                    <input type="number" id="stats-wis" style="margin-left: 36px;" v-model="statsWis" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-wis" style="margin-left: 36px;" v-model="stats.statsWis" class="input-stats" inputmode="numeric" required>
                   </div>
                   
                   <div class="container-stat-bonus">
                     <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-wis-bonus" v-model="statsWisBonus" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-wis-bonus" v-model="stats.statsWisBonus" class="input-stats" inputmode="numeric" required>
                   </div>
                 </div>
 
                 <div class="flex-container-stat">
                   <div class="container-stat">
                     <label for="stats-cha" class="label-stats">Charisma: </label>
-                    <input type="number" id="stats-cha" style="margin-left: 25px;" v-model="statsCha" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-cha" style="margin-left: 25px;" v-model="stats.statsCha" class="input-stats" inputmode="numeric" required>
                   </div>
                   
                   <div class="container-stat-bonus">
                     <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-cha-bonus" v-model="statsChaBonus" class="input-stats" inputmode="numeric" required>
+                    <input type="number" id="stats-cha-bonus" v-model="stats.statsChaBonus" class="input-stats" inputmode="numeric" required>
                   </div>
                 </div>
               </div>
@@ -150,32 +165,32 @@
               <div id="saving-throws">
                 <div>
                   <label for="saving-str" class="label-stats">Strength:</label>
-                  <input type="number" id="saving-str" style="margin-left: 31px;" v-model="savingStr" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="saving-str" style="margin-left: 31px;" v-model="savingThrows.savingStr" class="input-stats" inputmode="numeric" required>
                 </div>
                 
                 <div>
                   <label for="saving-dex" class="label-stats">Dexterity: </label>
-                  <input type="number" id="saving-dex" style="margin-left: 29px;" v-model="savingDex" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="saving-dex" style="margin-left: 29px;" v-model="savingThrows.savingDex" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="saving-con" class="label-stats">Consitution: </label>
-                  <input type="number" id="saving-con" style="margin-left: 12px;" v-model="savingCon" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="saving-con" style="margin-left: 12px;" v-model="savingThrows.savingCon" class="input-stats" inputmode="numeric" required>
                 </div>
                 
                 <div>
                   <label for="saving-int" class="label-stats">Intelligence: </label>
-                  <input type="number" id="saving-int" style="margin-left: 12px;" v-model="savingInt" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="saving-int" style="margin-left: 12px;" v-model="savingThrows.savingInt" class="input-stats" inputmode="numeric" required>
                 </div>
                 
                 <div>
                   <label for="saving-wis" class="label-stats">Wisdom: </label>
-                  <input type="number" id="saving-wis" style="margin-left: 36px;" v-model="savingWis" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="saving-wis" style="margin-left: 36px;" v-model="savingThrows.savingWis" class="input-stats" inputmode="numeric" required>
                 </div>
                 
                 <div>
                   <label for="saving-cha" class="label-stats">Charisma: </label>
-                  <input type="number" id="saving-cha" style="margin-left: 27px;" v-model="savingCha" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="saving-cha" style="margin-left: 27px;" v-model="savingThrows.savingCha" class="input-stats" inputmode="numeric" required>
                 </div>
               </div>
 
@@ -184,92 +199,92 @@
               <div class="skills">
                 <div>
                   <label for="skills-acrobatics" class="label-stats">Acrobatics:</label>
-                  <input type="number" id="skills-acrobatics" style="margin-left: 31px;" v-model="skillsAcrobatics" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-acrobatics" style="margin-left: 31px;" v-model="skills.skillsAcrobatics" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-animal-handling" class="label-stats">Animal Hanlding:</label>
-                  <input type="number" id="skills-animal-handling" v-model="skillsAnimalHandling" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-animal-handling" v-model="skills.skillsAnimalHandling" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-arcana" class="label-stats">Arcana:</label>
-                  <input type="number" id="skills-arcana" v-model="skillsArcana" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-arcana" v-model="skills.skillsArcana" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-athletics" class="label-stats">Athletics:</label>
-                  <input type="number" id="skills-athletics" v-model="skillsAthletics" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-athletics" v-model="skills.skillsAthletics" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-deception" class="label-stats">Deception:</label>
-                  <input type="number" id="skills-deception" v-model="skillsDeception" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-deception" v-model="skills.skillsDeception" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-history" class="label-stats">History:</label>
-                  <input type="number" id="skills-history" v-model="skillsHistory" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-history" v-model="skills.skillsHistory" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-insight" class="label-stats">Insight:</label>
-                  <input type="number" id="skills-insight" v-model="skillsInsight" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-insight" v-model="skills.skillsInsight" class="input-stats" inputmode="numeric" required>
                 </div>
                 
                 <div>
                   <label for="skills-intimidation" class="label-stats">Intimidation:</label>
-                  <input type="number" id="skills-intimidation" v-model="skillsIntimidation" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-intimidation" v-model="skills.skillsIntimidation" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-investigation" class="label-stats">Investigation:</label>
-                  <input type="number" id="skills-investigation" v-model="skillsInvestigation" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-investigation" v-model="skills.skillsInvestigation" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-medicine" class="label-stats">Medicine:</label>
-                  <input type="number" id="skills-medicine" v-model="skillsMedicine" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-medicine" v-model="skills.skillsMedicine" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-nature" class="label-stats">Nature:</label>
-                  <input type="number" id="skills-nature" v-model="skillsNature" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-nature" v-model="skills.skillsNature" class="input-stats" inputmode="numeric" required>
                 </div>
                 
                 <div>
                   <label for="skills-perception" class="label-stats">Perception:</label>
-                  <input type="number" id="skills-perception" v-model="skillsPerception" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-perception" v-model="skills.skillsPerception" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-performance" class="label-stats">Performance:</label>
-                  <input type="number" id="skills-performance" v-model="skillsPerformance" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-performance" v-model="skills.skillsPerformance" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-persuasion" class="label-stats">Persuasion:</label>
-                  <input type="number" id="skills-persuasion" v-model="skillsPersuasion" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-persuasion" v-model="skills.skillsPersuasion" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-religion" class="label-stats">Religion:</label>
-                  <input type="number" id="skills-religion" v-model="skillsReligion" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-religion" v-model="skills.skillsReligion" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-sleight-of-hand" class="label-stats">Slight of Hand:</label>
-                  <input type="number" id="skills-sleight-of-hand" v-model="skillsSleightOfHand" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-sleight-of-hand" v-model="skills.skillsSleightOfHand" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-stealth" class="label-stats">Stealth:</label>
-                  <input type="number" id="skills-stealth" v-model="skillsStealth" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-stealth" v-model="skills.skillsStealth" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
                   <label for="skills-survival" class="label-stats">Survival:</label>
-                  <input type="number" id="skills-survival" v-model="skillsSurvival" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="skills-survival" v-model="skills.skillsSurvival" class="input-stats" inputmode="numeric" required>
                 </div>
                 
               </div>
@@ -328,9 +343,11 @@
 
 <script>
 import { useStore } from 'vuex'
-import { ROUTER_NAMES } from '@/enums/router-names'
-import { COOKIE_NAMES } from '@/enums/cookie-names'
-import { DIE_TYPE } from '@/enums/die-type'
+import { createNewCharacter } from '@/functions/rtdb'
+import Character from '@/models/character'
+import ROUTER_NAMES from '@/enums/router-names'
+import COOKIE_NAMES from '@/enums/cookie-names'
+import DIE_TYPE from '@/enums/die-type'
 import Cookies from 'js-cookie'
 
 // TODO: Will be replaced by Firebase Remote Config
@@ -362,50 +379,66 @@ export default {
           alignment: '',
           background: '',
           charClass: '',
+          deathSaves: {"successes": 0, "failures": 0},
           race: '',
           level: '',
           armorClass: '',
           initiative: '',
           speed: '',
-          hp: '',
-          hitDieType: '', // 1d10
+          hp: {
+            "current": '',
+            "die": '',
+            "dieAmount": '',
+            "max": '',
+            "temp": 0
+          },
+          hitDieType: '', // d10
           hitDieAmount: '', // 3
-          statsStr: '',
-          statsStrBonus: '',
-          statsDex: '',
-          statsDexBonus: '',
-          statsCon: '',
-          statsConBonus: '',
-          statsInt: '',
-          statsIntBonus: '',
-          statsWis: '',
-          statsWisBonus: '',
-          statsCha: '',
-          statsChaBonus: '',
-          savingStr: '',
-          savingDex: '',
-          savingCon: '',
-          savingInt: '',
-          savingWis: '',
-          savingCha: '',
-          skillsAcrobatics: '',
-          skillsAnimalHandling: '',
-          skillsArcana: '',
-          skillsAthletics: '',
-          skillsDeception: '',
-          skillsHistory: '',
-          skillsInsight: '',
-          skillsIntimidation: '',
-          skillsInvestigation: '',
-          skillsMedicine: '',
-          skillsNature: '',
-          skillsPerception: '',
-          skillsPerformance: '',
-          skillsPersuasion: '',
-          skillsReligion: '',
-          skillsSleightOfHand: '',
-          skillsStealth: '',
-          skillsSurvival: '',
+          equipment: {},
+          featuresTraits: {},
+          languages: {},
+          stats: {
+            statsStr: '',
+            statsStrBonus: '',
+            statsDex: '',
+            statsDexBonus: '',
+            statsCon: '',
+            statsConBonus: '',
+            statsInt: '',
+            statsIntBonus: '',
+            statsWis: '',
+            statsWisBonus: '',
+            statsCha: '',
+            statsChaBonus: '',
+          },
+          savingThrows: {
+            savingStr: '',
+            savingDex: '',
+            savingCon: '',
+            savingInt: '',
+            savingWis: '',
+            savingCha: '',
+          },
+          skills: {
+            skillsAcrobatics: '',
+            skillsAnimalHandling: '',
+            skillsArcana: '',
+            skillsAthletics: '',
+            skillsDeception: '',
+            skillsHistory: '',
+            skillsInsight: '',
+            skillsIntimidation: '',
+            skillsInvestigation: '',
+            skillsMedicine: '',
+            skillsNature: '',
+            skillsPerception: '',
+            skillsPerformance: '',
+            skillsPersuasion: '',
+            skillsReligion: '',
+            skillsSleightOfHand: '',
+            skillsStealth: '',
+            skillsSurvival: '',
+          },
         }
     },
     mounted() {
@@ -438,6 +471,11 @@ export default {
         };
       }
     },
+    watch: {
+      'hp.max': function(newValue) {
+        this.hp.current = newValue
+      }
+    },
     methods: {
       checkIfAllValid() {
         console.info("@checkIfAllValid")
@@ -446,17 +484,17 @@ export default {
           return false
         }
         
-        if (this.hp < MIN_VALUES.HP || this.hp.MAX_VALUES) {
+        if (this.hp.max < MIN_VALUES.HP || this.hp.max.MAX_VALUES) {
           alert(`Starting HP must be between ${MIN_VALUES.HP} - ${MAX_VALUES.HP}`)
           return false
         } 
         
-        if (this.hitDieAmount < MIN_VALUES.HIT_DIE || this.hitDieAmount > MAX_VALUES.HIT_DIE) {
+        if (this.hp.dieAmount < MIN_VALUES.HIT_DIE || this.hp.dieAmount > MAX_VALUES.HIT_DIE) {
           alert(`Starting Hit Die amount must be between ${MIN_VALUES.HIT_DIE} - ${MAX_VALUES.HIT_DIE}`)
           return false
         }
 
-        if (this.hitDieType == '') {
+        if (this.hp.die == '') {
           alert(`Please pick a Hit Die type`)
           return false
         }
@@ -480,13 +518,13 @@ export default {
       },
       checkIfStatsValid() {
         console.info("@checkIfStatsValid")
-        if (this.statsStr == '' || this.statsDex == '' || this.statsCon == '' || this.statsInt == '' || this.statsWis == '' || this.statsCha == '' ||
-            this.statsStrBonus == '' || this.statsDexBonus == '' || this.statsConBonus == '' || this.statsIntBonus == '' || this.statsWisBonus == '' || this.statsChaBonus == '') {
+        if (this.stats.statsStr == '' || this.stats.statsDex == '' || this.stats.statsCon == '' || this.stats.statsInt == '' || this.stats.statsWis == '' || this.stats.statsCha == '' ||
+            this.stats.statsStrBonus == '' || this.stats.statsDexBonus == '' || this.stats.statsConBonus == '' || this.stats.statsIntBonus == '' || this.stats.statsWisBonus == '' || this.stats.statsChaBonus == '') {
               return false
         }
 
-        if (this.statsStr > MAX_VALUES.STATS && this.statsDex > MAX_VALUES.STATS && this.statsCon > MAX_VALUES.STATS && this.statsInt > MAX_VALUES.STATS && this.statsWis > MAX_VALUES.STATS && this.statsCha > MAX_VALUES.STATS &&
-            this.statsStrBonus > MAX_VALUES.STATS_BONUS && this.statsDexBonus > MAX_VALUES.STATS_BONUS && this.statsConBonus > MAX_VALUES.STATS_BONUS && this.statsIntBonus > MAX_VALUES.STATS_BONUS && this.statsWisBonus > MAX_VALUES.STATS_BONUS && this.statsChaBonus > MAX_VALUES.STATS_BONUS) {
+        if (this.stats.statsStr > MAX_VALUES.STATS && this.stats.statsDex > MAX_VALUES.STATS && this.stats.statsCon > MAX_VALUES.STATS && this.stats.statsInt > MAX_VALUES.STATS && this.stats.statsWis > MAX_VALUES.STATS && this.stats.statsCha > MAX_VALUES.STATS &&
+            this.stats.statsStrBonus > MAX_VALUES.STATS_BONUS && this.stats.statsDexBonus > MAX_VALUES.STATS_BONUS && this.stats.statsConBonus > MAX_VALUES.STATS_BONUS && this.stats.statsIntBonus > MAX_VALUES.STATS_BONUS && this.stats.statsWisBonus > MAX_VALUES.STATS_BONUS && this.stats.statsChaBonus > MAX_VALUES.STATS_BONUS) {
           return false
 
         }
@@ -496,30 +534,30 @@ export default {
       },
       checkIfThrowsValid() {
         console.info("@checkIfThrowsValid")
-        if (this.savingStr == '' || this.savingDex == '' || this.savingCon == '' || this.savingInt == '' || this.savingWis == '' || this.savingCha == '') {
+        if (this.savingThrows.savingStr == '' || this.savingThrows.savingDex == '' || this.savingThrows.savingCon == '' || this.savingThrows.savingInt == '' || this.savingThrows.savingWis == '' || this.savingThrows.savingCha == '') {
           return false
         }
         
-        if (this.savingStr > MAX_VALUES.SAVING_THROWS && this.savingDex > MAX_VALUES.SAVING_THROWS && this.savingCon > MAX_VALUES.SAVING_THROWS && this.savingInt > MAX_VALUES.SAVING_THROWS && this.savingWis > MAX_VALUES.SAVING_THROWS && this.savingCha > MAX_VALUES.SAVING_THROWS) {
+        if (this.savingThrows.savingStr > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingDex > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingCon > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingInt > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingWis > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingCha > MAX_VALUES.SAVING_THROWS) {
           return false
         }
 
         return true
       },
       checkIfSkillsValid() {
-        if (this.skillsAcrobatics == '' || this.skillsAnimalHandling == '' || this.skillsArcana == '' || this.skillsAthletics == '' || 
-            this.skillsDeception == '' || this.skillsHistory == '' || this.skillsInsight == '' || this.skillsIntimidation == '' || 
-            this.skillsInvestigation == '' || this.skillsMedicine == '' || this.skillsNature == '' || this.skillsPerception == '' || 
-            this.skillsPerformance == '' || this.skillsPersuasion == '' || this.skillsReligion == '' || this.skillsSleightOfHand == '' || 
-            this.skillsStealth == '' || this.skillsSurvival == '') {
+        if (this.skills.skillsAcrobatics == '' || this.skills.skillsAnimalHandling == '' || this.skills.skillsArcana == '' || this.skills.skillsAthletics == '' || 
+            this.skills.skillsDeception == '' || this.skills.skillsHistory == '' || this.skills.skillsInsight == '' || this.skills.skillsIntimidation == '' || 
+            this.skills.skillsInvestigation == '' || this.skills.skillsMedicine == '' || this.skills.skillsNature == '' || this.skills.skillsPerception == '' || 
+            this.skills.skillsPerformance == '' || this.skills.skillsPersuasion == '' || this.skills.skillsReligion == '' || this.skills.skillsSleightOfHand == '' || 
+            this.skills.skillsStealth == '' || this.skills.skillsSurvival == '') {
           return false
         }
 
-        if (this.skillsAcrobatics > MAX_VALUES.SKILLS || this.skillsAnimalHandling > MAX_VALUES.SKILLS || this.skillsArcana > MAX_VALUES.SKILLS || this.skillsAthletics > MAX_VALUES.SKILLS || 
-            this.skillsDeception > MAX_VALUES.SKILLS || this.skillsHistory > MAX_VALUES.SKILLS || this.skillsInsight > MAX_VALUES.SKILLS || this.skillsIntimidation > MAX_VALUES.SKILLS || 
-            this.skillsInvestigation > MAX_VALUES.SKILLS || this.skillsMedicine > MAX_VALUES.SKILLS || this.skillsNature > MAX_VALUES.SKILLS || this.skillsPerception > MAX_VALUES.SKILLS || 
-            this.skillsPerformance > MAX_VALUES.SKILLS || this.skillsPersuasion > MAX_VALUES.SKILLS || this.skillsReligion > MAX_VALUES.SKILLS || this.skillsSleightOfHand > MAX_VALUES.SKILLS || 
-            this.skillsStealth > MAX_VALUES.SKILLS || this.skillsSurvival > MAX_VALUES.SKILLS) {
+        if (this.skills.skillsAcrobatics > MAX_VALUES.SKILLS || this.skills.skillsAnimalHandling > MAX_VALUES.SKILLS || this.skills.skillsArcana > MAX_VALUES.SKILLS || this.skills.skillsAthletics > MAX_VALUES.SKILLS || 
+            this.skills.skillsDeception > MAX_VALUES.SKILLS || this.skills.skillsHistory > MAX_VALUES.SKILLS || this.skills.skillsInsight > MAX_VALUES.SKILLS || this.skills.skillsIntimidation > MAX_VALUES.SKILLS || 
+            this.skills.skillsInvestigation > MAX_VALUES.SKILLS || this.skills.skillsMedicine > MAX_VALUES.SKILLS || this.skills.skillsNature > MAX_VALUES.SKILLS || this.skills.skillsPerception > MAX_VALUES.SKILLS || 
+            this.skills.skillsPerformance > MAX_VALUES.SKILLS || this.skills.skillsPersuasion > MAX_VALUES.SKILLS || this.skills.skillsReligion > MAX_VALUES.SKILLS || this.skills.skillsSleightOfHand > MAX_VALUES.SKILLS || 
+            this.skills.skillsStealth > MAX_VALUES.SKILLS || this.skills.skillsSurvival > MAX_VALUES.SKILLS) {
           return false
         }
 
@@ -528,11 +566,40 @@ export default {
       createCharacter() {
         console.info("@createCharacter")
         if (this.checkIfAllValid()) {
-          alert("New Character created!")
-          this.toggleModal()
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-
+          const newCharacter = this.createCharacterDictionary()
+          console.info('character:', newCharacter)
+          // alert("New Character created!")
+          createNewCharacter(this.store.getters.getUser.id, newCharacter).then((success => {
+            if (success) {
+              alert("New Character created!")
+              this.toggleModal()
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              alert("An error occurred creating your character. Please try again")
+            }
+          }))
         }
+      },
+      createCharacterDictionary() {
+        var newCharacter = new Character(
+          this.alignment,
+          this.background,
+          this.charClass,
+          this.deathSaves,
+          this.equipment,
+          this.featuresTraits,
+          this.hp,
+          this.initiative,
+          this.languages,
+          this.level,
+          this.characterName,
+          this.skills,
+          this.stats,
+          this.savingThrows,
+          this.race
+        )
+
+        return newCharacter
       },
       navigateTo(routeName) {
         this.$router.push({ name: routeName })

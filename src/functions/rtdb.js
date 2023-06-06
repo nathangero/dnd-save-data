@@ -1,9 +1,10 @@
 /**
  * This file will contain all the functions that read/write the database
  */
-import { ref, set, get, child } from "firebase/database"
+import { ref, set, get, child, push } from "firebase/database"
 import { db } from "@/firebase.js"
 import User from "@/models/user"
+import DB_PATHS from "@/enums/db-paths"
 
 export async function writeUserInDb(uid, name, email) {
     const dbRef = 'users/' + uid
@@ -46,4 +47,23 @@ export async function readUserInDb(uid) {
         })
     })
     
+}
+
+
+export async function createNewCharacter(userId, characterInfo) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
+    return new Promise((resolve, reject) => {
+        const newKey = push(ref(db, dbRef)).key
+        console.info("newKey:", newKey)
+        dbRef += newKey
+        console.info('new dbref:', dbRef)
+        set(ref(db, dbRef), characterInfo).then((success) => {
+            console.info(`created a new character for user: ${userId}`)
+            resolve(success)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(error)
+        }))
+    })
 }

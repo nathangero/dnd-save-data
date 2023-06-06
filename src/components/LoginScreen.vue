@@ -78,7 +78,7 @@
 </template>
   
 <script>
-import { ROUTER_PATHS } from '@/enums/router-paths'
+import ROUTER_PATHS from '@/enums/router-paths'
 import { auth } from "@/firebase.js"
 import { useStore } from 'vuex'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"

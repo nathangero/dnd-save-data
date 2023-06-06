@@ -7,4 +7,4 @@ const CHARACTER_STATS = {
     CHARISMA: "charisma"
 }
 
-export { CHARACTER_STATS}
+export default CHARACTER_STATS

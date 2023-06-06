@@ -24,8 +24,8 @@
 
 <script>
 import { useStore } from 'vuex'
-import { ROUTER_NAMES } from '@/enums/router-names'
-import { COOKIE_NAMES } from '@/enums/cookie-names'
+import ROUTER_NAMES from '@/enums/router-names'
+import COOKIE_NAMES from '@/enums/cookie-names'
 import Cookies from 'js-cookie'
 
 export default {

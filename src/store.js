@@ -3,7 +3,7 @@ import User from './models/user'
 import { auth } from '@/firebase'
 import { readUserInDb } from './functions/rtdb'
 import Cookies from 'js-cookie';
-import { COOKIE_NAMES } from '@/enums/cookie-names'
+import COOKIE_NAMES from '@/enums/cookie-names'
 
 const store = createStore({
     state: {

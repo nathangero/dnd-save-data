@@ -6,4 +6,4 @@ const ROUTER_NAMES = {
     SESSIONS: 'sessions',
 }
 
-export { ROUTER_NAMES }
+export default ROUTER_NAMES
