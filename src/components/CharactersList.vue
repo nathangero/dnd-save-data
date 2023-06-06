@@ -324,7 +324,25 @@
               <br>
               <h3>Languages</h3>
               <div id="languages">
-                
+                <div class="language-container" v-for="(item, key) in languages" :key="key">
+                  <div class="language-title">
+                    <label class="language-name">{{ key }}: </label>
+                    <label class="language-Proficiency">{{ getLanguageProficiencyString(item) }}</label>
+                  </div>
+                  <br>
+                  <button @click="onPressDeleteLanguage(key)">Delete</button>
+                </div>
+                <div class="language-container">
+                  <input class="language-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
+                  <div>
+                    <label style="margin-right: 15px;" for="language-proficiency-picker">Proficiency: </label>
+                    <select class="language-proficiency-picker" v-model="languagesTempProficiency">
+                      <option v-for="prof in languageproficiencies" :key="prof" :value="prof">{{ prof }}</option>
+                    </select>
+                  </div>
+                  <br>
+                  <button @click="onPressAddLanguage" style="margin-top: 10px;">Add</button>
+                </div>
               </div>
               
               <br>
@@ -369,6 +387,7 @@ import ROUTER_NAMES from '@/enums/router-names'
 import COOKIE_NAMES from '@/enums/cookie-names'
 import DIE_TYPE from '@/enums/die-type'
 import EQUIPMENT_KEYS from '@/enums/equipment-keys'
+import LANGUAGE_PROFICIENCY from '@/enums/language-proficiency'
 import Cookies from 'js-cookie'
 
 // TODO: Will be replaced by Firebase Remote Config
@@ -396,6 +415,7 @@ export default {
           showModal: false,
           showMenu: false,
           hitDieTypes: [DIE_TYPE.D4, DIE_TYPE.D6, DIE_TYPE.D8, DIE_TYPE.D10, DIE_TYPE.D12, DIE_TYPE.D20],
+          languageproficiencies: [LANGUAGE_PROFICIENCY[0], LANGUAGE_PROFICIENCY[1], LANGUAGE_PROFICIENCY[2]],
           characterName: '',
           alignment: '',
           background: '',
@@ -422,6 +442,8 @@ export default {
           featuresTraits: {},
           gold: '', // TODO
           languages: {},
+          languagesTempName: '',
+          languagesTempProficiency: '',
           stats: {
             statsStr: '',
             statsStrBonus: '',
@@ -503,20 +525,73 @@ export default {
     },
     methods: {
       onPressAddEquipment() {
+        if (this.equipmentTempName == '') {
+          alert("Please enter an equipment name")
+          return
+        }
+
+        if (this.equipmentTempAmount == '') {
+          alert("Please enter an equipment amount")
+          return
+        }
+
+        if (this.equipmentTempDescription == '') {
+          alert("Please enter an equipment description")
+          return
+        }
+
         const newItem = {
           amount: this.equipmentTempAmount,
           description: this.equipmentTempDescription
         }
 
         this.equipment[this.equipmentTempName] = newItem
-        console.info("this.equipment:", this.equipment)
+        
         this.equipmentTempName = ''
         this.equipmentTempAmount = ''
         this.equipmentTempDescription = ''
       },
+      onPressAddLanguage() {
+        if (this.languagesTempName == '') {
+          alert("Please enter a language")
+          return
+        }
+
+        if (this.languagesTempProficiency == '') {
+          alert("Please select a language proficiency")
+          return
+        }
+
+        var proficiency;
+        switch (this.languagesTempProficiency) { // Change the string to an int
+          case LANGUAGE_PROFICIENCY[0]:
+            proficiency = LANGUAGE_PROFICIENCY.WRITTEN
+            break
+
+          case LANGUAGE_PROFICIENCY[1]:
+            proficiency = LANGUAGE_PROFICIENCY.SPOKEN
+            break
+            
+          case LANGUAGE_PROFICIENCY[2]:
+            proficiency = LANGUAGE_PROFICIENCY.WRITTEN_SPOKEN
+            break
+            
+          default:
+            proficiency = LANGUAGE_PROFICIENCY.WRITTEN_SPOKEN
+        }
+        this.languages[this.languagesTempName] = proficiency
+        
+        this.languagesTempName = ''
+        this.languagesTempProficiency = ''
+      },
       onPressDeleteEquipment(key) {
         if (key in this.equipment) {
           delete this.equipment[key]
+        }
+      },
+      onPressDeleteLanguage(key) {
+        if (key in this.languages) {
+          delete this.languages[key]
         }
       },
       checkIfAllValid() {
@@ -646,16 +721,15 @@ export default {
         return newCharacter
       },
       getEquipmentAmount(key) {
-        console.info('@getEquipmentAmount')
-        console.info('key:', key)
         const item = this.equipment[key]
-        console.info('item:', item)
-        console.info('item[EQUIPMENT_KEYS.AMOUNT]:', item[EQUIPMENT_KEYS.AMOUNT])
         return item[EQUIPMENT_KEYS.AMOUNT]
       },
       getEquipmentDescription(key) {
         const item = this.equipment[key]
         return item[EQUIPMENT_KEYS.DESCRIPTION]
+      },
+      getLanguageProficiencyString(proficiency) {
+        return LANGUAGE_PROFICIENCY[proficiency]
       },
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
@@ -820,6 +894,10 @@ h2 {
   padding-top: 50px;
 }
 
+h3 {
+  text-decoration: underline;
+}
+
 .input-container {
   display: flex;
   flex-direction: column;
@@ -886,6 +964,7 @@ h2 {
   border-bottom: 1px solid black; /* Add a bottom border */
   outline: none;
   padding-left: 0;
+  padding-bottom: 5px;
   margin-bottom: 10px;
 }
 
@@ -914,6 +993,35 @@ h2 {
   width: 80%;
   font-size: large;
   text-align: left;
+}
+
+
+/* LANGUAGE STYLE */
+
+.language-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.language-input {
+  width: 50%;
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  padding-left: 0;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.language-name {
+  font-weight: bold;
+  font-size: larger;
+  margin-right: 10px;
+}
+
+.language-proficiency {
+  font-size: large;
 }
 
 .button-create-character {
