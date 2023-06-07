@@ -308,7 +308,7 @@
                   <button @click="onPressDeleteFeatures(key)">Delete</button>
                 </div>
                 <div class="features-container">
-                  <input class="features-input" style="width=70%;" type="text" v-model="featuresTempName" placeholder="Feature name"> 
+                  <input class="features-input" style="width=70%;" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
                   <div>
                     <label style="margin-right: 15px;" for="features-type-picker">Type:</label>
                     <select class="features-type-picker" v-model="featuresTempType">
@@ -337,10 +337,7 @@
                 </div>
 
                 <div class="equipment-container" v-for="(item, key) in equipment" :key="key">
-                  <div class="equipment-title">
-                    <label class="equipment-name">{{ key }}</label>
-                    <label class="equipment-amount">x{{ getEquipmentAmount(key) }}</label>
-                  </div>
+                  <label class="equipment-name">{{ key }}</label>
                   <label class="equipment-description">{{ getEquipmentDescription(key) }}</label>
                   <br>
                   <button @click="onPressDeleteEquipment(key)">Delete</button>
@@ -364,7 +361,7 @@
                 <div class="language-container" v-for="(item, key) in languages" :key="key">
                   <div class="language-title">
                     <label class="language-name">{{ key }}: </label>
-                    <label class="language-Proficiency">{{ getLanguageProficiencyString(item) }}</label>
+                    <label class="language-Proficiency">{{ item }}</label>
                   </div>
                   <br>
                   <button @click="onPressDeleteLanguage(key)">Delete</button>
@@ -385,7 +382,19 @@
               <br>
               <h3>Proficiencies</h3>
               <div id="proficiencies">
-                
+                <div class="proficency-container" v-for="(item, key) in proficencies" :key="key">
+                  <label class="proficency-name">{{ key }}</label>
+                  <label class="proficency-description">{{ item }}</label>
+                  <br>
+                  <button @click="onPressDeleteProficency(key)">Delete</button>
+                </div>
+                <div class="proficency-container">
+                  <input class="proficency-input" style="width=70%;" type="text" v-model="proficencyTempName" placeholder="Proficency name"> 
+                  <br>
+                  <textarea class="proficency-textarea" v-model="proficencyTempDescription" rows="4" placeholder="Description"></textarea>
+                  <br>
+                  <button @click="onPressAddProficency" style="margin-top: 10px;">Add</button>
+                </div>
               </div>
 
 
@@ -454,7 +463,7 @@ export default {
           showModal: false,
           showMenu: false,
           hitDieTypes: [DIE_TYPE.D4, DIE_TYPE.D6, DIE_TYPE.D8, DIE_TYPE.D10, DIE_TYPE.D12, DIE_TYPE.D20],
-          languageProficiencies: [LANGUAGE_PROFICIENCY[0], LANGUAGE_PROFICIENCY[1], LANGUAGE_PROFICIENCY[2]],
+          languageProficiencies: [LANGUAGE_PROFICIENCY.WRITTEN, LANGUAGE_PROFICIENCY.SPOKEN, LANGUAGE_PROFICIENCY.WRITTEN_SPOKEN],
           featuresTypes: [FEATURES_TYPES.CLASS, FEATURES_TYPES.RACIAL, FEATURES_TYPES.OTHER],
           characterName: '',
           alignment: '',
@@ -490,6 +499,9 @@ export default {
           languages: {},
           languagesTempName: '',
           languagesTempProficiency: '',
+          proficencies: {},
+          proficencyTempName: '',
+          proficencyTempDescription: '',
           stats: {
             statsStr: '',
             statsStrBonus: '',
@@ -570,6 +582,36 @@ export default {
       }
     },
     methods: {
+      onPressAddFeatures() {
+        if (this.featuresTempDescription == '') {
+          alert("Please enter a feature description")
+          return
+        }
+
+        if (this.featuresTempType == '') {
+          alert("Please select a feature type")
+          return
+        }
+
+        if (this.featuresTempUses == '') {
+          alert("Please enter feature uses")
+          return
+        }
+
+        const newFeat = {
+          description: this.featuresTempDescription,
+          type: this.featuresTempType,
+          uses: this.featuresTempUses
+        }
+        console.info('newFeat:', newFeat)
+
+        this.featuresTraits[this.featuresTempName] = newFeat
+
+        this.featuresTempName = ''
+        this.featuresTempDescription = ''
+        this.featuresTempType = ''
+        this.featuresTempUses = ''
+      },
       onPressAddEquipment() {
         if (this.equipmentTempName == '') {
           alert("Please enter an equipment name")
@@ -613,35 +655,21 @@ export default {
         this.languagesTempName = ''
         this.languagesTempProficiency = ''
       },
-      onPressAddFeatures() {
-        if (this.featuresTempDescription == '') {
-          alert("Please enter a feature description")
+      onPressAddProficency() {
+        if (this.proficencyTempName == '') {
+          alert("Please enter a proficency name")
           return
         }
 
-        if (this.featuresTempType == '') {
-          alert("Please select a feature type")
+        if (this.proficencyTempDescription == '') {
+          alert("Please enter a proficency proficiency")
           return
         }
 
-        if (this.featuresTempUses == '') {
-          alert("Please enter feature uses")
-          return
-        }
-
-        const newFeat = {
-          description: this.featuresTempDescription,
-          type: this.featuresTempType,
-          uses: this.featuresTempUses
-        }
-        console.info('newFeat:', newFeat)
-
-        this.featuresTraits[this.featuresTempName] = newFeat
-
-        this.featuresTempName = ''
-        this.featuresTempDescription = ''
-        this.featuresTempType = ''
-        this.featuresTempUses = ''
+        this.proficencies[this.proficencyTempName] = this.proficencyTempDescription
+        
+        this.proficencyTempName = ''
+        this.proficencyTempDescription = ''
       },
       onPressDeleteFeatures(key) {
         if (key in this.featuresTraits) {
@@ -656,6 +684,11 @@ export default {
       onPressDeleteLanguage(key) {
         if (key in this.languages) {
           delete this.languages[key]
+        }
+      },
+      onPressDeleteProficency(key) {
+        if (key in this.proficencies) {
+          delete this.proficencies[key]
         }
       },
       checkIfAllValid() {
@@ -803,6 +836,10 @@ export default {
       getFeaturesUses(key) {
         const item = this.featuresTraits[key]
         return item[FEATURES_KEYS.USES]
+      },
+      getProficencyDescription(key) {
+        const item = this.proficencies[key]
+        return item[FEATURES_KEYS.DESCRIPTION]
       },
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
@@ -1121,6 +1158,41 @@ h3 {
 
 .language-proficiency {
   font-size: large;
+}
+
+
+/* PROFICENCY STYLE */
+
+.proficency-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.proficency-input {
+  margin-left: 5px; /* Adjust the spacing between the label and input */
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  padding-left: 0;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.proficency-textarea {
+  width: 80%;
+  text-align: left;
+}
+
+.proficency-name {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.proficency-description {
+  width: 80%;
+  font-size: large;
+  text-align: left;
 }
 
 .button-create-character {
