@@ -48,8 +48,8 @@
               <br>
               <h3>Base Stats</h3>
               <div id="base-stats">
-                <div class="container-list-stats">
-                  <ul class="list-stats">
+                <div class="container-inputs">
+                  <ul class="list-inputs">
                     <li>
                       <label for="stats-level" class="label-stats">Starting level:</label>
                       <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
@@ -94,60 +94,42 @@
                   </ul>
                 </div>
 
-                <div class="container-list-stats">
+                <div class="container-inputs">
                   <!-- Base stats -->
-                  <ul class="list-stats">
+                  <ul class="list-inputs">
                     <li>
                         <label for="stats-str" class="label-stats">Strength:</label>
                         <input type="number" id="stats-str" v-model="stats.statsStr" class="input-stats" inputmode="numeric" required>
-
-                        <!-- <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
-                        <input type="number" id="stats-str-bonus" v-model="stats.statsStrBonus" class="input-stats" inputmode="numeric" required> -->
                     </li>
                     
                     <li>
                       <label for="stats-dex" class="label-stats">Dexterity: </label>
                       <input type="number" id="stats-dex" v-model="stats.statsDex" class="input-stats" inputmode="numeric" required>
-
-                      <!-- <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-dex-bonus" v-model="stats.statsDexBonus" class="input-stats" inputmode="numeric" required> -->
                     </li>
                       
                     <li>
                       <label for="stats-con" class="label-stats">Consitution: </label>
                       <input type="number" id="stats-con" v-model="stats.statsCon" class="input-stats" inputmode="numeric" required>
-                    
-                      <!-- <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-con-bonus" v-model="stats.statsConBonus" class="input-stats" inputmode="numeric" required> -->
                     </li>
 
                     <li>
                       <label for="stats-int" class="label-stats">Intelligence: </label>
                       <input type="number" id="stats-int" v-model="stats.statsInt" class="input-stats" inputmode="numeric" required>
-                    
-                      <!-- <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-int-bonus" v-model="stats.statsIntBonus" class="input-stats" inputmode="numeric" required> -->
                     </li>
 
                     <li>
                       <label for="stats-wis" class="label-stats">Wisdom: </label>
                       <input type="number" id="stats-wis" v-model="stats.statsWis" class="input-stats" inputmode="numeric" required>
-                    
-                      <!-- <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-wis-bonus" v-model="stats.statsWisBonus" class="input-stats" inputmode="numeric" required> -->
                     </li>
 
                     <li>
                       <label for="stats-cha" class="label-stats">Charisma: </label>
                       <input type="number" id="stats-cha" v-model="stats.statsCha" class="input-stats" inputmode="numeric" required>
-                    
-                      <!-- <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-cha-bonus" v-model="stats.statsChaBonus" class="input-stats" inputmode="numeric" required> -->
                     </li>
                   </ul>
 
                   <!-- Bonus modifier -->
-                  <ul class="list-stats">
+                  <ul class="list-inputs">
                     <li>
                         <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
                         <input type="number" id="stats-str-bonus" v-model="stats.statsStrBonus" class="input-stats" inputmode="numeric" required>
@@ -184,8 +166,8 @@
               <br>
               <h3>Saving Throws</h3>
               <div id="saving-throws">
-                <div class="container-saving-throws">
-                  <ul class="list-saving-throws">
+                <div class="container-inputs">
+                  <ul class="list-inputs">
                     <li>
                       <label for="saving-str" class="label-stats">Strength:</label>
                       <input type="number" id="saving-str" v-model="savingThrows.savingStr" class="input-stats" inputmode="numeric" required>
@@ -222,8 +204,8 @@
               <br>
               <h3>Skills</h3>
               <div id="skills">
-                <div class="container-skills">
-                  <ul class="list-skills">
+                <div class="container-inputs">
+                  <ul class="list-inputs">
                     <li>
                       <label for="skills-acrobatics" class="label-stats">Acrobatics:</label>
                       <input type="number" id="skills-acrobatics" v-model="skills.skillsAcrobatics" class="input-stats" inputmode="numeric" required>
@@ -338,25 +320,27 @@
                   </div>
                 </template>
 
-                <div class="features-container">
-                  <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
-                  <div>
-                    <label>Type:</label>
-                    <select class="picker" v-model="featuresTempType">
-                      <option v-for="feat in featuresTypes" :key="feat" :value="feat">{{ feat }}</option>
-                    </select>
-                  </div>
+                <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
 
-                  <div>
-                    <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
-                    <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
-                  </div>
-                  <br>
+                <div class="container-inputs">
+                  <ul class="list-inputs">
+                    <li>
+                      <label>Type:</label>
+                      <select class="picker" v-model="featuresTempType">
+                        <option v-for="feat in featuresTypes" :key="feat" :value="feat">{{ feat }}</option>
+                      </select>
+                    </li>
+
+                    <li>
+                      <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                      <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                    </li>
+                  </ul>
+                </div>
                   
                   <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
                   <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
-                </div>
               </div>
 
               <br>
@@ -435,22 +419,89 @@
                         <label class="item-name">{{ key }}</label>
                         <label class="item-description">{{ item }}</label>
                         <br>
-                        <button @click="onPressDeleteproficiency(key)">Delete</button>
+                        <button @click="onPressDeleteProficiency(key)">Delete</button>
                       </li>
                     </ul>
                   </div>
                 </template>
 
                 <div class="proficiency-container">
-                  <input class="item-input" v-model="proficiencyTempName" placeholder="proficiency name"> 
+                  <input class="item-input" v-model="proficiencyTempName" placeholder="Proficiency name"> 
                   <br>
-                  <textarea class="proficiency-textarea" v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
+                  <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
                   <button @click="onPressAddproficiency" style="margin-top: 10px;">Add</button>
                 </div>
               </div>
 
 
+              <br>
+              <h3>Spell Casting</h3>
+              <div id="spells">
+                <div class="container-inputs">
+                  <ul class="list-inputs">
+                    <li>
+                      <label for="spells-attack-bonus" class="label-stats">Attack Bonus:</label>
+                      <input type="number" id="spells-attack-bonus" v-model="spellAttackBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="spells-attack-bonus" class="label-stats">Casting Ability:</label>
+                      <select class="picker" v-model="spellCastingAbility">
+                        <option v-for="stat in statNames" :key="stat" :value="stat">{{ stat }}</option>
+                      </select>
+                    </li>
+
+                    <li>
+                      <label for="spells-class" class="label-stats">Spell Casting Class:</label>
+                      <input type="text" id="spells-class" v-model="spellClass" class="input-stats" required>
+                    </li>
+
+                    <li>
+                      <label for="spells-save-dc" class="label-stats">Saving DC:</label>
+                      <input type="number" id="spells-save-dc" v-model="spellSavingDc" class="input-stats" inputmode="numeric" required>
+                    </li>
+                  </ul>
+                </div>
+
+                <template v-if="getDictionarySize(spells) > 0">
+                  <div class="list-container">
+                    <ul class="list">
+                      <li v-for="(item, key) in proficiencies" :key="key">
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-description">{{ item }}</label>
+                        <br>
+                        <button @click="onPressDeleteSpell(key)">Delete</button>
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+
+                <input class="item-input" v-model="spellTempName" placeholder="Spell name"> 
+
+                <div class="container-inputs">
+                  <ul class="list-inputs">
+                    <li>
+                      <label for="spells-casting-time" class="label-stats">Casting Time (# of actions):</label>
+                      <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="spells-casting-duration" class="label-stats">Duration (in seconds):</label>
+                      <input type="number" id="spells-casting-duration" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="spells-range" class="label-stats">Range (in feet):</label>
+                      <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
+                    </li>
+                  </ul>
+                </div>
+
+                <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+                <br>
+                <button @click="onPressAddSpell" style="margin-top: 10px;">Add</button>
+              </div>
               <button class="button-create-character" @click="createCharacter">Create Character</button>
 
             </div>
@@ -484,12 +535,14 @@ import { createNewCharacter } from '@/functions/rtdb'
 import Character from '@/models/character'
 import ROUTER_NAMES from '@/enums/router-names'
 import COOKIE_NAMES from '@/enums/cookie-names'
+import SPELLCASTING_NAMES from '@/enums/spellcasting-names'
 import DIE_TYPE from '@/enums/die-type'
-import EQUIPMENT_KEYS from '@/enums/equipment-keys'
+import EQUIPMENT_KEYS from '@/enums/dbKeys/equipment-keys.js'
+import FEATURES_KEYS from '@/enums/dbKeys/features-keys.js'
 import LANGUAGE_PROFICIENCY from '@/enums/language-proficiency'
-import FEATURES_KEYS from '@/enums/features-keys'
 import FEATURES_TYPES from '@/enums/features-types'
 import Cookies from 'js-cookie'
+import CHARACTER_STATS from '@/enums/character-stats'
 
 // TODO: Will be replaced by Firebase Remote Config
 const MAX_VALUES = {
@@ -518,6 +571,8 @@ export default {
           hitDieTypes: [DIE_TYPE.D4, DIE_TYPE.D6, DIE_TYPE.D8, DIE_TYPE.D10, DIE_TYPE.D12, DIE_TYPE.D20],
           languageProficiencies: [LANGUAGE_PROFICIENCY.WRITTEN, LANGUAGE_PROFICIENCY.SPOKEN, LANGUAGE_PROFICIENCY.WRITTEN_SPOKEN],
           featuresTypes: [FEATURES_TYPES.CLASS, FEATURES_TYPES.RACIAL, FEATURES_TYPES.OTHER],
+          statNames: [CHARACTER_STATS.STRENGTH, CHARACTER_STATS.DEXTERITY, CHARACTER_STATS.CONSTITUTION, CHARACTER_STATS.INTELLIGENCE, CHARACTER_STATS.WISDOM, CHARACTER_STATS.CHARISMA],
+          spellLevels: [SPELLCASTING_NAMES.LEVEL_1, SPELLCASTING_NAMES.LEVEL_2, SPELLCASTING_NAMES.LEVEL_3, SPELLCASTING_NAMES.LEVEL_4, SPELLCASTING_NAMES.LEVEL_5, SPELLCASTING_NAMES.LEVEL_6, SPELLCASTING_NAMES.LEVEL_7, SPELLCASTING_NAMES.LEVEL_8, SPELLCASTING_NAMES.LEVEL_9],
           characterName: '',
           alignment: '',
           background: '',
@@ -555,48 +610,59 @@ export default {
           proficiencies: {},
           proficiencyTempName: '',
           proficiencyTempDescription: '',
+          spellAttackBonus: '',
+          spellCastingAbility: '', // e.g. intelligence
+          spellClass: '',
+          spellSavingDc: '',
+          spellTempName: '',
+          spellTempCastingTime: '',
+          spellTempDescription: '',
+          spellTempDuration: '', // in seconds
+          spellTempRange: '', // in feet
           stats: {
-            statsStr: '',
-            statsStrBonus: '',
-            statsDex: '',
-            statsDexBonus: '',
-            statsCon: '',
-            statsConBonus: '',
-            statsInt: '',
-            statsIntBonus: '',
-            statsWis: '',
-            statsWisBonus: '',
-            statsCha: '',
-            statsChaBonus: '',
+            store: '',
+            strBonus: '',
+            dex: '',
+            dexBonus: '',
+            con: '',
+            sconBonus: '',
+            int: '',
+            intBonus: '',
+            wis: '',
+            wisBonus: '',
+            cha: '',
+            chaBonus: '',
           },
           savingThrows: {
-            savingStr: '',
-            savingDex: '',
-            savingCon: '',
-            savingInt: '',
-            savingWis: '',
-            savingCha: '',
+            str: '',
+            dex: '',
+            con: '',
+            int: '',
+            wis: '',
+            cha: '',
           },
           skills: {
-            skillsAcrobatics: '',
-            skillsAnimalHandling: '',
-            skillsArcana: '',
-            skillsAthletics: '',
-            skillsDeception: '',
-            skillsHistory: '',
-            skillsInsight: '',
-            skillsIntimidation: '',
-            skillsInvestigation: '',
-            skillsMedicine: '',
-            skillsNature: '',
-            skillsPerception: '',
-            skillsPerformance: '',
-            skillsPersuasion: '',
-            skillsReligion: '',
-            skillsSleightOfHand: '',
-            skillsStealth: '',
-            skillsSurvival: '',
+            acrobatics: '',
+            animalHandling: '',
+            arcana: '',
+            athletics: '',
+            deception: '',
+            history: '',
+            insight: '',
+            intimidation: '',
+            investigation: '',
+            medicine: '',
+            nature: '',
+            perception: '',
+            performance: '',
+            persuasion: '',
+            religion: '',
+            sleightOfHand: '',
+            stealth: '',
+            survival: '',
           },
+          spells: {
+          }
         }
     },
     mounted() {
@@ -805,6 +871,14 @@ export default {
         this.proficiencyTempName = ''
         this.proficiencyTempDescription = ''
       },
+      onPressAddSpell() {
+        // TODO accomodate for spell levels
+        const newSpell = {
+
+        }
+
+        this.spells[this.spellTempName] = newSpell
+      },
       onPressDeleteFeatures(key) {
         if (key in this.featuresTraits) {
           delete this.featuresTraits[key]
@@ -820,9 +894,14 @@ export default {
           delete this.languages[key]
         }
       },
-      onPressDeleteproficiency(key) {
+      onPressDeleteProficiency(key) {
         if (key in this.proficiencies) {
           delete this.proficiencies[key]
+        }
+      },
+      onPressDeleteSpell(key) {
+        if (key in this.spells) {
+          delete this.spells[key]
         }
       },
       checkIfAllValid() {
@@ -1200,6 +1279,26 @@ textarea {
   margin: 20px 10px auto;
 }
 
+
+/* LIST - ENTERING INPUT STYLE */
+
+.container-inputs {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto; /* centers the container */
+}
+
+.list-inputs {
+  list-style: none;
+  padding: 0;
+}
+
+.list-inputs li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* LIST - ADDED ITEMS STYLE */
 
 .item-input {
@@ -1244,61 +1343,13 @@ textarea {
 
 /* BASE STATS STYLE */
 
-.container-list-stats {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto; /* centers the container */
-}
-
-.list-stats {
-  list-style: none;
-  padding: 0;
-}
-
-.list-stats li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 
 /* SAVING THROWS STYLE */
 
-.container-saving-throws {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto; /* centers the container */
-}
-
-.list-saving-throws {
-  list-style: none;
-  padding: 0;
-}
-
-.list-saving-throws li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 /* SKILLS STYLE */
 
-.container-skills {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto; /* centers the container */
-}
-
-.list-skills {
-  list-style: none;
-  padding: 0;
-}
-
-.list-skills li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 
 /* FEATURES & TRAITS STYLE */
@@ -1308,42 +1359,14 @@ textarea {
 
 /* EQUIPMENT STYLE */
 
-.equipment-input {
-  margin-left: 5px; /* Adjust the spacing between the label and input */
-  border: none; /* Remove the default border */
-  border-bottom: 1px solid black; /* Add a bottom border */
-  outline: none;
-  padding-left: 0;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
 
 
 /* LANGUAGE STYLE */
 
 
-.language-input {
-  width: 50%;
-  border: none; /* Remove the default border */
-  border-bottom: 1px solid black; /* Add a bottom border */
-  outline: none;
-  padding-left: 0;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
-
-.language-name {
-  font-weight: bold;
-  font-size: larger;
-  margin-right: 10px;
-}
-
-.language-proficiency {
-  font-size: large;
-}
 
 
-/* proficiency STYLE */
+/* PROFICIENCY STYLE */
 
 .proficiency-container {
   display: flex;
@@ -1351,30 +1374,14 @@ textarea {
   align-items: center;
 }
 
-.proficiency-input {
-  margin-left: 5px; /* Adjust the spacing between the label and input */
-  border: none; /* Remove the default border */
-  border-bottom: 1px solid black; /* Add a bottom border */
-  outline: none;
-  padding-left: 0;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
 
-.proficiency-textarea {
-  width: 80%;
-  text-align: left;
-}
 
-.proficiency-name {
-  font-weight: bold;
-  font-size: larger;
-}
+/* SPELL CASTING STYLE */
 
-.proficiency-description {
-  width: 80%;
-  font-size: large;
-  text-align: left;
+.spells-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .button-create-character {
