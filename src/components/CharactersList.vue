@@ -1179,12 +1179,6 @@ textarea {
 }
 
 
-.container-stats-bonus {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto; /* centers the container */
-}
-
 /* SAVING THROWS STYLE */
 
 .container-saving-throws {
