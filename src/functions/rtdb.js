@@ -55,13 +55,13 @@ export async function createNewCharacter(userId, characterInfo) {
     return new Promise((resolve, reject) => {
         const newKey = push(ref(db, dbRef)).key
         dbRef += newKey
-        set(ref(db, dbRef), characterInfo).then((success) => {
+        set(ref(db, dbRef), characterInfo).then(() => {
             console.info(`created a new character for user: ${userId}`)
-            resolve(success)
+            resolve(true)
         })
         .catch ((error => {
             console.error(error)
-            reject(error)
+            reject(false)
         }))
     })
 }

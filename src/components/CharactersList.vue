@@ -48,154 +48,174 @@
               <br>
               <h3>Base Stats</h3>
               <div id="base-stats">
-                <div style="margin-bottom: 10px">
-                  <label for="stats-level" class="label-stats">Starting level:</label>
-                  <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
+                <div class="container-list-stats">
+                  <ul class="list-stats">
+                    <li>
+                      <label for="stats-level" class="label-stats">Starting level:</label>
+                      <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-hp" class="label-stats">Hit Points (HP):</label>
+                      <input type="number" id="stats-hp" v-model="hp.max" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-hit-die"># of Hit Die: </label>
+                      <input type="number" id="stats-hit-die" v-model="hp.dieAmount" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label>Hit Die Type: </label>
+                      <select class="picker" v-model="hp.die">
+                        <option v-for="die in hitDieTypes" :key="die" :value="die">{{ die }}</option>
+                      </select>
+                    </li>
+
+                    <li>
+                      <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
+                      <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-armor-class">Armor Class: </label>
+                      <input type="number" id="stats-armor-class" v-model="armorClass" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-initiative">Initiative: </label>
+                      <input type="number" id="stats-hit-die" v-model="initiative" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-speed">Speed: </label>
+                      <input type="number" id="stats-speed" v-model="speed" class="input-stats" inputmode="numeric" required>
+                    </li>
+                  </ul>
                 </div>
 
-                <div style="display: flex; justify-content: center;">
-                  <div>
-                    <label for="stats-hp" class="label-stats">Hit Points (HP):</label>
-                    <input type="number" id="stats-hp" v-model="hp.max" class="input-stats" inputmode="numeric" required>
-                  </div>
+                <div class="container-list-stats">
+                  <!-- Base stats -->
+                  <ul class="list-stats">
+                    <li>
+                        <label for="stats-str" class="label-stats">Strength:</label>
+                        <input type="number" id="stats-str" v-model="stats.statsStr" class="input-stats" inputmode="numeric" required>
 
-                  <div>
-                    <label for="stats-hit-die" style="margin-left: 10px;">Hit Die: </label>
-                    <input type="number" id="stats-hit-die" v-model="hp.dieAmount" class="input-stats" inputmode="numeric" required>
-                  </div>
-                </div>
+                        <!-- <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
+                        <input type="number" id="stats-str-bonus" v-model="stats.statsStrBonus" class="input-stats" inputmode="numeric" required> -->
+                    </li>
+                    
+                    <li>
+                      <label for="stats-dex" class="label-stats">Dexterity: </label>
+                      <input type="number" id="stats-dex" v-model="stats.statsDex" class="input-stats" inputmode="numeric" required>
 
-                <div>
-                  <label>Hit Die Type: </label>
-                  <select class="picker" v-model="hp.die">
-                    <option v-for="die in hitDieTypes" :key="die" :value="die">{{ die }}</option>
-                  </select>
-                </div>
+                      <!-- <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-dex-bonus" v-model="stats.statsDexBonus" class="input-stats" inputmode="numeric" required> -->
+                    </li>
+                      
+                    <li>
+                      <label for="stats-con" class="label-stats">Consitution: </label>
+                      <input type="number" id="stats-con" v-model="stats.statsCon" class="input-stats" inputmode="numeric" required>
+                    
+                      <!-- <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-con-bonus" v-model="stats.statsConBonus" class="input-stats" inputmode="numeric" required> -->
+                    </li>
 
-                <div>
-                  <label for="stats-proficiency-bonus">proficiency Bonus: </label>
-                  <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="stats-int" class="label-stats">Intelligence: </label>
+                      <input type="number" id="stats-int" v-model="stats.statsInt" class="input-stats" inputmode="numeric" required>
+                    
+                      <!-- <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-int-bonus" v-model="stats.statsIntBonus" class="input-stats" inputmode="numeric" required> -->
+                    </li>
 
-                <div>
-                  <label for="stats-armor-class">Armor Class: </label>
-                  <input type="number" id="stats-armor-class" v-model="armorClass" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="stats-wis" class="label-stats">Wisdom: </label>
+                      <input type="number" id="stats-wis" v-model="stats.statsWis" class="input-stats" inputmode="numeric" required>
+                    
+                      <!-- <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-wis-bonus" v-model="stats.statsWisBonus" class="input-stats" inputmode="numeric" required> -->
+                    </li>
 
-                <div>
-                  <label for="stats-initiative">Initiative: </label>
-                  <input type="number" id="stats-hit-die" v-model="initiative" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="stats-cha" class="label-stats">Charisma: </label>
+                      <input type="number" id="stats-cha" v-model="stats.statsCha" class="input-stats" inputmode="numeric" required>
+                    
+                      <!-- <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-cha-bonus" v-model="stats.statsChaBonus" class="input-stats" inputmode="numeric" required> -->
+                    </li>
+                  </ul>
 
-                <div style="margin-bottom: 10px;">
-                  <label for="stats-speed">Speed: </label>
-                  <input type="number" id="stats-speed" v-model="speed" class="input-stats" inputmode="numeric" required>
-                </div>
+                  <!-- Bonus modifier -->
+                  <ul class="list-stats">
+                    <li>
+                        <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
+                        <input type="number" id="stats-str-bonus" v-model="stats.statsStrBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-dex-bonus" v-model="stats.statsDexBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
+                      
+                    <li>
+                      <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-con-bonus" v-model="stats.statsConBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div class="flex-container-stat">
-                  <div class="container-stat">
-                    <label for="stats-str" class="label-stats">Strength:</label>
-                    <input type="number" id="stats-str" style="margin-left: 31px;" v-model="stats.statsStr" class="input-stats" inputmode="numeric" required>
-                  </div>
+                    <li>
+                      <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-int-bonus" v-model="stats.statsIntBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                  <div class="container-stat-bonus">
-                    <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-str-bonus" v-model="stats.statsStrBonus" class="input-stats" inputmode="numeric" required>
-                  </div>
-                </div>
+                    <li>
+                      <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-wis-bonus" v-model="stats.statsWisBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div class="flex-container-stat">
-                  <div class="container-stat">
-                    <label for="stats-dex" class="label-stats">Dexterity: </label>
-                    <input type="number" id="stats-dex" style="margin-left: 29px;" v-model="stats.statsDex" class="input-stats" inputmode="numeric" required>
-                  </div>
-
-                  <div class="container-stat-bonus">
-                    <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-dex-bonus" v-model="stats.statsDexBonus" class="input-stats" inputmode="numeric" required>
-                  </div>
-                </div>
-
-                <div class="flex-container-stat">
-                  <div class="container-stat">
-                    <label for="stats-con" class="label-stats">Consitution: </label>
-                    <input type="number" id="stats-con" style="margin-left: 12px;" v-model="stats.statsCon" class="input-stats" inputmode="numeric" required>
-                  </div>
-                  
-                  <div class="container-stat-bonus">
-                    <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-con-bonus" v-model="stats.statsConBonus" class="input-stats" inputmode="numeric" required>
-                  </div>
-                </div>
-
-                <div class="flex-container-stat">
-                  <div class="container-stat">
-                    <label for="stats-int" class="label-stats">Intelligence: </label>
-                    <input type="number" id="stats-int" style="margin-left: 12px;" v-model="stats.statsInt" class="input-stats" inputmode="numeric" required>
-                  </div>
-                  
-                  <div class="container-stat-bonus">
-                    <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-int-bonus" v-model="stats.statsIntBonus" class="input-stats" inputmode="numeric" required>
-                  </div>
-                </div>
-
-                <div class="flex-container-stat">
-                  <div class="container-stat">
-                    <label for="stats-wis" class="label-stats">Wisdom: </label>
-                    <input type="number" id="stats-wis" style="margin-left: 36px;" v-model="stats.statsWis" class="input-stats" inputmode="numeric" required>
-                  </div>
-                  
-                  <div class="container-stat-bonus">
-                    <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-wis-bonus" v-model="stats.statsWisBonus" class="input-stats" inputmode="numeric" required>
-                  </div>
-                </div>
-
-                <div class="flex-container-stat">
-                  <div class="container-stat">
-                    <label for="stats-cha" class="label-stats">Charisma: </label>
-                    <input type="number" id="stats-cha" style="margin-left: 25px;" v-model="stats.statsCha" class="input-stats" inputmode="numeric" required>
-                  </div>
-                  
-                  <div class="container-stat-bonus">
-                    <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
-                    <input type="number" id="stats-cha-bonus" v-model="stats.statsChaBonus" class="input-stats" inputmode="numeric" required>
-                  </div>
+                    <li>
+                      <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
+                      <input type="number" id="stats-cha-bonus" v-model="stats.statsChaBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
+                  </ul>
                 </div>
               </div>
               
               <br>
               <h3>Saving Throws</h3>
               <div id="saving-throws">
-                <div>
-                  <label for="saving-str" class="label-stats">Strength:</label>
-                  <input type="number" id="saving-str" style="margin-left: 31px;" v-model="savingThrows.savingStr" class="input-stats" inputmode="numeric" required>
-                </div>
-                
-                <div>
-                  <label for="saving-dex" class="label-stats">Dexterity: </label>
-                  <input type="number" id="saving-dex" style="margin-left: 29px;" v-model="savingThrows.savingDex" class="input-stats" inputmode="numeric" required>
-                </div>
+                <div class="container-saving-throws">
+                  <ul class="list-saving-throws">
+                    <li>
+                      <label for="saving-str" class="label-stats">Strength:</label>
+                      <input type="number" id="saving-str" v-model="savingThrows.savingStr" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="saving-dex" class="label-stats">Dexterity: </label>
+                      <input type="number" id="saving-dex" v-model="savingThrows.savingDex" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="saving-con" class="label-stats">Consitution: </label>
-                  <input type="number" id="saving-con" style="margin-left: 12px;" v-model="savingThrows.savingCon" class="input-stats" inputmode="numeric" required>
-                </div>
-                
-                <div>
-                  <label for="saving-int" class="label-stats">Intelligence: </label>
-                  <input type="number" id="saving-int" style="margin-left: 12px;" v-model="savingThrows.savingInt" class="input-stats" inputmode="numeric" required>
-                </div>
-                
-                <div>
-                  <label for="saving-wis" class="label-stats">Wisdom: </label>
-                  <input type="number" id="saving-wis" style="margin-left: 36px;" v-model="savingThrows.savingWis" class="input-stats" inputmode="numeric" required>
-                </div>
-                
-                <div>
-                  <label for="saving-cha" class="label-stats">Charisma: </label>
-                  <input type="number" id="saving-cha" style="margin-left: 27px;" v-model="savingThrows.savingCha" class="input-stats" inputmode="numeric" required>
+                    <li>
+                      <label for="saving-con" class="label-stats">Consitution: </label>
+                      <input type="number" id="saving-con" v-model="savingThrows.savingCon" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="saving-int" class="label-stats">Intelligence: </label>
+                      <input type="number" id="saving-int" v-model="savingThrows.savingInt" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="saving-wis" class="label-stats">Wisdom: </label>
+                      <input type="number" id="saving-wis" v-model="savingThrows.savingWis" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="saving-cha" class="label-stats">Charisma: </label>
+                      <input type="number" id="saving-cha" v-model="savingThrows.savingCha" class="input-stats" inputmode="numeric" required>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
@@ -839,6 +859,8 @@ export default {
           this.gold,
           this.hp,
           this.initiative,
+          this.proficiencyBonus,
+          this.proficiencies,
           this.languages,
           this.level,
           this.characterName,
@@ -1092,7 +1114,7 @@ textarea {
 }
 
 .picker {
-  margin: 10px 10px auto;
+  margin: 20px 10px auto;
 }
 
 /* LIST - ADDED ITEMS STYLE */
@@ -1104,7 +1126,6 @@ textarea {
   outline: none;
   padding-left: 0;
   padding-bottom: 5px;
-  margin-bottom: 10px;
 }
 
 .list-container {
@@ -1137,6 +1158,52 @@ textarea {
   text-align: left;
 }
 
+
+/* BASE STATS STYLE */
+
+.container-list-stats {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto; /* centers the container */
+}
+
+.list-stats {
+  list-style: none;
+  padding: 0;
+}
+
+.list-stats li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.container-stats-bonus {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto; /* centers the container */
+}
+
+/* SAVING THROWS STYLE */
+
+.container-saving-throws {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto; /* centers the container */
+}
+
+.list-saving-throws {
+  list-style: none;
+  padding: 0;
+}
+
+.list-saving-throws li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* SKILLS STYLE */
 
 .container-skills {
@@ -1145,14 +1212,15 @@ textarea {
   margin: 0 auto; /* centers the container */
 }
 
-.list-skills li {
+.list-skills {
   list-style: none;
-  text-align: left;
-  margin-bottom: 10px;
+  padding: 0;
 }
 
-.list-skills li input {
-  text-align: right;
+.list-skills li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 
