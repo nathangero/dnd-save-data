@@ -635,6 +635,87 @@ export default {
       }
     },
     methods: {
+      resetVariables() {
+        this.characterName = ''
+        this.alignment = ''
+        this.background = ''
+        this.charClass = ''
+        this.deathSaves = {"successes": 0, "failures": 0}
+        this.race = ''
+        this.level = ''
+        this.armorClass = ''
+        this.initiative = ''
+        this.proficiencyBonus = ''
+        this.speed = ''
+        this.hp = {
+          "current": '',
+          "die": '',
+          "dieAmount": '',
+          "max": '',
+          "temp": 0
+        }
+        this.hitDieType = ''
+        this.hitDieAmount = ''
+        this.equipment = {}
+        this.equipmentTempName = ''
+        this.equipmentTempAmount = ''
+        this.equipmentTempDescription = ''
+        this.featuresTraits = {}
+        this.featuresTempName = ''
+        this.featuresTempDescription = ''
+        this.featuresTempType = ''
+        this.featuresTempUseable = true
+        this.featuresTempUses = ''
+        this.gold = ''
+        this.languages = {}
+        this.languagesTempName = ''
+        this.languagesTempProficiency = ''
+        this.proficiencies = {}
+        this.proficiencyTempName = ''
+        this.proficiencyTempDescription = ''
+        this.stats = {
+          statsStr: '',
+          statsStrBonus: '',
+          statsDex: '',
+          statsDexBonus: '',
+          statsCon: '',
+          statsConBonus: '',
+          statsInt: '',
+          statsIntBonus: '',
+          statsWis: '',
+          statsWisBonus: '',
+          statsCha: '',
+          statsChaBonus: '',
+        }
+        this.savingThrows = {
+          savingStr: '',
+          savingDex: '',
+          savingCon: '',
+          savingInt: '',
+          savingWis: '',
+          savingCha: '',
+        }
+        this.skills = {
+          skillsAcrobatics: '',
+          skillsAnimalHandling: '',
+          skillsArcana: '',
+          skillsAthletics: '',
+          skillsDeception: '',
+          skillsHistory: '',
+          skillsInsight: '',
+          skillsIntimidation: '',
+          skillsInvestigation: '',
+          skillsMedicine: '',
+          skillsNature: '',
+          skillsPerception: '',
+          skillsPerformance: '',
+          skillsPersuasion: '',
+          skillsReligion: '',
+          skillsSleightOfHand: '',
+          skillsStealth: '',
+          skillsSurvival: '',
+        }
+      },
       onPressAddFeatures() {
         if (this.featuresTempDescription == '') {
           alert("Please enter a feature description")
@@ -785,8 +866,9 @@ export default {
       },
       checkIfStatsValid() {
         console.info("@checkIfStatsValid")
-        if (this.stats.statsStr == '' || this.stats.statsDex == '' || this.stats.statsCon == '' || this.stats.statsInt == '' || this.stats.statsWis == '' || this.stats.statsCha == '' ||
-            this.stats.statsStrBonus == '' || this.stats.statsDexBonus == '' || this.stats.statsConBonus == '' || this.stats.statsIntBonus == '' || this.stats.statsWisBonus == '' || this.stats.statsChaBonus == '') {
+        console.info('this.stats.statsStrBonus:', this.stats.statsStrBonus)
+        if (this.stats.statsStr === '' || this.stats.statsDex === '' || this.stats.statsCon === '' || this.stats.statsInt === '' || this.stats.statsWis === '' || this.stats.statsCha === '' ||
+            this.stats.statsStrBonus === '' || this.stats.statsDexBonus === '' || this.stats.statsConBonus === '' || this.stats.statsIntBonus === '' || this.stats.statsWisBonus === '' || this.stats.statsChaBonus === '') {
               return false
         }
 
@@ -801,7 +883,7 @@ export default {
       },
       checkIfThrowsValid() {
         console.info("@checkIfThrowsValid")
-        if (this.savingThrows.savingStr == '' || this.savingThrows.savingDex == '' || this.savingThrows.savingCon == '' || this.savingThrows.savingInt == '' || this.savingThrows.savingWis == '' || this.savingThrows.savingCha == '') {
+        if (this.savingThrows.savingStr === '' || this.savingThrows.savingDex === '' || this.savingThrows.savingCon === '' || this.savingThrows.savingInt === '' || this.savingThrows.savingWis === '' || this.savingThrows.savingCha === '') {
           return false
         }
         
@@ -812,11 +894,11 @@ export default {
         return true
       },
       checkIfSkillsValid() {
-        if (this.skills.skillsAcrobatics == '' || this.skills.skillsAnimalHandling == '' || this.skills.skillsArcana == '' || this.skills.skillsAthletics == '' || 
-            this.skills.skillsDeception == '' || this.skills.skillsHistory == '' || this.skills.skillsInsight == '' || this.skills.skillsIntimidation == '' || 
-            this.skills.skillsInvestigation == '' || this.skills.skillsMedicine == '' || this.skills.skillsNature == '' || this.skills.skillsPerception == '' || 
-            this.skills.skillsPerformance == '' || this.skills.skillsPersuasion == '' || this.skills.skillsReligion == '' || this.skills.skillsSleightOfHand == '' || 
-            this.skills.skillsStealth == '' || this.skills.skillsSurvival == '') {
+        if (this.skills.skillsAcrobatics === '' || this.skills.skillsAnimalHandling === '' || this.skills.skillsArcana === '' || this.skills.skillsAthletics === '' || 
+            this.skills.skillsDeception === '' || this.skills.skillsHistory === '' || this.skills.skillsInsight === '' || this.skills.skillsIntimidation === '' || 
+            this.skills.skillsInvestigation === '' || this.skills.skillsMedicine === '' || this.skills.skillsNature === '' || this.skills.skillsPerception === '' || 
+            this.skills.skillsPerformance === '' || this.skills.skillsPersuasion === '' || this.skills.skillsReligion === '' || this.skills.skillsSleightOfHand === '' || 
+            this.skills.skillsStealth === '' || this.skills.skillsSurvival === '') {
           return false
         }
 
@@ -839,6 +921,7 @@ export default {
           createNewCharacter(this.store.getters.getUser.id, newCharacter).then((success => {
             if (success) {
               alert("New Character created!")
+              this.resetVariables()
               this.toggleModal()
               window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
