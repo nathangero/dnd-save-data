@@ -66,15 +66,15 @@
                 </div>
 
                 <div>
-                  <label for="stats-hit-die-type">Hit Die Type: </label>
-                  <select class="hit-die-picker" v-model="hp.die">
+                  <label>Hit Die Type: </label>
+                  <select class="picker" v-model="hp.die">
                     <option v-for="die in hitDieTypes" :key="die" :value="die">{{ die }}</option>
                   </select>
                 </div>
 
-                <div style="margin-bottom: 10px;">
-                  <label for="stats-proficency-bonus">Proficency Bonus: </label>
-                  <input type="number" id="stats-proficency-bonus" v-model="proficencyBonus" class="input-stats" inputmode="numeric" required>
+                <div>
+                  <label for="stats-proficiency-bonus">proficiency Bonus: </label>
+                  <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
                 </div>
 
                 <div>
@@ -201,128 +201,139 @@
 
               <br>
               <h3>Skills</h3>
-              <div class="skills">
-                <div>
-                  <label for="skills-acrobatics" class="label-stats">Acrobatics:</label>
-                  <input type="number" id="skills-acrobatics" style="margin-left: 31px;" v-model="skills.skillsAcrobatics" class="input-stats" inputmode="numeric" required>
-                </div>
+              <div id="skills">
+                <div class="container-skills">
+                  <ul class="list-skills">
+                    <li>
+                      <label for="skills-acrobatics" class="label-stats">Acrobatics:</label>
+                      <input type="number" id="skills-acrobatics" v-model="skills.skillsAcrobatics" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-animal-handling" class="label-stats">Animal Hanlding:</label>
-                  <input type="number" id="skills-animal-handling" v-model="skills.skillsAnimalHandling" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-animal-handling" class="label-stats">Animal Hanlding:</label>
+                      <input type="number" id="skills-animal-handling" v-model="skills.skillsAnimalHandling" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-arcana" class="label-stats">Arcana:</label>
-                  <input type="number" id="skills-arcana" v-model="skills.skillsArcana" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-arcana" class="label-stats">Arcana:</label>
+                      <input type="number" id="skills-arcana" v-model="skills.skillsArcana" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-athletics" class="label-stats">Athletics:</label>
-                  <input type="number" id="skills-athletics" v-model="skills.skillsAthletics" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-athletics" class="label-stats">Athletics:</label>
+                      <input type="number" id="skills-athletics" v-model="skills.skillsAthletics" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-deception" class="label-stats">Deception:</label>
-                  <input type="number" id="skills-deception" v-model="skills.skillsDeception" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-deception" class="label-stats">Deception:</label>
+                      <input type="number" id="skills-deception" v-model="skills.skillsDeception" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-history" class="label-stats">History:</label>
-                  <input type="number" id="skills-history" v-model="skills.skillsHistory" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-history" class="label-stats">History:</label>
+                      <input type="number" id="skills-history" v-model="skills.skillsHistory" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-insight" class="label-stats">Insight:</label>
-                  <input type="number" id="skills-insight" v-model="skills.skillsInsight" class="input-stats" inputmode="numeric" required>
-                </div>
-                
-                <div>
-                  <label for="skills-intimidation" class="label-stats">Intimidation:</label>
-                  <input type="number" id="skills-intimidation" v-model="skills.skillsIntimidation" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-insight" class="label-stats">Insight:</label>
+                      <input type="number" id="skills-insight" v-model="skills.skillsInsight" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="skills-intimidation" class="label-stats">Intimidation:</label>
+                      <input type="number" id="skills-intimidation" v-model="skills.skillsIntimidation" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-investigation" class="label-stats">Investigation:</label>
-                  <input type="number" id="skills-investigation" v-model="skills.skillsInvestigation" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-investigation" class="label-stats">Investigation:</label>
+                      <input type="number" id="skills-investigation" v-model="skills.skillsInvestigation" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-medicine" class="label-stats">Medicine:</label>
-                  <input type="number" id="skills-medicine" v-model="skills.skillsMedicine" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-medicine" class="label-stats">Medicine:</label>
+                      <input type="number" id="skills-medicine" v-model="skills.skillsMedicine" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-nature" class="label-stats">Nature:</label>
-                  <input type="number" id="skills-nature" v-model="skills.skillsNature" class="input-stats" inputmode="numeric" required>
-                </div>
-                
-                <div>
-                  <label for="skills-perception" class="label-stats">Perception:</label>
-                  <input type="number" id="skills-perception" v-model="skills.skillsPerception" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-nature" class="label-stats">Nature:</label>
+                      <input type="number" id="skills-nature" v-model="skills.skillsNature" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="skills-perception" class="label-stats">Perception:</label>
+                      <input type="number" id="skills-perception" v-model="skills.skillsPerception" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-performance" class="label-stats">Performance:</label>
-                  <input type="number" id="skills-performance" v-model="skills.skillsPerformance" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-performance" class="label-stats">Performance:</label>
+                      <input type="number" id="skills-performance" v-model="skills.skillsPerformance" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-persuasion" class="label-stats">Persuasion:</label>
-                  <input type="number" id="skills-persuasion" v-model="skills.skillsPersuasion" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-persuasion" class="label-stats">Persuasion:</label>
+                      <input type="number" id="skills-persuasion" v-model="skills.skillsPersuasion" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-religion" class="label-stats">Religion:</label>
-                  <input type="number" id="skills-religion" v-model="skills.skillsReligion" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-religion" class="label-stats">Religion:</label>
+                      <input type="number" id="skills-religion" v-model="skills.skillsReligion" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-sleight-of-hand" class="label-stats">Slight of Hand:</label>
-                  <input type="number" id="skills-sleight-of-hand" v-model="skills.skillsSleightOfHand" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-sleight-of-hand" class="label-stats">Slight of Hand:</label>
+                      <input type="number" id="skills-sleight-of-hand" v-model="skills.skillsSleightOfHand" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-stealth" class="label-stats">Stealth:</label>
-                  <input type="number" id="skills-stealth" v-model="skills.skillsStealth" class="input-stats" inputmode="numeric" required>
-                </div>
+                    <li>
+                      <label for="skills-stealth" class="label-stats">Stealth:</label>
+                      <input type="number" id="skills-stealth" v-model="skills.skillsStealth" class="input-stats" inputmode="numeric" required>
+                    </li>
 
-                <div>
-                  <label for="skills-survival" class="label-stats">Survival:</label>
-                  <input type="number" id="skills-survival" v-model="skills.skillsSurvival" class="input-stats" inputmode="numeric" required>
+                    <li>
+                      <label for="skills-survival" class="label-stats">Survival:</label>
+                      <input type="number" id="skills-survival" v-model="skills.skillsSurvival" class="input-stats" inputmode="numeric" required>
+                    </li>
+                  </ul>
                 </div>
-                
               </div>
 
               <br>
               <h3>Features & Traits</h3>
               <div id="features-and-traits">
-                <div class="features-container" v-for="(item, key) in featuresTraits" :key="key">
-                  <div class="features-title">
-                    <label class="features-name">{{ key }}</label>
-                    <label class="features-amount">x{{ getFeaturesUses(key) }}</label>
+
+                <template v-if="getDictionarySize(featuresTraits) > 0">
+                  <div class="list-container">
+                    <ul class="list">
+                      <li v-for="(item, key) in featuresTraits" :key="key">
+                        <div>
+                          <label class="item-name">{{ key }}</label>
+                          <label class="item-amount">x{{ getFeaturesUses(key) }}</label>
+                        </div>
+                        <label class="item-type">Type: {{ getFeaturesType(key) }}</label>
+                        <label class="item-description">{{ getFeaturesDescription(key) }}</label>
+                        <br>
+                        <button @click="onPressDeleteFeatures(key)">Delete</button>
+                      </li>
+                    </ul>
                   </div>
-                  <label class="features-description">Type: {{ getFeaturesType(key) }}</label>
-                  <label class="features-description">{{ getFeaturesDescription(key) }}</label>
-                  <br>
-                  <button @click="onPressDeleteFeatures(key)">Delete</button>
-                </div>
+                </template>
+
                 <div class="features-container">
-                  <input class="features-input" style="width=70%;" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
+                  <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
                   <div>
-                    <label style="margin-right: 15px;" for="features-type-picker">Type:</label>
-                    <select class="features-type-picker" v-model="featuresTempType">
+                    <label>Type:</label>
+                    <select class="picker" v-model="featuresTempType">
                       <option v-for="feat in featuresTypes" :key="feat" :value="feat">{{ feat }}</option>
                     </select>
                   </div>
 
                   <div>
-                    <label style="margin-right: 10px;" for="features-input">Uses:</label>
+                    <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
                     <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
                   </div>
                   <br>
                   
-                  <textarea class="equipment-textarea" v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+                  <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
                   <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
                 </div>
@@ -331,25 +342,35 @@
               <br>
               <h3>Equipment</h3>
               <div id="equipment">
-                <div>
+                <div style="margin-bottom: 10px;">
                   <label for="equipment-gold" class="label-stats">Starting Gold:</label>
                   <input type="number" id="equipment-gold" v-model="gold" class="input-stats" inputmode="numeric" required>
                 </div>
 
-                <div class="equipment-container" v-for="(item, key) in equipment" :key="key">
-                  <label class="equipment-name">{{ key }}</label>
-                  <label class="equipment-description">{{ getEquipmentDescription(key) }}</label>
-                  <br>
-                  <button @click="onPressDeleteEquipment(key)">Delete</button>
-                </div>
+                <template v-if="getDictionarySize(equipment) > 0">
+                  <div class="list-container">
+                    <ul class="list">
+                      <li v-for="(item, key) in equipment" :key="key">
+                        <div>
+                          <label class="item-name">{{ key }}</label>
+                          <label class="item-amount">x{{ getEquipmentAmount(key) }}</label>
+                        </div>
+                        <label class="item-description">{{ getEquipmentDescription(key) }}</label>
+                        <br>
+                        <button @click="onPressDeleteEquipment(key)">Delete</button>
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+                
                 <div class="equipment-container">
-                  <input class="equipment-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
+                  <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
                   <div>
                     <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
                     <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
                   </div>
                   <br>
-                  <textarea class="equipment-textarea" v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+                  <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
                   <button @click="onPressAddEquipment" style="margin-top: 10px;">Add</button>
                 </div>
@@ -358,19 +379,24 @@
               <br>
               <h3>Languages</h3>
               <div id="languages">
-                <div class="language-container" v-for="(item, key) in languages" :key="key">
-                  <div class="language-title">
-                    <label class="language-name">{{ key }}: </label>
-                    <label class="language-Proficiency">{{ item }}</label>
+                <template v-if="getDictionarySize(languages) > 0">
+                  <div class="list-container">
+                    <ul class="list">
+                      <li v-for="(item, key) in languages" :key="key">
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-description">{{ item }}</label>
+                        <br>
+                        <button @click="onPressDeleteLanguage(key)">Delete</button>
+                      </li>
+                    </ul>
                   </div>
-                  <br>
-                  <button @click="onPressDeleteLanguage(key)">Delete</button>
-                </div>
+                </template>
+
                 <div class="language-container">
-                  <input class="language-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
+                  <input class="item-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
                   <div>
-                    <label style="margin-right: 15px;" for="language-proficiency-picker">Proficiency: </label>
-                    <select class="language-proficiency-picker" v-model="languagesTempProficiency">
+                    <label>Proficiency: </label>
+                    <select class="picker" v-model="languagesTempProficiency">
                       <option v-for="prof in languageProficiencies" :key="prof" :value="prof">{{ prof }}</option>
                     </select>
                   </div>
@@ -382,18 +408,25 @@
               <br>
               <h3>Proficiencies</h3>
               <div id="proficiencies">
-                <div class="proficency-container" v-for="(item, key) in proficencies" :key="key">
-                  <label class="proficency-name">{{ key }}</label>
-                  <label class="proficency-description">{{ item }}</label>
+                <template v-if="getDictionarySize(proficiencies) > 0">
+                  <div class="list-container">
+                    <ul class="list">
+                      <li v-for="(item, key) in proficiencies" :key="key">
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-description">{{ item }}</label>
+                        <br>
+                        <button @click="onPressDeleteproficiency(key)">Delete</button>
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+
+                <div class="proficiency-container">
+                  <input class="item-input" v-model="proficiencyTempName" placeholder="proficiency name"> 
                   <br>
-                  <button @click="onPressDeleteProficency(key)">Delete</button>
-                </div>
-                <div class="proficency-container">
-                  <input class="proficency-input" style="width=70%;" type="text" v-model="proficencyTempName" placeholder="Proficency name"> 
+                  <textarea class="proficiency-textarea" v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
-                  <textarea class="proficency-textarea" v-model="proficencyTempDescription" rows="4" placeholder="Description"></textarea>
-                  <br>
-                  <button @click="onPressAddProficency" style="margin-top: 10px;">Add</button>
+                  <button @click="onPressAddproficiency" style="margin-top: 10px;">Add</button>
                 </div>
               </div>
 
@@ -474,7 +507,7 @@ export default {
           level: '',
           armorClass: '',
           initiative: '',
-          proficencyBonus: '',
+          proficiencyBonus: '',
           speed: '',
           hp: {
             "current": '',
@@ -499,9 +532,9 @@ export default {
           languages: {},
           languagesTempName: '',
           languagesTempProficiency: '',
-          proficencies: {},
-          proficencyTempName: '',
-          proficencyTempDescription: '',
+          proficiencies: {},
+          proficiencyTempName: '',
+          proficiencyTempDescription: '',
           stats: {
             statsStr: '',
             statsStrBonus: '',
@@ -655,21 +688,21 @@ export default {
         this.languagesTempName = ''
         this.languagesTempProficiency = ''
       },
-      onPressAddProficency() {
-        if (this.proficencyTempName == '') {
-          alert("Please enter a proficency name")
+      onPressAddproficiency() {
+        if (this.proficiencyTempName == '') {
+          alert("Please enter a proficiency name")
           return
         }
 
-        if (this.proficencyTempDescription == '') {
-          alert("Please enter a proficency proficiency")
+        if (this.proficiencyTempDescription == '') {
+          alert("Please enter a proficiency proficiency")
           return
         }
 
-        this.proficencies[this.proficencyTempName] = this.proficencyTempDescription
+        this.proficiencies[this.proficiencyTempName] = this.proficiencyTempDescription
         
-        this.proficencyTempName = ''
-        this.proficencyTempDescription = ''
+        this.proficiencyTempName = ''
+        this.proficiencyTempDescription = ''
       },
       onPressDeleteFeatures(key) {
         if (key in this.featuresTraits) {
@@ -686,9 +719,9 @@ export default {
           delete this.languages[key]
         }
       },
-      onPressDeleteProficency(key) {
-        if (key in this.proficencies) {
-          delete this.proficencies[key]
+      onPressDeleteproficiency(key) {
+        if (key in this.proficiencies) {
+          delete this.proficiencies[key]
         }
       },
       checkIfAllValid() {
@@ -837,9 +870,13 @@ export default {
         const item = this.featuresTraits[key]
         return item[FEATURES_KEYS.USES]
       },
-      getProficencyDescription(key) {
-        const item = this.proficencies[key]
+      getproficiencyDescription(key) {
+        const item = this.proficiencies[key]
         return item[FEATURES_KEYS.DESCRIPTION]
+      },
+      getDictionarySize(dict) {
+        const count = Object.keys(dict).length;
+        return count
       },
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
@@ -1008,6 +1045,13 @@ h3 {
   text-decoration: underline;
 }
 
+textarea {
+  width: 80%;
+  text-align: left;
+  border-radius: 10px;
+  padding: 5px;
+}
+
 .input-container {
   display: flex;
   flex-direction: column;
@@ -1047,35 +1091,13 @@ h3 {
   text-align: center;
 }
 
-.hit-die-picker {
-  margin: 15px 20px;
-  width: 70px;
+.picker {
+  margin: 10px 10px auto;
 }
 
-/* SKILLS STYLE */
+/* LIST - ADDED ITEMS STYLE */
 
-.skills {
-  display: flex;
-  flex-direction: column;
-}
-
-
-/* FEATURES & TRAITS STYLE */
-
-
-.features-name {
-  font-weight: bold;
-  font-size: larger;
-  margin-right: 10px;
-}
-
-.features-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.features-input {
+.item-input {
   margin-left: 5px; /* Adjust the spacing between the label and input */
   border: none; /* Remove the default border */
   border-bottom: 1px solid black; /* Add a bottom border */
@@ -1085,14 +1107,61 @@ h3 {
   margin-bottom: 10px;
 }
 
+.list-container {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto; /* centers the container */
+  border: 1px solid black;
+  border-radius: 10px; /* Rounded corners */
+}
+
+.list li {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-weight: bold;
+  font-size: larger;
+  margin-right: 20px;
+}
+
+.item-amount {
+  font-size: large;
+}
+
+.item-description {
+  width: 80%;
+  font-size: large;
+  text-align: left;
+}
+
+/* SKILLS STYLE */
+
+.container-skills {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto; /* centers the container */
+}
+
+.list-skills li {
+  list-style: none;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.list-skills li input {
+  text-align: right;
+}
+
+
+/* FEATURES & TRAITS STYLE */
+
+
+
 
 /* EQUIPMENT STYLE */
-
-.equipment-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
 .equipment-input {
   margin-left: 5px; /* Adjust the spacing between the label and input */
@@ -1104,41 +1173,9 @@ h3 {
   margin-bottom: 10px;
 }
 
-.equipment-textarea {
-  width: 80%;
-  text-align: left;
-}
-
-
-.equipment-style {
-  display: flex;
-  flex-direction: row;
-}
-
-.equipment-name {
-  font-weight: bold;
-  font-size: larger;
-  margin-right: 20px;
-}
-
-.equipment-amount {
-  font-size: large;
-}
-
-.equipment-description {
-  width: 80%;
-  font-size: large;
-  text-align: left;
-}
-
 
 /* LANGUAGE STYLE */
 
-.language-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
 .language-input {
   width: 50%;
@@ -1161,15 +1198,15 @@ h3 {
 }
 
 
-/* PROFICENCY STYLE */
+/* proficiency STYLE */
 
-.proficency-container {
+.proficiency-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.proficency-input {
+.proficiency-input {
   margin-left: 5px; /* Adjust the spacing between the label and input */
   border: none; /* Remove the default border */
   border-bottom: 1px solid black; /* Add a bottom border */
@@ -1179,17 +1216,17 @@ h3 {
   margin-bottom: 10px;
 }
 
-.proficency-textarea {
+.proficiency-textarea {
   width: 80%;
   text-align: left;
 }
 
-.proficency-name {
+.proficiency-name {
   font-weight: bold;
   font-size: larger;
 }
 
-.proficency-description {
+.proficiency-description {
   width: 80%;
   font-size: large;
   text-align: left;
