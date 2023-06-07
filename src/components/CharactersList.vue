@@ -72,6 +72,11 @@
                   </select>
                 </div>
 
+                <div style="margin-bottom: 10px;">
+                  <label for="stats-proficency-bonus">Proficency Bonus: </label>
+                  <input type="number" id="stats-proficency-bonus" v-model="proficencyBonus" class="input-stats" inputmode="numeric" required>
+                </div>
+
                 <div>
                   <label for="stats-armor-class">Armor Class: </label>
                   <input type="number" id="stats-armor-class" v-model="armorClass" class="input-stats" inputmode="numeric" required>
@@ -292,7 +297,31 @@
               <br>
               <h3>Features & Traits</h3>
               <div id="features-and-traits">
-                <!-- be able to make a list and add new feats -->
+                <div class="features-container" v-for="(item, key) in equipment" :key="key">
+                  <label class="features-name">{{ key }}</label>
+                  <label class="features-description">{{ getEquipmentDescription(key) }}</label>
+                  <br>
+                  <button @click="onPressDeleteFeatures(key)">Delete</button>
+                </div>
+                <div class="features-container">
+                  <input class="features-input" style="width=70%;" type="text" v-model="featuresTempName" placeholder="Item name"> 
+                  <div>
+                    <label style="margin-right: 15px;" for="features-type-picker">Type:</label>
+                    <select class="features-type-picker" v-model="featuresTempType">
+                      <option v-for="feat in featuresTypes" :key="feat" :value="feat">{{ feat }}</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style="margin-right: 10px;" for="features-input">Uses:</label>
+                    <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                  </div>
+                  <br>
+                  
+                  <textarea class="equipment-textarea" v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+                  <br>
+                  <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
+                </div>
               </div>
 
               <br>
@@ -314,7 +343,11 @@
                 </div>
                 <div class="equipment-container">
                   <input class="equipment-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
-                  <input class="equipment-input" style="width=10%;" type="number" v-model="equipmentTempAmount" placeholder="Item amount">
+                  <div>
+                    <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                    <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
+                  </div>
+                  <br>
                   <textarea class="equipment-textarea" v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
                   <button @click="onPressAddEquipment" style="margin-top: 10px;">Add</button>
@@ -337,7 +370,7 @@
                   <div>
                     <label style="margin-right: 15px;" for="language-proficiency-picker">Proficiency: </label>
                     <select class="language-proficiency-picker" v-model="languagesTempProficiency">
-                      <option v-for="prof in languageproficiencies" :key="prof" :value="prof">{{ prof }}</option>
+                      <option v-for="prof in languageProficiencies" :key="prof" :value="prof">{{ prof }}</option>
                     </select>
                   </div>
                   <br>
@@ -388,6 +421,8 @@ import COOKIE_NAMES from '@/enums/cookie-names'
 import DIE_TYPE from '@/enums/die-type'
 import EQUIPMENT_KEYS from '@/enums/equipment-keys'
 import LANGUAGE_PROFICIENCY from '@/enums/language-proficiency'
+import FEATURES_KEYS from '@/enums/features-keys'
+import FEATURES_TYPES from '@/enums/features-types'
 import Cookies from 'js-cookie'
 
 // TODO: Will be replaced by Firebase Remote Config
@@ -415,7 +450,8 @@ export default {
           showModal: false,
           showMenu: false,
           hitDieTypes: [DIE_TYPE.D4, DIE_TYPE.D6, DIE_TYPE.D8, DIE_TYPE.D10, DIE_TYPE.D12, DIE_TYPE.D20],
-          languageproficiencies: [LANGUAGE_PROFICIENCY[0], LANGUAGE_PROFICIENCY[1], LANGUAGE_PROFICIENCY[2]],
+          languageProficiencies: [LANGUAGE_PROFICIENCY[0], LANGUAGE_PROFICIENCY[1], LANGUAGE_PROFICIENCY[2]],
+          featuresTypes: [FEATURES_TYPES.CLASS, FEATURES_TYPES.RACIAL, FEATURES_TYPES.OTHER],
           characterName: '',
           alignment: '',
           background: '',
@@ -425,6 +461,7 @@ export default {
           level: '',
           armorClass: '',
           initiative: '',
+          proficencyBonus: '',
           speed: '',
           hp: {
             "current": '',
@@ -440,6 +477,11 @@ export default {
           equipmentTempAmount: '',
           equipmentTempDescription: '',
           featuresTraits: {},
+          featuresTempName: '',
+          featuresTempDescription: '',
+          featuresTempType: '', // Racial, Class, Other
+          featuresTempUseable: true,
+          featuresTempUses: '',
           gold: '', // TODO
           languages: {},
           languagesTempName: '',
@@ -562,27 +604,31 @@ export default {
           return
         }
 
-        var proficiency;
-        switch (this.languagesTempProficiency) { // Change the string to an int
-          case LANGUAGE_PROFICIENCY[0]:
-            proficiency = LANGUAGE_PROFICIENCY.WRITTEN
-            break
-
-          case LANGUAGE_PROFICIENCY[1]:
-            proficiency = LANGUAGE_PROFICIENCY.SPOKEN
-            break
-            
-          case LANGUAGE_PROFICIENCY[2]:
-            proficiency = LANGUAGE_PROFICIENCY.WRITTEN_SPOKEN
-            break
-            
-          default:
-            proficiency = LANGUAGE_PROFICIENCY.WRITTEN_SPOKEN
-        }
-        this.languages[this.languagesTempName] = proficiency
+        this.languages[this.languagesTempName] = this.languagesTempProficiency
         
         this.languagesTempName = ''
         this.languagesTempProficiency = ''
+      },
+      onPressAddFeatures() {
+        if (this.featuresTempDescription == '') {
+          alert("Please enter a language")
+          return
+        }
+
+        if (this.featuresTempType == '') {
+          alert("Please select a language proficiency")
+          return
+        }
+        
+        if (this.featuresTempUseable == '') {
+          alert("Please enter a language")
+          return
+        }
+
+        if (this.featuresTempUses == '') {
+          alert("Please select a language proficiency")
+          return
+        }
       },
       onPressDeleteEquipment(key) {
         if (key in this.equipment) {
@@ -728,8 +774,21 @@ export default {
         const item = this.equipment[key]
         return item[EQUIPMENT_KEYS.DESCRIPTION]
       },
-      getLanguageProficiencyString(proficiency) {
-        return LANGUAGE_PROFICIENCY[proficiency]
+      getfeaturesTempDescription(key) {
+        const item = this.featuresTraits[key]
+        return item[FEATURES_KEYS.DESCRIPTION]
+      },
+      getfeaturesTempType(key) {
+        const item = this.featuresTraits[key]
+        return item[FEATURES_KEYS.TYPE]
+      },
+      getfeaturesTempUseable(key) {
+        const item = this.featuresTraits[key]
+        return item[FEATURES_KEYS.USEABLE]
+      },
+      getfeaturesTempUses(key) {
+        const item = this.featuresTraits[key]
+        return item[FEATURES_KEYS.USES]
       },
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
@@ -948,6 +1007,27 @@ h3 {
   display: flex;
   flex-direction: column;
 }
+
+
+/* FEATURES & TRAITS STYLE */
+
+.features-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.features-input {
+  margin-left: 5px; /* Adjust the spacing between the label and input */
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  padding-left: 0;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+
 
 
 /* EQUIPMENT STYLE */

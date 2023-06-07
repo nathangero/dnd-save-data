@@ -11,6 +11,7 @@ export default class Charcter {
         gold = '',
         hp = {},
         initiative = 1,
+        proficencyBonus = '',
         languages = {},
         level = 1,
         name = '',
@@ -29,6 +30,7 @@ export default class Charcter {
         this.gold = gold
         this.hp = hp
         this.initiative = initiative
+        this.proficencyBonus = proficencyBonus
         this.languages = languages
         this.level = level
         this.name = name
