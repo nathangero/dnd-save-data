@@ -1,6 +1,6 @@
 const FEATURES_KEYS = {
     DESCRIPTION: "description",
-    TYPE: "class",
+    TYPE: "type",
     USEABLE: "useable",
     USES: "uses"
 }

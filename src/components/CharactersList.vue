@@ -297,14 +297,18 @@
               <br>
               <h3>Features & Traits</h3>
               <div id="features-and-traits">
-                <div class="features-container" v-for="(item, key) in equipment" :key="key">
-                  <label class="features-name">{{ key }}</label>
-                  <label class="features-description">{{ getEquipmentDescription(key) }}</label>
+                <div class="features-container" v-for="(item, key) in featuresTraits" :key="key">
+                  <div class="features-title">
+                    <label class="features-name">{{ key }}</label>
+                    <label class="features-amount">x{{ getFeaturesUses(key) }}</label>
+                  </div>
+                  <label class="features-description">Type: {{ getFeaturesType(key) }}</label>
+                  <label class="features-description">{{ getFeaturesDescription(key) }}</label>
                   <br>
                   <button @click="onPressDeleteFeatures(key)">Delete</button>
                 </div>
                 <div class="features-container">
-                  <input class="features-input" style="width=70%;" type="text" v-model="featuresTempName" placeholder="Item name"> 
+                  <input class="features-input" style="width=70%;" type="text" v-model="featuresTempName" placeholder="Feature name"> 
                   <div>
                     <label style="margin-right: 15px;" for="features-type-picker">Type:</label>
                     <select class="features-type-picker" v-model="featuresTempType">
@@ -318,7 +322,7 @@
                   </div>
                   <br>
                   
-                  <textarea class="equipment-textarea" v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+                  <textarea class="equipment-textarea" v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
                   <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
                 </div>
@@ -611,23 +615,37 @@ export default {
       },
       onPressAddFeatures() {
         if (this.featuresTempDescription == '') {
-          alert("Please enter a language")
+          alert("Please enter a feature description")
           return
         }
 
         if (this.featuresTempType == '') {
-          alert("Please select a language proficiency")
-          return
-        }
-        
-        if (this.featuresTempUseable == '') {
-          alert("Please enter a language")
+          alert("Please select a feature type")
           return
         }
 
         if (this.featuresTempUses == '') {
-          alert("Please select a language proficiency")
+          alert("Please enter feature uses")
           return
+        }
+
+        const newFeat = {
+          description: this.featuresTempDescription,
+          type: this.featuresTempType,
+          uses: this.featuresTempUses
+        }
+        console.info('newFeat:', newFeat)
+
+        this.featuresTraits[this.featuresTempName] = newFeat
+
+        this.featuresTempName = ''
+        this.featuresTempDescription = ''
+        this.featuresTempType = ''
+        this.featuresTempUses = ''
+      },
+      onPressDeleteFeatures(key) {
+        if (key in this.featuresTraits) {
+          delete this.featuresTraits[key]
         }
       },
       onPressDeleteEquipment(key) {
@@ -774,19 +792,15 @@ export default {
         const item = this.equipment[key]
         return item[EQUIPMENT_KEYS.DESCRIPTION]
       },
-      getfeaturesTempDescription(key) {
+      getFeaturesDescription(key) {
         const item = this.featuresTraits[key]
         return item[FEATURES_KEYS.DESCRIPTION]
       },
-      getfeaturesTempType(key) {
+      getFeaturesType(key) {
         const item = this.featuresTraits[key]
         return item[FEATURES_KEYS.TYPE]
       },
-      getfeaturesTempUseable(key) {
-        const item = this.featuresTraits[key]
-        return item[FEATURES_KEYS.USEABLE]
-      },
-      getfeaturesTempUses(key) {
+      getFeaturesUses(key) {
         const item = this.featuresTraits[key]
         return item[FEATURES_KEYS.USES]
       },
@@ -1011,6 +1025,13 @@ h3 {
 
 /* FEATURES & TRAITS STYLE */
 
+
+.features-name {
+  font-weight: bold;
+  font-size: larger;
+  margin-right: 10px;
+}
+
 .features-container {
   display: flex;
   flex-direction: column;
@@ -1026,8 +1047,6 @@ h3 {
   padding-bottom: 5px;
   margin-bottom: 10px;
 }
-
-
 
 
 /* EQUIPMENT STYLE */
