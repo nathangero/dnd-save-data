@@ -14,7 +14,7 @@ const SKILL_KEYS = {
     PERFORMANCE: 'performance',
     PERSUASION: 'persuasion',
     RELIGION: 'religion',
-    SLEIGHTOFHAND: 'sleightOfHand',
+    SLEIGHT_OF_HAND: 'sleightOfHand',
     STEALTH: 'stealth',
     SURVIVAL: 'survival',
 }
@@ -35,7 +35,7 @@ const SKILL_NAMES = {
     [SKILL_KEYS.PERFORMANCE]: 'Performance',
     [SKILL_KEYS.PERSUASION]: 'Persuasion',
     [SKILL_KEYS.RELIGION]: 'Religion',
-    [SKILL_KEYS.SLEIGHTOFHAND]: 'SleightOfHand',
+    [SKILL_KEYS.SLEIGHT_OF_HAND]: 'SleightOfHand',
     [SKILL_KEYS.STEALTH]: 'Stealth',
     [SKILL_KEYS.SURVIVAL]: 'Survival',
 }
