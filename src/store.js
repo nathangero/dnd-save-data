@@ -9,8 +9,12 @@ const store = createStore({
     state: {
         user: new User(),
         isLoggedIn: false,
+        usersCharacters: {},
     },
     mutations: {
+        addCharacter(charId, characterInfo) {
+            this.usersCharacters[charId] = characterInfo
+        },
         signOut(state) {
             state.user = new User()
             state.isLoggedIn = false
@@ -44,7 +48,11 @@ const store = createStore({
                     reject(error)
                 })
             })
-        }
+        },
+        getUserCharacters() {
+            console.info('@getUserCharacterCount')
+            return this.state.usersCharacters
+        },
     },
     getters: {
         // This is where you define functions to retrieve state variables in a modified form

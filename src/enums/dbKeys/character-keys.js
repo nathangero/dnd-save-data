@@ -1,0 +1,26 @@
+const CHARACTER_KEYS = {
+    ALIGNMENT: "alignment",
+    ARMOR: "armor",
+    BACKGROUND: "background",
+    CLASS: "charClass",
+    DEATH_SAVES: "deathSaves",
+    EQUIPMENT: "equipment",
+    FEATURES: "featuresTraits",
+    GOLD: "gold",
+    HP: "hp",
+    LANGUAGES: "languages",
+    LEVEL: "level",
+    NAME: "name",
+    PROFICIENCIES: "proficiences",
+    PROFICIENCY_BONUS: "proficiencyBonus",
+    RACE: "race",
+    SAVING_THROWS: "savingThrows",
+    SKILLS: "skills",
+    SPELL_BONUS: "spellBonus",
+    SPELL_CAST_STAT: "spellCastStat",
+    SPELL_SAVE_DC: "spellSaveDc",
+    SPELLS: "spells",
+    STATS: "stats",
+}
+
+export { CHARACTER_KEYS }

@@ -65,3 +65,21 @@ export async function createNewCharacter(userId, characterInfo) {
         }))
     })
 }
+
+export async function readAllCharacters(userId) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
+    return new Promise((resolve, reject) => {
+        get(child(ref(db), dbRef)).then(() => {
+            
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+// export async function readSpecificCharacter(userId, charId) {
+
+// }

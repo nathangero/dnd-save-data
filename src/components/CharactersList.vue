@@ -13,8 +13,8 @@
             <h1 class="menu-close" @click="toggleMenu">X</h1>
 
             <ul class="list-side-menu">
-              <li>Profile</li>
-              <li>Settings</li>
+              <!-- <li>Profile</li>
+              <li>Settings</li> -->
               <li @click="logOut">Log Out</li>
             </ul>
           </div>
@@ -28,6 +28,18 @@
       <div class="top-buttons">
         <button class="button-open-modal" @click="toggleModal">Create Character</button>
       </div>
+
+      <hr>
+      
+      <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
+        <div id="users-characters">
+          <div class="list-container">
+            <ul class="list">
+              
+            </ul>
+          </div>
+        </div>
+      </template>
 
       <transition name="slide-up" mode="out-in">
         <template v-if="showModal">
@@ -95,7 +107,7 @@
 
                     <li>
                       <label for="stats-armor-class">Armor Class: </label>
-                      <input type="number" id="stats-armor-class" v-model="armorClass" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
@@ -105,7 +117,7 @@
 
                     <li>
                       <label for="stats-speed">Speed: </label>
-                      <input type="number" id="stats-speed" v-model="speed" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
                     </li>
                   </ul>
                 </div>
@@ -626,10 +638,10 @@ export default {
           },
           characterRace: '',
           level: '',
-          armorClass: '',
+          characterArmor: '',
           initiative: '',
           proficiencyBonus: '',
-          speed: '',
+          characterSpeed: '',
           hp: {
             [HP_KEYS.CURRENT]: '',
             [HP_KEYS.DIE]: '',
@@ -757,10 +769,10 @@ export default {
         },
         this.characterRace = ''
         this.level = ''
-        this.armorClass = ''
+        this.characterArmor = ''
         this.initiative = ''
         this.proficiencyBonus = ''
-        this.speed = ''
+        this.characterSpeed = ''
         this.hp = {
           [HP_KEYS.CURRENT]: '',
           [HP_KEYS.DIE]: '',
@@ -1202,7 +1214,7 @@ export default {
       createCharacterDictionary() {
         var newCharacter = new Character(
           this.characterAlignment,
-          this.armorClass,
+          this.characterArmor,
           this.characterBackground,
           this.characterClass,
           this.deathSaves,
@@ -1211,19 +1223,20 @@ export default {
           this.gold,
           this.hp,
           this.initiative,
-          this.proficiencyBonus,
-          this.proficiencies,
           this.languages,
           this.level,
           this.characterName,
-          this.skills,
-          this.stats,
+          this.proficiencies,
+          this.proficiencyBonus,
+          this.characterRace,
           this.savingThrows,
-          this.spells,
+          this.skills,
+          this.characterSpeed,
           this.spellAttackBonus,
           this.spellCastingStat,
           this.spellSavingDc,
-          this.characterRace
+          this.spells,
+          this.stats,
         )
 
         return newCharacter
@@ -1253,8 +1266,13 @@ export default {
         return item[FEATURES_KEYS.DESCRIPTION]
       },
       getDictionarySize(dict) {
-        const count = Object.keys(dict).length;
-        return count
+        if (dict) {
+          const count = Object.keys(dict).length;
+          return count
+        } else {
+          return 0
+        }
+        
       },
       getLevelName(level) {
         var output = "Level "
