@@ -13,6 +13,23 @@ const SPELLCASTING_KEYS = {
     LEVEL_7: "level_7",
     LEVEL_8: "level_8",
     LEVEL_9: "level_9",
+    CASTING_TIME: 'casting_time',
+    DESCRIPTION: 'description',
+    DURATION: 'duration',
+    RANGE: 'range',
 }
 
-export default SPELLCASTING_KEYS
+const SPELLCASTING_NAMES = {
+    [SPELLCASTING_KEYS.CANTRIPS]: "Cantrips",
+    [SPELLCASTING_KEYS.LEVEL_1]: "1",
+    [SPELLCASTING_KEYS.LEVEL_2]: "2",
+    [SPELLCASTING_KEYS.LEVEL_3]: "3",
+    [SPELLCASTING_KEYS.LEVEL_4]: "4",
+    [SPELLCASTING_KEYS.LEVEL_5]: "5",
+    [SPELLCASTING_KEYS.LEVEL_6]: "6",
+    [SPELLCASTING_KEYS.LEVEL_7]: "7",
+    [SPELLCASTING_KEYS.LEVEL_8]: "8",
+    [SPELLCASTING_KEYS.LEVEL_9]: "9",
+}
+
+export { SPELLCASTING_KEYS, SPELLCASTING_NAMES }

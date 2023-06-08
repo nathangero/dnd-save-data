@@ -19,6 +19,10 @@ export default class Charcter {
         skills = {},
         stats = {},
         savingThrows = {},
+        spells = {},
+        spellBonus = '',
+        spellCastStat = '',
+        spellSaveDc = '',
         race = '',
     ) {
         this.alignment = alignment
@@ -39,6 +43,10 @@ export default class Charcter {
         this.skills = skills
         this.stats = stats
         this.savingThrows = savingThrows
+        this.spells = spells
+        this.spellBonus = spellBonus
+        this.spellCastStat = spellCastStat
+        this.spellSaveDc = spellSaveDc
         this.race = race
     }
 
