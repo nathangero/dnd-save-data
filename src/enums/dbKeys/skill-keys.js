@@ -1,0 +1,43 @@
+const SKILL_KEYS = {
+    ACROBATICS: 'acrobatics',
+    ANIMALHANDLING: 'animalHandling',
+    ARCANA: 'arcana',
+    ATHLETICS: 'athletics',
+    DECEPTION: 'deception',
+    HISTORY: 'history',
+    INSIGHT: 'insight',
+    INTIMIDATION: 'intimidation',
+    INVESTIGATION: 'investigation',
+    MEDICINE: 'medicine',
+    NATURE: 'nature',
+    PERCEPTION: 'perception',
+    PERFORMANCE: 'performance',
+    PERSUASION: 'persuasion',
+    RELIGION: 'religion',
+    SLEIGHTOFHAND: 'sleightOfHand',
+    STEALTH: 'stealth',
+    SURVIVAL: 'survival',
+}
+
+const SKILL_NAMES = {
+    [SKILL_KEYS.ACROBATICS]: 'Acrobatics',
+    [SKILL_KEYS.ANIMALHANDLING]: 'AnimalHandling',
+    [SKILL_KEYS.ARCANA]: 'Arcana',
+    [SKILL_KEYS.ATHLETICS]: 'Athletics',
+    [SKILL_KEYS.DECEPTION]: 'Deception',
+    [SKILL_KEYS.HISTORY]: 'History',
+    [SKILL_KEYS.INSIGHT]: 'Insight',
+    [SKILL_KEYS.INTIMIDATION]: 'Intimidation',
+    [SKILL_KEYS.INVESTIGATION]: 'Investigation',    
+    [SKILL_KEYS.MEDICINE]: 'Medicine',
+    [SKILL_KEYS.NATURE]: 'Nature',
+    [SKILL_KEYS.PERCEPTION]: 'Perception',
+    [SKILL_KEYS.PERFORMANCE]: 'Performance',
+    [SKILL_KEYS.PERSUASION]: 'Persuasion',
+    [SKILL_KEYS.RELIGION]: 'Religion',
+    [SKILL_KEYS.SLEIGHTOFHAND]: 'SleightOfHand',
+    [SKILL_KEYS.STEALTH]: 'Stealth',
+    [SKILL_KEYS.SURVIVAL]: 'Survival',
+}
+
+export { SKILL_KEYS, SKILL_NAMES}

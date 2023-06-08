@@ -57,7 +57,7 @@
               
               <br>
               <h3>Base Stats</h3>
-              <div id="base-stats">
+              <div id="character-info">
                 <div class="container-inputs">
                   <ul class="list-inputs">
                     <li>
@@ -103,38 +103,39 @@
                     </li>
                   </ul>
                 </div>
+              </div>
 
+              <div id="base-stats">
                 <div class="container-inputs">
-                  <!-- Base stats -->
                   <ul class="list-inputs">
                     <li>
                         <label for="stats-str" class="label-stats">Strength:</label>
-                        <input type="number" id="stats-str" v-model="stats.statsStr" class="input-stats" inputmode="numeric" required>
+                        <input type="number" id="stats-str" v-model="stats[BASE_STAT_KEYS.STRENGTH]" class="input-stats" inputmode="numeric" required>
                     </li>
                     
                     <li>
                       <label for="stats-dex" class="label-stats">Dexterity: </label>
-                      <input type="number" id="stats-dex" v-model="stats.statsDex" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-dex" v-model="stats[BASE_STAT_KEYS.DEXTERITY]" class="input-stats" inputmode="numeric" required>
                     </li>
                       
                     <li>
                       <label for="stats-con" class="label-stats">Consitution: </label>
-                      <input type="number" id="stats-con" v-model="stats.statsCon" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-con" v-model="stats[BASE_STAT_KEYS.CONSTITUTION]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
                       <label for="stats-int" class="label-stats">Intelligence: </label>
-                      <input type="number" id="stats-int" v-model="stats.statsInt" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-int" v-model="stats[BASE_STAT_KEYS.INTELLIGENCE]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
                       <label for="stats-wis" class="label-stats">Wisdom: </label>
-                      <input type="number" id="stats-wis" v-model="stats.statsWis" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-wis" v-model="stats[BASE_STAT_KEYS.WISDOM]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
                       <label for="stats-cha" class="label-stats">Charisma: </label>
-                      <input type="number" id="stats-cha" v-model="stats.statsCha" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-cha" v-model="stats[BASE_STAT_KEYS.CHARISMA]" class="input-stats" inputmode="numeric" required>
                     </li>
                   </ul>
 
@@ -142,32 +143,32 @@
                   <ul class="list-inputs">
                     <li>
                         <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
-                        <input type="number" id="stats-str-bonus" v-model="stats.statsStrBonus" class="input-stats" inputmode="numeric" required>
+                        <input type="number" id="stats-str-bonus" v-model="stats[BASE_STAT_KEYS.STRENGTH_BONUS]" class="input-stats" inputmode="numeric" required>
                     </li>
                     
                     <li>
                       <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-dex-bonus" v-model="stats.statsDexBonus" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-dex-bonus" v-model="stats[BASE_STAT_KEYS.DEXTERITY_BONUS]" class="input-stats" inputmode="numeric" required>
                     </li>
                       
                     <li>
                       <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-con-bonus" v-model="stats.statsConBonus" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-con-bonus" v-model="stats[BASE_STAT_KEYS.CONSTITUTION_BONUS]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
                       <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-int-bonus" v-model="stats.statsIntBonus" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-int-bonus" v-model="stats[BASE_STAT_KEYS.INTELLIGENCE_BONUS]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
                       <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-wis-bonus" v-model="stats.statsWisBonus" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-wis-bonus" v-model="stats[BASE_STAT_KEYS.WISDOM_BONUS]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
                       <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-cha-bonus" v-model="stats.statsChaBonus" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-cha-bonus" v-model="stats[BASE_STAT_KEYS.CHARISMA_BONUS]" class="input-stats" inputmode="numeric" required>
                     </li>
                   </ul>
                 </div>
@@ -180,32 +181,32 @@
                   <ul class="list-inputs">
                     <li>
                       <label for="saving-str" class="label-stats">Strength:</label>
-                      <input type="number" id="saving-str" v-model="savingThrows.savingStr" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="saving-str" v-model="savingThrows[BASE_STAT_KEYS.STRENGTH]" class="input-stats" inputmode="numeric" required>
                     </li>
                     
                     <li>
                       <label for="saving-dex" class="label-stats">Dexterity: </label>
-                      <input type="number" id="saving-dex" v-model="savingThrows.savingDex" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="saving-dex" v-model="savingThrows[BASE_STAT_KEYS.DEXTERITY]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
                       <label for="saving-con" class="label-stats">Consitution: </label>
-                      <input type="number" id="saving-con" v-model="savingThrows.savingCon" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="saving-con" v-model="savingThrows[BASE_STAT_KEYS.CONSTITUTION]" class="input-stats" inputmode="numeric" required>
                     </li>
                     
                     <li>
                       <label for="saving-int" class="label-stats">Intelligence: </label>
-                      <input type="number" id="saving-int" v-model="savingThrows.savingInt" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="saving-int" v-model="savingThrows[BASE_STAT_KEYS.INTELLIGENCE]" class="input-stats" inputmode="numeric" required>
                     </li>
                     
                     <li>
                       <label for="saving-wis" class="label-stats">Wisdom: </label>
-                      <input type="number" id="saving-wis" v-model="savingThrows.savingWis" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="saving-wis" v-model="savingThrows[BASE_STAT_KEYS.WISDOM]" class="input-stats" inputmode="numeric" required>
                     </li>
                     
                     <li>
                       <label for="saving-cha" class="label-stats">Charisma: </label>
-                      <input type="number" id="saving-cha" v-model="savingThrows.savingCha" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="saving-cha" v-model="savingThrows[BASE_STAT_KEYS.CHARISMA]" class="input-stats" inputmode="numeric" required>
                     </li>
                   </ul>
                 </div>
@@ -512,7 +513,7 @@
                     
                     <li>
                       <label for="spells-casting-duration" class="label-stats">Duration (in seconds):</label>
-                      <input type="number" id="spells-casting-duration" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
                     </li>
                     
                     <li>
@@ -557,15 +558,19 @@
 import { useStore } from 'vuex'
 import { createNewCharacter } from '@/functions/rtdb'
 import Character from '@/models/character'
+import Cookies from 'js-cookie'
 import ROUTER_NAMES from '@/enums/router-names'
 import COOKIE_NAMES from '@/enums/cookie-names'
-import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import DIE_TYPE from '@/enums/die-type'
 import EQUIPMENT_KEYS from '@/enums/dbKeys/equipment-keys.js'
 import FEATURES_KEYS from '@/enums/dbKeys/features-keys.js'
 import LANGUAGE_PROFICIENCY from '@/enums/language-proficiency'
 import FEATURES_TYPES from '@/enums/features-types'
-import Cookies from 'js-cookie'
+import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
+import { BASE_STAT_KEYS } from '@/enums/dbKeys/baseStat-keys.js'
+import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
+import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
+import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
 
@@ -597,14 +602,19 @@ export default {
           DIE_TYPE: DIE_TYPE,
           LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
           FEATURES_TYPES: FEATURES_TYPES,
+          BASE_STAT_KEYS: BASE_STAT_KEYS,
           STAT_NAMES: STAT_NAMES,
+          SKILL_NAMES: SKILL_NAMES,
           SPELLCASTING_KEYS: SPELLCASTING_KEYS,
           SPELLCASTING_NAMES: SPELLCASTING_NAMES,
           characterName: '',
           alignment: '',
           background: '',
           charClass: '',
-          deathSaves: {"successes": 0, "failures": 0},
+          deathSaves: {
+            [DEATH_SAVES_KEYS.SUCCESSES]: 0, 
+            [DEATH_SAVES_KEYS.FAILURES]: 0
+          },
           race: '',
           level: '',
           armorClass: '',
@@ -612,11 +622,11 @@ export default {
           proficiencyBonus: '',
           speed: '',
           hp: {
-            "current": '',
-            "die": '',
-            "dieAmount": '',
-            "max": '',
-            "temp": 0
+            [HP_KEYS.CURRENT]: '',
+            [HP_KEYS.DIE]: '',
+            [HP_KEYS.DIEAMOUNT]: '',
+            [HP_KEYS.MAX]: '',
+            [HP_KEYS.TEMP]: 0
           },
           hitDieType: '', // d10
           hitDieAmount: '', // 3
@@ -647,46 +657,46 @@ export default {
           spellTempRange: '', // in feet
           spellTempLevel: '',
           stats: {
-            store: '',
-            strBonus: '',
-            dex: '',
-            dexBonus: '',
-            con: '',
-            sconBonus: '',
-            int: '',
-            intBonus: '',
-            wis: '',
-            wisBonus: '',
-            cha: '',
-            chaBonus: '',
+            [BASE_STAT_KEYS.STRENGTH]: '',
+            [BASE_STAT_KEYS.STRENGTH_BONUS]: '',
+            [BASE_STAT_KEYS.DEXTERITY]: '',
+            [BASE_STAT_KEYS.DEXTERITY_BONUS]: '',
+            [BASE_STAT_KEYS.CONSTITUTION]: '',
+            [BASE_STAT_KEYS.CONSTITUTION_BONUS]: '',
+            [BASE_STAT_KEYS.INTELLIGENCE]: '',
+            [BASE_STAT_KEYS.INTELLIGENCE_BONUS]: '',
+            [BASE_STAT_KEYS.WISDOM]: '',
+            [BASE_STAT_KEYS.WISDOM_BONUS]: '',
+            [BASE_STAT_KEYS.CHARISMA]: '',
+            [BASE_STAT_KEYS.CHARISMA_BONUS]: '',
           },
           savingThrows: {
-            str: '',
-            dex: '',
-            con: '',
-            int: '',
-            wis: '',
-            cha: '',
+            [BASE_STAT_KEYS.STRENGTH]: '',
+            [BASE_STAT_KEYS.DEXTERITY]: '',
+            [BASE_STAT_KEYS.CONSTITUTION]: '',
+            [BASE_STAT_KEYS.INTELLIGENCE]: '',
+            [BASE_STAT_KEYS.WISDOM]: '',
+            [BASE_STAT_KEYS.CHARISMA_BONUS]: '',
           },
           skills: {
-            acrobatics: '',
-            animalHandling: '',
-            arcana: '',
-            athletics: '',
-            deception: '',
-            history: '',
-            insight: '',
-            intimidation: '',
-            investigation: '',
-            medicine: '',
-            nature: '',
-            perception: '',
-            performance: '',
-            persuasion: '',
-            religion: '',
-            sleightOfHand: '',
-            stealth: '',
-            survival: '',
+            [SKILL_KEYS.ACROBATICS]: '', // TODO Convert to enum 
+            [SKILL_KEYS.ANIMALHANDLING]: '',
+            [SKILL_KEYS.ARCANA]: '',
+            [SKILL_KEYS.ATHLETICS]: '',
+            [SKILL_KEYS.DECEPTION]: '',
+            [SKILL_KEYS.HISTORY]: '',
+            [SKILL_KEYS.INSIGHT]: '',
+            [SKILL_KEYS.INTIMIDATION]: '',
+            [SKILL_KEYS.INVESTIGATION]: '',
+            [SKILL_KEYS.MEDICINE]: '',
+            [SKILL_KEYS.NATURE]: '',
+            [SKILL_KEYS.PERCEPTION]: '',
+            [SKILL_KEYS.PERFORMANCE]: '',
+            [SKILL_KEYS.PERSUASION]: '',
+            [SKILL_KEYS.RELIGION]: '',
+            [SKILL_KEYS.SLEIGHTOFHAND]: '',
+            [SKILL_KEYS.STEALTH]: '',
+            [SKILL_KEYS.SURVIVAL]: '',
           },
           spells: {}
         }
@@ -732,7 +742,10 @@ export default {
         this.alignment = ''
         this.background = ''
         this.charClass = ''
-        this.deathSaves = {"successes": 0, "failures": 0}
+        this.deathSaves = {
+          [DEATH_SAVES_KEYS.SUCCESSES]: 0, 
+          [DEATH_SAVES_KEYS.FAILURES]: 0
+        },
         this.race = ''
         this.level = ''
         this.armorClass = ''
@@ -740,14 +753,14 @@ export default {
         this.proficiencyBonus = ''
         this.speed = ''
         this.hp = {
-          "current": '',
-          "die": '',
-          "dieAmount": '',
-          "max": '',
-          "temp": 0
+          [HP_KEYS.CURRENT]: '',
+          [HP_KEYS.DIE]: '',
+          [HP_KEYS.DIEAMOUNT]: '',
+          [HP_KEYS.MAX]: '',
+          [HP_KEYS.TEMP]: 0
         }
-        this.hitDieType = ''
-        this.hitDieAmount = ''
+        this.hitDieType = '' // d10
+        this.hitDieAmount = '' // 3
         this.equipment = {}
         this.equipmentTempName = ''
         this.equipmentTempAmount = ''
@@ -755,79 +768,94 @@ export default {
         this.featuresTraits = {}
         this.featuresTempName = ''
         this.featuresTempDescription = ''
-        this.featuresTempType = ''
+        this.featuresTempType = '' // Racial, Class, Other
         this.featuresTempUseable = true
         this.featuresTempUses = ''
-        this.gold = ''
+        this.gold = '' // TODO
         this.languages = {}
         this.languagesTempName = ''
         this.languagesTempProficiency = ''
         this.proficiencies = {}
         this.proficiencyTempName = ''
         this.proficiencyTempDescription = ''
+        this.spellAttackBonus = ''
+        this.spellCastingStat = '' // e.g. intelligence
+        this.spellSavingDc = ''
+        this.spellTempName = ''
+        this.spellTempCastingTime = ''
+        this.spellTempDescription = ''
+        this.spellTempDuration = '' // in seconds
+        this.spellTempRange = '' // in feet
+        this.spellTempLevel = ''
         this.stats = {
-          statsStr: '',
-          statsStrBonus: '',
-          statsDex: '',
-          statsDexBonus: '',
-          statsCon: '',
-          statsConBonus: '',
-          statsInt: '',
-          statsIntBonus: '',
-          statsWis: '',
-          statsWisBonus: '',
-          statsCha: '',
-          statsChaBonus: '',
+          [BASE_STAT_KEYS.STRENGTH]: '',
+          [BASE_STAT_KEYS.STRENGTH_BONUS]: '',
+          [BASE_STAT_KEYS.DEXTERITY]: '',
+          [BASE_STAT_KEYS.DEXTERITY_BONUS]: '',
+          [BASE_STAT_KEYS.CONSTITUTION]: '',
+          [BASE_STAT_KEYS.CONSTITUTION_BONUS]: '',
+          [BASE_STAT_KEYS.INTELLIGENCE]: '',
+          [BASE_STAT_KEYS.INTELLIGENCE_BONUS]: '',
+          [BASE_STAT_KEYS.WISDOM]: '',
+          [BASE_STAT_KEYS.WISDOM_BONUS]: '',
+          [BASE_STAT_KEYS.CHARISMA]: '',
+          [BASE_STAT_KEYS.CHARISMA_BONUS]: '',
         }
         this.savingThrows = {
-          savingStr: '',
-          savingDex: '',
-          savingCon: '',
-          savingInt: '',
-          savingWis: '',
-          savingCha: '',
+          [BASE_STAT_KEYS.STRENGTH]: '',
+          [BASE_STAT_KEYS.DEXTERITY]: '',
+          [BASE_STAT_KEYS.CONSTITUTION]: '',
+          [BASE_STAT_KEYS.INTELLIGENCE]: '',
+          [BASE_STAT_KEYS.WISDOM]: '',
+          [BASE_STAT_KEYS.CHARISMA_BONUS]: '',
         }
         this.skills = {
-          skillsAcrobatics: '',
-          skillsAnimalHandling: '',
-          skillsArcana: '',
-          skillsAthletics: '',
-          skillsDeception: '',
-          skillsHistory: '',
-          skillsInsight: '',
-          skillsIntimidation: '',
-          skillsInvestigation: '',
-          skillsMedicine: '',
-          skillsNature: '',
-          skillsPerception: '',
-          skillsPerformance: '',
-          skillsPersuasion: '',
-          skillsReligion: '',
-          skillsSleightOfHand: '',
-          skillsStealth: '',
-          skillsSurvival: '',
+          [SKILL_KEYS.ACROBATICS]: '', // TODO Convert to enum 
+          [SKILL_KEYS.ANIMALHANDLING]: '',
+          [SKILL_KEYS.ARCANA]: '',
+          [SKILL_KEYS.ATHLETICS]: '',
+          [SKILL_KEYS.DECEPTION]: '',
+          [SKILL_KEYS.HISTORY]: '',
+          [SKILL_KEYS.INSIGHT]: '',
+          [SKILL_KEYS.INTIMIDATION]: '',
+          [SKILL_KEYS.INVESTIGATION]: '',
+          [SKILL_KEYS.MEDICINE]: '',
+          [SKILL_KEYS.NATURE]: '',
+          [SKILL_KEYS.PERCEPTION]: '',
+          [SKILL_KEYS.PERFORMANCE]: '',
+          [SKILL_KEYS.PERSUASION]: '',
+          [SKILL_KEYS.RELIGION]: '',
+          [SKILL_KEYS.SLEIGHTOFHAND]: '',
+          [SKILL_KEYS.STEALTH]: '',
+          [SKILL_KEYS.SURVIVAL]: '',
         }
+        this.spells = {}
       },
       onPressAddFeatures() {
-        if (this.featuresTempDescription == '') {
-          alert("Please enter a feature description")
+        if (this.featuresTempName === '') {
+          alert("Please enter a feature name")
           return
         }
 
-        if (this.featuresTempType == '') {
+        if (this.featuresTempType === '') {
           alert("Please select a feature type")
           return
         }
 
-        if (this.featuresTempUses == '') {
+        if (this.featuresTempUses === '') {
           alert("Please enter feature uses")
           return
         }
 
+        if (this.featuresTempDescription === '') {
+          alert("Please enter a feature description")
+          return
+        }
+
         const newFeat = {
-          description: this.featuresTempDescription,
-          type: this.featuresTempType,
-          uses: this.featuresTempUses
+          [FEATURES_KEYS.DESCRIPTION]: this.featuresTempDescription,
+          [FEATURES_KEYS.TYPE]: this.featuresTempType,
+          [FEATURES_KEYS.USES]: this.featuresTempUses
         }
         
 
@@ -839,24 +867,24 @@ export default {
         this.featuresTempUses = ''
       },
       onPressAddEquipment() {
-        if (this.equipmentTempName == '') {
+        if (this.equipmentTempName === '') {
           alert("Please enter an equipment name")
           return
         }
 
-        if (this.equipmentTempAmount == '') {
+        if (this.equipmentTempAmount === '') {
           alert("Please enter an equipment amount")
           return
         }
 
-        if (this.equipmentTempDescription == '') {
+        if (this.equipmentTempDescription === '') {
           alert("Please enter an equipment description")
           return
         }
 
         const newItem = {
-          amount: this.equipmentTempAmount,
-          description: this.equipmentTempDescription
+          [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
+          [EQUIPMENT_KEYS.DESCRIPTION]: this.equipmentTempDescription
         }
 
         this.equipment[this.equipmentTempName] = newItem
@@ -866,12 +894,12 @@ export default {
         this.equipmentTempDescription = ''
       },
       onPressAddLanguage() {
-        if (this.languagesTempName == '') {
+        if (this.languagesTempName === '') {
           alert("Please enter a language")
           return
         }
 
-        if (this.languagesTempProficiency == '') {
+        if (this.languagesTempProficiency === '') {
           alert("Please select a language proficiency")
           return
         }
@@ -898,6 +926,37 @@ export default {
         this.proficiencyTempDescription = ''
       },
       onPressAddSpell() {
+        if (this.spellTempName === '') {
+          alert("Please enter a Spell Name")
+          return
+        }
+
+        if (this.spellTempLevel === '') {
+          alert("Please enter a Spell Level")
+          return
+        }
+
+        if (this.spellTempCastingTime === '' || this.spellTempCastingTime <= 0) {
+          alert("Please enter a Casting Time")
+          return
+        }
+
+        if (this.spellTempDuration === '' || this.spellTempDuration <= 0) {
+          alert("Please enter a Casting Duration")
+          return
+        }
+
+        if (this.spellTempRange === '' || this.spellTempRange <= 0) {
+          alert("Please enter a Casting Range")
+          return
+        }
+
+        if (this.spellTempDescription === '') {
+          alert("Please enter a Casting Description")
+          return
+        }
+
+
         var levelKey;
         switch (this.spellTempLevel) {
           case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]:
@@ -993,6 +1052,26 @@ export default {
       },
       checkIfAllValid() {
         console.info("@checkIfAllValid")
+        if (this.characterName === '') {
+          alert("Please enter a character name")
+          return
+        }
+
+        if (this.alignment === '') {
+          alert("Please enter an alignment")
+          return
+        }
+
+        if (this.background === '') {
+          alert("Please enter a background")
+          return
+        }
+
+        if (this.race === '') {
+          alert("Please enter a race")
+          return
+        }
+
         if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
           alert(`Starting level must be between ${MIN_VALUES.LEVEL} - ${MAX_VALUES.LEVEL}`)
           return false
@@ -1026,6 +1105,21 @@ export default {
         if (!this.checkIfSkillsValid()) {
           alert(`Skills cannot be blank or greater than ${MAX_VALUES.SKILLS}`)
           return false
+        }
+
+        if (this.spellAttackBonus === '') {
+          alert("Please put a spell attack bonus. Even if you don't have spells")
+          return
+        }
+
+        if (this.spellCastingStat === '') {
+          alert("Please select a stat your spell casting will be based off of")
+          return
+        }
+
+        if (this.spellSavingDc === '') {
+          alert("Please enter your spell saving DC")
+          return
         }
 
         return true

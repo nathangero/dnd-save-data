@@ -8,6 +8,7 @@ const STAT_KEYS = {
 }
 
 const STAT_NAMES = {
+    NONE: '',
     [STAT_KEYS.STRENGTH]: "Strength",
     [STAT_KEYS.DEXTERITY]: "Dexterity",
     [STAT_KEYS.CONSTITUTION]: "Constitution",

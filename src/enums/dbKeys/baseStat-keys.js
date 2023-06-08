@@ -13,4 +13,4 @@ const BASE_STAT_KEYS = {
     CHARISMA_BONUS: "chaBonus",
 }
 
-export default BASE_STAT_KEYS
+export { BASE_STAT_KEYS }
