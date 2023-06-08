@@ -5,4 +5,4 @@ const LANGUAGE_PROFICIENCY = {
     WRITTEN_SPOKEN: "Written/Spoken",
 }
 
-export default LANGUAGE_PROFICIENCY
+export { LANGUAGE_PROFICIENCY }

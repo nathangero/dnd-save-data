@@ -7,4 +7,4 @@ const DIE_TYPE = {
     D20: "d20",
 }
 
-export default DIE_TYPE
+export { DIE_TYPE }

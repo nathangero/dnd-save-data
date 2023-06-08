@@ -3,4 +3,4 @@ const EQUIPMENT_KEYS = {
     DESCRIPTION: "description",
 }
 
-export default EQUIPMENT_KEYS
+export { EQUIPMENT_KEYS }

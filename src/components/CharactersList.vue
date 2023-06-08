@@ -39,15 +39,21 @@
               
               <div class="input-container">
                 <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
-                <input class="character-description" type="text" v-model="alignment" placeholder="Alignment" required>
-                <input class="character-description" type="text" v-model="background" placeholder="Background" required>
-                <input class="character-description" type="text" v-model="race" placeholder="Race" required>
+                <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
+                <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
 
                 <div class="container-inputs">
                   <ul class="list-inputs">
-                    <li style="margin-top: 10px;">
-                      <label for="spells-class" class="label-stats">Class:</label>
-                      <select class="picker" v-model="charClass">
+                    <li>
+                      <label for="character-alignment" class="label-stats">Alignment:</label>
+                      <select class="picker" v-model="characterAlignment">
+                        <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
+                      </select>
+                    </li>
+
+                    <li style="margin-top: 20px;">
+                      <label for="character-class" class="label-stats">Class:</label>
+                      <select class="picker" v-model="characterClass">
                         <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
                       </select>
                     </li>
@@ -561,11 +567,12 @@ import Character from '@/models/character'
 import Cookies from 'js-cookie'
 import ROUTER_NAMES from '@/enums/router-names'
 import COOKIE_NAMES from '@/enums/cookie-names'
-import DIE_TYPE from '@/enums/die-type'
-import EQUIPMENT_KEYS from '@/enums/dbKeys/equipment-keys.js'
-import FEATURES_KEYS from '@/enums/dbKeys/features-keys.js'
-import LANGUAGE_PROFICIENCY from '@/enums/language-proficiency'
-import FEATURES_TYPES from '@/enums/features-types'
+import { DIE_TYPE } from '@/enums/die-type'
+import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
+import { FEATURES_KEYS } from '@/enums/dbKeys/features-keys.js'
+import { LANGUAGE_PROFICIENCY } from '@/enums/language-proficiency'
+import { FEATURES_TYPES } from '@/enums/features-types'
+import { ALIGNMENT_TYPES } from '@/enums/alignment-types'
 import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { BASE_STAT_KEYS } from '@/enums/dbKeys/baseStat-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
@@ -598,24 +605,26 @@ export default {
           store: useStore(),
           showModal: false,
           showMenu: false,
+          ALIGNMENT_TYPES: ALIGNMENT_TYPES,
+          BASE_STAT_KEYS: BASE_STAT_KEYS,
           CLASS_NAMES: CLASS_NAMES,
           DIE_TYPE: DIE_TYPE,
-          LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
           FEATURES_TYPES: FEATURES_TYPES,
-          BASE_STAT_KEYS: BASE_STAT_KEYS,
+          LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
           STAT_NAMES: STAT_NAMES,
+          SKILL_KEYS: SKILL_KEYS,
           SKILL_NAMES: SKILL_NAMES,
           SPELLCASTING_KEYS: SPELLCASTING_KEYS,
           SPELLCASTING_NAMES: SPELLCASTING_NAMES,
           characterName: '',
-          alignment: '',
-          background: '',
-          charClass: '',
+          characterAlignment: '',
+          characterBackground: '',
+          characterClass: '',
           deathSaves: {
             [DEATH_SAVES_KEYS.SUCCESSES]: 0, 
             [DEATH_SAVES_KEYS.FAILURES]: 0
           },
-          race: '',
+          characterRace: '',
           level: '',
           armorClass: '',
           initiative: '',
@@ -739,14 +748,14 @@ export default {
     methods: {
       resetVariables() {
         this.characterName = ''
-        this.alignment = ''
-        this.background = ''
-        this.charClass = ''
+        this.characterAlignment = ''
+        this.characterBackground = ''
+        this.characterClass = ''
         this.deathSaves = {
           [DEATH_SAVES_KEYS.SUCCESSES]: 0, 
           [DEATH_SAVES_KEYS.FAILURES]: 0
         },
-        this.race = ''
+        this.characterRace = ''
         this.level = ''
         this.armorClass = ''
         this.initiative = ''
@@ -1057,17 +1066,17 @@ export default {
           return
         }
 
-        if (this.alignment === '') {
+        if (this.characterAlignment === '') {
           alert("Please enter an alignment")
           return
         }
 
-        if (this.background === '') {
+        if (this.characterBackground === '') {
           alert("Please enter a background")
           return
         }
 
-        if (this.race === '') {
+        if (this.characterRace === '') {
           alert("Please enter a race")
           return
         }
@@ -1192,10 +1201,10 @@ export default {
       },
       createCharacterDictionary() {
         var newCharacter = new Character(
-          this.alignment,
+          this.characterAlignment,
           this.armorClass,
-          this.background,
-          this.charClass,
+          this.characterBackground,
+          this.characterClass,
           this.deathSaves,
           this.equipment,
           this.featuresTraits,
@@ -1214,7 +1223,7 @@ export default {
           this.spellAttackBonus,
           this.spellCastingStat,
           this.spellSavingDc,
-          this.race
+          this.characterRace
         )
 
         return newCharacter

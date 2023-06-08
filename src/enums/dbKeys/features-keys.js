@@ -5,4 +5,4 @@ const FEATURES_KEYS = {
     USES: "uses"
 }
 
-export default FEATURES_KEYS
+export { FEATURES_KEYS }

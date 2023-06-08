@@ -1,8 +1,8 @@
 const FEATURES_TYPES = {
     NONE: "",
-    CLASS: "class",
-    RACIAL: "racial",
-    OTHER: "other"
+    CLASS: "Class",
+    RACIAL: "Racial",
+    OTHER: "Other"
 }
 
-export default FEATURES_TYPES
+export { FEATURES_TYPES }

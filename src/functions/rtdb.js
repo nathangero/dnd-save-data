@@ -56,7 +56,7 @@ export async function createNewCharacter(userId, characterInfo) {
         const newKey = push(ref(db, dbRef)).key
         dbRef += newKey
         set(ref(db, dbRef), characterInfo).then(() => {
-            console.info(`created a new character for user: ${userId}`)
+            // console.info(`created a new character for user: ${userId}`)
             resolve(true)
         })
         .catch ((error => {
