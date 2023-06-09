@@ -12,8 +12,10 @@
           <div v-if="error" class="error">{{ error }}</div>
         </div>
 
-        <p class="sign-up-text">New user? Please make a new account <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a>.</p>
-        <p class="password-reset-text">Forget your password? Reset <a href="#" class="signup-link" @click.prevent="showResetPasswordPopup">here</a>.</p>
+        <div style="display: flex; flex-direction: column; text-align: center;">
+          <p class="sign-up-text">New user? Please make a new account <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a>.</p>
+          <p class="password-reset-text">Forgot your password? Reset <a href="#" class="signup-link" @click.prevent="showResetPasswordPopup">here</a>.</p>
+        </div>
 
         <!-- Sign Up Popup -->
         <transition name="fade" appear>
