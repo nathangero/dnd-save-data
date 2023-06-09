@@ -29,7 +29,7 @@ export default class Charcter {
         this.alignment = alignment
         this.armor = armor
         this.background = background
-        this.charClass = charClass
+        this.class = charClass
         this.deathSaves = deathSaves
         this.equipment = equipment
         this.featuresTraits = featuresTraits
