@@ -1,28 +1,6 @@
 <template>
   <div class="body" ref="bodyRef">
-    <div class="hamburger-menu" ref="menuRef" @click="toggleMenu">
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-    </div>
-
-    <!-- Side Menu -->
-    <transition name="slide-right" mode="out-in">
-      <template v-if="showMenu">
-        <div class="side-menu-overlay">
-          <div class="side-menu">
-            <h1 class="menu-close" @click="toggleMenu">X</h1>
-
-            <ul class="list-side-menu">
-              <!-- <li>Profile</li>
-              <li>Settings</li> -->
-              <li @click="logOut">Log Out</li>
-            </ul>
-          </div>
-        </div>
-      </template>
-    </transition>
-    
+    <side-menu @click="toggleMenu"></side-menu>
 
     <div class="content" ref="contentRef">
       <h1>{{ getUserInfo.name }}'s characters</h1>
@@ -30,7 +8,8 @@
         <button class="button-open-modal" @click="toggleModalNewCharacter">Create Character</button>
       </div>
 
-      <hr>
+      <hr v-if="!showMenu">
+      <hr v-if="showMenu" style="visibility: hidden ;" >
 
       <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
         <div id="users-characters">
@@ -45,8 +24,8 @@
                   
                   <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
                   <label class="item-description">{{ item[CHARACTER_KEYS.RACE] }}</label>
-                  <label class="item-description">{{ item[CHARACTER_KEYS.ALIGNMENT] }}</label>
-                  <!-- <label class="item-description">gp: {{ item[CHARACTER_KEYS.GOLD] }}</label> -->
+                  <label class="item-description">Current HP: {{ item[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}</label>
+                  <!-- <label class="item-description">Campaign: {{ item[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
                 </div>
               </li>
             </ul>
@@ -585,7 +564,7 @@
     </div>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="bottom-navigation" v-if="isModalOpen">
+    <nav class="bottom-navigation" v-if="showNavBar">
       <ul>
         <li @click="navigateTo(ROUTER_NAMES.Campaigns)" :class="{ active: currentRoute === ROUTER_NAMES.Campaigns }">
           <i class="fas fa-campaigns"></i>
@@ -600,10 +579,12 @@
         </li>
       </ul>
     </nav>
+    
   </div>
 </template>
 
 <script>
+import SideMenu from '@/components/SideMenu.vue'
 import { useStore } from 'vuex'
 import { createNewCharacter } from '@/functions/rtdb'
 import Character from '@/models/character'
@@ -644,12 +625,16 @@ const MIN_VALUES = {
 
 export default {
     name: ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1),
+    components: {
+      SideMenu,
+    },
     data() {
         return {
           store: useStore(),
           showModalNewCharacter: false,
           showModalViewCharacter: false,
           showMenu: false,
+          showNavBar: true, // show by default
           characterToView: new Character(),
           usersCharacters: {},
           ALIGNMENT_TYPES: ALIGNMENT_TYPES,
@@ -660,6 +645,7 @@ export default {
           EQUIPMENT_KEYS: EQUIPMENT_KEYS,
           FEATURES_KEYS: FEATURES_KEYS,
           FEATURES_TYPES: FEATURES_TYPES,
+          HP_KEYS: HP_KEYS,
           LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
           STAT_NAMES: STAT_NAMES,
           SKILL_KEYS: SKILL_KEYS,
@@ -1329,15 +1315,15 @@ export default {
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
       },
-      isModalOpen() {
-        return this.showModalNewCharacter || this.showModalViewCharacter
-      },
       toggleModalViewCharacter(charId) {
         this.showModalViewCharacter = !this.showModalViewCharacter
         this.characterToView = this.usersCharacters[charId]
+
+        this.showNavBar = !this.showNavBar
       },
       toggleModalNewCharacter() {
         this.showModalNewCharacter = !this.showModalNewCharacter
+        this.showNavBar = !this.showNavBar
       },
       toggleMenu() {
         this.showMenu = !this.showMenu
@@ -1357,6 +1343,9 @@ export default {
 </script>
 
 <style>
+.invisible-hr {
+  display: none;
+}
 .slide-up-enter-active {
 transition: transform 0.3s;
 }
@@ -1373,24 +1362,6 @@ transition: transform 0.3s;
 .slide-up-enter-to,
 .slide-up-leave {
   transform: translateY(0);
-}
-
-.slide-right-enter-active {
-transition: transform 0.3s;
-}
-
-.slide-right-leave-active {
-  transition: transform 0.4s;
-}
-
-.slide-right-enter-from,
-.slide-right-leave-to {
-  transform: translateX(-100%);
-}
-
-.slide-right-enter-to,
-.slide-right-leave {
-  transform: translateX(0);
 }
 
 .body {
