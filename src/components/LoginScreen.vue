@@ -22,7 +22,7 @@
           <div class="overlay" v-if="showSignup">
             <div class="popup">
               <div class="form">
-                <h2>Sign up</h2>
+                <h1>Sign up</h1>
                 <input type="text" id="name" v-model="name" placeholder="Name">
                 <br>
                 <input type="email" id="email" v-model="emailSignup" placeholder="Email">
@@ -48,7 +48,7 @@
           <div class="overlay" v-if="showResetPassword">
             <div class="popup">
               <div class="form">
-                <h2>Password Reset</h2>
+                <h1>Password Reset</h1>
                 <input type="email" id="email" v-model="emailReset" placeholder="Email">
                 <br>
                 <div class="signup-buttons">
