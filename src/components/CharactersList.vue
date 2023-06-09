@@ -10,44 +10,9 @@
 
       <hr v-if="!showMenu">
       <hr v-if="showMenu" style="visibility: hidden ;" >
-
-      <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-        <div id="users-characters">
-          <div class="list-container-characters">
-            <ul class="list-characters">
-              <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
-                <div @click="toggleModalViewCharacter(key)">
-                  <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <label class="item-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
-                    <label class="item-amount">Level: {{ item[CHARACTER_KEYS.LEVEL] }}</label>
-                  </div>
-                  
-                  <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
-                  <label class="item-description">{{ item[CHARACTER_KEYS.RACE] }}</label>
-                  <label class="item-description">Current HP: {{ item[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}</label>
-                  <!-- <label class="item-description">Campaign: {{ item[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </template>
-
-      <!-- View a character -->
-      <div id="view-character">
-        <transition name="slide-up" mode="out-in">
-          <template v-if="showModalViewCharacter">
-            <div class="modal-page-overlay">
-              <div class="modal-page scrollable">
-                <button class="button-close" @click="toggleModalViewCharacter">Close</button>
-
-                <h1 style="padding-top: 10px">{{ characterToView[CHARACTER_KEYS.NAME] }}</h1>
-
-              </div>
-            </div>
-          </template>
-        </transition>
-      </div>
+      
+      <!-- Character summary -->
+      <character-page @click="toggleModalViewCharacter"></character-page>
 
       <!-- Create a new character -->
       <div id="create-character">
@@ -584,6 +549,7 @@
 </template>
 
 <script>
+import CharacterPage from '@/components/CharacterPage.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import { useStore } from 'vuex'
 import { createNewCharacter } from '@/functions/rtdb'
@@ -627,6 +593,7 @@ export default {
     name: ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1),
     components: {
       SideMenu,
+      CharacterPage
     },
     data() {
         return {
@@ -760,7 +727,7 @@ export default {
           console.info(error)
         }
       } else {
-        this.usersCharacters = this.store.getters.getUserCharacters
+        // this.usersCharacters = this.store.getters.getUserCharacters
       }
     },
     computed: {
@@ -1273,7 +1240,6 @@ export default {
         } else {
           return 0
         }
-        
       },
       getSpellLevelName(level) {
         var output = "Level "
@@ -1327,6 +1293,7 @@ export default {
       },
       toggleMenu() {
         this.showMenu = !this.showMenu
+        this.showNavBar = !this.showNavBar
         if (this.showMenu) {
           this.$refs.contentRef.style.backgroundColor = 'gray';
           // this.$refs.bodyRef.style.height = 100%
@@ -1343,9 +1310,6 @@ export default {
 </script>
 
 <style>
-.invisible-hr {
-  display: none;
-}
 .slide-up-enter-active {
 transition: transform 0.3s;
 }

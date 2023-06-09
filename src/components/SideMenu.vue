@@ -30,10 +30,10 @@ import { useStore } from 'vuex'
 export default {
   name: "SideMenu",
   data() {
-      return {
-          store: useStore(),
-          showMenu: false,
-      }
+    return {
+      store: useStore(),
+      showMenu: false,
+    }
   },
   methods: {
     toggleMenu() {
