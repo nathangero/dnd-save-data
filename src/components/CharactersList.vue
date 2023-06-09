@@ -36,9 +36,17 @@
           <div class="list-container-characters">
             <ul class="list-characters">
               <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
-                
-                <label class="item-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
-                <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
+                <div @click="toggleModal">
+                  <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <label class="item-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
+                    <label class="item-amount">Level: {{ item[CHARACTER_KEYS.LEVEL] }}</label>
+                  </div>
+                  
+                  <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
+                  <label class="item-description">{{ item[CHARACTER_KEYS.RACE] }}</label>
+                  <label class="item-description">{{ item[CHARACTER_KEYS.ALIGNMENT] }}</label>
+                  <label class="item-description">gp: {{ item[CHARACTER_KEYS.GOLD] }}</label>
+                </div>
               </li>
             </ul>
           </div>
