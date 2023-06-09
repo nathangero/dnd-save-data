@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
       <div id="users-characters">
         <div class="list-container-characters">
@@ -31,6 +31,43 @@
               <button class="button-close" @click="toggleModalViewCharacter">Close</button>
 
               <h1 style="padding-top: 10px">{{ characterToView[CHARACTER_KEYS.NAME] }}</h1>
+              <label class="item-description">Level: {{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.BACKGROUND] }}</label>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.RACE] }}</label>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
+                
+              <br><br>
+              <h3>Base Stats</h3>
+              <label class="item-description">Armor Class: {{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
+              <label class="item-description">Initiative: {{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
+              <label class="item-description">Speed: {{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
+              <label class="item-description">Current HP: {{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.STATS] }}</label>
+
+              <h3>Saving Throws</h3>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.SAVING_THROWS] }}</label>
+              
+              <h3>Skills</h3>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.SKILLS] }}</label>
+
+              
+              <h3>Features & Traits</h3>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.FEATURES] }}</label>
+
+              
+              <h3>Equipment</h3>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.EQUIPMENT] }}</label>
+
+              
+              <h3>Languages</h3>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.LANGUAGES] }}</label>
+
+
+              <h3>Spell Casting</h3>
+              <label class="item-description">{{ characterToView[CHARACTER_KEYS.SPELLS] }}</label>
+
 
             </div>
           </div>
@@ -91,5 +128,9 @@ transition: transform 0.3s;
 .slide-up-enter-to,
 .slide-up-leave {
   transform: translateY(0);
+}
+
+h3 {
+  text-decoration: underline;
 }
 </style>

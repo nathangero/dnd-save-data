@@ -60,17 +60,17 @@
 
                     <li>
                       <label for="stats-hp" class="label-stats">Hit Points (HP):</label>
-                      <input type="number" id="stats-hp" v-model="hp.max" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
                       <label for="stats-hit-die"># of Hit Die: </label>
-                      <input type="number" id="stats-hit-die" v-model="hp.dieAmount" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIEAMOUNT]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li style="margin-top: 10px;">
                       <label>Hit Die Type: </label>
-                      <select class="picker" v-model="hp.die">
+                      <select class="picker" v-model="hp[HP_KEYS.DIE]">
                         <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                       </select>
                     </li>
@@ -630,7 +630,7 @@ export default {
           characterRace: '',
           level: '',
           characterArmor: '',
-          initiative: '',
+          [CHARACTER_KEYS.INITIATIVE]: '',
           proficiencyBonus: '',
           characterSpeed: '',
           hp: {
