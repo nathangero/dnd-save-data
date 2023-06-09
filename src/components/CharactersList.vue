@@ -30,12 +30,15 @@
       </div>
 
       <hr>
-      
+
       <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
         <div id="users-characters">
-          <div class="list-container">
-            <ul class="list">
-              
+          <div class="list-container-characters">
+            <ul class="list-characters">
+              <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
+                <label class="item-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
+                <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
+              </li>
             </ul>
           </div>
         </div>
@@ -586,6 +589,7 @@ import { LANGUAGE_PROFICIENCY } from '@/enums/language-proficiency'
 import { FEATURES_TYPES } from '@/enums/features-types'
 import { ALIGNMENT_TYPES } from '@/enums/alignment-types'
 import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
+import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { BASE_STAT_KEYS } from '@/enums/dbKeys/baseStat-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
@@ -617,8 +621,10 @@ export default {
           store: useStore(),
           showModal: false,
           showMenu: false,
+          usersCharacters: {},
           ALIGNMENT_TYPES: ALIGNMENT_TYPES,
           BASE_STAT_KEYS: BASE_STAT_KEYS,
+          CHARACTER_KEYS: CHARACTER_KEYS,
           CLASS_NAMES: CLASS_NAMES,
           DIE_TYPE: DIE_TYPE,
           FEATURES_TYPES: FEATURES_TYPES,
@@ -735,7 +741,8 @@ export default {
         } catch (error) {
           console.info(error)
         }
-        
+      } else {
+        this.usersCharacters = this.store.getters.getUserCharacters
       }
     },
     computed: {
@@ -758,6 +765,9 @@ export default {
       }
     },
     methods: {
+      getUsersCharacters() {
+        this.store.getters
+      },
       resetVariables() {
         this.characterName = ''
         this.characterAlignment = ''
@@ -1266,6 +1276,7 @@ export default {
         return item[FEATURES_KEYS.DESCRIPTION]
       },
       getDictionarySize(dict) {
+        console.info('dict:', dict)
         if (dict) {
           const count = Object.keys(dict).length;
           return count
@@ -1591,6 +1602,25 @@ textarea {
   text-align: left;
 }
 
+
+/* USER'S CHARACTERS LIST STYLE */
+
+.list-container-characters {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto; /* centers the container */
+}
+
+.list-characters li {
+  width: 90%;
+  list-style: none;
+  border: 1px solid black;
+  border-radius: 10px; /* Rounded corners */
+  text-align: left;
+  margin-bottom: 10px;
+  padding: 5px;
+}
 
 /* BASE STATS STYLE */
 

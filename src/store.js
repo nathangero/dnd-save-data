@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
 import User from './models/user'
 import { auth } from '@/firebase'
-import { readUserInDb } from './functions/rtdb'
+import { readUserInDb, readAllCharacters } from './functions/rtdb'
 import Cookies from 'js-cookie';
 import COOKIE_NAMES from '@/enums/cookie-names'
 
@@ -34,6 +34,11 @@ const store = createStore({
         }
     },
     actions: {
+        dbGetUsersCharacters() {
+            readAllCharacters(this.state.user.id).then((characters) => {
+                console.info('characters:', characters)
+            })
+        },
         getUserInfo(state, uid) {
             // console.info('getUserInfo: ' + uid)
             return new Promise((resolve, reject) => {
@@ -49,10 +54,6 @@ const store = createStore({
                 })
             })
         },
-        getUserCharacters() {
-            console.info('@getUserCharacterCount')
-            return this.state.usersCharacters
-        },
     },
     getters: {
         // This is where you define functions to retrieve state variables in a modified form
@@ -62,7 +63,9 @@ const store = createStore({
         isLoggedIn(state) {
           return state.isLoggedIn
         },
-        
+        getUserCharacters(state) {
+            return state.user.characters
+        },
     }
 })
 

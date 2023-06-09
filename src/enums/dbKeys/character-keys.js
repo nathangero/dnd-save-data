@@ -2,7 +2,7 @@ const CHARACTER_KEYS = {
     ALIGNMENT: "alignment",
     ARMOR: "armor",
     BACKGROUND: "background",
-    CLASS: "charClass",
+    CLASS: "class",
     DEATH_SAVES: "deathSaves",
     EQUIPMENT: "equipment",
     FEATURES: "featuresTraits",

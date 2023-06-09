@@ -36,6 +36,8 @@ export async function readUserInDb(uid) {
                 data["id"] = snapshot.key
                 const user = User.fromSnapshot(data)
                 
+                console.info('user:', user)
+                
                 resolve(user)
             } else {
                 console.info("No user found with uid: \"" + uid + "\"")
@@ -69,8 +71,8 @@ export async function createNewCharacter(userId, characterInfo) {
 export async function readAllCharacters(userId) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
     return new Promise((resolve, reject) => {
-        get(child(ref(db), dbRef)).then(() => {
-            
+        get(child(ref(db), dbRef)).then((snapshot) => {
+            console.info('snapshot:', JSON.stringify(snapshot))
             resolve(true)
         })
         .catch ((error => {
