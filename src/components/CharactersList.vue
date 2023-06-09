@@ -6,6 +6,7 @@
       <div class="hamburger-line"></div>
     </div>
 
+    <!-- Side Menu -->
     <transition name="slide-right" mode="out-in">
       <template v-if="showMenu">
         <div class="side-menu-overlay">
@@ -26,7 +27,7 @@
     <div class="content" ref="contentRef">
       <h1>{{ getUserInfo.name }}'s characters</h1>
       <div class="top-buttons">
-        <button class="button-open-modal" @click="toggleModal">Create Character</button>
+        <button class="button-open-modal" @click="toggleModalNewCharacter">Create Character</button>
       </div>
 
       <hr>
@@ -36,7 +37,7 @@
           <div class="list-container-characters">
             <ul class="list-characters">
               <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
-                <div @click="toggleModal">
+                <div @click="toggleModalViewCharacter(key)">
                   <div style="display: flex; flex-direction: row; justify-content: space-between;">
                     <label class="item-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
                     <label class="item-amount">Level: {{ item[CHARACTER_KEYS.LEVEL] }}</label>
@@ -45,7 +46,7 @@
                   <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
                   <label class="item-description">{{ item[CHARACTER_KEYS.RACE] }}</label>
                   <label class="item-description">{{ item[CHARACTER_KEYS.ALIGNMENT] }}</label>
-                  <label class="item-description">gp: {{ item[CHARACTER_KEYS.GOLD] }}</label>
+                  <!-- <label class="item-description">gp: {{ item[CHARACTER_KEYS.GOLD] }}</label> -->
                 </div>
               </li>
             </ul>
@@ -53,21 +54,39 @@
         </div>
       </template>
 
-      <transition name="slide-up" mode="out-in">
-        <template v-if="showModal">
-          <div class="modal-page-overlay">
-            <div class="modal-page scrollable">
-              <button class="button-close" @click="toggleModal">Close</button>
+      <!-- View a character -->
+      <div id="view-character">
+        <transition name="slide-up" mode="out-in">
+          <template v-if="showModalViewCharacter">
+            <div class="modal-page-overlay">
+              <div class="modal-page scrollable">
+                <button class="button-close" @click="toggleModalViewCharacter">Close</button>
 
-              <h2>New Character</h2>
-              
-              <div class="input-container">
-                <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
-                <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
-                <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
+                <h1 style="padding-top: 10px">{{ characterToView[CHARACTER_KEYS.NAME] }}</h1>
 
-                <div class="container-inputs">
-                  <ul class="list-inputs">
+              </div>
+            </div>
+          </template>
+        </transition>
+      </div>
+
+      <!-- Create a new character -->
+      <div id="create-character">
+        <transition name="slide-up" mode="out-in">
+          <template v-if="showModalNewCharacter">
+            <div class="modal-page-overlay">
+              <div class="modal-page scrollable">
+                <button class="button-close" @click="toggleModalNewCharacter">Close</button>
+
+                <h2>New Character</h2>
+                
+                <div class="input-container">
+                  <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
+                  <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
+                  <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
+
+                  <div class="container-inputs">
+                    <ul class="list-inputs">
                     <li>
                       <label for="character-alignment" class="label-stats">Alignment:</label>
                       <select class="picker" v-model="characterAlignment">
@@ -475,7 +494,6 @@
                 </div>
               </div>
 
-
               <br>
               <h3>Spell Casting</h3>
               <div id="spells">
@@ -563,10 +581,11 @@
           </div>
         </template>
       </transition>
+      </div>
     </div>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="bottom-navigation" v-if="!showModal">
+    <nav class="bottom-navigation" v-if="isModalOpen">
       <ul>
         <li @click="navigateTo(ROUTER_NAMES.Campaigns)" :class="{ active: currentRoute === ROUTER_NAMES.Campaigns }">
           <i class="fas fa-campaigns"></i>
@@ -628,8 +647,10 @@ export default {
     data() {
         return {
           store: useStore(),
-          showModal: false,
+          showModalNewCharacter: false,
+          showModalViewCharacter: false,
           showMenu: false,
+          characterToView: new Character(),
           usersCharacters: {},
           ALIGNMENT_TYPES: ALIGNMENT_TYPES,
           BASE_STAT_KEYS: BASE_STAT_KEYS,
@@ -776,9 +797,6 @@ export default {
       }
     },
     methods: {
-      getUsersCharacters() {
-        this.store.getters
-      },
       resetVariables() {
         this.characterName = ''
         this.characterAlignment = ''
@@ -1224,7 +1242,7 @@ export default {
             if (success) {
               alert("New Character created!")
               this.resetVariables()
-              this.toggleModal()
+              this.toggleModalNewCharacter()
               window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
               alert("An error occurred creating your character. Please try again")
@@ -1311,8 +1329,15 @@ export default {
       navigateTo(routeName) {
         this.$router.push({ name: routeName })
       },
-      toggleModal() {
-        this.showModal = !this.showModal
+      isModalOpen() {
+        return this.showModalNewCharacter || this.showModalViewCharacter
+      },
+      toggleModalViewCharacter(charId) {
+        this.showModalViewCharacter = !this.showModalViewCharacter
+        this.characterToView = this.usersCharacters[charId]
+      },
+      toggleModalNewCharacter() {
+        this.showModalNewCharacter = !this.showModalNewCharacter
       },
       toggleMenu() {
         this.showMenu = !this.showMenu

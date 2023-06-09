@@ -36,7 +36,7 @@ export async function readUserInDb(uid) {
                 data["id"] = snapshot.key
                 const user = User.fromSnapshot(data)
                 
-                console.info('user:', user)
+                // console.info('user:', user)
                 
                 resolve(user)
             } else {
