@@ -36,6 +36,7 @@
           <div class="list-container-characters">
             <ul class="list-characters">
               <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
+                
                 <label class="item-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
                 <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
               </li>
@@ -341,10 +342,10 @@
                       <li v-for="(item, key) in featuresTraits" :key="key">
                         <div>
                           <label class="item-name">{{ key }}</label>
-                          <label class="item-amount">x{{ getFeaturesUses(key) }}</label>
+                          <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
                         </div>
-                        <label class="item-type">Type: {{ getFeaturesType(key) }}</label>
-                        <label class="item-description">{{ getFeaturesDescription(key) }}</label>
+                        <label class="item-type">Type: {{ item[FEATURES_KEYS.TYPE] }}</label>
+                        <label class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</label>
                         <br>
                         <button @click="onPressDeleteFeatures(key)">Delete</button>
                       </li>
@@ -389,9 +390,9 @@
                       <li v-for="(item, key) in equipment" :key="key">
                         <div>
                           <label class="item-name">{{ key }}</label>
-                          <label class="item-amount">x{{ getEquipmentAmount(key) }}</label>
+                          <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
                         </div>
-                        <label class="item-description">{{ getEquipmentDescription(key) }}</label>
+                        <label class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</label>
                         <br>
                         <button @click="onPressDeleteEquipment(key)">Delete</button>
                       </li>
@@ -496,7 +497,7 @@
                     <ul class="list">
                       <li v-for="(item, level) in spells" :key="level">
                         <template v-if="getDictionarySize(spells[level]) > 0">
-                          <label class="item-name">{{ getLevelName(level) }}:</label>
+                          <label class="item-name">{{ getSpellLevelName(level) }}:</label>
                           <ul class="list">
                             <li v-for="(spell, spellName) in spells[level]" :key="spellName">
                               <label class="item-name">{{ spellName }}</label>
@@ -627,6 +628,8 @@ export default {
           CHARACTER_KEYS: CHARACTER_KEYS,
           CLASS_NAMES: CLASS_NAMES,
           DIE_TYPE: DIE_TYPE,
+          EQUIPMENT_KEYS: EQUIPMENT_KEYS,
+          FEATURES_KEYS: FEATURES_KEYS,
           FEATURES_TYPES: FEATURES_TYPES,
           LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
           STAT_NAMES: STAT_NAMES,
@@ -1251,32 +1254,7 @@ export default {
 
         return newCharacter
       },
-      getEquipmentAmount(key) {
-        const item = this.equipment[key]
-        return item[EQUIPMENT_KEYS.AMOUNT]
-      },
-      getEquipmentDescription(key) {
-        const item = this.equipment[key]
-        return item[EQUIPMENT_KEYS.DESCRIPTION]
-      },
-      getFeaturesDescription(key) {
-        const item = this.featuresTraits[key]
-        return item[FEATURES_KEYS.DESCRIPTION]
-      },
-      getFeaturesType(key) {
-        const item = this.featuresTraits[key]
-        return item[FEATURES_KEYS.TYPE]
-      },
-      getFeaturesUses(key) {
-        const item = this.featuresTraits[key]
-        return item[FEATURES_KEYS.USES]
-      },
-      getproficiencyDescription(key) {
-        const item = this.proficiencies[key]
-        return item[FEATURES_KEYS.DESCRIPTION]
-      },
       getDictionarySize(dict) {
-        console.info('dict:', dict)
         if (dict) {
           const count = Object.keys(dict).length;
           return count
@@ -1285,7 +1263,7 @@ export default {
         }
         
       },
-      getLevelName(level) {
+      getSpellLevelName(level) {
         var output = "Level "
         switch (level) {
           case SPELLCASTING_KEYS.LEVEL_1:
