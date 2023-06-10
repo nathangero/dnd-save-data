@@ -8,16 +8,50 @@
         <button class="button-open-modal" @click="toggleModalNewCharacter">Create Character</button>
       </div>
 
-      <hr v-if="!showMenu">
-      <hr v-if="showMenu" style="visibility: hidden ;" >
+      <hr v-if="!isMenuOpen">
+      <hr v-if="isMenuOpen" style="visibility: hidden ;" >
       
       <!-- Character summary -->
-      <character-page @click="toggleModalViewCharacter"></character-page>
+      <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
+        <div id="users-characters-summary">
+          <div class="list-container-characters">
+            <ul class="list-characters">
+              <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
+                <div @click="toggleModalViewCharacter(key)">
+                  <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <label class="item-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
+                    <label class="item-amount" style="white-space: nowrap;">Level: {{ item[CHARACTER_KEYS.LEVEL] }}</label>
+                  </div>
+                  
+                  <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
+                  <label class="item-description">{{ item[CHARACTER_KEYS.RACE] }}</label>
+                  <label class="item-description">Current HP: {{ item[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}</label>
+                  <!-- <label class="item-description">Campaign: {{ item[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </template>
+
+
+      <transition name="slide-up" mode="out-in">
+        <template v-if="isModalViewCharacterOpen">
+          <div class="modal-page-overlay">
+            <div class="modal-page scrollable">
+              <character-page v-if="isModalViewCharacterOpen" :characterToView="characterToView" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
+            </div>
+          </div>
+          
+        </template>
+      </transition>
+
+      
 
       <!-- Create a new character -->
       <div id="create-character">
         <transition name="slide-up" mode="out-in">
-          <template v-if="showModalNewCharacter">
+          <template v-if="isModalNewCharacterOpen">
             <div class="modal-page-overlay">
               <div class="modal-page scrollable">
                 <button class="button-close" @click="toggleModalNewCharacter">Close</button>
@@ -529,18 +563,18 @@
     </div>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="bottom-navigation" v-if="showNavBar">
+    <nav class="bottom-navigation" v-if="isNavBarOpen">
       <ul>
-        <li @click="navigateTo(ROUTER_NAMES.Campaigns)" :class="{ active: currentRoute === ROUTER_NAMES.Campaigns }">
+        <li @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
           <i class="fas fa-campaigns"></i>
-          {{ ROUTER_NAMES.Campaigns.charAt(0).toUpperCase() + ROUTER_NAMES.Campaigns.slice(1) }}
+          {{ ROUTER_NAMES.CAMPAIGNS.charAt(0).toUpperCase() + ROUTER_NAMES.CAMPAIGNS.slice(1) }}
         </li>
-        <li @click="navigateTo(ROUTER_NAMES.Characters)" :class="{ active: currentRoute === ROUTER_NAMES.Characters }">
+        <li @click="navigateTo(ROUTER_NAMES.CHARACTERS)" :class="{ active: currentRoute === ROUTER_NAMES.CHARACTERS }">
           <i class="fas fa-characters"></i>
-          {{ ROUTER_NAMES.Characters.charAt(0).toUpperCase() + ROUTER_NAMES.Characters.slice(1) }}
-        </li><li @click="navigateTo(ROUTER_NAMES.Sessions)" :class="{ active: currentRoute === ROUTER_NAMES.Sessions }">
+          {{ ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1) }}
+        </li><li @click="navigateTo(ROUTER_NAMES.SESSIONS)" :class="{ active: currentRoute === ROUTER_NAMES.SESSIONS }">
           <i class="fas fa-sessions"></i>
-          {{ ROUTER_NAMES.Sessions.charAt(0).toUpperCase() + ROUTER_NAMES.Sessions.slice(1) }}
+          {{ ROUTER_NAMES.SESSIONS.charAt(0).toUpperCase() + ROUTER_NAMES.SESSIONS.slice(1) }}
         </li>
       </ul>
     </nav>
@@ -590,7 +624,6 @@ const MIN_VALUES = {
 }
 
 export default {
-  name: ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1),
   components: {
     SideMenu,
     CharacterPage
@@ -598,12 +631,14 @@ export default {
   data() {
     return {
       store: useStore(),
-      showModalNewCharacter: false,
-      showModalViewCharacter: false,
-      showMenu: false,
-      showNavBar: true, // show by default
+      isModalNewCharacterOpen: false,
+      isModalViewCharacterOpen: false,
+      isMenuOpen: false,
+      isNavBarOpen: true, // show by default
       characterToView: new Character(),
+      characterToViewId: '',
       usersCharacters: {},
+      ROUTER_NAMES: ROUTER_NAMES,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       BASE_STAT_KEYS: BASE_STAT_KEYS,
       CHARACTER_KEYS: CHARACTER_KEYS,
@@ -726,8 +761,6 @@ export default {
       } catch (error) {
         console.info(error)
       }
-    } else {
-      // this.usersCharacters = this.store.getters.getUserCharacters
     }
   },
   computed: {
@@ -736,13 +769,6 @@ export default {
       
       return user
     },
-    ROUTER_NAMES() {
-      return {
-        Campaigns: ROUTER_NAMES.CAMPAIGNS,
-        Characters: ROUTER_NAMES.CHARACTERS,
-        Sessions: ROUTER_NAMES.SESSIONS
-      };
-    }
   },
   watch: {
     'hp.max': function(newValue) {
@@ -1281,20 +1307,27 @@ export default {
     navigateTo(routeName) {
       this.$router.push({ name: routeName })
     },
-    toggleModalViewCharacter(charId) {
-      this.showModalViewCharacter = !this.showModalViewCharacter
-      this.characterToView = this.usersCharacters[charId]
-
-      this.showNavBar = !this.showNavBar
-    },
     toggleModalNewCharacter() {
-      this.showModalNewCharacter = !this.showModalNewCharacter
-      this.showNavBar = !this.showNavBar
+      this.isModalNewCharacterOpen = !this.isModalNewCharacterOpen
+      this.isNavBarOpen = !this.isNavBarOpen
+    },
+    toggleModalViewCharacter(charId) {
+      this.isModalViewCharacterOpen = !this.isModalViewCharacterOpen
+      this.isNavBarOpen = !this.isNavBarOpen
+
+      if (this.isModalViewCharacterOpen) {
+        this.characterToView = this.store.getters.getUserCharacters[charId]
+        this.characterToViewId = charId
+      } else {
+        this.characterToView = new Character()
+        this.characterToViewId = ''
+      }
+      
     },
     toggleMenu() {
-      this.showMenu = !this.showMenu
-      this.showNavBar = !this.showNavBar
-      if (this.showMenu) {
+      this.isMenuOpen = !this.isMenuOpen
+      this.isNavBarOpen = !this.isNavBarOpen
+      if (this.isMenuOpen) {
         this.$refs.contentRef.style.backgroundColor = 'gray';
         // this.$refs.bodyRef.style.height = 100%
         
@@ -1356,27 +1389,6 @@ transition: transform 0.3s;
   background-color: #000;
 }
 
-
-.side-menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 70%;
-  height: 100%;
-  background-color: white;
-}
-
-.side-menu {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-}
-
-.side-menu h1 {
-  padding: 20px 12%;
-  margin-bottom: 30px;
-  
-}
 
 .menu-close {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

@@ -1,7 +1,7 @@
 /**
  * This file will contain all the functions that read/write the database
  */
-import { ref, set, get, child, push } from "firebase/database"
+import { ref, set, get, child, push, remove } from "firebase/database"
 import { db } from "@/firebase.js"
 import User from "@/models/user"
 import DB_PATHS from "@/enums/db-paths"
@@ -59,6 +59,20 @@ export async function createNewCharacter(userId, characterInfo) {
         dbRef += newKey
         set(ref(db, dbRef), characterInfo).then(() => {
             // console.info(`created a new character for user: ${userId}`)
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+
+export async function deleteCharacter(userId, charId) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
+    return new Promise((resolve, reject) => {
+        remove(ref(db, dbRef)).then(() => {
             resolve(true)
         })
         .catch ((error => {
