@@ -53,87 +53,97 @@
               
                 
               <br>
-              <h3>Base Stats</h3>
-              <div id="base-stats">
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li>
-                      <label class="stat-label">Level:</label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
-                    </li>
-
-                    <li>
-                      <label class="stat-label">Armor Class: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
-                    </li>
-                    
-                    <li>
-                      <label class="stat-label">Initiative: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
-                    </li>
-                    
-                    <li>
-                      <label class="stat-label">Speed: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
-                    </li>
-                    
-                    <li>
-                      <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
-                    </li>
-                  </ul>
-                </div>
-
+              <h3>Character Info</h3>
+              <div id="character-info">
                 <ul class="stat-list">
                   <li>
                     <div class="stat-group">
-                      <label class="stat-label">Strength: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH] }}</label>
-                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]) }}</label>
+                      <label class="stat-label">Level:</label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Armor Class: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
                     </div>
                   </li>
                   
                   <li>
                     <div class="stat-group">
-                      <label class="stat-label">Dexterity: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY] }}</label>
-                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]) }}</label>
+                      <label class="stat-label">Initiative: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
                     </div>
                   </li>
-                    
+                  
                   <li>
                     <div class="stat-group">
-                      <label class="stat-label">Consitution: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION] }}</label>
-                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]) }}</label>
+                      <label class="stat-label">Speed: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
                     </div>
                   </li>
-
+                  
                   <li>
                     <div class="stat-group">
-                      <label class="stat-label">Intelligence: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE] }}</label>
-                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]) }}</label>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="stat-group">
-                      <label class="stat-label">Wisdom: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM] }}</label>
-                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]) }}</label>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="stat-group">
-                      <label class="stat-label">Charisma: </label>
-                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA] }}</label>
-                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]) }}</label>
+                      <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
                     </div>
                   </li>
                 </ul>
               </div>
+
+              <br>
+              <h3>Base Stats</h3>
+              <ul class="stat-list">
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Strength: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]) }}</label>
+                  </div>
+                </li>
+                
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Dexterity: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]) }}</label>
+                  </div>
+                </li>
+                  
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Consitution: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]) }}</label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Intelligence: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]) }}</label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Wisdom: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]) }}</label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Charisma: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]) }}</label>
+                  </div>
+                </li>
+              </ul>
 
               <br>
               <h3>Saving Throws</h3>
@@ -187,17 +197,10 @@
               <h3>Skills</h3>
               <div id="skills">
                 <ul class="stat-list">
-                  <li>
+                  <li v-for="(skill, key) in SKILL_KEYS" :key="key">
                     <div class="stat-group">
-                      <label class="stat-label">{{ SKILL_NAMES[SKILL_KEYS.ACROBATICS] }}:</label>
-                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS]) }}</label>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="stat-group">
-                      <label class="stat-label">{{ SKILL_NAMES[SKILL_KEYS.ANIMAL_HANDLING] }}:</label>
-                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING]) }}</label>
+                      <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SKILLS][skill]) }}</label>
                     </div>
                   </li>
                 </ul>
@@ -344,7 +347,6 @@ export default {
   },
   methods: {
     getDictionarySize(dict) {
-      console.info('dict:', dict)
       if (dict) {
         const count = Object.keys(dict).length;
         return count
@@ -399,7 +401,6 @@ export default {
     toggleModalViewCharacter(charId) {
       this.showModalViewCharacter = !this.showModalViewCharacter
       this.characterToView = this.usersCharacters[charId]
-      console.info('this.characterToView:', this.characterToView)
     }
   },
 }
