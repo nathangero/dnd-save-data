@@ -31,40 +31,128 @@
               <button class="button-close" @click="toggleModalViewCharacter">Close</button>
 
               <h1 style="padding-top: 10px">{{ characterToView[CHARACTER_KEYS.NAME] }}</h1>
-              <label class="item-description">Level: {{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.BACKGROUND] }}</label>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.RACE] }}</label>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
+
+              <ul class="stat-list">
+                <li>
+                  <label class="item-label">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
+                </li>
+
+                <li>
+                  <label class="item-label">{{ characterToView[CHARACTER_KEYS.BACKGROUND] }}</label>
+                </li>
+
+                <li>
+                  <label class="item-label">{{ characterToView[CHARACTER_KEYS.RACE] }}</label>
+                </li>
+
+                <li>
+                  <label class="item-label">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
+                </li>
+              </ul>
+              
                 
               <br><br>
               <h3>Base Stats</h3>
-              <label class="item-description">Armor Class: {{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
-              <label class="item-description">Initiative: {{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
-              <label class="item-description">Speed: {{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
-              <label class="item-description">Current HP: {{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+              <div class="container-inputs">
+                <ul class="list-inputs">
+                  <li>
+                    <label class="stat-label">Level:</label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
+                  </li>
 
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.STATS] }}</label>
+                  <li>
+                    <label class="stat-label">Armor Class: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
+                  </li>
+                  
+                  <li>
+                    <label class="stat-label">Initiative: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
+                  </li>
+                  
+                  <li>
+                    <label class="stat-label">Speed: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
+                  </li>
+                  
+                  <li>
+                    <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+                  </li>
+                </ul>
+              </div>
 
+              <ul class="stat-list">
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Strength: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]) }}</label>
+                  </div>
+                </li>
+                
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Dexterity: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]) }}</label>
+                  </div>
+                </li>
+                  
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Consitution: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]) }}</label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Intelligence: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]) }}</label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Wisdom: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]) }}</label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="stat-group">
+                    <label class="stat-label">Charisma: </label>
+                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA] }}</label>
+                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]) }}</label>
+                  </div>
+                </li>
+              </ul>
+
+              <br>
               <h3>Saving Throws</h3>
               <label class="item-description">{{ characterToView[CHARACTER_KEYS.SAVING_THROWS] }}</label>
               
+              <br>
               <h3>Skills</h3>
               <label class="item-description">{{ characterToView[CHARACTER_KEYS.SKILLS] }}</label>
 
-              
+              <br>
               <h3>Features & Traits</h3>
               <label class="item-description">{{ characterToView[CHARACTER_KEYS.FEATURES] }}</label>
 
-              
+              <br>
               <h3>Equipment</h3>
               <label class="item-description">{{ characterToView[CHARACTER_KEYS.EQUIPMENT] }}</label>
 
-              
+              <br>
               <h3>Languages</h3>
               <label class="item-description">{{ characterToView[CHARACTER_KEYS.LANGUAGES] }}</label>
 
-
+              <br>
               <h3>Spell Casting</h3>
               <label class="item-description">{{ characterToView[CHARACTER_KEYS.SPELLS] }}</label>
 
@@ -80,6 +168,7 @@
 
 <script>
 import { useStore } from 'vuex'
+import { BASE_STAT_KEYS } from '@/enums/dbKeys/baseStat-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import store from '@/store'
@@ -90,8 +179,9 @@ export default {
       store: useStore(),
       showModalViewCharacter: false,
       usersCharacters: store.getters.getUserCharacters,
+      BASE_STAT_KEYS: BASE_STAT_KEYS,
       CHARACTER_KEYS: CHARACTER_KEYS,
-      HP_KEYS: HP_KEYS
+      HP_KEYS: HP_KEYS,
     }
   },
   methods: {
@@ -101,6 +191,13 @@ export default {
         return count
       } else {
         return 0
+      }
+    },
+    getStatBonus(stat) {
+      if (stat < 0) {
+        return stat // the negative will already be apart of the number
+      } else {
+        return "+" + stat
       }
     },
     toggleModalViewCharacter(charId) {
@@ -132,5 +229,103 @@ transition: transform 0.3s;
 
 h3 {
   text-decoration: underline;
+}
+
+
+/* LIST - ENTERING INPUT STYLE */
+
+.container-inputs {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0 auto;
+}
+
+.list-inputs {
+  list-style: none;
+}
+
+.list-inputs li {
+  display: flex;
+  align-items: center;
+}
+
+/* LIST - ADDED ITEMS STYLE */
+
+.item-input {
+  width: 80%;
+  margin-left: 5px; /* Adjust the spacing between the label and input */
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  padding-left: 0;
+  padding-bottom: 5px;
+}
+
+.list-container {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto; /* centers the container */
+  border: 1px solid black;
+  border-radius: 10px; /* Rounded corners */
+}
+
+.list li {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-weight: bold;
+  font-size: larger;
+  margin-right: 20px;
+}
+
+.item-label {
+  font-size: large;
+}
+
+.item-amount {
+  font-size: large;
+}
+
+.item-description {
+  width: 80%;
+  font-size: large;
+  text-align: left;
+}
+
+
+/* STAT STYLE */
+
+.stat-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 50%;
+  margin: 0 auto;
+  padding-left: 0;
+}
+
+.stat-group {
+  display: flex;
+  align-items: center;
+}
+
+.stat-label {
+  text-align: left;
+  font-size: large;
+}
+
+.stat-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: large;
+}
+
+.stat-bonus {
+  margin-left: 10px; /* Adjust as needed */
+  text-align: right;
+  font-size: large;
 }
 </style>
