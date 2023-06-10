@@ -5,8 +5,8 @@ import DashBoard from './components/DashBoard.vue'
 import Campaigns from './components/CampaignsList.vue'
 import Characters from './components/CharactersList.vue'
 import Sessions from './components/SessionsList.vue'
-import { ROUTER_PATHS } from './enums/router-paths'
-import { ROUTER_NAMES } from './enums/router-names'
+import ROUTER_PATHS from './enums/router-paths'
+import ROUTER_NAMES from './enums/router-names'
 
 const routes = [
   {
@@ -38,7 +38,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes: routes
 })
 
 export default router

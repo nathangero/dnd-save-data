@@ -3,4 +3,4 @@ const COOKIE_NAMES = {
     NAME: 'name',
 }
 
-export { COOKIE_NAMES }
+export default COOKIE_NAMES

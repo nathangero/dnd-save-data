@@ -12,15 +12,17 @@
           <div v-if="error" class="error">{{ error }}</div>
         </div>
 
-        <p class="sign-up-text">New user? Please make a new account <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a>.</p>
-        <p class="password-reset-text">Forget your password? Reset <a href="#" class="signup-link" @click.prevent="showResetPasswordPopup">here</a>.</p>
+        <div style="display: flex; flex-direction: column; text-align: center;">
+          <p class="sign-up-text">New user? Please make a new account <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a>.</p>
+          <p class="password-reset-text">Forgot your password? Reset <a href="#" class="signup-link" @click.prevent="showResetPasswordPopup">here</a>.</p>
+        </div>
 
         <!-- Sign Up Popup -->
         <transition name="fade" appear>
           <div class="overlay" v-if="showSignup">
             <div class="popup">
               <div class="form">
-                <h2>Sign up</h2>
+                <h1>Sign up</h1>
                 <input type="text" id="name" v-model="name" placeholder="Name">
                 <br>
                 <input type="email" id="email" v-model="emailSignup" placeholder="Email">
@@ -46,7 +48,7 @@
           <div class="overlay" v-if="showResetPassword">
             <div class="popup">
               <div class="form">
-                <h2>Password Reset</h2>
+                <h1>Password Reset</h1>
                 <input type="email" id="email" v-model="emailReset" placeholder="Email">
                 <br>
                 <div class="signup-buttons">
@@ -78,7 +80,7 @@
 </template>
   
 <script>
-import { ROUTER_PATHS } from '@/enums/router-paths'
+import ROUTER_PATHS from '@/enums/router-paths'
 import { auth } from "@/firebase.js"
 import { useStore } from 'vuex'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"
@@ -309,7 +311,7 @@ input {
   transition: opacity 200ms ease-in-out;
 }
 
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }

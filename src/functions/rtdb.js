@@ -1,9 +1,10 @@
 /**
  * This file will contain all the functions that read/write the database
  */
-import { ref, set, get, child } from "firebase/database"
+import { ref, set, get, child, push, remove } from "firebase/database"
 import { db } from "@/firebase.js"
 import User from "@/models/user"
+import DB_PATHS from "@/enums/db-paths"
 
 export async function writeUserInDb(uid, name, email) {
     const dbRef = 'users/' + uid
@@ -35,6 +36,8 @@ export async function readUserInDb(uid) {
                 data["id"] = snapshot.key
                 const user = User.fromSnapshot(data)
                 
+                // console.info('user:', user)
+                
                 resolve(user)
             } else {
                 console.info("No user found with uid: \"" + uid + "\"")
@@ -47,3 +50,52 @@ export async function readUserInDb(uid) {
     })
     
 }
+
+
+export async function createNewCharacter(userId, characterInfo) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
+    return new Promise((resolve, reject) => {
+        const newKey = push(ref(db, dbRef)).key
+        dbRef += newKey
+        set(ref(db, dbRef), characterInfo).then(() => {
+            // console.info(`created a new character for user: ${userId}`)
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+
+export async function deleteCharacter(userId, charId) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
+    return new Promise((resolve, reject) => {
+        remove(ref(db, dbRef)).then(() => {
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+export async function readAllCharacters(userId) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
+    return new Promise((resolve, reject) => {
+        get(child(ref(db), dbRef)).then((snapshot) => {
+            console.info('snapshot:', JSON.stringify(snapshot))
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+// export async function readSpecificCharacter(userId, charId) {
+
+// }

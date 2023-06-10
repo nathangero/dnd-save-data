@@ -6,4 +6,4 @@ const ROUTER_PATHS = {
     SESSIONS: '/sessions',
 }
 
-export { ROUTER_PATHS }
+export default ROUTER_PATHS

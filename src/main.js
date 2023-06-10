@@ -7,8 +7,8 @@ import Cookies from 'js-cookie';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
-import { ROUTER_NAMES } from './enums/router-names';
-import { COOKIE_NAMES } from './enums/cookie-names';
+import ROUTER_NAMES from './enums/router-names';
+import COOKIE_NAMES from './enums/cookie-names';
 
 // const app = createApp(App)
 // app.use(store)
