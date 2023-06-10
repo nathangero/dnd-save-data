@@ -1,6 +1,6 @@
 const SKILL_KEYS = {
     ACROBATICS: 'acrobatics',
-    ANIMALHANDLING: 'animalHandling',
+    ANIMAL_HANDLING: 'animalHandling',
     ARCANA: 'arcana',
     ATHLETICS: 'athletics',
     DECEPTION: 'deception',
@@ -21,7 +21,7 @@ const SKILL_KEYS = {
 
 const SKILL_NAMES = {
     [SKILL_KEYS.ACROBATICS]: 'Acrobatics',
-    [SKILL_KEYS.ANIMALHANDLING]: 'AnimalHandling',
+    [SKILL_KEYS.ANIMAL_HANDLING]: 'AnimalHandling',
     [SKILL_KEYS.ARCANA]: 'Arcana',
     [SKILL_KEYS.ATHLETICS]: 'Athletics',
     [SKILL_KEYS.DECEPTION]: 'Deception',

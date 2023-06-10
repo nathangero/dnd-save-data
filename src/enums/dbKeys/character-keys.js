@@ -12,7 +12,7 @@ const CHARACTER_KEYS = {
     LANGUAGES: "languages",
     LEVEL: "level",
     NAME: "name",
-    PROFICIENCIES: "proficiences",
+    PROFICIENCIES: "proficiencies",
     PROFICIENCY_BONUS: "proficiencyBonus",
     RACE: "race",
     SAVING_THROWS: "savingThrows",

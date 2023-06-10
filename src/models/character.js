@@ -81,6 +81,8 @@ export default class Charcter {
             stats,
         } = snapshot
 
+        console.info('proficiencies:', JSON.stringify(proficiencies))
+
         const newCharacter =  new Charcter(
             alignment,
             armor,

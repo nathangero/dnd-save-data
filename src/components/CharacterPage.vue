@@ -1,7 +1,9 @@
 <template>
   <div class="body">
+
+    <!-- Character summary -->
     <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-      <div id="users-characters">
+      <div id="users-characters-summary">
         <div class="list-container-characters">
           <ul class="list-characters">
             <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
@@ -29,8 +31,7 @@
           <div class="modal-page-overlay">
             <div class="modal-page scrollable">
               <button class="button-close" @click="toggleModalViewCharacter">Close</button>
-
-              <h1 style="padding-top: 10px">{{ characterToView[CHARACTER_KEYS.NAME] }}</h1>
+              <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 
               <ul class="stat-list">
                 <li>
@@ -51,111 +52,239 @@
               </ul>
               
                 
-              <br><br>
+              <br>
               <h3>Base Stats</h3>
-              <div class="container-inputs">
-                <ul class="list-inputs">
+              <div id="base-stats">
+                <div class="container-inputs">
+                  <ul class="list-inputs">
+                    <li>
+                      <label class="stat-label">Level:</label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
+                    </li>
+
+                    <li>
+                      <label class="stat-label">Armor Class: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
+                    </li>
+                    
+                    <li>
+                      <label class="stat-label">Initiative: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
+                    </li>
+                    
+                    <li>
+                      <label class="stat-label">Speed: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
+                    </li>
+                    
+                    <li>
+                      <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+                    </li>
+                  </ul>
+                </div>
+
+                <ul class="stat-list">
                   <li>
-                    <label class="stat-label">Level:</label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
+                    <div class="stat-group">
+                      <label class="stat-label">Strength: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH] }}</label>
+                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]) }}</label>
+                    </div>
+                  </li>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Dexterity: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY] }}</label>
+                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]) }}</label>
+                    </div>
+                  </li>
+                    
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Consitution: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION] }}</label>
+                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]) }}</label>
+                    </div>
                   </li>
 
                   <li>
-                    <label class="stat-label">Armor Class: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
+                    <div class="stat-group">
+                      <label class="stat-label">Intelligence: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE] }}</label>
+                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]) }}</label>
+                    </div>
                   </li>
-                  
+
                   <li>
-                    <label class="stat-label">Initiative: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
+                    <div class="stat-group">
+                      <label class="stat-label">Wisdom: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM] }}</label>
+                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]) }}</label>
+                    </div>
                   </li>
-                  
+
                   <li>
-                    <label class="stat-label">Speed: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
-                  </li>
-                  
-                  <li>
-                    <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+                    <div class="stat-group">
+                      <label class="stat-label">Charisma: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA] }}</label>
+                      <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]) }}</label>
+                    </div>
                   </li>
                 </ul>
               </div>
 
-              <ul class="stat-list">
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Strength: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH] }}</label>
-                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]) }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Dexterity: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY] }}</label>
-                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]) }}</label>
-                  </div>
-                </li>
-                  
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Consitution: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION] }}</label>
-                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]) }}</label>
-                  </div>
-                </li>
-
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Intelligence: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE] }}</label>
-                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]) }}</label>
-                  </div>
-                </li>
-
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Wisdom: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM] }}</label>
-                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]) }}</label>
-                  </div>
-                </li>
-
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Charisma: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA] }}</label>
-                    <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]) }}</label>
-                  </div>
-                </li>
-              </ul>
-
               <br>
               <h3>Saving Throws</h3>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.SAVING_THROWS] }}</label>
+              <div id="saving-throws">
+                <ul class="stat-list">
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Strength: </label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH]) }}</label>
+                    </div>
+                  </li>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Dexterity: </label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY]) }}</label>
+                    </div>
+                  </li>
+                    
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Consitution: </label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION]) }}</label>
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Intelligence: </label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE]) }}</label>
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Wisdom: </label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM]) }}</label>
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Charisma: </label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA]) }}</label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
               
               <br>
               <h3>Skills</h3>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.SKILLS] }}</label>
+              <div id="skills">
+                <ul class="stat-list">
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">{{ SKILL_NAMES[SKILL_KEYS.ACROBATICS] }}:</label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS]) }}</label>
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">{{ SKILL_NAMES[SKILL_KEYS.ANIMAL_HANDLING] }}:</label>
+                      <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING]) }}</label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
 
               <br>
               <h3>Features & Traits</h3>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.FEATURES] }}</label>
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.FEATURES]) > 0">
+                <div class="list-container-character">
+                  <ul class="list">
+                    <li v-for="(item, key) in characterToView[CHARACTER_KEYS.FEATURES]" :key="key">
+                      <div>
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
+                      </div>
+                      <label class="item-type">Type: {{ item[FEATURES_KEYS.TYPE] }}</label>
+                      <label class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</label>
+                    </li>
+                  </ul>
+                </div>
+              </template>
 
               <br>
               <h3>Equipment</h3>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.EQUIPMENT] }}</label>
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.EQUIPMENT]) > 0">
+                <div class="list-container-character">
+                  <ul class="list">
+                    <li v-for="(item, key) in characterToView[CHARACTER_KEYS.EQUIPMENT]" :key="key">
+                      <div>
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                      </div>
+                      <label class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</label>
+                    </li>
+                  </ul>
+                </div>
+              </template>
 
               <br>
               <h3>Languages</h3>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.LANGUAGES] }}</label>
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
+                <div class="list-container-character">
+                  <ul class="list">
+                    <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
+                      <label class="item-name">{{ key }}</label>
+                      <label class="item-description">{{ item }}</label>
+                    </li>
+                  </ul>
+                </div>
+              </template>
+
+              <br>
+              <h3>Proficiencies</h3>
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
+                <div class="list-container-character">
+                  <ul class="list">
+                    <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
+                      <label class="item-name">{{ key }}</label>
+                      <label class="item-description">{{ item }}</label>
+                    </li>
+                  </ul>
+                </div>
+              </template>
 
               <br>
               <h3>Spell Casting</h3>
-              <label class="item-description">{{ characterToView[CHARACTER_KEYS.SPELLS] }}</label>
-
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
+                <div class="list-container-character">
+                  <ul class="list">
+                    <li v-for="(item, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
+                      <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS][level]) > 0">
+                        <label class="item-name">{{ getSpellLevelName(level) }}:</label>
+                        <ul class="list">
+                          <li v-for="(spell, spellName) in characterToView[CHARACTER_KEYS.SPELLS][level]" :key="spellName">
+                            <label class="item-name">{{ spellName }}</label>
+                            <br>
+                            <label class="item-description">Casting Time: {{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }}</label>
+                            <label class="item-description">Duration: {{ spell[[SPELLCASTING_KEYS.DURATION]] }} seconds</label>
+                            <label class="item-description">Range: {{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
+                            <label class="item-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
+                          </li>
+                        </ul>
+                      </template>
+                    </li>
+                  </ul>
+                </div>
+              </template>
 
             </div>
           </div>
@@ -167,11 +296,23 @@
 </template>
 
 <script>
-import { useStore } from 'vuex'
-import { BASE_STAT_KEYS } from '@/enums/dbKeys/baseStat-keys.js'
-import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
-import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import store from '@/store'
+import { useStore } from 'vuex'
+import Character from '@/models/character'
+import { DIE_TYPE } from '@/enums/die-type'
+import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
+import { FEATURES_KEYS } from '@/enums/dbKeys/features-keys.js'
+import { LANGUAGE_PROFICIENCY } from '@/enums/language-proficiency'
+import { FEATURES_TYPES } from '@/enums/features-types'
+import { ALIGNMENT_TYPES } from '@/enums/alignment-types'
+import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
+import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
+import { BASE_STAT_KEYS } from '@/enums/dbKeys/baseStat-keys.js'
+import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
+import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
+import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
+import { STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
+import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
 
 export default {
   data() {
@@ -179,19 +320,74 @@ export default {
       store: useStore(),
       showModalViewCharacter: false,
       usersCharacters: store.getters.getUserCharacters,
+      characterToView: new Character(),
+      ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       BASE_STAT_KEYS: BASE_STAT_KEYS,
       CHARACTER_KEYS: CHARACTER_KEYS,
+      CLASS_NAMES: CLASS_NAMES,
+      DEATH_SAVES_KEYS: DEATH_SAVES_KEYS,
+      DIE_TYPE: DIE_TYPE,
+      EQUIPMENT_KEYS: EQUIPMENT_KEYS,
+      FEATURES_KEYS: FEATURES_KEYS,
+      FEATURES_TYPES: FEATURES_TYPES,
       HP_KEYS: HP_KEYS,
+      LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
+      STAT_NAMES: STAT_NAMES,
+      SKILL_KEYS: SKILL_KEYS,
+      SKILL_NAMES: SKILL_NAMES,
+      SPELLCASTING_KEYS: SPELLCASTING_KEYS,
+      SPELLCASTING_NAMES: SPELLCASTING_NAMES,
     }
+  },
+  mounted() {
+    
   },
   methods: {
     getDictionarySize(dict) {
+      console.info('dict:', dict)
       if (dict) {
         const count = Object.keys(dict).length;
         return count
       } else {
         return 0
       }
+    },
+    getSpellLevelName(level) {
+      var output = "Level "
+      switch (level) {
+        case SPELLCASTING_KEYS.LEVEL_1:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]
+          break
+        case SPELLCASTING_KEYS.LEVEL_2:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_2]
+          break
+        case SPELLCASTING_KEYS.LEVEL_3:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_3]
+          break
+        case SPELLCASTING_KEYS.LEVEL_4:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_4]
+          break
+        case SPELLCASTING_KEYS.LEVEL_5:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_5]
+          break
+        case SPELLCASTING_KEYS.LEVEL_6:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_6]
+          break
+        case SPELLCASTING_KEYS.LEVEL_7:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_7]
+          break
+        case SPELLCASTING_KEYS.LEVEL_8:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_8]
+          break
+        case SPELLCASTING_KEYS.LEVEL_9:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_9]
+          break
+        default:
+          output = SPELLCASTING_NAMES[SPELLCASTING_KEYS.CANTRIPS]
+          break
+      }
+
+      return output
     },
     getStatBonus(stat) {
       if (stat < 0) {
@@ -203,6 +399,7 @@ export default {
     toggleModalViewCharacter(charId) {
       this.showModalViewCharacter = !this.showModalViewCharacter
       this.characterToView = this.usersCharacters[charId]
+      console.info('this.characterToView:', this.characterToView)
     }
   },
 }
@@ -231,6 +428,10 @@ h3 {
   text-decoration: underline;
 }
 
+.character-name {
+  margin-top: 50px;
+  font-size: 2.5em;
+}
 
 /* LIST - ENTERING INPUT STYLE */
 
@@ -254,20 +455,15 @@ h3 {
 .item-input {
   width: 80%;
   margin-left: 5px; /* Adjust the spacing between the label and input */
-  border: none; /* Remove the default border */
-  border-bottom: 1px solid black; /* Add a bottom border */
-  outline: none;
   padding-left: 0;
   padding-bottom: 5px;
 }
 
-.list-container {
+.list-container-character {
   display: flex;
   justify-content: center;
   width: 90%;
   margin: 0 auto; /* centers the container */
-  border: 1px solid black;
-  border-radius: 10px; /* Rounded corners */
 }
 
 .list li {
