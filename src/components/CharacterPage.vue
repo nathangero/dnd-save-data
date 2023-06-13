@@ -26,10 +26,27 @@
       <br>
       <div id="character-info">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingCharInfo">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingCharInfo">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
           <h3>Character Info</h3>
-          <button class="button-edit">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingCharInfo">
+              <button class="button-edit" @click="toggleEditForStat(characterinfo)">Edit</button>
+            </div>
+            <div v-if="isEditingCharInfo">
+              <button class="button-edit" @click="toggleEditForStat(characterinfo)">Finish</button>
+            </div>
+          </div>
         </div>
+
         <ul class="stat-list">
           <li>
             <div class="stat-group">
@@ -71,10 +88,27 @@
       <br>
       <div id="base-stats">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingBaseStats">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingBaseStats">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
           <h3>Base Stats</h3>
-          <button class="button-edit">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingBaseStats">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Edit</button>
+            </div>
+            <div v-if="isEditingBaseStats">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Finish</button>
+            </div>
+          </div>
         </div>
+        
         <ul class="stat-list">
           <li>
             <div class="stat-group">
@@ -129,10 +163,27 @@
       <br>
       <div id="saving-throws">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingSavingThrows">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingSavingThrows">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
           <h3>Saving Throws</h3>
-          <button class="button-edit">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingSavingThrows">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)">Edit</button>
+            </div>
+            <div v-if="isEditingSavingThrows">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)">Finish</button>
+            </div>
+          </div>
         </div>
+
         <ul class="stat-list">
           <li>
             <div class="stat-group">
@@ -181,10 +232,27 @@
       <br>
       <div id="skills">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingSkills">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingSkills">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
           <h3>Skills</h3>
-          <button class="button-edit">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingSkills">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.SKILLS)">Edit</button>
+            </div>
+            <div v-if="isEditingSkills">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.SKILLS)">Finish</button>
+            </div>
+          </div>
         </div>
+
         <ul class="stat-list">
           <li v-for="(skill, key) in SKILL_KEYS" :key="key">
             <div class="stat-group">
@@ -198,10 +266,27 @@
       <br>
       <div id="features-traits">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingFeaturesTraits">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingFeaturesTraits">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
           <h3>Features & Traits</h3>
-          <button class="button-edit">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingFeaturesTraits">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Edit</button>
+            </div>
+            <div v-if="isEditingFeaturesTraits">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Finish</button>
+            </div>
+          </div>
         </div>
+
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.FEATURES]) > 0">
           <div class="list-container-character">
             <ul class="list">
@@ -221,10 +306,27 @@
       <br>
       <div id="equipment">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingEquipment">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingEquipment">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
           <h3>Equipment</h3>
-          <button class="button-edit">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingEquipment">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Edit</button>
+            </div>
+            <div v-if="isEditingEquipment">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Finish</button>
+            </div>
+          </div>
         </div>
+
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.EQUIPMENT]) > 0">
           <div class="list-container-character">
             <ul class="list">
@@ -246,10 +348,10 @@
         <div class="edit-buttons">
           <div>
             <div v-if="!isEditingLanguages">
-              <button class="button-edit-spacer" @click="toggleEditLanguages">Edit</button>
+              <button class="button-edit-spacer">Edit</button>
             </div>
             <div v-if="isEditingLanguages">
-              <button class="button-edit-spacer" @click="toggleEditLanguages">Finish</button>
+              <button class="button-edit-spacer">Finish</button>
             </div>
           </div>
 
@@ -257,13 +359,14 @@
           
           <div>
             <div v-if="!isEditingLanguages">
-              <button class="button-edit" @click="toggleEditLanguages">Edit</button>
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
             </div>
             <div v-if="isEditingLanguages">
-              <button class="button-edit" @click="toggleEditLanguages">Finish</button>
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
             </div>
           </div>
         </div>
+
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
           <div class="list-container-character">
             <ul class="list">
@@ -318,9 +421,25 @@
       <br>
       <div id="proficiences">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingProficiencies">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingProficiencies">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
           <h3>Proficiencies</h3>
-          <button class="button-edit">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingProficiencies">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Edit</button>
+            </div>
+            <div v-if="isEditingProficiencies">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Finish</button>
+            </div>
+          </div>
         </div>
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
           <div class="list-container-character">
@@ -337,10 +456,27 @@
       <br>
       <div id="spell-casting">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingSpellCasting">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingSpellCasting">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
           <h3>Spell Casting</h3>
-          <button class="button-edit">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingSpellCasting">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Edit</button>
+            </div>
+            <div v-if="isEditingSpellCasting">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Finish</button>
+            </div>
+          </div>
         </div>
+
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
           <div class="list-container-character">
             <ul class="list">
@@ -594,8 +730,52 @@ export default {
         }
       }
     },
-    toggleEditLanguages() {
-      this.isEditingLanguages = !this.isEditingLanguages
+    toggleEditForStat(statRef) {
+      console.info('toggling:', statRef)
+      switch (statRef) {
+        case CHARACTER_KEYS.STATS:
+          this.isEditingBaseStats = !this.isEditingBaseStats
+          break
+
+        
+        case CHARACTER_KEYS.SAVING_THROWS:
+          this.isEditingSavingThrows = !this.isEditingSavingThrows
+          break
+
+        
+        case CHARACTER_KEYS.SKILLS:
+          this.isEditingSkills = !this.isEditingSkills
+          break
+
+        
+        case CHARACTER_KEYS.FEATURES:
+          this.isEditingFeaturesTraits = !this.isEditingFeaturesTraits
+          break
+
+        
+        case CHARACTER_KEYS.EQUIPMENT:
+          this.isEditingEquipment = !this.isEditingEquipment
+          break
+
+        
+        case CHARACTER_KEYS.LANGUAGES:
+          this.isEditingLanguages = !this.isEditingLanguages
+          break
+
+        
+        case CHARACTER_KEYS.PROFICIENCIES:
+          this.isEditingProficiencies = !this.isEditingProficiencies
+          break
+
+        
+        case CHARACTER_KEYS.SPELLS:
+          this.isEditingSpellCasting = !this.isEditingSpellCasting
+          break
+
+        
+        default:
+          this.isEditingCharInfo = !this.isEditingCharInfo
+      }
     },
     toggleDeletePopup() {
       this.isDeletePopupOpen = !this.isDeletePopupOpen
