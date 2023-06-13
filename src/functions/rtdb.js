@@ -146,29 +146,3 @@ export async function addCharacterStatByKey(userId, charId, statRef, itemToAdd) 
         }))
     })
 }
-
-
-/**
- * Adds a stat under the user's character's id.
- * E.G. dbRef = "/users/userId/characters/charId/statRef/keyToDelete"
- *      If user is adding a language, it could be like this "/users/userId/characters/charId/languages/"
- * @param {String} userId User's uid
- * @param {String} charId User's Character uid
- * @param {String} statRef Stat name where the deletion will occur
- * @param {String} spellLevel Level where the spell belongs under
- * @param {Dict} itemToAdd Dictionary containing the info to be added
- * @returns 
- */
-export async function addCharacterSpellByKey(userId, charId, statRef, spellLevel, itemToAdd) {
-    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId + '/' + statRef + '/' + spellLevel
-    return new Promise((resolve, reject) => {
-        update(ref(db, dbRef), itemToAdd).then(() => {
-            // console.info(`created a new character for user: ${userId}`)
-            resolve(true)
-        })
-        .catch ((error => {
-            console.error(error)
-            reject(false)
-        }))
-    })
-}

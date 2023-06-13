@@ -585,14 +585,41 @@
               <li v-for="(item, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
                 <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS][level]) > 0">
                   <label class="item-name">{{ getSpellLevelName(level) }}:</label>
-                  <ul class="list">
+                  <ul>
                     <li v-for="(spell, spellName) in characterToView[CHARACTER_KEYS.SPELLS][level]" :key="spellName">
-                      <label class="item-name">{{ spellName }}</label>
-                      <br>
-                      <label class="item-description">Casting Time: {{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }}</label>
-                      <label class="item-description">Duration: {{ spell[[SPELLCASTING_KEYS.DURATION]] }} seconds</label>
-                      <label class="item-description">Range: {{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
-                      <label class="item-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
+                      <div v-if="!isEditingSpellCasting">
+                        <label class="item-name">{{ spellName }}</label>
+                        <br>
+                        <label class="item-description">Casting Time: {{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }}</label>
+                        <label class="item-description">Duration: {{ spell[[SPELLCASTING_KEYS.DURATION]] }} seconds</label>
+                        <label class="item-description">Range: {{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
+                        <label class="item-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
+                      </div>
+
+                      <!-- Edit and Delete -->
+                      <div v-if="isEditingSpellCasting">
+                        <label class="item-name">{{ spellName }}</label>
+                        <br>
+                        <div>
+                          <label for="spells-casting-time" class="label-stats">Casting Time (# of actions):</label>
+                          <input type="number" id="spells-casting-time" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
+                        </div>
+                        <div>
+                          <label for="spells-casting-duration" class="label-stats">Duration (in seconds):</label>
+                          <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                        </div>
+                        
+                        <div>
+                          <label for="spells-range" class="label-stats">Range (in feet):</label>
+                          <input type="number" id="spells-range" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
+                        </div>
+                        <br>
+                        <textarea v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        <div class="buttons-delete-save">
+                          <button style="margin-right: 10px;" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
+                          <button style="margin-left: 10px;" @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
+                        </div>
+                      </div>
                     </li>
                   </ul>
                 </template>
@@ -1044,7 +1071,24 @@ export default {
         value: value,
         statRef: statRef
       }
-      this.store.dispatch("updateCharacterStat", payload)
+      this.store.dispatch("updateCharacterSpell", payload)
+    },
+    onPressUpdateSpell(levelKey, spellName, updatedSpell, statRef) {
+      const payload = {
+        charId: this.characterToViewId,
+        levelKey: levelKey,
+        spellName: spellName,
+        updatedSpell: updatedSpell,
+        statRef: statRef
+      }
+
+      this.store.dispatch("updateCharacterSpell", payload).then((success) => {
+        if (success) {
+          alert(`updated spell ${spellName}`)
+        } else {
+          alert(`couldn't update ${spellName} for some reason`)
+        }
+      })
     },
     onPressDeleteStat(key, statRef) {
       if (key in this.characterToView[statRef]) {
@@ -1056,6 +1100,25 @@ export default {
           statRef: statRef
         }
         this.store.dispatch("deleteCharacterStat", payload)
+      }
+    },
+    onPressDeleteSpell(levelKey, spellName, statRef) {
+      if (spellName in this.characterToView[statRef][levelKey]) {
+        delete this.characterToView[statRef][levelKey][spellName]
+        
+        const payload = {
+          charId: this.characterToViewId, 
+          levelKey: levelKey,
+          spellName: spellName,
+          statRef: statRef
+        }
+        this.store.dispatch("deleteCharacterSpell", payload).then((success) => {
+        if (success) {
+          alert(`deleted spell ${spellName}`)
+        } else {
+          alert(`couldn't delete ${spellName} for some reason`)
+        }
+      })
       }
     },
     toggleEditForStat(statRef) {
