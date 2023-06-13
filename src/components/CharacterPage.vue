@@ -4,7 +4,9 @@
       <button class="button-close" @click="closeModal('')">Close</button>
       <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 
-      <ul class="stat-list">
+      <!-- Not editable -->
+      <div id="character-background">
+        <ul class="stat-list">
         <li>
           <label class="item-label">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
         </li>
@@ -21,7 +23,7 @@
           <label class="item-label">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
         </li>
       </ul>
-      
+      </div>
         
       <br>
       <div id="character-info">
@@ -80,6 +82,13 @@
             <div class="stat-group">
               <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
               <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+            </div>
+          </li>
+          
+          <li>
+            <div class="stat-group">
+              <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
+              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT] }}{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
             </div>
           </li>
         </ul>

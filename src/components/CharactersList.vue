@@ -99,7 +99,7 @@
 
                     <li>
                       <label for="stats-hit-die"># of Hit Die: </label>
-                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIEAMOUNT]" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li style="margin-top: 10px;">
@@ -668,7 +668,7 @@ export default {
       hp: {
         [HP_KEYS.CURRENT]: '',
         [HP_KEYS.DIE]: '',
-        [HP_KEYS.DIEAMOUNT]: '',
+        [HP_KEYS.DIE_AMOUNT]: '',
         [HP_KEYS.MAX]: '',
         [HP_KEYS.TEMP]: 0
       },
@@ -791,7 +791,7 @@ export default {
       this.hp = {
         [HP_KEYS.CURRENT]: '',
         [HP_KEYS.DIE]: '',
-        [HP_KEYS.DIEAMOUNT]: '',
+        [HP_KEYS.DIE_AMOUNT]: '',
         [HP_KEYS.MAX]: '',
         [HP_KEYS.TEMP]: 0
       }
