@@ -328,16 +328,48 @@
         </div>
 
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.EQUIPMENT]) > 0">
-          <div class="list-container-character">
+          <div>
             <ul class="list">
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.EQUIPMENT]" :key="key">
-                <div>
+                <div v-if="!isEditingEquipment">
                   <label class="item-name">{{ key }}</label>
                   <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                  <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
                 </div>
-                <label class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</label>
+
+                <!-- Edit and Delete -->
+                <div v-if="isEditingEquipment">
+                  <div class="container-edit">
+                    <label class="item-name" style="width: 100lvw;">{{ key }}:</label>
+                    <div>
+                      <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                      <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.AMOUNT]"> 
+                    </div>
+                    <textarea v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                  </div>
+
+                  <div class="buttons-delete-save">
+                    <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
+                    <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.EQUIPMENT][key], CHARACTER_KEYS.EQUIPMENT)">Update</button>
+                  </div>
+                </div>
               </li>
             </ul>
+          </div>
+        </template>
+
+        <!-- Add new -->
+        <template v-if="isEditingEquipment">
+          <div class="equipment-container">
+            <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
+            <div>
+              <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+              <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
+            </div>
+            <br>
+            <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button @click="onPressAddEquipment" style="margin-top: 10px;">Add</button>
           </div>
         </template>
       </div>
@@ -368,12 +400,12 @@
         </div>
 
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
-          <div class="list-container-character">
-            <ul class="list">
+          <div>
+            <ul>
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
                 <div v-if="!isEditingLanguages">
-                  <div style="display: flex; flex-direction: row;">
-                    <label class="item-name">{{ key }}:</label>
+                  <div style="display: flex; flex-direction: row; margin-bottom: -10px;">
+                    <p class="item-name">{{ key }}:</p>
                     <p class="item-description">{{ item }}</p>
                   </div>
                 </div>
@@ -442,7 +474,7 @@
           </div>
         </div>
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
-          <div class="list-container-character">
+          <div>
             <ul class="list">
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
                 <div v-if="!isEditingProficiencies">
@@ -504,7 +536,7 @@
         </div>
 
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
-          <div class="list-container-character">
+          <div>
             <ul class="list">
               <li v-for="(item, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
                 <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS][level]) > 0">
@@ -708,6 +740,40 @@ export default {
       } else {
         return "+" + stat
       }
+    },
+    onPressAddEquipment() {
+      if (this.equipmentTempName === '') {
+        alert("Please enter an equipment name")
+        return
+      }
+
+      if (this.equipmentTempAmount === '') {
+        alert("Please enter an equipment amount")
+        return
+      }
+
+      if (this.equipmentTempDescription === '') {
+        alert("Please enter an equipment description")
+        return
+      }
+
+      const newItem = {
+        [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
+        [EQUIPMENT_KEYS.DESCRIPTION]: this.equipmentTempDescription
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        key: this.equipmentTempName,
+        value: newItem,
+        statRef: CHARACTER_KEYS.EQUIPMENT
+      }
+
+      this.store.dispatch("addCharacterStat", payload)
+      
+      this.equipmentTempName = ''
+      this.equipmentTempAmount = ''
+      this.equipmentTempDescription = ''
     },
     onPressAddLanguage() {
       // Make a check just in case 
@@ -1005,15 +1071,5 @@ textarea {
   justify-content: center;
   margin: 0 auto;
   margin-top: 20px;
-}
-
-
-/* PROFICIENCY STYLE */
-
-.proficiency-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* width: 80%; */
 }
 </style>

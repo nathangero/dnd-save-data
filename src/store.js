@@ -74,7 +74,6 @@ const store = createStore({
         const lang = {
           [key]: value
         }
-        console.info('lang:', lang)
         
         const userId = this.state.user.id
         rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, lang)
