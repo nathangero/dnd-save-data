@@ -370,7 +370,6 @@
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
           <div class="list-container-character">
             <ul class="list">
-              <!-- Add new -->
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
                 <div v-if="!isEditingLanguages">
                   <div style="display: flex; flex-direction: row;">
@@ -402,6 +401,7 @@
           </div>
         </template>
 
+        <!-- Add new -->
         <template v-if="isEditingLanguages">
           <div class="language-container">
             <input class="item-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
@@ -445,10 +445,36 @@
           <div class="list-container-character">
             <ul class="list">
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
-                <label class="item-name">{{ key }}</label>
-                <p class="item-description">{{ item }}</p>
+                <div v-if="!isEditingProficiencies">
+                  <label class="item-name">{{ key }}</label>
+                  <p class="item-description">{{ item }}</p>
+                </div>
+
+                <!-- Edit and Delete -->
+                <div v-if="isEditingProficiencies">
+                  <div class="container-edit">
+                    <label class="item-name" style="width: 100lvw;">{{ key }}:</label>
+                    <textarea v-model="characterToView[CHARACTER_KEYS.PROFICIENCIES][key]" rows="4" placeholder="Description"></textarea>
+                  </div>
+
+                  <div class="buttons-delete-save">
+                    <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                    <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.PROFICIENCIES][key], CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                  </div>
+                </div>
               </li>
             </ul>
+          </div>
+        </template>
+
+        <!-- Add new -->
+        <template v-if="isEditingProficiencies">
+          <div class="proficiency-container">
+            <input class="item-input" v-model="proficiencyTempName" placeholder="Proficiency name"> 
+            <br>
+            <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button @click="onPressAddProficiency" style="margin-top: 10px;">Add</button>
           </div>
         </template>
       </div>
@@ -581,8 +607,35 @@ export default {
       SPELLCASTING_KEYS: SPELLCASTING_KEYS,
       SPELLCASTING_NAMES: SPELLCASTING_NAMES,
       characterToView: new Character(),
+      level: '',
+      characterArmor: '',
+      [CHARACTER_KEYS.INITIATIVE]: '',
+      proficiencyBonus: '',
+      characterSpeed: '',
+      hitDieType: '', // d10
+      hitDieAmount: '', // 3
+      equipmentTempName: '',
+      equipmentTempAmount: '',
+      equipmentTempDescription: '',
+      featuresTempName: '',
+      featuresTempDescription: '',
+      featuresTempType: '', // Racial, Class, Other
+      featuresTempUseable: true,
+      featuresTempUses: '',
+      gold: '',
       languagesTempName: '',
       languagesTempProficiency: '',
+      proficiencyTempName: '',
+      proficiencyTempDescription: '',
+      spellAttackBonus: '',
+      spellCastingStat: '', // e.g. intelligence
+      spellSavingDc: '',
+      spellTempName: '',
+      spellTempCastingTime: '',
+      spellTempDescription: '',
+      spellTempDuration: '', // in seconds
+      spellTempRange: '', // in feet
+      spellTempLevel: '',
     }
   },
   mounted() {
@@ -681,6 +734,32 @@ export default {
       }
       
       this.store.dispatch("addCharacterStat", payload)
+
+      this.languagesTempName = ''
+      this.languagesTempProficiency == ''
+    },
+    onPressAddProficiency() {
+      if (this.proficiencyTempName == '') {
+        alert("Please enter a proficiency name")
+        return 
+      }
+
+      if (this.proficiencyTempDescription == '') {
+        alert("Please enter a proficiency proficiency")
+        return
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        key: this.proficiencyTempName,
+        value: this.proficiencyTempDescription,
+        statRef: CHARACTER_KEYS.PROFICIENCIES
+      }
+      
+      this.store.dispatch("addCharacterStat", payload)
+      
+      this.proficiencyTempName = ''
+      this.proficiencyTempDescription = ''
     },
     onPressUpdateStat(key, value, statRef) {
       const payload = {
@@ -697,41 +776,13 @@ export default {
 
         const payload = {
           charId: this.characterToViewId, 
-          key: key
+          key: key,
+          statRef: statRef
         }
         this.store.dispatch("deleteCharacterStat", payload)
       }
     },
-    onPressDeleteFeatures(featId) {
-      if (featId in this.characterToView[CHARACTER_KEYS.FEATURES]) {
-        delete this.characterToView[CHARACTER_KEYS.FEATURES][featId]
-      }
-    },
-    onPressDeleteEquipment(equipmentId) {
-      if (equipmentId in this.characterToView[CHARACTER_KEYS.EQUIPMENT]) {
-        delete this.characterToView[CHARACTER_KEYS.EQUIPMENT][equipmentId]
-      }
-    },
-    onPressDeleteProficiency(profId) {
-      if (profId in this.characterToView[CHARACTER_KEYS.PROFICIENCIES]) {
-        delete this.characterToView[CHARACTER_KEYS.PROFICIENCIES][profId]
-      }
-    },
-    onPressDeleteSpell(levelKey, spellName) {
-      if (levelKey in this.characterToView[CHARACTER_KEYS.SPELLS]) {
-        const levelDict = this.characterToView[CHARACTER_KEYS.SPELLS][levelKey]
-        if (spellName in levelDict) {
-          delete this.characterToView[CHARACTER_KEYS.SPELLS][levelKey][spellName]
-
-          // If there's nothing left in the level 
-          if (this.getDictionarySize(levelDict) == 0) {
-            delete this.characterToView[CHARACTER_KEYS.SPELLS][levelKey]
-          }
-        }
-      }
-    },
     toggleEditForStat(statRef) {
-      console.info('toggling:', statRef)
       switch (statRef) {
         case CHARACTER_KEYS.STATS:
           this.isEditingBaseStats = !this.isEditingBaseStats
@@ -817,6 +868,13 @@ h3 {
   text-decoration: underline;
 }
 
+textarea {
+  width: 80%;
+  text-align: left;
+  border-radius: 10px;
+  padding: 5px;
+}
+
 .character-name {
   margin-top: 50px;
   font-size: 2.5em;
@@ -848,52 +906,11 @@ h3 {
   margin: 0 auto;
 }
 
-/* .list-rows {
-  display: flex;
-  flex-direction: row;
-  margin: 0 auto;
-  list-style: circle;
-} */
+/* EDITING - STYLE */
 
-/* .item-input {
-  width: 80%;
-  margin-left: 5px;
-  padding-left: 0;
-  padding-bottom: 5px;
+.container-edit {
+  text-align: center;
 }
-
-.list-container-character {
-  display: flex;
-  justify-content: center;
-  width: 90%;
-  margin: 0 auto;
-}
-
-.list li {
-  text-align: left;
-  margin-bottom: 10px;
-}
-
-.item-name {
-  font-weight: bold;
-  font-size: larger;
-  margin-right: 20px;
-}
-
-.item-label {
-  font-size: large;
-}
-
-.item-amount {
-  font-size: large;
-}
-
-.item-description {
-  width: 80%;
-  font-size: large;
-  text-align: left;
-} */
-
 
 /* STAT STYLE */
 
@@ -988,5 +1005,15 @@ h3 {
   justify-content: center;
   margin: 0 auto;
   margin-top: 20px;
+}
+
+
+/* PROFICIENCY STYLE */
+
+.proficiency-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* width: 80%; */
 }
 </style>
