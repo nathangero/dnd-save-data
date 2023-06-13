@@ -39,7 +39,7 @@
         <template v-if="isModalViewCharacterOpen">
           <div class="modal-page-overlay">
             <div class="modal-page scrollable">
-              <character-page v-if="isModalViewCharacterOpen" :characterToView="characterToView" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
+              <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
             </div>
           </div>
           

@@ -1,7 +1,7 @@
 /**
  * This file will contain all the functions that read/write the database
  */
-import { ref, set, get, child, push, remove } from "firebase/database"
+import { ref, set, get, child, push, remove, update } from "firebase/database"
 import { db } from "@/firebase.js"
 import User from "@/models/user"
 import DB_PATHS from "@/enums/db-paths"
@@ -99,3 +99,50 @@ export async function readAllCharacters(userId) {
 // export async function readSpecificCharacter(userId, charId) {
 
 // }
+
+/**
+ * Deletes a stat under the user's character's id.
+ * E.G. dbRef = "/users/userId/characters/charId/statRef/keyToDelete"
+ *      If user is deleting a language, it could be like this "/users/userId/characters/charId/languages/languageName"
+ * @param {String} userId User's uid
+ * @param {String} charId User's Character uid
+ * @param {String} statRef Stat name where the deletion will occur
+ * @param {String} keyToDelete Name in the stat list that will be deleted
+ * @returns 
+ */
+export async function deleteUserStatByKey(userId, charId, statRef, keyToDelete) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId + '/' + statRef + '/' + keyToDelete 
+    return new Promise((resolve, reject) => {
+        remove(ref(db, dbRef)).then(() => {
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+/**
+ * Adds a stat under the user's character's id.
+ * E.G. dbRef = "/users/userId/characters/charId/statRef/keyToDelete"
+ *      If user is adding a language, it could be like this "/users/userId/characters/charId/languages/"
+ * @param {String} userId User's uid
+ * @param {String} charId User's Character uid
+ * @param {String} statRef Stat name where the deletion will occur
+ * @param {Dict} itemToAdd Dictionary containing the info to be added
+ * @returns 
+ */
+export async function addUserStatByKey(userId, charId, statRef, itemToAdd) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId + '/' + statRef + '/' 
+    return new Promise((resolve, reject) => {
+        update(ref(db, dbRef), itemToAdd).then(() => {
+            // console.info(`created a new character for user: ${userId}`)
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}

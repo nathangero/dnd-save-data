@@ -1,9 +1,10 @@
 import { createStore } from 'vuex'
 import User from './models/user'
 import { auth } from '@/firebase'
-import { readUserInDb, readAllCharacters, deleteCharacter } from './functions/rtdb'
+import * as rtdbFunctions from './functions/rtdb'
 import Cookies from 'js-cookie';
 import COOKIE_NAMES from '@/enums/cookie-names'
+import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 
 const store = createStore({
   state: {
@@ -38,10 +39,32 @@ const store = createStore({
     }
   },
   actions: {
-    deleteCharacterFromDb(state, charId) {
-      const userId = state.state.user.id
+    addCharacterLanguage(state, payload) {
+      const charId = payload.charId
+      const key = payload.key
+      const value = payload.value
+
       return new Promise((resolve, reject) => {
-        deleteCharacter(userId, charId).then((success) => {
+        if (key === undefined || key === '' || value === undefined || value === '') {
+          console.info('something is undefined')
+          reject(false)
+          return
+        }
+
+        this.state.user.characters[charId][CHARACTER_KEYS.LANGUAGES][key] = value
+        const lang = {
+          [key]: value
+        }
+        console.info('language to add:', lang)
+        const userId = this.state.user.id
+        rtdbFunctions.addUserStatByKey(userId, charId, CHARACTER_KEYS.LANGUAGES, lang)
+        resolve(true)
+      })
+    },
+    deleteCharacterFromDb(state, charId) {
+      const userId = this.state.user.id
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.deleteCharacter(userId, charId).then((success) => {
           if (success) {
             this.commit('deleteCharacter', charId)
             resolve(true)
@@ -52,15 +75,22 @@ const store = createStore({
         })
       })
     },
+    deleteCharacterLanguage(state, charId, langId) {
+      if (langId in this.state.user.characters[charId][CHARACTER_KEYS.LANGUAGES]) {
+        delete this.state.user.characters[charId][CHARACTER_KEYS.LANGUAGES][langId]
+        const userId = this.state.user.id
+        rtdbFunctions.deleteUserStatByKey(userId, charId, CHARACTER_KEYS.LANGUAGES, langId)
+      }
+    },
     dbGetUsersCharacters() {
-      readAllCharacters(this.state.user.id).then((characters) => {
+      rtdbFunctions.readAllCharacters(this.state.user.id).then((characters) => {
         console.info('characters:', characters)
       })
     },
     getUserInfo(state, uid) {
       // console.info('getUserInfo: ' + uid)
       return new Promise((resolve, reject) => {
-        readUserInDb(uid).then((user) => {
+        rtdbFunctions.readUserInDb(uid).then((user) => {
           this.commit('setUser', user)
           this.commit('setIsLoggedIn', true)
 
