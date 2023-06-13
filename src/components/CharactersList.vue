@@ -358,27 +358,24 @@
                   </div>
                 </template>
 
-                <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
-
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li style="margin-top: 10px;">
-                      <label>Type:</label>
-                      <select class="picker" v-model="featuresTempType">
-                        <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                      </select>
-                    </li>
-
-                    <li>
-                      <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
-                      <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
-                    </li>
-                  </ul>
-                </div>
-                  
+                <div>
+                  <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
+                  <div>
+                    <br>
+                    <label>Type:</label>
+                    <select class="picker" v-model="featuresTempType">
+                      <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                    <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                  </div>
+                  <br>
                   <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
                   <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
+                </div>  
               </div>
 
               <br>

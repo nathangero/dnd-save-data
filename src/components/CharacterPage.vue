@@ -288,18 +288,64 @@
         </div>
 
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.FEATURES]) > 0">
-          <div class="list-container-character">
+          <div>
             <ul class="list">
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.FEATURES]" :key="key">
-                <div>
+                <div v-if="!isEditingFeaturesTraits">
                   <label class="item-name">{{ key }}</label>
                   <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
+                  <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                  <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                 </div>
-                <label class="item-type">Type: {{ item[FEATURES_KEYS.TYPE] }}</label>
-                <label class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</label>
+
+                <!-- Edit and Delete -->
+                <div v-if="isEditingFeaturesTraits">
+                  <label class="item-name">{{ key }}</label>
+                  <div class="container-edit">
+                    <div>
+                      <br>
+                      <label>Type:</label>
+                      <select class="picker" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.TYPE]">
+                        <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                      <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.USES]"> 
+                    </div>
+                    <br>
+                    <textarea v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                    <div class="buttons-delete-save">
+                      <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
+                      <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.FEATURES][key], CHARACTER_KEYS.FEATURES)">Update</button>
+                    </div>
+                  </div>
+                </div>
               </li>
             </ul>
           </div>
+        </template>
+
+        <!-- Add new -->
+        <template v-if="isEditingFeaturesTraits">
+          <div>
+            <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
+            <div>
+              <br>
+              <label>Type:</label>
+              <select class="picker" v-model="featuresTempType">
+                <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+              </select>
+            </div>
+            <div>
+              <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+              <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+            </div>
+            <br>
+            <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
+          </div>         
         </template>
       </div>
 
@@ -339,8 +385,8 @@
 
                 <!-- Edit and Delete -->
                 <div v-if="isEditingEquipment">
+                  <label class="item-name">{{ key }}:</label>
                   <div class="container-edit">
-                    <label class="item-name" style="width: 100lvw;">{{ key }}:</label>
                     <div>
                       <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
                       <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.AMOUNT]"> 
@@ -360,7 +406,7 @@
 
         <!-- Add new -->
         <template v-if="isEditingEquipment">
-          <div class="equipment-container">
+          <div>
             <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
             <div>
               <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
@@ -412,14 +458,12 @@
 
                 <!-- Edit and Delete -->
                 <div v-if="isEditingLanguages">
-                  <div class="language-container">
-                    <div style="margin-top: 10px;">
+                    <div style="margin-top: 10px; text-align: left;">
                       <label class="item-name">{{ key }}:</label>
                       <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
                         <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
                       </select>
                     </div>
-                  </div>
 
                   <div class="buttons-delete-save">
                     <br>
@@ -484,8 +528,8 @@
 
                 <!-- Edit and Delete -->
                 <div v-if="isEditingProficiencies">
+                  <label class="item-name">{{ key }}:</label>
                   <div class="container-edit">
-                    <label class="item-name" style="width: 100lvw;">{{ key }}:</label>
                     <textarea v-model="characterToView[CHARACTER_KEYS.PROFICIENCIES][key]" rows="4" placeholder="Description"></textarea>
                   </div>
 
@@ -740,6 +784,47 @@ export default {
       } else {
         return "+" + stat
       }
+    },
+    onPressAddFeatures() {
+      if (this.featuresTempName === '') {
+        alert("Please enter a feature name")
+        return
+      }
+
+      if (this.featuresTempType === '') {
+        alert("Please select a feature type")
+        return
+      }
+
+      if (this.featuresTempUses === '') {
+        alert("Please enter feature uses")
+        return
+      }
+
+      if (this.featuresTempDescription === '') {
+        alert("Please enter a feature description")
+        return
+      }
+
+      const newFeat = {
+        [FEATURES_KEYS.DESCRIPTION]: this.featuresTempDescription,
+        [FEATURES_KEYS.TYPE]: this.featuresTempType,
+        [FEATURES_KEYS.USES]: this.featuresTempUses
+      }
+      
+      const payload = {
+        charId: this.characterToViewId,
+        key: this.featuresTempName,
+        value: newFeat,
+        statRef: CHARACTER_KEYS.FEATURES
+      }
+
+      this.store.dispatch("addCharacterStat", payload)
+
+      this.featuresTempName = ''
+      this.featuresTempDescription = ''
+      this.featuresTempType = ''
+      this.featuresTempUses = ''
     },
     onPressAddEquipment() {
       if (this.equipmentTempName === '') {
