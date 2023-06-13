@@ -93,6 +93,21 @@
                     </li>
 
                     <li>
+                      <label for="stats-armor-class">Armor Class: </label>
+                      <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-initiative">Initiative: </label>
+                      <input type="number" id="stats-hit-die" v-model="initiative" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="stats-speed">Speed: </label>
+                      <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
                       <label for="stats-hp" class="label-stats">Hit Points (HP):</label>
                       <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
                     </li>
@@ -115,19 +130,10 @@
                     </li>
 
                     <li>
-                      <label for="stats-armor-class">Armor Class: </label>
-                      <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
+                      <label for="stats-proficiency-bonus">Passive Perception: </label>
+                      <input type="number" id="stats-proficiency-bonus" v-model="passivePerception" class="input-stats" inputmode="numeric" required>
                     </li>
 
-                    <li>
-                      <label for="stats-initiative">Initiative: </label>
-                      <input type="number" id="stats-hit-die" v-model="initiative" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-speed">Speed: </label>
-                      <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
-                    </li>
                   </ul>
                 </div>
               </div>
@@ -663,8 +669,9 @@ export default {
       level: '',
       characterArmor: '',
       [CHARACTER_KEYS.INITIATIVE]: '',
-      proficiencyBonus: '',
       characterSpeed: '',
+      proficiencyBonus: '',
+      passivePerception: '',
       hp: {
         [HP_KEYS.CURRENT]: '',
         [HP_KEYS.DIE]: '',

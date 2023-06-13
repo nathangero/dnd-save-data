@@ -12,6 +12,7 @@ const CHARACTER_KEYS = {
     LANGUAGES: "languages",
     LEVEL: "level",
     NAME: "name",
+    PASSIVE_PERCEPTION: "passivePerception",
     PROFICIENCIES: "proficiencies",
     PROFICIENCY_BONUS: "proficiencyBonus",
     RACE: "race",

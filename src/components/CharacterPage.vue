@@ -49,49 +49,55 @@
           </div>
         </div>
 
-        <ul class="stat-list">
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Level:</label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
-            </div>
-          </li>
+        <div v-if="!isEditingCharInfo">
+          <ul class="stat-list">
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Level:</label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
+              </div>
+            </li>
 
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Armor Class: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
-            </div>
-          </li>
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Armor Class: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Initiative: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Speed: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT] }}{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div v-if="isEditingCharInfo">
           
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Initiative: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
-            </div>
-          </li>
-          
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Speed: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
-            </div>
-          </li>
-          
-          <li>
-            <div class="stat-group">
-              <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
-            </div>
-          </li>
-          
-          <li>
-            <div class="stat-group">
-              <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT] }}{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
-            </div>
-          </li>
-        </ul>
+        </div>
       </div>
 
       <br>
