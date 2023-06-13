@@ -110,7 +110,7 @@ export async function readAllCharacters(userId) {
  * @param {String} keyToDelete Name in the stat list that will be deleted
  * @returns 
  */
-export async function deleteUserStatByKey(userId, charId, statRef, keyToDelete) {
+export async function deleteCharacterStatByKey(userId, charId, statRef, keyToDelete) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId + '/' + statRef + '/' + keyToDelete 
     return new Promise((resolve, reject) => {
         remove(ref(db, dbRef)).then(() => {
@@ -133,7 +133,7 @@ export async function deleteUserStatByKey(userId, charId, statRef, keyToDelete) 
  * @param {Dict} itemToAdd Dictionary containing the info to be added
  * @returns 
  */
-export async function addUserStatByKey(userId, charId, statRef, itemToAdd) {
+export async function addCharacterStatByKey(userId, charId, statRef, itemToAdd) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId + '/' + statRef + '/' 
     return new Promise((resolve, reject) => {
         update(ref(db, dbRef), itemToAdd).then(() => {

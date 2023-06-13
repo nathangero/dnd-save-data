@@ -244,22 +244,56 @@
       <br>
       <div id="languages">
         <div class="edit-buttons">
-          <button class="button-edit-spacer">Edit</button>
+          <div>
+            <div v-if="!isEditingLanguages">
+              <button class="button-edit-spacer" @click="toggleEditLanguages">Edit</button>
+            </div>
+            <div v-if="isEditingLanguages">
+              <button class="button-edit-spacer" @click="toggleEditLanguages">Finish</button>
+            </div>
+          </div>
+
           <h3>Languages</h3>
-          <button class="button-edit" @click="toggleEditLanguages">Edit</button>
+          
+          <div>
+            <div v-if="!isEditingLanguages">
+              <button class="button-edit" @click="toggleEditLanguages">Edit</button>
+            </div>
+            <div v-if="isEditingLanguages">
+              <button class="button-edit" @click="toggleEditLanguages">Finish</button>
+            </div>
+          </div>
         </div>
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
           <div class="list-container-character">
             <ul class="list">
+              <!-- Add new -->
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
-                <div style="display: flex; flex-direction: row;">
-                  <label class="item-name">{{ key }}:</label>
-                  <label class="item-description">{{ item }}</label>
+                <div v-if="!isEditingLanguages">
+                  <div style="display: flex; flex-direction: row;">
+                    <label class="item-name">{{ key }}:</label>
+                    <p class="item-description">{{ item }}</p>
+                  </div>
                 </div>
+
+                <!-- Edit and Delete -->
                 <div v-if="isEditingLanguages">
-                  <br>
-                  <button @click="onPressDeleteLanguage(key)">Delete</button>
+                  <div class="language-container">
+                    <div style="margin-top: 10px;">
+                      <label class="item-name">{{ key }}:</label>
+                      <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
+                        <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="buttons-delete-save">
+                    <br>
+                    <button style="margin-right: 20px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
+                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.LANGUAGES][key], CHARACTER_KEYS.LANGUAGES)">Update</button>
+                  </div>
                 </div>
+                
               </li>
             </ul>
           </div>
@@ -293,7 +327,7 @@
             <ul class="list">
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
                 <label class="item-name">{{ key }}</label>
-                <label class="item-description">{{ item }}</label>
+                <p class="item-description">{{ item }}</p>
               </li>
             </ul>
           </div>
@@ -417,7 +451,7 @@ export default {
   },
   mounted() {
     this.characterToView = this.store.getters.getUserCharacters[this.characterToViewId]
-    console.info('this.characterToView:', this.characterToView)
+    // console.info('this.characterToView:', this.characterToView)
   },
   methods: {
     closeModal() {
@@ -503,25 +537,34 @@ export default {
         return
       }
 
-      console.info('trying to add:', this.languagesTempName, ':', this.languagesTempProficiency)
-      const langPayLoad = {
+      const payload = {
         charId: this.characterToViewId,
         key: this.languagesTempName,
-        value: this.languagesTempProficiency
+        value: this.languagesTempProficiency,
+        statRef: CHARACTER_KEYS.LANGUAGES
       }
-      // this.characterToView[CHARACTER_KEYS.LANGUAGES][this.languagesTempName] = this.languagesTempProficiency
-      this.store.dispatch("addCharacterLanguage", langPayLoad)
-      // .then((success) => {
-      //   console.info('added lang?', success)
-      //   this.languagesTempName = ''
-      //   this.languagesTempProficiency = ''
-      // }).catch((error) => {
-      //   console.error(error)
-      //   this.languagesTempName = ''
-      //   this.languagesTempProficiency = ''
-      // })
       
-      
+      this.store.dispatch("addCharacterStat", payload)
+    },
+    onPressUpdateStat(key, value, statRef) {
+      const payload = {
+        charId: this.characterToViewId,
+        key: key,
+        value: value,
+        statRef: statRef
+      }
+      this.store.dispatch("updateCharacterStat", payload)
+    },
+    onPressDeleteStat(key, statRef) {
+      if (key in this.characterToView[statRef]) {
+        delete this.characterToView[statRef][key]
+
+        const payload = {
+          charId: this.characterToViewId, 
+          key: key
+        }
+        this.store.dispatch("deleteCharacterStat", payload)
+      }
     },
     onPressDeleteFeatures(featId) {
       if (featId in this.characterToView[CHARACTER_KEYS.FEATURES]) {
@@ -531,12 +574,6 @@ export default {
     onPressDeleteEquipment(equipmentId) {
       if (equipmentId in this.characterToView[CHARACTER_KEYS.EQUIPMENT]) {
         delete this.characterToView[CHARACTER_KEYS.EQUIPMENT][equipmentId]
-      }
-    },
-    onPressDeleteLanguage(langId) {
-      if (langId in this.characterToView[CHARACTER_KEYS.LANGUAGES]) {
-        delete this.characterToView[CHARACTER_KEYS.LANGUAGES][langId]
-        this.store.dispatch("deleteCharacterLanguage", this.characterToViewId, langId)
       }
     },
     onPressDeleteProficiency(profId) {
@@ -763,5 +800,13 @@ h3 {
   margin-left: 10px;
   padding: 5px 10px;
   visibility: hidden;
+}
+
+.buttons-delete-save {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 20px;
 }
 </style>
