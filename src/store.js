@@ -50,14 +50,43 @@ const store = createStore({
         }
 
         this.state.user.characters[charId][statRef][key] = value
-        const lang = {
+        const itemToAdd = {
           [key]: value
         }
         
         const userId = this.state.user.id
-        rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, lang)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, itemToAdd)
         resolve(true)
       })
+    },
+    addCharacterSpell(state, payload) {
+      const { charId, levelKey, spellName, newSpell, newEntry, statRef } = payload
+      console.info('payload:', payload)
+
+      return new Promise((resolve, reject) => {
+        if (levelKey === undefined || levelKey === '' || spellName === undefined || spellName === '' || newEntry === undefined || newEntry === '') {
+          console.info('something is undefined')
+          reject(false)
+          return
+        }
+
+        if (levelKey in this.state.user.characters[charId][statRef]) {
+          console.info('this level exists')
+          // If there's a level key already in the dictionary. Prevents overwritting the whole level of spells
+          this.state.user.characters[charId][statRef][levelKey][spellName] = newSpell
+        } else {
+          // If there's a new entry for the level key. 
+          this.state.user.characters[charId][statRef][levelKey] = newEntry
+        }  
+        
+        const itemToAdd = {
+          [spellName]: newSpell
+        }
+        
+        const userId = this.state.user.id
+        rtdbFunctions.addCharacterSpellByKey(userId, charId, statRef, levelKey, itemToAdd)
+        resolve(true)
+      })      
     },
     updateCharacterStat(state, payload) {
       console.info('payload:', payload)

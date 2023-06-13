@@ -600,6 +600,37 @@
             </ul>
           </div>
         </template>
+
+        <!-- Add new -->
+        <template v-if="isEditingSpellCasting">
+          <div>
+            <input class="item-input" type="text" v-model="spellTempName" placeholder="Spell name"> 
+            <div>
+              <br>
+              <label for="spells-level" class="label-stats">Level:</label>
+              <select class="picker" v-model="spellTempLevel">
+                <option v-for="levels in SPELLCASTING_NAMES" :key="levels" :value="levels">{{ levels }}</option>
+              </select>
+            </div>
+            <div>
+              <label for="spells-casting-time" class="label-stats">Casting Time (# of actions):</label>
+              <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+            </div>
+            <div>
+              <label for="spells-casting-duration" class="label-stats">Duration (in seconds):</label>
+              <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+            </div>
+            
+            <div>
+              <label for="spells-range" class="label-stats">Range (in feet):</label>
+              <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
+            </div>
+            <br>
+            <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button @click="onPressAddSpell" style="margin-top: 10px;">Add</button>
+          </div>         
+        </template>
       </div>
       
       <br>
@@ -911,6 +942,100 @@ export default {
       
       this.proficiencyTempName = ''
       this.proficiencyTempDescription = ''
+    },
+    onPressAddSpell() {
+      if (this.spellTempName === '') {
+        alert("Please enter a Spell Name")
+        return
+      }
+
+      if (this.spellTempLevel === '') {
+        alert("Please enter a Spell Level")
+        return
+      }
+
+      if (this.spellTempCastingTime === '' || this.spellTempCastingTime <= 0) {
+        alert("Please enter a Casting Time")
+        return
+      }
+
+      if (this.spellTempDuration === '' || this.spellTempDuration <= 0) {
+        alert("Please enter a Casting Duration")
+        return
+      }
+
+      if (this.spellTempRange === '' || this.spellTempRange <= 0) {
+        alert("Please enter a Casting Range")
+        return
+      }
+
+      if (this.spellTempDescription === '') {
+        alert("Please enter a Casting Description")
+        return
+      }
+
+
+      var levelKey;
+      switch (this.spellTempLevel) {
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_1
+          break
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_2]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_2
+          break
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_3]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_3
+          break
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_4]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_4
+          break
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_5]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_5
+          break
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_6]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_6
+          break
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_7]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_7
+          break
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_8]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_8
+          break
+        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_9]:
+          levelKey = SPELLCASTING_KEYS.LEVEL_9
+          break
+        default:
+          levelKey = SPELLCASTING_KEYS.CANTRIPS
+      }
+
+      const newSpell = {
+        [SPELLCASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
+        [SPELLCASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
+        [SPELLCASTING_KEYS.DURATION]: this.spellTempDuration,
+        [SPELLCASTING_KEYS.RANGE]: this.spellTempRange
+      }
+      
+      const newEntry = {
+        [this.spellTempName]: newSpell
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        levelKey: levelKey,
+        spellName: this.spellTempName,
+        newSpell: newSpell,
+        newEntry: newEntry,
+        statRef: CHARACTER_KEYS.SPELLS
+      }
+      
+      this.store.dispatch("addCharacterSpell", payload)
+      
+      this.spellTempName = ''
+      this.spellTempLevel = ''
+      this.spellTempCastingTime = ''
+      this.spellTempDescription = ''
+      this.spellTempDuration = ''
+      this.spellTempRange = ''
     },
     onPressUpdateStat(key, value, statRef) {
       const payload = {
