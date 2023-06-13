@@ -96,33 +96,6 @@ export async function readAllCharacters(userId) {
     })
 }
 
-// export async function readSpecificCharacter(userId, charId) {
-
-// }
-
-/**
- * Deletes a stat under the user's character's id.
- * E.G. dbRef = "/users/userId/characters/charId/statRef/keyToDelete"
- *      If user is deleting a language, it could be like this "/users/userId/characters/charId/languages/languageName"
- * @param {String} userId User's uid
- * @param {String} charId User's Character uid
- * @param {String} statRef Stat name where the deletion will occur
- * @param {String} keyToDelete Name in the stat list that will be deleted
- * @returns 
- */
-export async function deleteCharacterStatByKey(userId, charId, statRef, keyToDelete) {
-    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId + '/' + statRef + '/' + keyToDelete 
-    return new Promise((resolve, reject) => {
-        remove(ref(db, dbRef)).then(() => {
-            resolve(true)
-        })
-        .catch ((error => {
-            console.error(error)
-            reject(false)
-        }))
-    })
-}
-
 /**
  * Adds a stat under the user's character's id.
  * E.G. dbRef = "/users/userId/characters/charId/statRef/keyToDelete"
@@ -138,6 +111,51 @@ export async function addCharacterStatByKey(userId, charId, statRef, itemToAdd) 
     return new Promise((resolve, reject) => {
         update(ref(db, dbRef), itemToAdd).then(() => {
             // console.info(`created a new character for user: ${userId}`)
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+/**
+ * Updates a character info value under the user's character's id.
+ * E.G. dbRef = "/users/userId/characters/charId/" where the value for armor will be changed
+ * @param {String} userId User's uid
+ * @param {String} charId User's Character uid
+ * @param {Dict} itemToAdd Dictionary containing the info to be updated
+ * @returns 
+ */
+export async function updateCharacterInfoByKey(userId, charId, itemToAdd) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
+    return new Promise((resolve, reject) => {
+        update(ref(db, dbRef), itemToAdd).then(() => {
+            // console.info(`created a new character for user: ${userId}`)
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+/**
+ * Deletes a stat under the user's character's id.
+ * E.G. dbRef = "/users/userId/characters/charId/statRef/keyToDelete"
+ *      If user is deleting a language, it could be like this "/users/userId/characters/charId/languages/languageName"
+ * @param {String} userId User's uid
+ * @param {String} charId User's Character uid
+ * @param {String} statRef Stat name where the deletion will occur
+ * @param {String} keyToDelete Name in the stat list that will be deleted
+ * @returns 
+ */
+export async function deleteCharacterStatByKey(userId, charId, statRef, keyToDelete) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId + '/' + statRef + '/' + keyToDelete 
+    return new Promise((resolve, reject) => {
+        remove(ref(db, dbRef)).then(() => {
             resolve(true)
         })
         .catch ((error => {

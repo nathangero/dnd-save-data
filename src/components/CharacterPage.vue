@@ -68,7 +68,7 @@
             <li>
               <div class="stat-group">
                 <label class="stat-label">Initiative: </label>
-                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INITIATIVE] }}</label>
+                <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
               </div>
             </li>
             
@@ -92,11 +92,83 @@
                 <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT] }}{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
               </div>
             </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Proficiency Bonus: </label>
+                <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Passive Perception: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
+              </div>
+            </li>
           </ul>
         </div>
 
         <div v-if="isEditingCharInfo">
-          
+          <div class="container-inputs">
+            <ul class="list-inputs">
+              <li>
+                <label for="stats-level" class="label-stats"> Current Level:</label>
+                <input type="number" id="stats-level" v-model="characterToView[CHARACTER_KEYS.LEVEL]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-armor-class">Armor Class: </label>
+                <input type="number" id="stats-armor-class" v-model="characterToView[CHARACTER_KEYS.ARMOR]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-initiative">Initiative: </label>
+                <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.INITIATIVE]" class="input-stats" inputmode="numeric" required>
+              </li>
+              
+              <li>
+                <label for="stats-speed">Speed: </label>
+                <input type="number" id="stats-speed" v-model="characterToView[CHARACTER_KEYS.SPEED]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-hp" class="label-stats">Hit Points - Current:</label>
+                <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-hp" class="label-stats">Hit Points - Max:</label>
+                <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li style="margin-top: 10px;">
+                <label>Hit Die Type: </label>
+                <select class="picker" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE]">
+                  <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                </select>
+              </li>
+
+              <li>
+                <label for="stats-hit-die"># of Hit Die: </label>
+                <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
+                <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-proficiency-bonus">Passive Perception: </label>
+                <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]" class="input-stats" inputmode="numeric" required>
+              </li>
+            </ul>
+          </div>
+
+          <div class="buttons-delete-save">
+            <button style="margin-left: 10px;" @click="onPressUpdateCharacterInfo()">Update</button>
+          </div>
         </div>
       </div>
 
@@ -1079,6 +1151,32 @@ export default {
       this.spellTempDuration = ''
       this.spellTempRange = ''
     },
+    onPressUpdateCharacterInfo() {
+      const info = {
+        [CHARACTER_KEYS.LEVEL]: this.characterToView[CHARACTER_KEYS.LEVEL],
+        [CHARACTER_KEYS.ARMOR]: this.characterToView[CHARACTER_KEYS.ARMOR],
+        [CHARACTER_KEYS.INITIATIVE]: this.characterToView[CHARACTER_KEYS.INITIATIVE],
+        [CHARACTER_KEYS.SPEED]: this.characterToView[CHARACTER_KEYS.SPEED],
+        [CHARACTER_KEYS.HP]: this.characterToView[CHARACTER_KEYS.HP],
+        [CHARACTER_KEYS.PROFICIENCY_BONUS]: this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS],
+        [CHARACTER_KEYS.PASSIVE_PERCEPTION]: this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION],
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        info: info
+      }
+
+      this.store.dispatch("updateCharacterInfo", payload).then((success) => {
+        if (success) {
+          alert(`updated character info`)
+        } else {
+          alert(`couldn't update character info for some reason`)
+        }
+
+        this.toggleEditForStat("character info")
+      })
+    },
     onPressUpdateStat(key, value, statRef) {
       const payload = {
         charId: this.characterToViewId,
@@ -1127,13 +1225,14 @@ export default {
           spellName: spellName,
           statRef: statRef
         }
+
         this.store.dispatch("deleteCharacterSpell", payload).then((success) => {
-        if (success) {
-          alert(`deleted spell ${spellName}`)
-        } else {
-          alert(`couldn't delete ${spellName} for some reason`)
-        }
-      })
+          if (success) {
+            alert(`deleted spell ${spellName}`)
+          } else {
+            alert(`couldn't delete ${spellName} for some reason`)
+          }
+        })
       }
     },
     toggleEditForStat(statRef) {

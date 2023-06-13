@@ -4,7 +4,6 @@ import { auth } from '@/firebase'
 import * as rtdbFunctions from './functions/rtdb'
 import Cookies from 'js-cookie';
 import COOKIE_NAMES from '@/enums/cookie-names'
-// import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 
 const store = createStore({
   state: {
@@ -88,6 +87,21 @@ const store = createStore({
         rtdbFunctions.addCharacterStatByKey(userId, charId, spellRef, itemToAdd)
         resolve(true)
       })      
+    },
+    updateCharacterInfo(state, payload) {
+      const { charId, info} = payload      
+
+      return new Promise((resolve, reject) => {
+        const userId = this.state.user.id
+        rtdbFunctions.updateCharacterInfoByKey(userId, charId, info).then((success) => {
+          if (success) {
+            resolve(true)
+          } else {
+            reject(false)
+          }
+        })
+      })
+      
     },
     updateCharacterStat(state, payload) {
       console.info('payload:', payload)

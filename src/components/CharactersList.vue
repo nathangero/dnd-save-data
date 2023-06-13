@@ -112,16 +112,16 @@
                       <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
                     </li>
 
-                    <li>
-                      <label for="stats-hit-die"># of Hit Die: </label>
-                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
                     <li style="margin-top: 10px;">
                       <label>Hit Die Type: </label>
                       <select class="picker" v-model="hp[HP_KEYS.DIE]">
                         <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                       </select>
+                    </li>
+
+                    <li>
+                      <label for="stats-hit-die"># of Hit Die: </label>
+                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
