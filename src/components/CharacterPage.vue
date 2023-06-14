@@ -256,19 +256,16 @@
           </ul>
         </div>
 
+        <!-- Editing -->
         <div v-if="isEditingBaseStats">
           <div class="container-inputs">
             <ul class="list-inputs" style="margin-right: 20px;">
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                  <label for="stats-label" class="label-stats">{{ STAT_NAMES[stat] }}:</label>
+                <label for="stats-label" class="label-stats">{{ STAT_NAMES[stat] }}:</label>
+                <div style="margin-left: 10px;">
                   <input type="number" id="stats-label" v-model="characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
-              </li>
-            </ul>
-
-            <ul class="list-inputs">
-              <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                  <label for="stats-mod-label" class="label-stats">Mod:</label>
-                  <input type="number" id="stats-mod-label" v-model="characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]" class="input-stats" inputmode="numeric" required>
+                  <label style="margin-left: 20px;">Mod: {{ getStatBonus(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                </div>
               </li>
             </ul>
           </div>
