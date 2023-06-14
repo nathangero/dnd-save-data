@@ -397,46 +397,65 @@
         <ul class="stat-list">
           <li>
             <div class="stat-group">
+              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH_PROF]" :disabled="!isEditingSavingThrows">
               <label class="stat-label">Strength: </label>
-              <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH]) }}</label>
+              
+              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH]) }}</label>
             </div>
           </li>
           
           <li>
             <div class="stat-group">
+              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY_PROF]" :disabled="!isEditingSavingThrows">
               <label class="stat-label">Dexterity: </label>
-              <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY]) }}</label>
+              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY]) }}</label>
             </div>
           </li>
             
           <li>
             <div class="stat-group">
+              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION_PROF]" :disabled="!isEditingSavingThrows">
               <label class="stat-label">Consitution: </label>
-              <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION]) }}</label>
+              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION]) }}</label>
             </div>
           </li>
 
           <li>
             <div class="stat-group">
+              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE_PROF]" :disabled="!isEditingSavingThrows">
               <label class="stat-label">Intelligence: </label>
-              <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE]) }}</label>
+              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE]) }}</label>
             </div>
           </li>
 
           <li>
             <div class="stat-group">
+              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM_PROF]" :disabled="!isEditingSavingThrows">
               <label class="stat-label">Wisdom: </label>
-              <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM]) }}</label>
+              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM]) }}</label>
             </div>
           </li>
 
           <li>
             <div class="stat-group">
+              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA_PROF]" :disabled="!isEditingSavingThrows">
               <label class="stat-label">Charisma: </label>
-              <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA]) }}</label>
+              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA]) }}</label>
             </div>
           </li>
         </ul>
+
+        <div v-if="isEditingSavingThrows">
+          <div class="buttons-delete-save">
+            <button style="margin-left: 10px;" @click="onPressUpdateSavingThrows()">Update</button>
+          </div>
+        </div>
       </div>
       
       <br>
@@ -1391,12 +1410,18 @@ export default {
       }
 
       const savingThrows = {
-        [BASE_STAT_KEYS.STRENGTH]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS],
-        [BASE_STAT_KEYS.DEXTERITY]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS],
-        [BASE_STAT_KEYS.CONSTITUTION]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS],
-        [BASE_STAT_KEYS.INTELLIGENCE]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS],
-        [BASE_STAT_KEYS.WISDOM]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS],
-        [BASE_STAT_KEYS.CHARISMA]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS],
+        [BASE_STAT_KEYS.STRENGTH]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH],
+        [BASE_STAT_KEYS.STRENGTH_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH_PROF],
+        [BASE_STAT_KEYS.DEXTERITY]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY],
+        [BASE_STAT_KEYS.DEXTERITY_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY_PROF],
+        [BASE_STAT_KEYS.CONSTITUTION]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION],
+        [BASE_STAT_KEYS.CONSTITUTION_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION_PROF],
+        [BASE_STAT_KEYS.INTELLIGENCE]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE],
+        [BASE_STAT_KEYS.INTELLIGENCE_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE_PROF],
+        [BASE_STAT_KEYS.WISDOM]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM],
+        [BASE_STAT_KEYS.WISDOM_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM_PROF],
+        [BASE_STAT_KEYS.CHARISMA]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA],
+        [BASE_STAT_KEYS.CHARISMA_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA_PROF],
       }
 
       const skills = {
@@ -1439,6 +1464,41 @@ export default {
         this.toggleEditForStat(CHARACTER_KEYS.STATS)
       })
     },
+    onPressUpdateSavingThrows() {
+      const savingThrows = {
+        [BASE_STAT_KEYS.STRENGTH]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH],
+        [BASE_STAT_KEYS.STRENGTH_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH_PROF],
+        [BASE_STAT_KEYS.DEXTERITY]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY],
+        [BASE_STAT_KEYS.DEXTERITY_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY_PROF],
+        [BASE_STAT_KEYS.CONSTITUTION]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION],
+        [BASE_STAT_KEYS.CONSTITUTION_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION_PROF],
+        [BASE_STAT_KEYS.INTELLIGENCE]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE],
+        [BASE_STAT_KEYS.INTELLIGENCE_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE_PROF],
+        [BASE_STAT_KEYS.WISDOM]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM],
+        [BASE_STAT_KEYS.WISDOM_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM_PROF],
+        [BASE_STAT_KEYS.CHARISMA]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA],
+        [BASE_STAT_KEYS.CHARISMA_PROF]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA_PROF],
+      }
+
+      const info = {
+        [CHARACTER_KEYS.SAVING_THROWS]: savingThrows
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        info: info,
+      }
+
+      this.store.dispatch("updateCharacterInfo", payload).then((success) => {
+        if (success) {
+          alert(`updated saving throws`)
+        } else {
+          alert(`couldn't update saving throws info for some reason`)
+        }
+
+        this.toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)
+      })
+    },
     onPressUpdateStat(key, value, statRef) {
       const payload = {
         charId: this.characterToViewId,
@@ -1446,7 +1506,8 @@ export default {
         value: value,
         statRef: statRef
       }
-      this.store.dispatch("updateCharacterSpell", payload)
+
+      this.store.dispatch("updateCharacterStat", payload)
     },
     onPressUpdateSpell(levelKey, spellName, updatedSpell, statRef) {
       const payload = {
@@ -1590,6 +1651,12 @@ textarea {
   padding: 5px;
 }
 
+.checkbox {
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+}
+
 .character-name {
   margin-top: 50px;
   font-size: 2.5em;
@@ -1633,7 +1700,7 @@ textarea {
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  width: 50%;
+  width: 55%;
   margin: 0 auto;
   padding-left: 0;
 }

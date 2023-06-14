@@ -129,6 +129,7 @@ export async function addCharacterStatByKey(userId, charId, statRef, itemToAdd) 
  * @returns 
  */
 export async function updateCharacterInfoByKey(userId, charId, itemToAdd) {
+    // console.info('itemToAdd:', itemToAdd)
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
     return new Promise((resolve, reject) => {
         update(ref(db, dbRef), itemToAdd).then(() => {
