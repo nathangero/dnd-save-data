@@ -109,6 +109,20 @@
             
             <li>
               <div class="stat-group">
+                <label class="stat-label" style="margin-right: 20px;">Death saves successes: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES] }}/3</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label" style="margin-right: 20px;">Death saves failures: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES] }}/3</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
                 <label class="stat-label">Proficiency Bonus: </label>
                 <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
               </div>
@@ -176,6 +190,16 @@
               <li>
                 <label for="stats-hit-die">Max # of Hit Die: </label>
                 <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
+              </li>
+            
+              <li> 
+                <label for="death-saves-successes">Death saves successes: </label>
+                <input type="number" id="death-saves-successes" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES]" class="input-stats" inputmode="numeric" required>
+              </li>
+              
+              <li>
+                <label for="death-saves-failures">Death saves failures: </label>
+                <input type="number" id="death-saves-failures" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
@@ -888,6 +912,18 @@ import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
 
+
+const MAX_VALUES = {
+  DEATH_SAVES: 3,
+  HP: 600,
+  HIT_DIE: 10,
+  LEVEL: 20,
+  STATS: 20,
+  STATS_BONUS: 5,
+  SAVING_THROWS: 5,
+  SKILLS: 15,
+}
+
 export default {
   props: {
     characterToViewId: {
@@ -920,6 +956,7 @@ export default {
       FEATURES_TYPES: FEATURES_TYPES,
       HP_KEYS: HP_KEYS,
       LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
+      MAX_VALUES: MAX_VALUES,
       STAT_NAMES: STAT_NAMES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
@@ -961,6 +998,7 @@ export default {
     this.characterToView = this.store.getters.getUserCharacters[this.characterToViewId]
     // console.info('this.characterToView:', this.characterToView)
   },
+
   watch: {
     'characterToView.stats.str': function(newValue) {
       const statMod = Math.floor(this.getBaseStatBonus(newValue))
