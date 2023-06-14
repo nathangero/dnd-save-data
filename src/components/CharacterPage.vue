@@ -699,7 +699,7 @@
                         <div class="spell-list">
                           <div class="spell-group">
                             <label class="spell-label">Casting Time:</label>
-                            <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }} action</label>
+                            <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }} action(s)</label>
                           </div>
                           <div class="spell-group">
                             <label class="spell-label">Duration:</label>
@@ -1688,7 +1688,7 @@ textarea {
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  width: 70%;
+  width: 75%;
 }
 
 .spell-group {
