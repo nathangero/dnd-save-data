@@ -526,6 +526,77 @@
           </div>
         </template>
       </div>
+
+      <br>
+      <div id="treasure">
+        <div class="edit-buttons">
+          <div>
+            <div v-if="!isEditingTreasure">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingTreasure">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
+          <h3>Treasures</h3>
+          
+          <div>
+            <div v-if="!isEditingTreasure">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.TREASURES)">Edit</button>
+            </div>
+            <div v-if="isEditingTreasure">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.TREASURES)">Finish</button>
+            </div>
+          </div>
+        </div>
+
+        <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.TREASURES]) > 0">
+          <div>
+            <ul class="list">
+              <li v-for="(item, key) in characterToView[CHARACTER_KEYS.TREASURES]" :key="key">
+                <div v-if="!isEditingTreasure">
+                  <label class="item-name">{{ key }}</label>
+                  <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                  <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                </div>
+
+                <!-- Edit and Delete -->
+                <div v-if="isEditingTreasure">
+                  <label class="item-name">{{ key }}:</label>
+                  <div class="container-edit">
+                    <div>
+                      <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                      <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.AMOUNT]"> 
+                    </div>
+                    <textarea v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                  </div>
+
+                  <div class="buttons-delete-save">
+                    <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
+                    <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.TREASURES][key], CHARACTER_KEYS.TREASURES)">Update</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </template>
+
+        <!-- Add new -->
+        <template v-if="isEditingTreasure">
+          <div>
+            <input class="item-input" style="width=70%;" type="text" v-model="treasureTempName" placeholder="Item name"> 
+            <div>
+              <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+              <input class="input-stats" style="width=70%;" type="number" v-model="treasureTempAmount"> 
+            </div>
+            <br>
+            <textarea v-model="treasureTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button @click="onPressAddTreasure" style="margin-top: 10px;">Add</button>
+          </div>
+        </template>
+      </div>
       
       <br>
       <div id="languages">
@@ -598,7 +669,6 @@
           </div>
         </template>
       </div>      
-
 
       <br>
       <div id="proficiences">
@@ -849,6 +919,7 @@ export default {
       isEditingSkills: false,
       isEditingFeaturesTraits: false,
       isEditingEquipment: false,
+      isEditingTreasure: false,
       isEditingLanguages: false,
       isEditingProficiencies: false,
       isEditingSpellCasting: false,
@@ -900,6 +971,9 @@ export default {
       spellTempDuration: '', // in seconds
       spellTempRange: '', // in feet
       spellTempLevel: '',
+      treasureTempName: '',
+      treasureTempAmount: '',
+      treasureTempDescription: '',
     }
   },
   mounted() {
@@ -1113,6 +1187,40 @@ export default {
       this.equipmentTempAmount = ''
       this.equipmentTempDescription = ''
     },
+    onPressAddTreasure() {
+      if (this.treasureTempAmount === '') {
+        alert("Please enter an treasure name")
+        return
+      }
+
+      if (this.treasureTempAmount === '') {
+        alert("Please enter an treasure amount")
+        return
+      }
+
+      if (this.treasureTempDescription === '') {
+        alert("Please enter an treasure description")
+        return
+      }
+
+      const newItem = {
+        [EQUIPMENT_KEYS.AMOUNT]: this.treasureTempAmount,
+        [EQUIPMENT_KEYS.DESCRIPTION]: this.treasureTempDescription
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        key: this.treasureTempName,
+        value: newItem,
+        statRef: CHARACTER_KEYS.TREASURES
+      }
+
+      this.store.dispatch("addCharacterStat", payload)
+      
+      this.treasureTempAmount = ''
+      this.treasureTempAmount = ''
+      this.treasureTempDescription = ''
+    },
     onPressAddLanguage() {
       // Make a check just in case 
       if (!this.isEditingLanguages) {
@@ -1284,6 +1392,10 @@ export default {
 
         this.toggleEditForStat("character info")
       })
+      .catch((error) => {
+        console.error(error)
+        alert(`An error occured updating character info`)
+      })
     },
     onPressUpdateBaseStats() {
       const stats = {
@@ -1338,10 +1450,14 @@ export default {
         if (success) {
           alert(`updated base stats, saving throws, skills, initiative, and passive perception`)
         } else {
-          alert(`couldn't update character info for some reason`)
+          alert(`couldn't update base stats for some reason`)
         }
 
         this.toggleEditForStat(CHARACTER_KEYS.STATS)
+      })
+      .catch((error) => {
+        console.error(error)
+        alert(`An error occured updating base stats`)
       })
     },
     onPressUpdateSavingThrows() {
@@ -1371,6 +1487,10 @@ export default {
         }
 
         this.toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)
+      })
+      .catch((error) => {
+        console.error(error)
+        alert(`An error occured updating saving throws`)
       })
     },
     onPressUpdateSkills() {
@@ -1411,7 +1531,17 @@ export default {
           alert(`couldn't update skills info for some reason`)
         }
 
-        this.toggleEditForStat(CHARACTER_KEYS.SKILLS)
+        this.toggleEditForStat(CHARACTER_KEYS.SKILLS).then((success) => {
+          if (success) {
+            alert(`Updated skills`)
+          } else {
+            alert(`Couldn't update skills`)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          alert(`An error occured updating skills`)
+        })
       })
     },
     onPressUpdateStat(key, value, statRef) {
@@ -1422,7 +1552,17 @@ export default {
         statRef: statRef
       }
 
-      this.store.dispatch("updateCharacterStat", payload)
+      this.store.dispatch("updateCharacterStat", payload).then((success) => {
+        if (success) {
+          alert(`Updated info for ${key}`)
+        } else {
+          alert(`Couldn't update info for ${key}`)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+        alert(`An error occured updating for ${key}`)
+      })
     },
     onPressUpdateSpell(levelKey, spellName, updatedSpell, statRef) {
       const payload = {
@@ -1439,6 +1579,10 @@ export default {
         } else {
           alert(`couldn't update ${spellName} for some reason`)
         }
+      })
+      .catch((error) => {
+        console.error(error)
+        alert(`An error occured updating for ${spellName}`)
       })
     },
     onPressDeleteStat(key, statRef) {
@@ -1497,6 +1641,11 @@ export default {
         
         case CHARACTER_KEYS.EQUIPMENT:
           this.isEditingEquipment = !this.isEditingEquipment
+          break
+
+        
+        case CHARACTER_KEYS.TREASURES:
+          this.isEditingTreasure = !this.isEditingTreasure
           break
 
         

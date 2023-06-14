@@ -48,12 +48,23 @@ const store = createStore({
           reject(false)
           return
         }
-
-        this.state.user.characters[charId][statRef][key] = value
+        
         const itemToAdd = {
           [key]: value
         }
+
+        if (this.state.user.characters[charId][statRef]) {
+          // Add to dict
+          this.state.user.characters[charId][statRef] = itemToAdd
+        } else {
+          // Make the dict
+          const newDict = {
+            [statRef]: itemToAdd
+          }
+          this.state.user.characters[charId] = newDict
+        }
         
+
         const userId = this.state.user.id
         rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, itemToAdd)
         resolve(true)

@@ -24,6 +24,7 @@ const CHARACTER_KEYS = {
     SPELL_SAVE_DC: "spellSaveDc",
     SPELLS: "spells",
     STATS: "stats",
+    TREASURES: "treasures",
 }
 
 export { CHARACTER_KEYS }
