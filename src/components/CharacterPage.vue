@@ -273,9 +273,9 @@
             </ul>
           </div>
 
-          <!-- <div class="buttons-delete-save">
+          <div class="buttons-delete-save">
             <button style="margin-left: 10px;" @click="onPressUpdateBaseStats()">Update</button>
-          </div> -->
+          </div>
         </div>
       </div>
 
@@ -319,63 +319,6 @@
           </li>
         </ul>
 
-        <!-- <ul class="stat-list">
-          <li>
-            <div class="stat-group">
-              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH_PROF]" :disabled="!isEditingSavingThrows">
-              <label class="stat-label">Strength: </label>
-              
-              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH_PROF]">{{ getStatBonus(getStatValue(CHARACTER_KEYS.SAVING_THROWS, STAT_KEYS.STRENGTH, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
-              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH]) }}</label>
-            </div>
-          </li>
-          
-          <li>
-            <div class="stat-group">
-              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY_PROF]" :disabled="!isEditingSavingThrows">
-              <label class="stat-label">Dexterity: </label>
-              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
-              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY]) }}</label>
-            </div>
-          </li>
-            
-          <li>
-            <div class="stat-group">
-              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION_PROF]" :disabled="!isEditingSavingThrows">
-              <label class="stat-label">Consitution: </label>
-              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
-              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION]) }}</label>
-            </div>
-          </li>
-
-          <li>
-            <div class="stat-group">
-              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE_PROF]" :disabled="!isEditingSavingThrows">
-              <label class="stat-label">Intelligence: </label>
-              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
-              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE]) }}</label>
-            </div>
-          </li>
-
-          <li>
-            <div class="stat-group">
-              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM_PROF]" :disabled="!isEditingSavingThrows">
-              <label class="stat-label">Wisdom: </label>
-              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
-              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM]) }}</label>
-            </div>
-          </li>
-
-          <li>
-            <div class="stat-group">
-              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA_PROF]" :disabled="!isEditingSavingThrows">
-              <label class="stat-label">Charisma: </label>
-              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA] + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
-              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA_PROF]">{{ getStatBonus(characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA]) }}</label>
-            </div>
-          </li>
-        </ul> -->
-
         <div v-if="isEditingSavingThrows">
           <div class="buttons-delete-save">
             <button style="margin-left: 10px;" @click="onPressUpdateSavingThrows()">Update</button>
@@ -410,8 +353,15 @@
         <ul class="stat-list">
           <li v-for="(skill, key) in SKILL_KEYS" :key="key">
             <div class="stat-group">
+              <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]" :disabled="!isEditingSkills">
               <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
-              <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.SKILLS][skill]) }}</label>
+
+              <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
+                {{ getStatBonus(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+              </label>
+              <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
+                {{ getStatBonus(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD)) }}
+              </label>
             </div>
           </li>
         </ul>
@@ -951,16 +901,16 @@ export default {
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
-      // this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS][STAT_VALUES_KEYS.MOD] = statMod
     },
     'characterToView.stats.dex.value': function(newValue) {
       const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.INITIATIVE] = statMod
     },
     'characterToView.stats.con.value': function(newValue) {
@@ -974,22 +924,22 @@ export default {
 
       this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ARCANA] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.HISTORY] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ARCANA][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.HISTORY][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION][STAT_VALUES_KEYS.MOD] = statMod
     },
     'characterToView.stats.wis.value': function(newValue) {
       const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INSIGHT] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INSIGHT][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] = 10 + statMod
     },
     'characterToView.stats.cha.value': function(newValue) {
@@ -997,10 +947,10 @@ export default {
 
       this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.DECEPTION] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.DECEPTION][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE][STAT_VALUES_KEYS.MOD] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION][STAT_VALUES_KEYS.MOD] = statMod
     },
   },
   methods: {
