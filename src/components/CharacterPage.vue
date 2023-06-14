@@ -7,22 +7,22 @@
       <!-- NOT EDITABLE -->
       <div id="character-background">
         <ul class="stat-list">
-        <li>
-          <label class="item-label">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
-        </li>
+          <li>
+            <label class="character-info">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
+          </li>
 
-        <li>
-          <label class="item-label">{{ characterToView[CHARACTER_KEYS.BACKGROUND] }}</label>
-        </li>
+          <li>
+            <label class="character-info">{{ characterToView[CHARACTER_KEYS.BACKGROUND] }}</label>
+          </li>
 
-        <li>
-          <label class="item-label">{{ characterToView[CHARACTER_KEYS.RACE] }}</label>
-        </li>
+          <li>
+            <label class="character-info">{{ characterToView[CHARACTER_KEYS.RACE] }}</label>
+          </li>
 
-        <li>
-          <label class="item-label">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
-        </li>
-      </ul>
+          <li>
+            <label class="character-info">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
+          </li>
+        </ul>
       </div>
         
       <br>
@@ -556,9 +556,9 @@
             <ul>
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
                 <div v-if="!isEditingLanguages">
-                  <div style="display: flex; flex-direction: row; margin-bottom: -10px;">
-                    <p class="item-name">{{ key }}:</p>
-                    <p class="item-description">{{ item }}</p>
+                  <div class="language-group">
+                    <p class="language-label">{{ key }}:</p>
+                    <p class="language-value">{{ item }}</p>
                   </div>
                 </div>
 
@@ -904,7 +904,7 @@ export default {
   },
   mounted() {
     this.characterToView = this.store.getters.getUserCharacters[this.characterToViewId]
-    console.info('this.characterToView:', this.characterToView)
+    // console.info('this.characterToView:', this.characterToView)
   },
 
   watch: {
@@ -1567,14 +1567,19 @@ textarea {
 }
 
 .checkbox {
-  width: 15px;
-  height: 15px;
+  width: 17px;
+  height: 17px;
   margin-right: 10px;
+  padding: 0;
 }
 
 .character-name {
   margin-top: 50px;
   font-size: 2.5em;
+}
+
+.character-info {
+  font-size: 1.5em;
 }
 
 /* LIST - ENTERING INPUT STYLE */
@@ -1615,7 +1620,7 @@ textarea {
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  width: 55%;
+  width: 65%;
   margin: 0 auto;
   padding-left: 0;
 }
@@ -1623,23 +1628,24 @@ textarea {
 .stat-group {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .stat-label {
   text-align: left;
-  font-size: large;
+  font-size: larger;
 }
 
 .stat-value {
   flex-grow: 1;
   text-align: right;
-  font-size: large;
+  font-size: larger;
 }
 
 .stat-bonus {
   margin-left: 10px; /* Adjust as needed */
   text-align: right;
-  font-size: large;
+  font-size: larger;
 }
 
 .popup {
@@ -1654,17 +1660,35 @@ textarea {
 }
 
 
+/* LANGUAGE STYLES */
+
+.language-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 50%
+}
+
+.language-label {
+  text-align: left;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.language-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+
 /* SPELL STYLES */
 
 .spell-list {
   display: flex;
   flex-direction: column;
-  /* justify-content: space-evenly; */
-  /* align-items: right; */
   list-style-type: none;
-  width: 60%;
-  /* margin: 0 auto; */
-  /* padding-left: 0; */
+  width: 70%;
 }
 
 .spell-group {
@@ -1674,18 +1698,18 @@ textarea {
 
 .spell-label {
   text-align: left;
-  font-size: large;
+  font-size: larger;
 }
 
 .spell-value {
   flex-grow: 1;
   text-align: right;
-  font-size: large;
+  font-size: larger;
 }
 
 .spell-description {
-  font-size: large;
-  width: 90%;
+  font-size: larger;
+  width: 100%;
   margin-top: 10px;
 }
 
@@ -1712,6 +1736,7 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .edit-buttons h3 {
