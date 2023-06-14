@@ -83,7 +83,7 @@
               </div>
               
               <br>
-              <h3>Base Stats</h3>
+              <h3>Character Info</h3>
               <div id="character-info">
                 <div class="container-inputs">
                   <ul class="list-inputs">
@@ -138,6 +138,8 @@
                 </div>
               </div>
 
+              <br>
+              <h3>Base Stats</h3>
               <div id="base-stats">
                 <div class="container-inputs">
                   <ul class="list-inputs">
@@ -777,7 +779,49 @@ export default {
   watch: {
     'hp.max': function(newValue) {
       this.hp.current = newValue
-    }
+    },
+    'stats.str': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.stats[BASE_STAT_KEYS.STRENGTH_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'stats.dex': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.stats[BASE_STAT_KEYS.DEXTERITY_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'stats.con': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.stats[BASE_STAT_KEYS.CONSTITUTION_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'stats.int': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.stats[BASE_STAT_KEYS.INTELLIGENCE_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'stats.wis': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.stats[BASE_STAT_KEYS.WISDOM_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'stats.cha': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.stats[BASE_STAT_KEYS.CHARISMA_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
   },
   methods: {
     resetVariables() {
@@ -1262,6 +1306,9 @@ export default {
       )
 
       return newCharacter
+    },
+    getBaseStatBonus(stat) {
+      return (stat - 10) / 2
     },
     getDictionarySize(dict) {
       if (dict) {
