@@ -156,6 +156,11 @@
                 <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
               </li>
 
+              <li>
+                <label for="stats-hp" class="label-stats">Hit Points - Temp:</label>
+                <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
+              </li>
+
               <li style="margin-top: 10px;">
                 <label>Hit Die Type: </label>
                 <select class="picker" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE]">
@@ -164,8 +169,13 @@
               </li>
 
               <li>
-                <label for="stats-hit-die"># of Hit Die: </label>
+                <label for="stats-hit-die">Current # of Hit Die: </label>
                 <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-hit-die">Max # of Hit Die: </label>
+                <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
