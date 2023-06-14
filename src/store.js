@@ -4,6 +4,7 @@ import { auth } from '@/firebase'
 import * as rtdbFunctions from './functions/rtdb'
 import Cookies from 'js-cookie';
 import COOKIE_NAMES from '@/enums/cookie-names'
+import { CHARACTER_KEYS } from './enums/dbKeys/character-keys';
 
 const store = createStore({
   state: {
@@ -103,8 +104,40 @@ const store = createStore({
       })
       
     },
+    updateCharacterBaseStats(state, payload) {
+      // console.info('payload:', payload)
+      const { charId, stats, savingThrows, skills, initiative, passivePerception} = payload      
+
+      return new Promise((resolve, reject) => {
+        if (stats === undefined || stats === '' || savingThrows === undefined || savingThrows === '' || skills === undefined || skills === '') {
+          console.info('something is undefined')
+          reject(false)
+          return
+        }
+
+        this.state.user.characters[charId][CHARACTER_KEYS.STATS] = stats // Update all the stats
+        this.state.user.characters[charId][CHARACTER_KEYS.SAVING_THROWS] = savingThrows // Update all the saving Throws
+        this.state.user.characters[charId][CHARACTER_KEYS.SKILLS] = skills // Update all the skills
+        this.state.user.characters[charId][CHARACTER_KEYS.INITIATIVE] = initiative
+        this.state.user.characters[charId][CHARACTER_KEYS.PASSIVE_PERCEPTION] = passivePerception
+
+        const misc = {
+          [CHARACTER_KEYS.INITIATIVE]: initiative,
+          [CHARACTER_KEYS.PASSIVE_PERCEPTION]: passivePerception
+        }
+        
+        // Update all the stats with numbers since they're all connected from base stats
+        const userId = this.state.user.id
+        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.STATS, stats)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SAVING_THROWS, savingThrows)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SKILLS, skills)
+        rtdbFunctions.updateCharacterInfoByKey(userId, charId, misc)
+        resolve(true)
+      })
+      
+    },
     updateCharacterStat(state, payload) {
-      console.info('payload:', payload)
+      // console.info('payload:', payload)
       const { charId, key, value, statRef } = payload
 
       return new Promise((resolve, reject) => {
@@ -115,12 +148,12 @@ const store = createStore({
         }
 
         this.state.user.characters[charId][statRef][key] = value
-        const lang = {
+        const itemToAdd = {
           [key]: value
         }
         
         const userId = this.state.user.id
-        rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, lang)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, itemToAdd)
         resolve(true)
       })
     },

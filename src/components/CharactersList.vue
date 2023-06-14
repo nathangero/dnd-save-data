@@ -121,7 +121,7 @@
 
                     <li>
                       <label for="stats-hit-die"># of Hit Die: </label>
-                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT]" class="input-stats" inputmode="numeric" required>
+                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
@@ -677,7 +677,8 @@ export default {
       hp: {
         [HP_KEYS.CURRENT]: '',
         [HP_KEYS.DIE]: '',
-        [HP_KEYS.DIE_AMOUNT]: '',
+        [HP_KEYS.DIE_AMOUNT_MAX]: '',
+        [HP_KEYS.DIE_AMOUNT_CURR]: '',
         [HP_KEYS.MAX]: '',
         [HP_KEYS.TEMP]: 0
       },
@@ -778,50 +779,29 @@ export default {
   },
   watch: {
     'hp.max': function(newValue) {
-      this.hp.current = newValue
+      this.hp[HP_KEYS.CURRENT] = newValue
     },
-    'stats.str': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        this.stats[BASE_STAT_KEYS.STRENGTH_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
-        if (oldValue) { return } // ignore oldValue
-      }
+    'hp.dieAmountMax': function(newValue) {
+      this.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
     },
-    'stats.dex': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        this.stats[BASE_STAT_KEYS.DEXTERITY_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
-        if (oldValue) { return } // ignore oldValue
-      }
+    'stats.str': function(newValue) {
+      this.stats[BASE_STAT_KEYS.STRENGTH_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
     },
-    'stats.con': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        this.stats[BASE_STAT_KEYS.CONSTITUTION_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
-        if (oldValue) { return } // ignore oldValue
-      }
+    'stats.dex': function(newValue) {
+      this.stats[BASE_STAT_KEYS.DEXTERITY_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
     },
-    'stats.int': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        this.stats[BASE_STAT_KEYS.INTELLIGENCE_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
-        if (oldValue) { return } // ignore oldValue
-      }
+    'stats.con': function(newValue) {
+      this.stats[BASE_STAT_KEYS.CONSTITUTION_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
     },
-    'stats.wis': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        this.stats[BASE_STAT_KEYS.WISDOM_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
-        if (oldValue) { return } // ignore oldValue
-      }
+    'stats.int': function(newValue) {
+      this.stats[BASE_STAT_KEYS.INTELLIGENCE_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
     },
-    'stats.cha': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        this.stats[BASE_STAT_KEYS.CHARISMA_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
-        if (oldValue) { return } // ignore oldValue
-      }
+    'stats.wis': function(newValue) {
+      this.stats[BASE_STAT_KEYS.WISDOM_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
     },
+    'stats.cha': function(newValue) {
+      this.stats[BASE_STAT_KEYS.CHARISMA_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    }
   },
   methods: {
     resetVariables() {
@@ -842,7 +822,8 @@ export default {
       this.hp = {
         [HP_KEYS.CURRENT]: '',
         [HP_KEYS.DIE]: '',
-        [HP_KEYS.DIE_AMOUNT]: '',
+        [HP_KEYS.DIE_AMOUNT_MAX]: '',
+        [HP_KEYS.DIE_AMOUNT_CURR]: '',
         [HP_KEYS.MAX]: '',
         [HP_KEYS.TEMP]: 0
       }

@@ -88,8 +88,22 @@
             
             <li>
               <div class="stat-group">
+                <label class="stat-label" style="margin-right: 20px;">Temp HP: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP] }}</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
                 <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
-                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT] }}{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
+                <label class="stat-value">1{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label" style="margin-right: 20px;">Hit die count: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX] }}</label>
               </div>
             </li>
             
@@ -151,7 +165,7 @@
 
               <li>
                 <label for="stats-hit-die"># of Hit Die: </label>
-                <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT]" class="input-stats" inputmode="numeric" required>
+                <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
@@ -314,6 +328,10 @@
                 <input type="number" id="stats-cha-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]" class="input-stats" inputmode="numeric" required>
               </li>
             </ul>
+          </div>
+
+          <div class="buttons-delete-save">
+            <button style="margin-left: 10px;" @click="onPressUpdateBaseStats()">Update</button>
           </div>
         </div>
       </div>
@@ -577,7 +595,6 @@
           </div>
         </template>
       </div>
-      
       
       <br>
       <div id="languages">
@@ -935,83 +952,61 @@ export default {
     // console.info('this.characterToView:', this.characterToView)
   },
   watch: {
-    'characterToView.stats.str': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        const statMod = Math.floor(this.getBaseStatBonus(newValue))
+    'characterToView.stats.str': function(newValue) {
+      const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
-        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS] = statMod
-        this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS] = statMod
-        if (oldValue) { return } // ignore oldValue
-      }
+      this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS] = statMod
+      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS] = statMod
     },
-    'characterToView.stats.dex': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        const statMod = Math.floor(this.getBaseStatBonus(newValue))
+    'characterToView.stats.dex': function(newValue) {
+      const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
-        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS] = statMod
-        this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH] = statMod
-        if (oldValue) { return } // ignore oldValue
-      }
+      this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS] = statMod
+      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.DEXTERITY] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH] = statMod
+      this.characterToView[CHARACTER_KEYS.INITIATIVE] = statMod
     },
-    'characterToView.stats.con': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        const statMod = Math.floor(this.getBaseStatBonus(newValue))
+    'characterToView.stats.con': function(newValue) {
+      const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
-        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS] = statMod
-        this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION] = statMod
-        if (oldValue) { return } // ignore oldValue
-      }
+      this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS] = statMod
+      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CONSTITUTION] = statMod
     },
-    'characterToView.stats.int': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        const statMod = Math.floor(this.getBaseStatBonus(newValue))
+    'characterToView.stats.int': function(newValue) {
+      const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
-        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS] = statMod
-        this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ARCANA] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.HISTORY] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION] = statMod
-        if (oldValue) { return } // ignore oldValue
-      }
+      this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS] = statMod
+      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.INTELLIGENCE] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ARCANA] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.HISTORY] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION] = statMod
     },
-    'characterToView.stats.wis': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        const statMod = Math.floor(this.getBaseStatBonus(newValue))
+    'characterToView.stats.wis': function(newValue) {
+      const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
-        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS] = statMod
-        this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INSIGHT] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL] = statMod
-        if (oldValue) { return } // ignore oldValue
-      }
+      this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS] = statMod
+      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.WISDOM] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INSIGHT] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL] = statMod
+      this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] = 10 + statMod
     },
-    'characterToView.stats.cha': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        const statMod = Math.floor(this.getBaseStatBonus(newValue))
+    'characterToView.stats.cha': function(newValue) {
+      const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
-        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS] = statMod
-        this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.DECEPTION] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE] = statMod
-        this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION] = statMod
-        if (oldValue) { return } // ignore oldValue
-      }
+      this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS] = statMod
+      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.CHARISMA] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.DECEPTION] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION] = statMod
     },
   },
   methods: {
@@ -1329,6 +1324,71 @@ export default {
         }
 
         this.toggleEditForStat("character info")
+      })
+    },
+    onPressUpdateBaseStats() {
+      const stats = {
+        [BASE_STAT_KEYS.STRENGTH]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH],
+        [BASE_STAT_KEYS.STRENGTH_BONUS]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS],
+        [BASE_STAT_KEYS.DEXTERITY]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY],
+        [BASE_STAT_KEYS.DEXTERITY_BONUS]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS],
+        [BASE_STAT_KEYS.CONSTITUTION]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION],
+        [BASE_STAT_KEYS.CONSTITUTION_BONUS]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS],
+        [BASE_STAT_KEYS.INTELLIGENCE]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE],
+        [BASE_STAT_KEYS.INTELLIGENCE_BONUS]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS],
+        [BASE_STAT_KEYS.WISDOM]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM],
+        [BASE_STAT_KEYS.WISDOM_BONUS]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS],
+        [BASE_STAT_KEYS.CHARISMA]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA],
+        [BASE_STAT_KEYS.CHARISMA_BONUS]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS],
+      }
+
+      const savingThrows = {
+        [BASE_STAT_KEYS.STRENGTH]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS],
+        [BASE_STAT_KEYS.DEXTERITY]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS],
+        [BASE_STAT_KEYS.CONSTITUTION]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS],
+        [BASE_STAT_KEYS.INTELLIGENCE]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS],
+        [BASE_STAT_KEYS.WISDOM]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS],
+        [BASE_STAT_KEYS.CHARISMA]: this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS],
+      }
+
+      const skills = {
+        [SKILL_KEYS.ACROBATICS]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS],
+        [SKILL_KEYS.ANIMAL_HANDLING]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING],
+        [SKILL_KEYS.ARCANA]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ARCANA],
+        [SKILL_KEYS.ATHLETICS]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS],
+        [SKILL_KEYS.DECEPTION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.DECEPTION],
+        [SKILL_KEYS.HISTORY]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.HISTORY],
+        [SKILL_KEYS.INSIGHT]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INSIGHT],
+        [SKILL_KEYS.INTIMIDATION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION],
+        [SKILL_KEYS.INVESTIGATION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION],
+        [SKILL_KEYS.MEDICINE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE],
+        [SKILL_KEYS.NATURE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE],
+        [SKILL_KEYS.PERCEPTION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION],
+        [SKILL_KEYS.PERFORMANCE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE],
+        [SKILL_KEYS.PERSUASION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION],
+        [SKILL_KEYS.RELIGION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION],
+        [SKILL_KEYS.SLEIGHT_OF_HAND]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND],
+        [SKILL_KEYS.STEALTH]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH],
+        [SKILL_KEYS.SURVIVAL]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL],
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        stats: stats,
+        savingThrows: savingThrows,
+        skills: skills,
+        [CHARACTER_KEYS.INITIATIVE]: this.characterToView[CHARACTER_KEYS.INITIATIVE],
+        [CHARACTER_KEYS.PASSIVE_PERCEPTION]: this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]
+      }
+
+      this.store.dispatch("updateCharacterBaseStats", payload).then((success) => {
+        if (success) {
+          alert(`updated base stats, saving throws, skills, initiative, and passive perception`)
+        } else {
+          alert(`couldn't update character info for some reason`)
+        }
+
+        this.toggleEditForStat(CHARACTER_KEYS.STATS)
       })
     },
     onPressUpdateStat(key, value, statRef) {
