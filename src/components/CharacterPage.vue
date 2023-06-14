@@ -1,7 +1,7 @@
 <template>
   <div class="body">
-    <div id="character-info">
-      <button class="button-close" @click="closeModal('')">Close</button>
+    <button class="button-close" @click="closeModal('')">Close</button>
+    <div id="character-info" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''">
       <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 
       <!-- Not editable -->
@@ -246,51 +246,11 @@
         
         <div v-if="!isEditingBaseStats">
           <ul class="stat-list">
-            <li>
+            <li v-for="(stat, key) in STAT_KEYS" :key="key">
               <div class="stat-group">
-                <label class="stat-label">Strength: </label>
-                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH] }}</label>
-                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]) }}</label>
-              </div>
-            </li>
-            
-            <li>
-              <div class="stat-group">
-                <label class="stat-label">Dexterity: </label>
-                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY] }}</label>
-                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]) }}</label>
-              </div>
-            </li>
-              
-            <li>
-              <div class="stat-group">
-                <label class="stat-label">Consitution: </label>
-                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION] }}</label>
-                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]) }}</label>
-              </div>
-            </li>
-
-            <li>
-              <div class="stat-group">
-                <label class="stat-label">Intelligence: </label>
-                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE] }}</label>
-                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]) }}</label>
-              </div>
-            </li>
-
-            <li>
-              <div class="stat-group">
-                <label class="stat-label">Wisdom: </label>
-                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM] }}</label>
-                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]) }}</label>
-              </div>
-            </li>
-
-            <li>
-              <div class="stat-group">
-                <label class="stat-label">Charisma: </label>
-                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA] }}</label>
-                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]) }}</label>
+                <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                <label class="stat-value">{{ getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.VALUE) }}</label>
+                <label class="stat-bonus">{{ getStatBonus(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
               </div>
             </li>
           </ul>
@@ -298,74 +258,19 @@
 
         <div v-if="isEditingBaseStats">
           <div class="container-inputs">
-            <ul class="list-inputs">
-              <li>
-                <label for="stats-str" class="label-stats">Strength:</label>
-                <input type="number" id="stats-str" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH]" class="input-stats" inputmode="numeric" required>
-              </li>
-              
-              <li>
-                <label for="stats-dex" class="label-stats">Dexterity: </label>
-                <input type="number" id="stats-dex" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY]" class="input-stats" inputmode="numeric" required>
-              </li>
-                
-              <li>
-                <label for="stats-con" class="label-stats">Consitution: </label>
-                <input type="number" id="stats-con" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION]" class="input-stats" inputmode="numeric" required>
-              </li>
-
-              <li>
-                <label for="stats-int" class="label-stats">Intelligence: </label>
-                <input type="number" id="stats-int" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE]" class="input-stats" inputmode="numeric" required>
-              </li>
-
-              <li>
-                <label for="stats-wis" class="label-stats">Wisdom: </label>
-                <input type="number" id="stats-wis" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM]" class="input-stats" inputmode="numeric" required>
-              </li>
-
-              <li>
-                <label for="stats-cha" class="label-stats">Charisma: </label>
-                <input type="number" id="stats-cha" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA]" class="input-stats" inputmode="numeric" required>
+            <ul class="list-inputs" style="margin-right: 20px;">
+              <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                  <label for="stats-label" class="label-stats">{{ STAT_NAMES[stat] }}:</label>
+                  <input type="number" id="stats-label" v-model="characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
               </li>
             </ul>
 
-            <!-- Bonus modifier -->
             <ul class="list-inputs">
-              <li>
-                  <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
-                  <input type="number" id="stats-str-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]" class="input-stats" inputmode="numeric" required>
-              </li>
-              
-              <li>
-                <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-dex-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]" class="input-stats" inputmode="numeric" required>
-              </li>
-                
-              <li>
-                <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-con-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]" class="input-stats" inputmode="numeric" required>
-              </li>
-
-              <li>
-                <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-int-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]" class="input-stats" inputmode="numeric" required>
-              </li>
-
-              <li>
-                <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-wis-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]" class="input-stats" inputmode="numeric" required>
-              </li>
-
-              <li>
-                <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
-                <input type="number" id="stats-cha-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]" class="input-stats" inputmode="numeric" required>
+              <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                  <label for="stats-mod-label" class="label-stats">Mod:</label>
+                  <input type="number" id="stats-mod-label" v-model="characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]" class="input-stats" inputmode="numeric" required>
               </li>
             </ul>
-          </div>
-
-          <div class="buttons-delete-save">
-            <button style="margin-left: 10px;" @click="onPressUpdateBaseStats()">Update</button>
           </div>
         </div>
       </div>
@@ -928,7 +833,7 @@ import { BASE_STAT_KEYS } from '@/enums/dbKeys/baseStat-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
-import { STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
+import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
 
 
@@ -976,6 +881,8 @@ export default {
       HP_KEYS: HP_KEYS,
       LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
       MAX_VALUES: MAX_VALUES,
+      STAT_KEYS: STAT_KEYS,
+      STAT_VALUES_KEYS: STAT_VALUES_KEYS,
       STAT_NAMES: STAT_NAMES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
@@ -1019,6 +926,14 @@ export default {
   },
 
   watch: {
+    'characterToView.statsTest.str.value': function(newValue) {
+      console.info('@characterToView.statsTest.str.value')
+      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+
+      this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS] = statMod
+      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][BASE_STAT_KEYS.STRENGTH] = statMod
+      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS] = statMod
+    },
     'characterToView.stats.str': function(newValue) {
       const statMod = Math.floor(this.getBaseStatBonus(newValue))
 
@@ -1138,6 +1053,9 @@ export default {
       }
 
       return output
+    },
+    getStatValue(statRef, statKey, valueKey) {
+      return this.characterToView[statRef][statKey][valueKey]
     },
     getStatBonus(stat) {
       if (stat < 0) {
