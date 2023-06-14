@@ -4,7 +4,7 @@
     <div id="character-info" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''">
       <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 
-      <!-- Not editable -->
+      <!-- NOT EDITABLE -->
       <div id="character-background">
         <ul class="stat-list">
         <li>
@@ -696,10 +696,21 @@
                       <div v-if="!isEditingSpellCasting">
                         <label class="item-name">{{ spellName }}</label>
                         <br>
-                        <label class="item-description">Casting Time: {{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }}</label>
-                        <label class="item-description">Duration: {{ spell[[SPELLCASTING_KEYS.DURATION]] }} seconds</label>
-                        <label class="item-description">Range: {{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
-                        <label class="item-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
+                        <div class="spell-list">
+                          <div class="spell-group">
+                            <label class="spell-label">Casting Time:</label>
+                            <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }} action</label>
+                          </div>
+                          <div class="spell-group">
+                            <label class="spell-label">Duration:</label>
+                            <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.DURATION]] }} sec</label>
+                          </div>
+                          <div class="spell-group">
+                            <label class="spell-label">Range:</label>
+                            <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
+                          </div>
+                        </div>
+                        <label class="spell-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
                       </div>
 
                       <!-- Edit and Delete -->
@@ -1642,6 +1653,41 @@ textarea {
   opacity: 1;
 }
 
+
+/* SPELL STYLES */
+
+.spell-list {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-evenly; */
+  /* align-items: right; */
+  list-style-type: none;
+  width: 60%;
+  /* margin: 0 auto; */
+  /* padding-left: 0; */
+}
+
+.spell-group {
+  display: flex;
+  align-items: center;
+}
+
+.spell-label {
+  text-align: left;
+  font-size: large;
+}
+
+.spell-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: large;
+}
+
+.spell-description {
+  font-size: large;
+  width: 90%;
+  margin-top: 10px;
+}
 
 /* BUTTON STYLES */
 
