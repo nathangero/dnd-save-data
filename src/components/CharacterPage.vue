@@ -196,55 +196,126 @@
           </div>
         </div>
         
-        <ul class="stat-list">
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Strength: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH] }}</label>
-              <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]) }}</label>
-            </div>
-          </li>
-          
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Dexterity: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY] }}</label>
-              <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]) }}</label>
-            </div>
-          </li>
+        <div v-if="!isEditingBaseStats">
+          <ul class="stat-list">
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Strength: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH] }}</label>
+                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]) }}</label>
+              </div>
+            </li>
             
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Consitution: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION] }}</label>
-              <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]) }}</label>
-            </div>
-          </li>
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Dexterity: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY] }}</label>
+                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]) }}</label>
+              </div>
+            </li>
+              
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Consitution: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION] }}</label>
+                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]) }}</label>
+              </div>
+            </li>
 
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Intelligence: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE] }}</label>
-              <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]) }}</label>
-            </div>
-          </li>
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Intelligence: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE] }}</label>
+                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]) }}</label>
+              </div>
+            </li>
 
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Wisdom: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM] }}</label>
-              <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]) }}</label>
-            </div>
-          </li>
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Wisdom: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM] }}</label>
+                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]) }}</label>
+              </div>
+            </li>
 
-          <li>
-            <div class="stat-group">
-              <label class="stat-label">Charisma: </label>
-              <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA] }}</label>
-              <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]) }}</label>
-            </div>
-          </li>
-        </ul>
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Charisma: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA] }}</label>
+                <label class="stat-bonus">{{ getStatBonus(characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]) }}</label>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div v-if="isEditingBaseStats">
+          <div class="container-inputs">
+            <ul class="list-inputs">
+              <li>
+                <label for="stats-str" class="label-stats">Strength:</label>
+                <input type="number" id="stats-str" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH]" class="input-stats" inputmode="numeric" required>
+              </li>
+              
+              <li>
+                <label for="stats-dex" class="label-stats">Dexterity: </label>
+                <input type="number" id="stats-dex" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY]" class="input-stats" inputmode="numeric" required>
+              </li>
+                
+              <li>
+                <label for="stats-con" class="label-stats">Consitution: </label>
+                <input type="number" id="stats-con" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-int" class="label-stats">Intelligence: </label>
+                <input type="number" id="stats-int" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-wis" class="label-stats">Wisdom: </label>
+                <input type="number" id="stats-wis" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-cha" class="label-stats">Charisma: </label>
+                <input type="number" id="stats-cha" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA]" class="input-stats" inputmode="numeric" required>
+              </li>
+            </ul>
+
+            <!-- Bonus modifier -->
+            <ul class="list-inputs">
+              <li>
+                  <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
+                  <input type="number" id="stats-str-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS]" class="input-stats" inputmode="numeric" required>
+              </li>
+              
+              <li>
+                <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-dex-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS]" class="input-stats" inputmode="numeric" required>
+              </li>
+                
+              <li>
+                <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-con-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-int-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-wis-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
+                <input type="number" id="stats-cha-bonus" v-model="characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS]" class="input-stats" inputmode="numeric" required>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <br>
@@ -863,6 +934,50 @@ export default {
     this.characterToView = this.store.getters.getUserCharacters[this.characterToViewId]
     // console.info('this.characterToView:', this.characterToView)
   },
+  watch: {
+    'characterToView.stats.str': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.STRENGTH_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'characterToView.stats.dex': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.DEXTERITY_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'characterToView.stats.con': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CONSTITUTION_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'characterToView.stats.int': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.INTELLIGENCE_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'characterToView.stats.wis': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.WISDOM_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+    'characterToView.stats.cha': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        this.characterToView[CHARACTER_KEYS.STATS][BASE_STAT_KEYS.CHARISMA_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+        if (oldValue) { return } // ignore oldValue
+      }
+    },
+  },
   methods: {
     closeModal() {
       this.$emit('close')
@@ -877,6 +992,9 @@ export default {
         }
       })
       
+    },
+    getBaseStatBonus(stat) {
+      return (stat - 10) / 2
     },
     getDictionarySize(dict) {
       if (dict) {
