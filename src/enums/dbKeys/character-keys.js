@@ -25,6 +25,7 @@ const CHARACTER_KEYS = {
     SPELLS: "spells",
     STATS: "stats",
     TREASURES: "treasures",
+    WEAPONS: "weapons",
 }
 
 export { CHARACTER_KEYS }

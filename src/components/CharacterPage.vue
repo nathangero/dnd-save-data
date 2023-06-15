@@ -457,6 +457,77 @@
       </div>
 
       <br>
+      <div id="weapons">
+        <div class="edit-buttons">
+          <div>
+            <div v-if="!isEditingWeapons">
+              <button class="button-edit-spacer">Edit</button>
+            </div>
+            <div v-if="isEditingWeapons">
+              <button class="button-edit-spacer">Finish</button>
+            </div>
+          </div>
+
+          <h3>Weapons & Spells</h3>
+          
+          <div>
+            <div v-if="!isEditingWeapons">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Edit</button>
+            </div>
+            <div v-if="isEditingWeapons">
+              <button class="button-edit" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Finish</button>
+            </div>
+          </div>
+        </div>
+
+        <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.WEAPONS]) > 0">
+          <div>
+            <ul class="list">
+              <li v-for="(item, key) in characterToView[CHARACTER_KEYS.WEAPONS]" :key="key">
+                <div v-if="!isEditingWeapons">
+                  <label class="item-name">{{ key }}</label>
+                  <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                  <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                </div>
+
+                <!-- Edit and Delete -->
+                <div v-if="isEditingWeapons">
+                  <label class="item-name">{{ key }}:</label>
+                  <div class="container-edit">
+                    <div>
+                      <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                      <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][EQUIPMENT_KEYS.AMOUNT]"> 
+                    </div>
+                    <textarea v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                  </div>
+
+                  <div class="buttons-delete-save">
+                    <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
+                    <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.WEAPONS][key], CHARACTER_KEYS.WEAPONS)">Update</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </template>
+
+        <!-- Add new -->
+        <template v-if="isEditingWeapons">
+          <div>
+            <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="Item name"> 
+            <div>
+              <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+              <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
+            </div>
+            <br>
+            <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button @click="onPressAddWeapon" style="margin-top: 10px;">Add</button>
+          </div>
+        </template>
+      </div>
+
+      <br>
       <div id="equipment">
         <div class="edit-buttons">
           <div>
@@ -918,6 +989,7 @@ export default {
       isEditingSavingThrows: false,
       isEditingSkills: false,
       isEditingFeaturesTraits: false,
+      isEditingWeapons: false,
       isEditingEquipment: false,
       isEditingTreasure: false,
       isEditingLanguages: false,
@@ -941,6 +1013,7 @@ export default {
       SKILL_NAMES: SKILL_NAMES,
       SPELLCASTING_KEYS: SPELLCASTING_KEYS,
       SPELLCASTING_NAMES: SPELLCASTING_NAMES,
+      WEAPON_MODS: ['', STAT_NAMES[STAT_KEYS.STRENGTH], STAT_NAMES[STAT_KEYS.DEXTERITY], STAT_NAMES[STAT_KEYS.CONSTITUTION], STAT_NAMES[STAT_KEYS.INTELLIGENCE], STAT_NAMES[STAT_KEYS.WISDOM], STAT_NAMES[STAT_KEYS.CHARISMA]],
       characterToView: new Character(),
       level: '',
       characterArmor: '',
@@ -974,6 +1047,14 @@ export default {
       treasureTempName: '',
       treasureTempAmount: '',
       treasureTempDescription: '',
+      weaponTempName: '',
+      weaponTempCategory: '', // e.g. finesse
+      weaponTempAmount: '',
+      weaponsTempAttackModifier: '', // e.g. dex
+      weaponsTempDamageModifier: '', // e.g. dex
+      weaponTempDieType: '', // e.g. d8
+      weaponTempIsProficient: '', // e.g. d8
+      weaponTempDescription: '',
     }
   },
   mounted() {
@@ -1152,6 +1233,40 @@ export default {
       this.featuresTempDescription = ''
       this.featuresTempType = ''
       this.featuresTempUses = ''
+    },
+    onPressAddWeapon() {
+      if (this.equipmentTempName === '') {
+        alert("Please enter an equipment name")
+        return
+      }
+
+      if (this.equipmentTempAmount === '') {
+        alert("Please enter an equipment amount")
+        return
+      }
+
+      if (this.equipmentTempDescription === '') {
+        alert("Please enter an equipment description")
+        return
+      }
+
+      const newItem = {
+        [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
+        [EQUIPMENT_KEYS.DESCRIPTION]: this.equipmentTempDescription
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        key: this.equipmentTempName,
+        value: newItem,
+        statRef: CHARACTER_KEYS.EQUIPMENT
+      }
+
+      this.store.dispatch("addCharacterStat", payload)
+      
+      this.equipmentTempName = ''
+      this.equipmentTempAmount = ''
+      this.equipmentTempDescription = ''
     },
     onPressAddEquipment() {
       if (this.equipmentTempName === '') {
@@ -1636,6 +1751,11 @@ export default {
         
         case CHARACTER_KEYS.FEATURES:
           this.isEditingFeaturesTraits = !this.isEditingFeaturesTraits
+          break
+
+        
+        case CHARACTER_KEYS.WEAPONS:
+          this.isEditingWeapons = !this.isEditingWeapons
           break
 
         
