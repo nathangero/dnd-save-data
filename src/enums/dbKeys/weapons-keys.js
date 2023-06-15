@@ -10,8 +10,8 @@ const WEAPON_KEYS = {
 }
 
 const WEAPON_CATEGORY = {
-    MARTIAL: "Martial",
     SIMPLE: "Simple",
+    MARTIAL: "Martial",
     SPELL: "Spell",
     OTHER: "Other"
 }
@@ -32,3 +32,5 @@ const WEAPON_PROPERTY = {
     THUNDER: "Thunder",
     OTHER: "Other"
 }
+
+export { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY}

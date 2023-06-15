@@ -437,17 +437,22 @@
         <template v-if="isEditingFeaturesTraits">
           <div>
             <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
-            <div>
-              <br>
-              <label>Type:</label>
-              <select class="picker" v-model="featuresTempType">
-                <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-              </select>
+            <div class="container-inputs">
+              <ul class="list-inputs">
+                <li style="margin-top: 10px;">
+                  <label>Type:</label>
+                  <select class="picker" v-model="featuresTempType">
+                    <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                  </select>
+                </li>
+
+                <li>
+                  <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                  <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                </li>
+              </ul>
             </div>
-            <div>
-              <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
-              <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
-            </div>
+            
             <br>
             <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
             <br>
@@ -514,11 +519,50 @@
         <!-- Add new -->
         <template v-if="isEditingWeapons">
           <div>
-            <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="Item name"> 
-            <div>
-              <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
-              <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
+            <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="Weapon/Spell name"> 
+
+            <div class="container-inputs">
+              <ul class="list-inputs">
+                <li style="margin-top: 10px;">
+                  <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                  <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
+                </li>
+                
+                <li style="margin-top: 10px;">
+                  <label style="margin-right: 10px;" for="equipment-input">Attack Bonus Mod:</label>
+                  <select class="picker" v-model="weaponsTempAttackModifier">
+                    <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
+                  </select>
+                </li>
+                
+                <li style="margin-top: 10px;">
+                  <label style="margin-right: 10px;" for="equipment-input">Damage Mod:</label>
+                  <select class="picker" v-model="weaponsTempDamageModifier">
+                    <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
+                  </select>
+                </li>
+                
+                <li style="margin-top: 10px;">
+                  <label style="margin-right: 10px;" for="equipment-input">Die Type:</label>
+                  <select class="picker" v-model="weaponTempDieType">
+                    <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                  </select>
+                </li>
+
+                <li style="margin-top: 10px;">
+                  <label style="margin-right: 10px;" for="equipment-input">Category:</label>
+                  <select class="picker" v-model="weaponTempCategory">
+                    <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                  </select>
+                </li>
+
+                <li style="margin-top: 10px;">
+                  <label style="margin-right: 10px;" for="equipment-input">Proficient:</label>
+                  <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                </li>
+              </ul>
             </div>
+
             <br>
             <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
             <br>
@@ -959,6 +1003,7 @@ import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
+import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY} from '@/enums/dbKeys/weapons-keys'
 
 
 const MAX_VALUES = {
@@ -1013,6 +1058,9 @@ export default {
       SKILL_NAMES: SKILL_NAMES,
       SPELLCASTING_KEYS: SPELLCASTING_KEYS,
       SPELLCASTING_NAMES: SPELLCASTING_NAMES,
+      WEAPON_KEYS: WEAPON_KEYS,
+      WEAPON_CATEGORY: WEAPON_CATEGORY,
+      WEAPON_PROPERTY: WEAPON_PROPERTY,
       WEAPON_MODS: ['', STAT_NAMES[STAT_KEYS.STRENGTH], STAT_NAMES[STAT_KEYS.DEXTERITY], STAT_NAMES[STAT_KEYS.CONSTITUTION], STAT_NAMES[STAT_KEYS.INTELLIGENCE], STAT_NAMES[STAT_KEYS.WISDOM], STAT_NAMES[STAT_KEYS.CHARISMA]],
       characterToView: new Character(),
       level: '',
@@ -1877,6 +1925,19 @@ textarea {
   margin: 0 auto;
 }
 
+/* POPUP STYLE */
+
+.popup {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  max-width: 500px;
+}
+
+.popup.active {
+  opacity: 1;
+}
+
 /* EDITING - STYLE */
 
 .container-edit {
@@ -1917,17 +1978,33 @@ textarea {
   font-size: larger;
 }
 
-.popup {
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  max-width: 500px;
+/* WEAPON STYLES */
+
+.weapon-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 70%;
+  margin: 0 auto;
 }
 
-.popup.active {
-  opacity: 1;
+
+.weapon-group {
+  display: flex;
+  
+  margin-bottom: 10px;
 }
 
+.weapon-label {
+  text-align: left;
+  font-size: larger;
+}
+
+.weapon-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
 
 /* LANGUAGE STYLES */
 
