@@ -214,7 +214,7 @@
             </ul>
           </div>
 
-          <div class="buttons-delete-save">
+          <div class="buttons-delete-update">
             <button style="margin-left: 10px;" @click="onPressUpdateCharacterInfo()">Update</button>
           </div>
         </div>
@@ -270,7 +270,7 @@
             </ul>
           </div>
 
-          <div class="buttons-delete-save">
+          <div class="buttons-delete-update">
             <button style="margin-left: 10px;" @click="onPressUpdateBaseStats()">Update</button>
           </div>
         </div>
@@ -317,7 +317,7 @@
         </ul>
 
         <div v-if="isEditingSavingThrows">
-          <div class="buttons-delete-save">
+          <div class="buttons-delete-update">
             <button style="margin-left: 10px;" @click="onPressUpdateSavingThrows()">Update</button>
           </div>
         </div>
@@ -364,7 +364,7 @@
         </ul>
 
         <div v-if="isEditingSkills">
-          <div class="buttons-delete-save">
+          <div class="buttons-delete-update">
             <button style="margin-left: 10px;" @click="onPressUpdateSkills()">Update</button>
           </div>
         </div>
@@ -422,11 +422,13 @@
                     </div>
                     <br>
                     <textarea v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                    <div class="buttons-delete-save">
-                      <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
-                      <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.FEATURES][key], CHARACTER_KEYS.FEATURES)">Update</button>
+                    <div class="buttons-delete-update">
+                      <button @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
+                      <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.FEATURES][key], CHARACTER_KEYS.FEATURES)">Update</button>
                     </div>
                   </div>
+                  
+                  <hr class="list-divider">
                 </div>
               </li>
             </ul>
@@ -436,7 +438,7 @@
         <!-- Add new -->
         <template v-if="isEditingFeaturesTraits">
           <div>
-            <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
+            <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/Trait name"> 
             <div class="container-inputs">
               <ul class="list-inputs">
                 <li style="margin-top: 10px;">
@@ -491,25 +493,90 @@
               <li v-for="(item, key) in characterToView[CHARACTER_KEYS.WEAPONS]" :key="key">
                 <div v-if="!isEditingWeapons">
                   <label class="item-name">{{ key }}</label>
-                  <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                  <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                  <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
+
+                  <div class="spell-list" style="width: 60%;">
+                    <div class="spell-group">
+                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_MOD] }}:</label>
+                      <label class="spell-value">{{ item[WEAPON_KEYS.ATTACK_MOD] }}</label>
+                    </div>
+
+                    <div class="spell-group">
+                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.DAMAGE_MOD] }}:</label>
+                      <label class="spell-value">{{ item[WEAPON_KEYS.DAMAGE_MOD] }}</label>
+                    </div>
+
+                    <div class="spell-group">
+                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                      <label class="spell-value">{{ item[WEAPON_KEYS.DIE] }}</label>
+                    </div>
+
+                    <div class="spell-group">
+                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                      <label class="spell-value">{{ item[WEAPON_KEYS.CATEGORY] }}</label>
+                    </div>
+
+                    <div class="spell-group">
+                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                      <input type="checkbox" class="checkbox" style="flex-grow: 1; " v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
+                    </div>
+                  </div>
+                  
+                  <p class="spell-label">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
                 </div>
 
                 <!-- Edit and Delete -->
                 <div v-if="isEditingWeapons">
                   <label class="item-name">{{ key }}:</label>
-                  <div class="container-edit">
-                    <div>
-                      <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
-                      <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][EQUIPMENT_KEYS.AMOUNT]"> 
-                    </div>
-                    <textarea v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                  
+                  <div class="container-inputs">
+                    <ul class="list-inputs">
+                      <li style="margin-top: 10px;">
+                        <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                        <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.AMOUNT]"> 
+                      </li>
+                      
+                      <li style="margin-top: 10px;">
+                        <label style="margin-right: 10px;" for="equipment-input">Attack Bonus Mod:</label>
+                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.ATTACK_MOD]">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
+                        </select>
+                      </li>
+                      
+                      <li style="margin-top: 10px;">
+                        <label style="margin-right: 10px;" for="equipment-input">Damage Mod:</label>
+                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.DAMAGE_MOD]">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
+                        </select>
+                      </li>
+                      
+                      <li style="margin-top: 10px;">
+                        <label style="margin-right: 10px;" for="equipment-input">Die Type:</label>
+                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.DIE]">
+                          <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                        </select>
+                      </li>
+
+                      <li style="margin-top: 10px;">
+                        <label style="margin-right: 10px;" for="equipment-input">Category:</label>
+                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.CATEGORY]">
+                          <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                        </select>
+                      </li>
+
+                      <li style="margin-top: 10px;">
+                        <label style="margin-right: 10px;" for="equipment-input">Proficient:</label>
+                        <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.PROFICIENT]">
+                      </li>
+                    </ul>
                   </div>
 
-                  <div class="buttons-delete-save">
-                    <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
-                    <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.WEAPONS][key], CHARACTER_KEYS.WEAPONS)">Update</button>
+                  <div class="buttons-delete-update">
+                    <button @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
+                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.WEAPONS][key], CHARACTER_KEYS.WEAPONS)">Update</button>
                   </div>
+                  
+                  <hr class="list-divider">
                 </div>
               </li>
             </ul>
@@ -519,7 +586,7 @@
         <!-- Add new -->
         <template v-if="isEditingWeapons">
           <div>
-            <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="Weapon/Spell name"> 
+            <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
 
             <div class="container-inputs">
               <ul class="list-inputs">
@@ -616,10 +683,12 @@
                     <textarea v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                   </div>
 
-                  <div class="buttons-delete-save">
-                    <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
-                    <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.EQUIPMENT][key], CHARACTER_KEYS.EQUIPMENT)">Update</button>
+                  <div class="buttons-delete-update">
+                    <button @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
+                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.EQUIPMENT][key], CHARACTER_KEYS.EQUIPMENT)">Update</button>
                   </div>
+                  
+                  <hr class="list-divider">
                 </div>
               </li>
             </ul>
@@ -629,7 +698,7 @@
         <!-- Add new -->
         <template v-if="isEditingEquipment">
           <div>
-            <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
+            <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
             <div>
               <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
               <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
@@ -687,10 +756,12 @@
                     <textarea v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                   </div>
 
-                  <div class="buttons-delete-save">
-                    <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
-                    <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.TREASURES][key], CHARACTER_KEYS.TREASURES)">Update</button>
+                  <div class="buttons-delete-update">
+                    <button @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
+                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.TREASURES][key], CHARACTER_KEYS.TREASURES)">Update</button>
                   </div>
+                  
+                  <hr class="list-divider">
                 </div>
               </li>
             </ul>
@@ -700,7 +771,7 @@
         <!-- Add new -->
         <template v-if="isEditingTreasure">
           <div>
-            <input class="item-input" style="width=70%;" type="text" v-model="treasureTempName" placeholder="Item name"> 
+            <input class="item-input" style="width=70%;" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
             <div>
               <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
               <input class="input-stats" style="width=70%;" type="number" v-model="treasureTempAmount"> 
@@ -750,18 +821,20 @@
 
                 <!-- Edit and Delete -->
                 <div v-if="isEditingLanguages">
-                    <div style="margin-top: 10px; text-align: left;">
-                      <label class="item-name">{{ key }}:</label>
-                      <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
-                        <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                      </select>
-                    </div>
+                  <div style="margin-top: 10px; text-align: left;">
+                    <label class="item-name">{{ key }}:</label>
+                    <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
+                      <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                    </select>
+                  </div>
 
-                  <div class="buttons-delete-save">
+                  <div class="buttons-delete-update">
                     <br>
                     <button style="margin-right: 20px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
                     <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.LANGUAGES][key], CHARACTER_KEYS.LANGUAGES)">Update</button>
                   </div>
+                  
+                  <hr class="list-divider">
                 </div>
                 
               </li>
@@ -772,7 +845,7 @@
         <!-- Add new -->
         <template v-if="isEditingLanguages">
           <div class="language-container">
-            <input class="item-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
+            <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
             <div style="margin-top: 10px;">
               <label>Proficiency: </label>
               <select class="picker" v-model="languagesTempProficiency">
@@ -808,6 +881,7 @@
             </div>
           </div>
         </div>
+
         <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
           <div>
             <ul class="list">
@@ -824,10 +898,12 @@
                     <textarea v-model="characterToView[CHARACTER_KEYS.PROFICIENCIES][key]" rows="4" placeholder="Description"></textarea>
                   </div>
 
-                  <div class="buttons-delete-save">
-                    <button style="margin-right: 10px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                    <button style="margin-left: 10px;" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.PROFICIENCIES][key], CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                  <div class="buttons-delete-update">
+                    <button @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.PROFICIENCIES][key], CHARACTER_KEYS.PROFICIENCIES)">Update</button>
                   </div>
+                  
+                  <hr class="list-divider">
                 </div>
               </li>
             </ul>
@@ -837,7 +913,7 @@
         <!-- Add new -->
         <template v-if="isEditingProficiencies">
           <div class="proficiency-container">
-            <input class="item-input" v-model="proficiencyTempName" placeholder="Proficiency name"> 
+            <input class="item-input" v-model="proficiencyTempName" placeholder="New proficiency name"> 
             <br>
             <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
             <br>
@@ -917,10 +993,12 @@
                         </div>
                         <br>
                         <textarea v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                        <div class="buttons-delete-save">
+                        <div class="buttons-delete-update">
                           <button style="margin-right: 10px;" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
                           <button style="margin-left: 10px;" @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
                         </div>
+                  
+                        <hr class="list-divider">
                       </div>
                     </li>
                   </ul>
@@ -933,7 +1011,7 @@
         <!-- Add new -->
         <template v-if="isEditingSpellCasting">
           <div>
-            <input class="item-input" type="text" v-model="spellTempName" placeholder="Spell name"> 
+            <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
             <div>
               <br>
               <label for="spells-level" class="label-stats">Level:</label>
@@ -963,19 +1041,19 @@
       </div>
       
       <br>
-      <button class="button-delete" @click="toggleDeletePopup">Delete Character</button>
+      <button class="button-delete" @click="toggleDeleteCharacterPopup">Delete Character</button>
     </div>
 
     <!-- Delete Character Popup -->
     <div id="delete-character">
       <transition name="fade" appear>
-        <div class="overlay" v-if="isDeletePopupOpen">
+        <div class="overlay" v-if="isDeleteCharacterPopupOpen">
           <div class="popup">
             <div class="form">
               <h1>Delete {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
               <p>This action can't be undone</p>
               <div class="delete-buttons">
-                <button style="margin-right: 20px;" @click="toggleDeletePopup">Cancel</button>
+                <button style="margin-right: 20px;" @click="toggleDeleteCharacterPopup">Cancel</button>
                 <button @click="deleteCharacter">Delete</button>
               </div>
             </div>
@@ -1003,7 +1081,7 @@ import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
-import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY} from '@/enums/dbKeys/weapons-keys'
+import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys'
 
 
 const MAX_VALUES = {
@@ -1028,7 +1106,7 @@ export default {
     return {
       store: useStore(),
       isModalViewCharacterOpen: false,
-      isDeletePopupOpen: false,
+      isDeleteCharacterPopupOpen: false,
       isEditingCharInfo: false,
       isEditingBaseStats: false,
       isEditingSavingThrows: false,
@@ -1061,6 +1139,7 @@ export default {
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
+      WEAPON_NAMES: WEAPON_NAMES,
       WEAPON_MODS: ['', STAT_NAMES[STAT_KEYS.STRENGTH], STAT_NAMES[STAT_KEYS.DEXTERITY], STAT_NAMES[STAT_KEYS.CONSTITUTION], STAT_NAMES[STAT_KEYS.INTELLIGENCE], STAT_NAMES[STAT_KEYS.WISDOM], STAT_NAMES[STAT_KEYS.CHARISMA]],
       characterToView: new Character(),
       level: '',
@@ -1102,6 +1181,7 @@ export default {
       weaponsTempDamageModifier: '', // e.g. dex
       weaponTempDieType: '', // e.g. d8
       weaponTempIsProficient: '', // e.g. d8
+      weaponTempProperties: '', // e.g. finesse, light
       weaponTempDescription: '',
     }
   },
@@ -1283,38 +1363,80 @@ export default {
       this.featuresTempUses = ''
     },
     onPressAddWeapon() {
-      if (this.equipmentTempName === '') {
-        alert("Please enter an equipment name")
+      if (this.weaponTempName === '') {
+        alert("Please enter a weapon name")
         return
       }
 
-      if (this.equipmentTempAmount === '') {
-        alert("Please enter an equipment amount")
+      if (this.weaponTempAmount === '') {
+        alert("Please enter a weapon amount")
         return
       }
 
-      if (this.equipmentTempDescription === '') {
-        alert("Please enter an equipment description")
+      if (this.weaponsTempAttackModifier === '') {
+        alert("Please enter a weapon attack mod")
         return
       }
+
+      if (this.weaponsTempDamageModifier === '') {
+        alert("Please enter a weapon damage mod")
+        return
+      }
+
+      if (this.weaponTempDieType === '') {
+        alert("Please enter a weapon die")
+        return
+      }
+
+      if (this.weaponTempCategory === '') {
+        alert("Please enter a weapon category")
+        return
+      }
+
+      if (this.weaponTempIsProficient === '') {
+        alert("Please decide if you're proficient in the weapon")
+        return
+      }
+
+      if (this.weaponTempDescription === '') {
+        alert("Please enter a weapon description")
+        return
+      }
+
+      // if (this.weaponTempProperties === '') {
+      //   alert("Please enter a weapon properties")
+      //   return
+      // }
 
       const newItem = {
-        [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
-        [EQUIPMENT_KEYS.DESCRIPTION]: this.equipmentTempDescription
+        [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
+        [WEAPON_KEYS.ATTACK_MOD]: this.weaponsTempAttackModifier,
+        [WEAPON_KEYS.CATEGORY]: this.weaponTempCategory,
+        [WEAPON_KEYS.DAMAGE_MOD]: this.weaponsTempDamageModifier,
+        [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
+        [WEAPON_KEYS.DIE]: this.weaponTempDieType,
+        [WEAPON_KEYS.PROFICIENT]: this.weaponTempIsProficient,
+        // [WEAPON_KEYS.PROPERTIES]: this.weaponTempProperties,
       }
 
       const payload = {
         charId: this.characterToViewId,
-        key: this.equipmentTempName,
+        key: this.weaponTempName,
         value: newItem,
-        statRef: CHARACTER_KEYS.EQUIPMENT
+        statRef: CHARACTER_KEYS.WEAPONS
       }
 
       this.store.dispatch("addCharacterStat", payload)
       
-      this.equipmentTempName = ''
-      this.equipmentTempAmount = ''
-      this.equipmentTempDescription = ''
+      this.weaponTempName = ''
+      this.weaponTempAmount = ''
+      this.weaponsTempAttackModifier = ''
+      this.weaponTempCategory = ''
+      this.weaponsTempDamageModifier = ''
+      this.weaponTempDescription = ''
+      this.weaponTempDieType = ''
+      this.weaponTempIsProficient = ''
+      this.weaponTempProperties = ''
     },
     onPressAddEquipment() {
       if (this.equipmentTempName === '') {
@@ -1836,8 +1958,8 @@ export default {
           this.isEditingCharInfo = !this.isEditingCharInfo
       }
     },
-    toggleDeletePopup() {
-      this.isDeletePopupOpen = !this.isDeletePopupOpen
+    toggleDeleteCharacterPopup() {
+      this.isDeleteCharacterPopupOpen = !this.isDeleteCharacterPopupOpen
     },
   },
 }
@@ -1884,10 +2006,15 @@ textarea {
 }
 
 .checkbox {
-  width: 17px;
-  height: 17px;
+  width: 20px;
+  height: 20px;
   margin-right: 10px;
   padding: 0;
+}
+
+.list-divider {
+  width: 90%;
+  margin-top: 10px;
 }
 
 .character-name {
@@ -2102,11 +2229,11 @@ textarea {
   visibility: hidden;
 }
 
-.buttons-delete-save {
+.buttons-delete-update {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  margin: 0 auto;
-  margin-top: 20px;
+  justify-content: space-evenly;
+  margin: 15px auto;
+  width: 60%;
 }
 </style>

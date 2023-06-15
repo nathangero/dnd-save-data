@@ -16,9 +16,7 @@ const store = createStore({
       this.usersCharacters[charId] = characterInfo
     },
     deleteCharacter(state, charId) {
-      console.info('@deleteCharacter')
       delete state.user.characters[charId]
-      console.info('state.user.characters:', state.user.characters)
     },
     signOut(state) {
       state.user = new User()
@@ -27,10 +25,14 @@ const store = createStore({
       Cookies.remove(COOKIE_NAMES.USER)
       auth.signOut()
     },
-      setUser(state, user) {
+    setUser(state, user) {
       state.user = user
       const limitedUser = User.getUserForCookie(user)
-      Cookies.set(COOKIE_NAMES.USER, JSON.stringify(limitedUser), { secure: true })
+
+      const days = 7; // TODO: Make controlled by Remote Config
+      const secondsInDay = 24 * 60 * 60;
+      const expirationSeconds = days * secondsInDay;
+      Cookies.set(COOKIE_NAMES.USER, JSON.stringify(limitedUser), { expires: expirationSeconds, secure: true })
       // console.info('set the user')
     },
     setIsLoggedIn(state, loggedIn) {
@@ -40,6 +42,7 @@ const store = createStore({
   },
   actions: {
     addCharacterStat(state, payload) {
+      // console.info('@addCharacterStat')
       const { charId, key, value, statRef } = payload
 
       return new Promise((resolve, reject) => {
@@ -54,9 +57,11 @@ const store = createStore({
         }
 
         if (this.state.user.characters[charId][statRef]) {
+          console.info(`adding to ${statRef}`)
           // Add to dict
           this.state.user.characters[charId][statRef] = itemToAdd
         } else {
+          console.info(`creating ${statRef}`)
           // Make the dict
           const newDict = {
             [statRef]: itemToAdd
