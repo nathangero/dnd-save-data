@@ -15,6 +15,7 @@
         <div style="display: flex; flex-direction: column; text-align: center;">
           <p class="sign-up-text">New user? Please make a new account <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a>.</p>
           <p class="password-reset-text">Forgot your password? Reset <a href="#" class="signup-link" @click.prevent="showResetPasswordPopup">here</a>.</p>
+          <p>Version: {{ APP_VERSION }}</p>
         </div>
 
         <!-- Sign Up Popup -->
@@ -84,8 +85,8 @@ import ROUTER_PATHS from '@/enums/router-paths'
 import { auth } from "@/firebase.js"
 import { useStore } from 'vuex'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"
-// import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min.js'
 import { writeUserInDb } from "@/functions/rtdb.js"
+import APP_VERSION from "@/enums/app-version"
 
 export default {
   name: 'LoginScreen',
@@ -105,7 +106,8 @@ export default {
       error: null,
       showSignup: false,
       showResetPassword: false,
-      isLoggingIn: false
+      isLoggingIn: false,
+      APP_VERSION: APP_VERSION
     }
   },
   mounted() {
