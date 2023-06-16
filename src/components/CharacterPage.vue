@@ -443,7 +443,7 @@
                       </select>
                     </div>
                     <div>
-                      <label class="stat-label" style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                      <label class="stat-label" for="features-input"> # of Uses:</label>
                       <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.USES]"> 
                     </div>
                     <br>
@@ -475,7 +475,7 @@
                 </li>
 
                 <li>
-                  <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                  <label for="features-input"> # of Uses:</label>
                   <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
                 </li>
               </ul>
@@ -553,33 +553,33 @@
                   <div class="container-inputs">
                     <ul class="list-inputs">
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
+                        <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
                         <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.AMOUNT]"> 
                       </li>
                       
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                        <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
                         <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
                           <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                         </select>
                       </li>
                       
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                        <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
                         <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.DIE]">
                           <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                         </select>
                       </li>
 
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                        <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
                         <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.CATEGORY]">
                           <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                         </select>
                       </li>
 
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                        <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
                         <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.PROFICIENT]">
                       </li>
                     </ul>
@@ -604,41 +604,41 @@
 
             <div class="container-inputs">
               <ul class="list-inputs">
-                <li style="margin-top: 10px;">
-                  <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                <li>
+                  <label class="stat-label" for="equipment-input">Amount:</label>
                   <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
                 </li>
                 
-                <li style="margin-top: 10px;">
-                  <label style="margin-right: 10px;" for="equipment-input">Attack Bonus Mod:</label>
+                <li>
+                  <label class="stat-label" for="equipment-input">Attack Bonus Mod:</label>
                   <select class="picker" v-model="weaponsTempAttackModifier">
                     <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
                   </select>
                 </li>
                 
-                <li style="margin-top: 10px;">
-                  <label style="margin-right: 10px;" for="equipment-input">Damage Mod:</label>
+                <li>
+                  <label class="stat-label" for="equipment-input">Damage Mod:</label>
                   <select class="picker" v-model="weaponsTempDamageModifier">
                     <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
                   </select>
                 </li>
                 
-                <li style="margin-top: 10px;">
-                  <label style="margin-right: 10px;" for="equipment-input">Die Type:</label>
+                <li>
+                  <label class="stat-label" for="equipment-input">Die Type:</label>
                   <select class="picker" v-model="weaponTempDieType">
                     <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                   </select>
                 </li>
 
-                <li style="margin-top: 10px;">
-                  <label style="margin-right: 10px;" for="equipment-input">Category:</label>
+                <li>
+                  <label class="stat-label" for="equipment-input">Category:</label>
                   <select class="picker" v-model="weaponTempCategory">
                     <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                   </select>
                 </li>
 
-                <li style="margin-top: 10px;">
-                  <label style="margin-right: 10px;" for="equipment-input">Proficient:</label>
+                <li>
+                  <label class="stat-label" for="equipment-input">Proficient:</label>
                   <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
                 </li>
               </ul>
@@ -691,7 +691,7 @@
                   <label class="item-name">{{ key }}:</label>
                   <div class="container-edit">
                     <div>
-                      <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                      <label class="stat-label" for="equipment-input">Amount:</label>
                       <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.AMOUNT]"> 
                     </div>
                     <textarea v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
@@ -714,7 +714,7 @@
           <div>
             <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
             <div>
-              <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+              <label class="stat-label" for="equipment-input">Amount:</label>
               <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
             </div>
             <br>
@@ -764,7 +764,7 @@
                   <label class="item-name">{{ key }}:</label>
                   <div class="container-edit">
                     <div>
-                      <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                      <label class="stat-label" for="equipment-input">Amount:</label>
                       <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.AMOUNT]"> 
                     </div>
                     <textarea v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
@@ -787,7 +787,7 @@
           <div>
             <input class="item-input" style="width=70%;" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
             <div>
-              <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+              <label class="stat-label" for="equipment-input">Amount:</label>
               <input class="input-stats" style="width=70%;" type="number" v-model="treasureTempAmount"> 
             </div>
             <br>
@@ -861,7 +861,7 @@
           <div class="language-container">
             <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
             <div style="margin-top: 10px;">
-              <label>Proficiency: </label>
+              <label class="stat-label">Proficiency: </label>
               <select class="picker" v-model="languagesTempProficiency">
                 <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
               </select>
@@ -991,25 +991,30 @@
                       <!-- Edit and Delete -->
                       <div v-if="isEditingSpellCasting">
                         <label class="item-name">{{ spellName }}</label>
-                        <br>
-                        <div>
-                          <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
-                          <input type="number" id="spells-casting-time" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
-                        </div>
-                        <div>
-                          <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
-                          <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                        <div class="container-inputs">
+                          <ul class="list-inputs">
+                            <li>
+                              <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
+                              <input type="number" id="spells-casting-time" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
+                            </li>
+                              
+                            <li>
+                              <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
+                              <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                            </li>
+                            
+                            <li>
+                              <label for="spells-range" class="stat-label">Range (in feet):</label>
+                              <input type="number" id="spells-range" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
+                            </li>
+                          </ul>
                         </div>
                         
-                        <div>
-                          <label for="spells-range" class="stat-label">Range (in feet):</label>
-                          <input type="number" id="spells-range" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
-                        </div>
                         <br>
                         <textarea v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                         <div class="buttons-delete-update">
-                          <button style="margin-right: 10px;" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                          <button style="margin-left: 10px;" @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
+                          <button @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
+                          <button @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
                         </div>
                   
                         <hr class="list-divider">
@@ -1024,8 +1029,39 @@
 
         <!-- Add new -->
         <template v-if="isEditingSpellCasting">
-          <div>
-            <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
+          <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
+          <div class="container-inputs">
+            <ul class="list-inputs">
+              <li>
+                <label class="stat-label" for="spells-level">Level:</label>
+                <select class="picker" v-model="spellTempLevel">
+                  <option v-for="levels in SPELLCASTING_NAMES" :key="levels" :value="levels">{{ levels }}</option>
+                </select>
+              </li>
+              
+              <li>
+                <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
+                <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label class="stat-label" for="spells-casting-duration">Duration (in seconds):</label>
+                <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label class="stat-label" for="spells-range">Range (in feet):</label>
+                <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
+              </li>
+            </ul>
+          </div>
+
+          <br>
+          <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+          <br>
+          <button @click="onPressAddSpell" style="margin-top: 10px;">Add</button>
+
+          <!-- <div> 
             <div>
               <br>
               <label for="spells-level" class="stat-label">Level:</label>
@@ -1050,7 +1086,7 @@
             <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
             <br>
             <button @click="onPressAddSpell" style="margin-top: 10px;">Add</button>
-          </div>         
+          </div>          -->
         </template>
       </div>
       
@@ -2088,6 +2124,7 @@ textarea {
 .list-inputs li {
   display: flex;
   align-items: left;
+  margin-top: 10px;
 }
 
 /* LIST - ADDED ITEMS STYLE */
@@ -2230,7 +2267,7 @@ textarea {
 .spell-description {
   font-size: larger;
   width: 100%;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 /* BUTTON STYLES */
