@@ -2398,6 +2398,7 @@ textarea {
   border: none;
   color: white;
   border-radius: 10px;
+  font-size: large;
 }
 
 .button-update {
@@ -2406,6 +2407,7 @@ textarea {
   border: none;
   color: white;
   border-radius: 10px;
+  font-size: large;
 }
 
 
