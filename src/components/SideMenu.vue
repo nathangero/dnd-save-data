@@ -16,6 +16,8 @@
               <!-- <li>Profile</li>
               <li>Settings</li> -->
               <li @click="logOut">Log Out</li>
+              
+              <p>Version: {{ APP_VERSION }}</p>
             </ul>
           </div>
         </div>
@@ -26,6 +28,7 @@
 
 <script>
 import { useStore } from 'vuex'
+import APP_VERSION from "@/enums/app-version"
 
 export default {
   name: "SideMenu",
@@ -33,6 +36,7 @@ export default {
     return {
       store: useStore(),
       showMenu: false,
+      APP_VERSION: APP_VERSION
     }
   },
   methods: {
