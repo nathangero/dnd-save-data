@@ -10,13 +10,17 @@ import 'bootstrap/dist/js/bootstrap.js'
 import ROUTER_NAMES from './enums/router-names';
 import COOKIE_NAMES from './enums/cookie-names';
 
-// const app = createApp(App)
-// app.use(store)
-// app.use(router)
+/* import the fontawesome core */
+import { library } from '@fortawesome/fontawesome-svg-core'
 
-// app.mount('#app')
+/* import font awesome icon component */
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+/* import specific icons */
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
 let app;
+library.add(faChevronDown, faChevronUp)
 
 // Listen to the Firebase Auth state changes
 
@@ -30,6 +34,7 @@ auth.onAuthStateChanged(() => {
     app = createApp(App)
       .use(store)
       .use(router)
+      .component('font-awesome-icon', FontAwesomeIcon)
       .mount('#app')
   }
 

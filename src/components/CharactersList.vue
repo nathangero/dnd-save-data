@@ -39,7 +39,7 @@
         <template v-if="isModalViewCharacterOpen">
           <div class="modal-page-overlay">
             <div class="modal-page scrollable">
-              <character-page v-if="isModalViewCharacterOpen" :characterToView="characterToView" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
+              <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
             </div>
           </div>
           
@@ -83,35 +83,13 @@
               </div>
               
               <br>
-              <h3>Base Stats</h3>
+              <h3>Character Info</h3>
               <div id="character-info">
                 <div class="container-inputs">
                   <ul class="list-inputs">
                     <li>
                       <label for="stats-level" class="label-stats">Starting level:</label>
                       <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-hp" class="label-stats">Hit Points (HP):</label>
-                      <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-hit-die"># of Hit Die: </label>
-                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIEAMOUNT]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li style="margin-top: 10px;">
-                      <label>Hit Die Type: </label>
-                      <select class="picker" v-model="hp[HP_KEYS.DIE]">
-                        <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                      </select>
-                    </li>
-
-                    <li>
-                      <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
-                      <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
                     </li>
 
                     <li>
@@ -123,15 +101,45 @@
                       <label for="stats-initiative">Initiative: </label>
                       <input type="number" id="stats-hit-die" v-model="initiative" class="input-stats" inputmode="numeric" required>
                     </li>
-
+                    
                     <li>
                       <label for="stats-speed">Speed: </label>
                       <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
                     </li>
+
+                    <li>
+                      <label for="stats-hp" class="label-stats">Hit Points (HP):</label>
+                      <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li style="margin-top: 10px;">
+                      <label>Hit Die Type: </label>
+                      <select class="picker" v-model="hp[HP_KEYS.DIE]">
+                        <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                      </select>
+                    </li>
+
+                    <li>
+                      <label for="stats-hit-die"># of Hit Die: </label>
+                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
+                      <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-proficiency-bonus">Passive Perception: </label>
+                      <input type="number" id="stats-proficiency-bonus" v-model="passivePerception" class="input-stats" inputmode="numeric" required>
+                    </li>
+
                   </ul>
                 </div>
               </div>
 
+              <br>
+              <h3>Base Stats</h3>
               <div id="base-stats">
                 <div class="container-inputs">
                   <ul class="list-inputs">
@@ -358,27 +366,24 @@
                   </div>
                 </template>
 
-                <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
-
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li style="margin-top: 10px;">
-                      <label>Type:</label>
-                      <select class="picker" v-model="featuresTempType">
-                        <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                      </select>
-                    </li>
-
-                    <li>
-                      <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
-                      <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
-                    </li>
-                  </ul>
-                </div>
-                  
+                <div>
+                  <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
+                  <div>
+                    <br>
+                    <label>Type:</label>
+                    <select class="picker" v-model="featuresTempType">
+                      <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                    <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                  </div>
+                  <br>
                   <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                   <br>
                   <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
+                </div>  
               </div>
 
               <br>
@@ -666,12 +671,14 @@ export default {
       level: '',
       characterArmor: '',
       [CHARACTER_KEYS.INITIATIVE]: '',
-      proficiencyBonus: '',
       characterSpeed: '',
+      proficiencyBonus: '',
+      passivePerception: '',
       hp: {
         [HP_KEYS.CURRENT]: '',
         [HP_KEYS.DIE]: '',
-        [HP_KEYS.DIEAMOUNT]: '',
+        [HP_KEYS.DIE_AMOUNT_MAX]: '',
+        [HP_KEYS.DIE_AMOUNT_CURR]: '',
         [HP_KEYS.MAX]: '',
         [HP_KEYS.TEMP]: 0
       },
@@ -772,7 +779,28 @@ export default {
   },
   watch: {
     'hp.max': function(newValue) {
-      this.hp.current = newValue
+      this.hp[HP_KEYS.CURRENT] = newValue
+    },
+    'hp.dieAmountMax': function(newValue) {
+      this.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
+    },
+    'stats.str': function(newValue) {
+      this.stats[BASE_STAT_KEYS.STRENGTH_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    },
+    'stats.dex': function(newValue) {
+      this.stats[BASE_STAT_KEYS.DEXTERITY_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    },
+    'stats.con': function(newValue) {
+      this.stats[BASE_STAT_KEYS.CONSTITUTION_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    },
+    'stats.int': function(newValue) {
+      this.stats[BASE_STAT_KEYS.INTELLIGENCE_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    },
+    'stats.wis': function(newValue) {
+      this.stats[BASE_STAT_KEYS.WISDOM_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    },
+    'stats.cha': function(newValue) {
+      this.stats[BASE_STAT_KEYS.CHARISMA_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
     }
   },
   methods: {
@@ -794,7 +822,8 @@ export default {
       this.hp = {
         [HP_KEYS.CURRENT]: '',
         [HP_KEYS.DIE]: '',
-        [HP_KEYS.DIEAMOUNT]: '',
+        [HP_KEYS.DIE_AMOUNT_MAX]: '',
+        [HP_KEYS.DIE_AMOUNT_CURR]: '',
         [HP_KEYS.MAX]: '',
         [HP_KEYS.TEMP]: 0
       }
@@ -1258,6 +1287,9 @@ export default {
       )
 
       return newCharacter
+    },
+    getBaseStatBonus(stat) {
+      return (stat - 10) / 2
     },
     getDictionarySize(dict) {
       if (dict) {

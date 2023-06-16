@@ -1,14 +1,20 @@
 const STAT_KEYS = {
-    STRENGTH: "strength",
-    DEXTERITY: "dexterity",
-    CONSTITUTION: "constitution",
-    INTELLIGENCE: "intelligence",
-    WISDOM: "wisdom",
-    CHARISMA: "charisma"
+    STRENGTH: "str",
+    DEXTERITY: "dex",
+    CONSTITUTION: "con",
+    INTELLIGENCE: "int",
+    WISDOM: "wis",
+    CHARISMA: "cha"
+}
+
+const STAT_VALUES_KEYS = {
+    MOD: "mod",
+    PROFICIENT: "proficient",
+    VALUE: "value",
 }
 
 const STAT_NAMES = {
-    NONE: '',
+    '': 'None',
     [STAT_KEYS.STRENGTH]: "Strength",
     [STAT_KEYS.DEXTERITY]: "Dexterity",
     [STAT_KEYS.CONSTITUTION]: "Constitution",
@@ -17,4 +23,4 @@ const STAT_NAMES = {
     [STAT_KEYS.CHARISMA]: "Charisma"
 }
 
-export { STAT_KEYS, STAT_NAMES }
+export { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES }

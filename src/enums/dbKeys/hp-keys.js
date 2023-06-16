@@ -1,7 +1,8 @@
 const HP_KEYS = {
     CURRENT: 'current',
     DIE: 'die',
-    DIEAMOUNT: 'dieAmount',
+    DIE_AMOUNT_MAX: 'dieAmountMax',
+    DIE_AMOUNT_CURR: 'dieAmount',
     MAX: 'max',
     TEMP: 'temp'
 }

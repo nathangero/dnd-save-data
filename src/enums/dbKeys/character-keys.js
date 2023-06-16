@@ -12,6 +12,7 @@ const CHARACTER_KEYS = {
     LANGUAGES: "languages",
     LEVEL: "level",
     NAME: "name",
+    PASSIVE_PERCEPTION: "passivePerception",
     PROFICIENCIES: "proficiencies",
     PROFICIENCY_BONUS: "proficiencyBonus",
     RACE: "race",
@@ -23,6 +24,8 @@ const CHARACTER_KEYS = {
     SPELL_SAVE_DC: "spellSaveDc",
     SPELLS: "spells",
     STATS: "stats",
+    TREASURES: "treasures",
+    WEAPONS: "weapons",
 }
 
 export { CHARACTER_KEYS }
