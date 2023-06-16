@@ -68,7 +68,7 @@
             <li>
               <div class="stat-group">
                 <label class="stat-label">Initiative: </label>
-                <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
+                <label class="stat-value">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
               </div>
             </li>
             
@@ -124,7 +124,7 @@
             <li>
               <div class="stat-group">
                 <label class="stat-label">Proficiency Bonus: </label>
-                <label class="stat-value">{{ getStatBonus(characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+                <label class="stat-value">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
               </div>
             </li>
             
@@ -134,6 +134,20 @@
                 <label class="stat-value">{{ characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
               </div>
             </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Spell Casting Stat: </label>
+                <label class="stat-value">{{ STAT_NAMES[characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]] }}</label>
+              </div>
+            </li>
+            
+            <li>
+              <div class="stat-group">
+                <label class="stat-label">Spell Saving DC: </label>
+                <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
+              </div>
+            </li>
           </ul>
         </div>
 
@@ -141,75 +155,87 @@
           <div class="container-inputs">
             <ul class="list-inputs">
               <li>
-                <label for="stats-level" class="label-stats"> Current Level:</label>
+                <label for="stats-level" class="stat-label"> Current Level:</label>
                 <input type="number" id="stats-level" v-model="characterToView[CHARACTER_KEYS.LEVEL]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
-                <label for="stats-armor-class">Armor Class: </label>
+                <label for="stats-armor-class" class="stat-label">Armor Class: </label>
                 <input type="number" id="stats-armor-class" v-model="characterToView[CHARACTER_KEYS.ARMOR]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
-                <label for="stats-initiative">Initiative: </label>
+                <label for="stats-initiative" class="stat-label">Initiative: </label>
                 <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.INITIATIVE]" class="input-stats" inputmode="numeric" required>
               </li>
               
               <li>
-                <label for="stats-speed">Speed: </label>
+                <label for="stats-speed" class="stat-label">Speed: </label>
                 <input type="number" id="stats-speed" v-model="characterToView[CHARACTER_KEYS.SPEED]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
-                <label for="stats-hp" class="label-stats">Hit Points - Current:</label>
+                <label for="stats-hp" class="stat-label">Hit Points - Current:</label>
                 <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
-                <label for="stats-hp" class="label-stats">Hit Points - Max:</label>
+                <label for="stats-hp" class="stat-label">Hit Points - Max:</label>
                 <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
-                <label for="stats-hp" class="label-stats">Hit Points - Temp:</label>
+                <label for="stats-hp" class="stat-label">Hit Points - Temp:</label>
                 <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li style="margin-top: 10px;">
-                <label>Hit Die Type: </label>
+                <label class="stat-label">Hit Die Type: </label>
                 <select class="picker" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE]">
                   <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                 </select>
               </li>
 
               <li>
-                <label for="stats-hit-die">Current # of Hit Die: </label>
+                <label for="stats-hit-die" class="stat-label">Current # of Hit Die: </label>
                 <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
-                <label for="stats-hit-die">Max # of Hit Die: </label>
+                <label for="stats-hit-die" class="stat-label">Max # of Hit Die: </label>
                 <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
               </li>
             
               <li> 
-                <label for="death-saves-successes">Death saves successes: </label>
+                <label for="death-saves-successes" class="stat-label">Death saves successes: </label>
                 <input type="number" id="death-saves-successes" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES]" class="input-stats" inputmode="numeric" required>
               </li>
               
               <li>
-                <label for="death-saves-failures">Death saves failures: </label>
+                <label for="death-saves-failures" class="stat-label">Death saves failures: </label>
                 <input type="number" id="death-saves-failures" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES]" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
-                <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
+                <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
                 <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]" class="input-stats" inputmode="numeric" required>
               </li>
 
-              <li>
-                <label for="stats-proficiency-bonus">Passive Perception: </label>
-                <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]" class="input-stats" inputmode="numeric" required>
+              <li style="margin-top: 10px;">
+                <label for="stats-proficiency-bonus" class="stat-label">Passive Perception: </label>
+                <label class="stat-label">{{ characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
+              </li>
+
+              <li style="margin-top: 10px;">
+                <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
+                <select class="picker" v-model="characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]">
+                  <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ stat }}</option>
+                </select>
+              </li>
+            
+              <li style="margin-top: 5px;">
+                <label class="stat-label">Spell Saving DC: </label>
+                <label class="stat-label">{{ characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
               </li>
             </ul>
           </div>
@@ -250,21 +276,21 @@
               <div class="stat-group">
                 <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
                 <label class="stat-value">{{ getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.VALUE) }}</label>
-                <label class="stat-bonus">{{ getStatBonus(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                <label class="stat-bonus">{{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
               </div>
             </li>
           </ul>
         </div>
 
         <!-- Editing -->
-        <div v-if="isEditingBaseStats">
+        <div v-if="isEditingBaseStats" class="isEditing">
           <div class="container-inputs">
             <ul class="list-inputs" style="margin-right: 20px;">
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                <label for="stats-label" class="label-stats">{{ STAT_NAMES[stat] }}:</label>
+                <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
                 <div style="margin-left: 10px;">
                   <input type="number" id="stats-label" v-model="characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
-                  <label style="margin-left: 20px;">Mod: {{ getStatBonus(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                  <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
                 </div>
               </li>
             </ul>
@@ -307,10 +333,10 @@
               <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
               <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
-                {{ getStatBonus(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+                {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
               </label>
               <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
-                {{ getStatBonus(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD)) }}
+                {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD)) }}
               </label>
             </div>
           </li>
@@ -354,10 +380,10 @@
               <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
               <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
-                {{ getStatBonus(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+                {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
               </label>
               <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
-                {{ getStatBonus(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD)) }}
+                {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD)) }}
               </label>
             </div>
           </li>
@@ -411,13 +437,13 @@
                   <div class="container-edit">
                     <div>
                       <br>
-                      <label>Type:</label>
+                      <label class="stat-label">Type:</label>
                       <select class="picker" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.TYPE]">
                         <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                       </select>
                     </div>
                     <div>
-                      <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                      <label class="stat-label" style="margin-right: 10px;" for="features-input"> # of Uses:</label>
                       <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.USES]"> 
                     </div>
                     <br>
@@ -495,15 +521,10 @@
                   <label class="item-name">{{ key }}</label>
                   <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
 
-                  <div class="spell-list" style="width: 60%;">
+                  <div class="spell-list">
                     <div class="spell-group">
-                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_MOD] }}:</label>
-                      <label class="spell-value">{{ item[WEAPON_KEYS.ATTACK_MOD] }}</label>
-                    </div>
-
-                    <div class="spell-group">
-                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.DAMAGE_MOD] }}:</label>
-                      <label class="spell-value">{{ item[WEAPON_KEYS.DAMAGE_MOD] }}</label>
+                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                      <label class="spell-value">{{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})</label>
                     </div>
 
                     <div class="spell-group">
@@ -517,8 +538,8 @@
                     </div>
 
                     <div class="spell-group">
-                      <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                      <input type="checkbox" class="checkbox" style="flex-grow: 1; " v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
+                      <label class="spell-label" style="flex-grow: 1;">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                      <input type="checkbox" class="checkbox" style="margin-right: 0px;" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
                     </div>
                   </div>
                   
@@ -532,40 +553,33 @@
                   <div class="container-inputs">
                     <ul class="list-inputs">
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
                         <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.AMOUNT]"> 
                       </li>
                       
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">Attack Bonus Mod:</label>
-                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.ATTACK_MOD]">
-                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
+                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                         </select>
                       </li>
                       
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">Damage Mod:</label>
-                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.DAMAGE_MOD]">
-                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
-                        </select>
-                      </li>
-                      
-                      <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">Die Type:</label>
+                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
                         <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.DIE]">
                           <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                         </select>
                       </li>
 
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">Category:</label>
+                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
                         <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.CATEGORY]">
                           <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                         </select>
                       </li>
 
                       <li style="margin-top: 10px;">
-                        <label style="margin-right: 10px;" for="equipment-input">Proficient:</label>
+                        <label style="margin-right: 10px;" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
                         <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.PROFICIENT]">
                       </li>
                     </ul>
@@ -979,16 +993,16 @@
                         <label class="item-name">{{ spellName }}</label>
                         <br>
                         <div>
-                          <label for="spells-casting-time" class="label-stats">Casting Time (# of actions):</label>
+                          <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
                           <input type="number" id="spells-casting-time" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
                         </div>
                         <div>
-                          <label for="spells-casting-duration" class="label-stats">Duration (in seconds):</label>
+                          <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
                           <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
                         </div>
                         
                         <div>
-                          <label for="spells-range" class="label-stats">Range (in feet):</label>
+                          <label for="spells-range" class="stat-label">Range (in feet):</label>
                           <input type="number" id="spells-range" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
                         </div>
                         <br>
@@ -1014,22 +1028,22 @@
             <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
             <div>
               <br>
-              <label for="spells-level" class="label-stats">Level:</label>
+              <label for="spells-level" class="stat-label">Level:</label>
               <select class="picker" v-model="spellTempLevel">
                 <option v-for="levels in SPELLCASTING_NAMES" :key="levels" :value="levels">{{ levels }}</option>
               </select>
             </div>
             <div>
-              <label for="spells-casting-time" class="label-stats">Casting Time (# of actions):</label>
+              <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
               <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
             </div>
             <div>
-              <label for="spells-casting-duration" class="label-stats">Duration (in seconds):</label>
+              <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
               <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
             </div>
             
             <div>
-              <label for="spells-range" class="label-stats">Range (in feet):</label>
+              <label for="spells-range" class="stat-label">Range (in feet):</label>
               <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
             </div>
             <br>
@@ -1140,7 +1154,7 @@ export default {
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
       WEAPON_NAMES: WEAPON_NAMES,
-      WEAPON_MODS: ['', STAT_NAMES[STAT_KEYS.STRENGTH], STAT_NAMES[STAT_KEYS.DEXTERITY], STAT_NAMES[STAT_KEYS.CONSTITUTION], STAT_NAMES[STAT_KEYS.INTELLIGENCE], STAT_NAMES[STAT_KEYS.WISDOM], STAT_NAMES[STAT_KEYS.CHARISMA]],
+      WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
       characterToView: new Character(),
       level: '',
       characterArmor: '',
@@ -1247,6 +1261,16 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION][STAT_VALUES_KEYS.MOD] = statMod
     },
+    'characterToView.spellCastStat': function(newValue) {
+      if (newValue === '') {
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = 0
+      } else {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const mod = this.characterToView[CHARACTER_KEYS.STATS][newValue][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = 8 + profBonus + mod
+      }
+      
+    }
   },
   methods: {
     closeModal() {
@@ -1311,10 +1335,18 @@ export default {
 
       return output
     },
+    getStatModFromKey(stat) {
+      if (stat === '') {
+        return 0
+      } else {
+        return this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
+      }
+      
+    },
     getStatValue(statRef, statKey, valueKey) {
       return this.characterToView[statRef][statKey][valueKey]
     },
-    getStatBonus(stat) {
+    getStatBonusSign(stat) {
       if (stat < 0) {
         return stat // the negative will already be apart of the number
       } else {
@@ -1410,7 +1442,7 @@ export default {
 
       const newItem = {
         [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
-        [WEAPON_KEYS.ATTACK_MOD]: this.weaponsTempAttackModifier,
+        [WEAPON_KEYS.ATTACK_DAMAGE_MOD]: this.weaponsTempAttackModifier,
         [WEAPON_KEYS.CATEGORY]: this.weaponTempCategory,
         [WEAPON_KEYS.DAMAGE_MOD]: this.weaponsTempDamageModifier,
         [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
@@ -1661,6 +1693,8 @@ export default {
         [CHARACTER_KEYS.HP]: this.characterToView[CHARACTER_KEYS.HP],
         [CHARACTER_KEYS.PROFICIENCY_BONUS]: this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS],
         [CHARACTER_KEYS.PASSIVE_PERCEPTION]: this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION],
+        [CHARACTER_KEYS.SPELL_CAST_STAT]: this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT],
+        [CHARACTER_KEYS.SPELL_SAVE_DC]: this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC],
       }
 
       const payload = {
@@ -1999,10 +2033,17 @@ h3 {
 }
 
 textarea {
-  width: 80%;
+  width: 90%;
   text-align: left;
   border-radius: 10px;
   padding: 5px;
+  font-size: large;
+}
+
+.picker {
+  padding: 5px;
+  margin: 5px;
+  font-size: larger;
 }
 
 .checkbox {
@@ -2016,6 +2057,12 @@ textarea {
   width: 90%;
   margin-top: 10px;
 }
+
+.input-stats {
+  font-size: larger;
+}
+
+/* CHARACTER INFO STYLE */
 
 .character-name {
   margin-top: 50px;
@@ -2111,7 +2158,7 @@ textarea {
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
 }
 

@@ -1,8 +1,7 @@
 const WEAPON_KEYS = {
     AMOUNT: "amount",
-    ATTACK_MOD: "attackMod",
+    ATTACK_DAMAGE_MOD: "attackDamageMod",
     CATEGORY: "category",
-    DAMAGE_MOD: "damageMod",
     DESCRIPTION: "description",
     DIE: "die",
     PROFICIENT: "proficient",
@@ -35,9 +34,8 @@ const WEAPON_PROPERTY = {
 
 const WEAPON_NAMES = {
     [WEAPON_KEYS.AMOUNT]: "Amount",
-    [WEAPON_KEYS.ATTACK_MOD]: "Attack Mod",
+    [WEAPON_KEYS.ATTACK_DAMAGE_MOD]: "Atk/Dmg Mod",
     [WEAPON_KEYS.CATEGORY]: "Category",
-    [WEAPON_KEYS.DAMAGE_MOD]: "Damage Mod",
     [WEAPON_KEYS.DESCRIPTION]: "Description",
     [WEAPON_KEYS.DIE]: "Die type",
     [WEAPON_KEYS.PROFICIENT]: "Proficient",

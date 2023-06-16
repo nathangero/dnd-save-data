@@ -14,6 +14,7 @@ const STAT_VALUES_KEYS = {
 }
 
 const STAT_NAMES = {
+    '': 'None',
     [STAT_KEYS.STRENGTH]: "Strength",
     [STAT_KEYS.DEXTERITY]: "Dexterity",
     [STAT_KEYS.CONSTITUTION]: "Constitution",
