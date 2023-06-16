@@ -241,7 +241,7 @@
           </div>
 
           <div class="buttons-delete-update">
-            <button style="margin-left: 10px;" @click="onPressUpdateCharacterInfo()">Update</button>
+            <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
           </div>
         </div>
       </div>
@@ -297,7 +297,7 @@
           </div>
 
           <div class="buttons-delete-update">
-            <button style="margin-left: 10px;" @click="onPressUpdateBaseStats()">Update</button>
+            <button class="button-update" @click="onPressUpdateBaseStats()">Update</button>
           </div>
         </div>
       </div>
@@ -344,7 +344,7 @@
 
         <div v-if="isEditingSavingThrows">
           <div class="buttons-delete-update">
-            <button style="margin-left: 10px;" @click="onPressUpdateSavingThrows()">Update</button>
+            <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
           </div>
         </div>
       </div>
@@ -391,7 +391,7 @@
 
         <div v-if="isEditingSkills">
           <div class="buttons-delete-update">
-            <button style="margin-left: 10px;" @click="onPressUpdateSkills()">Update</button>
+            <button class="button-update" @click="onPressUpdateSkills()">Update</button>
           </div>
         </div>
       </div>
@@ -449,8 +449,8 @@
                     <br>
                     <textarea v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                     <div class="buttons-delete-update">
-                      <button @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
-                      <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.FEATURES][key], CHARACTER_KEYS.FEATURES)">Update</button>
+                      <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
+                      <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.FEATURES][key], CHARACTER_KEYS.FEATURES)">Update</button>
                     </div>
                   </div>
                   
@@ -586,8 +586,8 @@
                   </div>
 
                   <div class="buttons-delete-update">
-                    <button @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
-                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.WEAPONS][key], CHARACTER_KEYS.WEAPONS)">Update</button>
+                    <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
+                    <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.WEAPONS][key], CHARACTER_KEYS.WEAPONS)">Update</button>
                   </div>
                   
                   <hr class="list-divider">
@@ -698,8 +698,8 @@
                   </div>
 
                   <div class="buttons-delete-update">
-                    <button @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
-                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.EQUIPMENT][key], CHARACTER_KEYS.EQUIPMENT)">Update</button>
+                    <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
+                    <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.EQUIPMENT][key], CHARACTER_KEYS.EQUIPMENT)">Update</button>
                   </div>
                   
                   <hr class="list-divider">
@@ -771,8 +771,8 @@
                   </div>
 
                   <div class="buttons-delete-update">
-                    <button @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
-                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.TREASURES][key], CHARACTER_KEYS.TREASURES)">Update</button>
+                    <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
+                    <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.TREASURES][key], CHARACTER_KEYS.TREASURES)">Update</button>
                   </div>
                   
                   <hr class="list-divider">
@@ -844,8 +844,8 @@
 
                   <div class="buttons-delete-update">
                     <br>
-                    <button style="margin-right: 20px;" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
-                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.LANGUAGES][key], CHARACTER_KEYS.LANGUAGES)">Update</button>
+                    <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
+                    <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.LANGUAGES][key], CHARACTER_KEYS.LANGUAGES)">Update</button>
                   </div>
                   
                   <hr class="list-divider">
@@ -913,8 +913,8 @@
                   </div>
 
                   <div class="buttons-delete-update">
-                    <button @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                    <button @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.PROFICIENCIES][key], CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                    <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                    <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.PROFICIENCIES][key], CHARACTER_KEYS.PROFICIENCIES)">Update</button>
                   </div>
                   
                   <hr class="list-divider">
@@ -1013,8 +1013,8 @@
                         <br>
                         <textarea v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                         <div class="buttons-delete-update">
-                          <button @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                          <button @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
+                          <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
+                          <button class="button-update" @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
                         </div>
                   
                         <hr class="list-divider">
@@ -1091,7 +1091,7 @@
       </div>
       
       <br>
-      <button class="button-delete" @click="toggleDeleteCharacterPopup">Delete Character</button>
+      <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
     </div>
 
     <!-- Delete Character Popup -->
@@ -2077,9 +2077,20 @@ textarea {
 }
 
 .picker {
-  padding: 5px;
   margin: 5px;
   font-size: larger;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  border-radius: 10px;
+}
+
+.picker:focus {
+  outline: none;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 .checkbox {
@@ -2276,17 +2287,17 @@ textarea {
   position: absolute;
   top: 10px;
   right: 10px;
-  padding: 5px 10px;
+  padding: 10px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 10px;
 }
 
 .delete-buttons {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
-}
-
-.button-delete {
-  margin-bottom: 30px;
 }
 
 .edit-buttons {
@@ -2304,6 +2315,10 @@ textarea {
   margin-left: auto;
   margin-right: 10px;
   padding: 5px 10px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 10px;
 }
 
 .button-edit-spacer {
@@ -2317,7 +2332,23 @@ textarea {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  margin: 15px auto;
+  margin: 10px auto;
   width: 60%;
+}
+
+.button-delete {
+  padding: 10px;
+  background-color: #dd3528;
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+
+.button-update {
+  padding: 10px;
+  background-color: #42B6E8;
+  border: none;
+  color: white;
+  border-radius: 10px;
 }
 </style>

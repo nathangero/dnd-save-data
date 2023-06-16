@@ -57,11 +57,11 @@ const store = createStore({
         }
 
         if (this.state.user.characters[charId][statRef]) {
-          console.info(`adding to ${statRef}`)
+          // console.info(`adding to ${statRef}`)
           // Add to dict
-          this.state.user.characters[charId][statRef] = itemToAdd
+          this.state.user.characters[charId][statRef][key] = value
         } else {
-          console.info(`creating ${statRef}`)
+          // console.info(`creating ${statRef}`)
           // Make the dict
           const newDict = {
             [statRef]: itemToAdd
