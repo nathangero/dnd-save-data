@@ -484,7 +484,7 @@
                 <br>
                 <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddFeatures">Add</button>
               </div>         
             </template>
           </div>
@@ -654,7 +654,7 @@
                 <br>
                 <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddWeapon" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddWeapon">Add</button>
               </div>
             </template>
           </div>
@@ -739,7 +739,7 @@
                 <br>
                 <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddEquipment" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddEquipment">Add</button>
               </div>
             </template>
           </div>
@@ -812,7 +812,7 @@
                 <br>
                 <textarea v-model="treasureTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddTreasure" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddTreasure">Add</button>
               </div>
             </template>
           </div>
@@ -886,7 +886,7 @@
                   </select>
                 </div>
                 <br>
-                <button @click="onPressAddLanguage" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddLanguage">Add</button>
               </div>
             </template>
           </div>
@@ -951,7 +951,7 @@
                 <br>
                 <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddProficiency" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddProficiency">Add</button>
               </div>
             </template>
           </div>
@@ -985,7 +985,7 @@
                 <ul class="list">
                   <li v-for="(item, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
                     <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS][level]) > 0">
-                      <label class="item-name">{{ getSpellLevelName(level) }}:</label>
+                      <label class="item-name">Level {{ SPELL_CASTING_NAMES[level] }}:</label>
                       <ul>
                         <li v-for="(spell, spellName) in characterToView[CHARACTER_KEYS.SPELLS][level]" :key="spellName">
                           <div v-if="!isEditingSpellCasting">
@@ -994,18 +994,18 @@
                             <div class="spell-list">
                               <div class="spell-group">
                                 <label class="spell-label">Casting Time:</label>
-                                <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
                               </div>
                               <div class="spell-group">
                                 <label class="spell-label">Duration:</label>
-                                <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.DURATION]] }} sec</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
                               </div>
                               <div class="spell-group">
                                 <label class="spell-label">Range:</label>
-                                <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
                               </div>
                             </div>
-                            <label class="spell-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
+                            <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
                           </div>
 
                           <!-- Edit and Delete -->
@@ -1015,23 +1015,23 @@
                               <ul class="list-inputs">
                                 <li>
                                   <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
-                                  <input type="number" id="spells-casting-time" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-casting-time" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
                                 </li>
                                   
                                 <li>
                                   <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
-                                  <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
                                 </li>
                                 
                                 <li>
                                   <label for="spells-range" class="stat-label">Range (in feet):</label>
-                                  <input type="number" id="spells-range" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-range" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
                                 </li>
                               </ul>
                             </div>
                             
                             <br>
-                            <textarea v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                            <textarea v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                             <div class="buttons-delete-update">
                               <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
                               <button class="button-update" @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
@@ -1055,7 +1055,7 @@
                   <li>
                     <label class="stat-label" for="spells-level">Level:</label>
                     <select class="picker" v-model="spellTempLevel">
-                      <option v-for="levels in SPELLCASTING_NAMES" :key="levels" :value="levels">{{ levels }}</option>
+                      <option v-for="levels in SPELL_CASTING_KEYS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES[levels] }}</option>
                     </select>
                   </li>
                   
@@ -1079,7 +1079,7 @@
               <br>
               <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
               <br>
-              <button @click="onPressAddSpell" style="margin-top: 10px;">Add</button>
+              <button class="button-add" @click="onPressAddSpell">Add</button>
             </template>
           </div>
         </collapse-transition>
@@ -1123,10 +1123,10 @@ import { ALIGNMENT_TYPES } from '@/enums/alignment-types'
 import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
-import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
+import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
-import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
+import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES } from '@/enums/dbKeys/spell-casting-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 
 
@@ -1195,8 +1195,9 @@ export default {
       STAT_NAMES: STAT_NAMES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
-      SPELLCASTING_KEYS: SPELLCASTING_KEYS,
-      SPELLCASTING_NAMES: SPELLCASTING_NAMES,
+      SPELL_CASTING_KEYS: SPELL_CASTING_KEYS,
+      SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
+      SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
@@ -1205,7 +1206,7 @@ export default {
       characterToView: new Character(),
       level: '',
       characterArmor: '',
-      [CHARACTER_KEYS.INITIATIVE]: '',
+      initiative: '',
       proficiencyBonus: '',
       characterSpeed: '',
       hitDieType: '', // d10
@@ -1252,12 +1253,24 @@ export default {
   },
 
   watch: {
+    'characterToView.proficiencyBonus': function(newValue) {
+      const stat = this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]
+      const statMod = this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
+      this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(newValue, statMod)
+    },
     'characterToView.stats.str.value': function(newValue) {
       const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS][STAT_VALUES_KEYS.MOD] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.STRENGTH) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.dex.value': function(newValue) {
       const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
@@ -1268,12 +1281,26 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.INITIATIVE] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.DEXTERITY) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.con.value': function(newValue) {
       const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.CONSTITUTION) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.int.value': function(newValue) {
       const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
@@ -1285,6 +1312,13 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION][STAT_VALUES_KEYS.MOD] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.INTELLIGENCE) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.wis.value': function(newValue) {
       const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
@@ -1297,6 +1331,13 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] = this.calculatePassivePerception(statMod)
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.WISDOM) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.cha.value': function(newValue) {
       const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
@@ -1307,14 +1348,21 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION][STAT_VALUES_KEYS.MOD] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.CHARISMA) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.spellCastStat': function(newValue) {
       if (newValue === '') {
         this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = 0
       } else {
         const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const mod = this.characterToView[CHARACTER_KEYS.STATS][newValue][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, mod)
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][newValue][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
       }
       
     }
@@ -1605,42 +1653,42 @@ export default {
 
       var levelKey;
       switch (this.spellTempLevel) {
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_1
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_1]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_1
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_2]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_2
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_2]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_2
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_3]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_3
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_3]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_3
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_4]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_4
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_4]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_4
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_5]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_5
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_5]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_5
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_6]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_6
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_6]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_6
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_7]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_7
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_7]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_7
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_8]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_8
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_8]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_8
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_9]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_9
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_9]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_9
           break
         default:
-          levelKey = SPELLCASTING_KEYS.CANTRIPS
+          levelKey = SPELL_CASTING_KEYS.CANTRIPS
       }
 
       const newSpell = {
-        [SPELLCASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
-        [SPELLCASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
-        [SPELLCASTING_KEYS.DURATION]: this.spellTempDuration,
-        [SPELLCASTING_KEYS.RANGE]: this.spellTempRange
+        [SPELL_CASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
+        [SPELL_CASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
+        [SPELL_CASTING_KEYS.DURATION]: this.spellTempDuration,
+        [SPELL_CASTING_KEYS.RANGE]: this.spellTempRange
       }
       
       const newEntry = {
@@ -1948,6 +1996,9 @@ export default {
       return (stat - 10) / 2
     },
     calculateSpellSavingDc(profBonus, mod) {
+      if (profBonus === '') {
+        return 8 + mod
+      }
       return 8 + profBonus + mod
     },
     getDictionarySize(dict) {
@@ -1957,43 +2008,6 @@ export default {
       } else {
         return 0
       }
-    },
-    getSpellLevelName(level) {
-      var output = "Level "
-      switch (level) {
-        case SPELLCASTING_KEYS.LEVEL_1:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]
-          break
-        case SPELLCASTING_KEYS.LEVEL_2:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_2]
-          break
-        case SPELLCASTING_KEYS.LEVEL_3:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_3]
-          break
-        case SPELLCASTING_KEYS.LEVEL_4:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_4]
-          break
-        case SPELLCASTING_KEYS.LEVEL_5:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_5]
-          break
-        case SPELLCASTING_KEYS.LEVEL_6:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_6]
-          break
-        case SPELLCASTING_KEYS.LEVEL_7:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_7]
-          break
-        case SPELLCASTING_KEYS.LEVEL_8:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_8]
-          break
-        case SPELLCASTING_KEYS.LEVEL_9:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_9]
-          break
-        default:
-          output = SPELLCASTING_NAMES[SPELLCASTING_KEYS.CANTRIPS]
-          break
-      }
-
-      return output
     },
     getStatModFromKey(stat) {
       if (stat === '') {
@@ -2457,7 +2471,8 @@ textarea {
   font-size: large;
 }
 
-.button-update {
+.button-update,
+.button-add {
   padding: 10px;
   background-color: #42B6E8;
   border: none;
