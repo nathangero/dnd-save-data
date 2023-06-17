@@ -181,11 +181,23 @@
     </div>
 
     <br>
-    <div id="features-and-traits">
-      <div class="h3-bar">
-        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features</h3>
-        <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
-        <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
+    <div id="features-traits">
+      <div class="edit-buttons">
+        <div>
+          <button class="button-edit-spacer" v-if="!isEditingFeaturesTraits">Edit</button>
+          <button class="button-edit-spacer" v-if="isEditingFeaturesTraits">Finish</button>
+        </div>
+
+        <div class="h3-bar">
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features & Traits</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
+        </div>
+        
+        <div>
+          <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Edit</button>
+          <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Finish</button>
+        </div>
       </div>
 
       <collapse-transition dimension="height">
@@ -194,20 +206,44 @@
             <div>
               <ul class="list">
                 <li v-for="(item, key) in featuresTraits" :key="key">
-                  <div>
+                  <div v-if="!isEditingFeaturesTraits">
                     <label class="item-name">{{ key }}</label>
                     <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
                     <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
                     <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                   </div>
-                  <button class="button-delete" @click="onPressDeleteFeatures(key)">Delete</button>
+
+                  <!-- Edit and Delete -->
+                  <div v-if="isEditingFeaturesTraits">
+                    <label class="item-name">{{ key }}</label>
+                    <div class="container-edit">
+                      <div>
+                        <label class="stat-label">Type:</label>
+                        <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
+                          <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label class="stat-label" for="features-input"> # of Uses:</label>
+                        <input class="input-stats" style="width=70%;" type="number" v-model="item[FEATURES_KEYS.USES]"> 
+                      </div>
+                      <br>
+                      <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                      <div class="buttons-delete-update">
+                        <button class="button-delete" @click="onPressDeleteFeatures(key)">Delete</button>
+                      </div>
+                    </div>
+                    
+                    <hr class="list-divider">
+                  </div>
                 </li>
               </ul>
             </div>
           </template>
 
+          <!-- Add new -->
           <div>
-            <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
+            <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/Trait name"> 
             <div class="container-inputs">
               <ul class="list-inputs">
                 <li style="margin-top: 10px;">
@@ -218,19 +254,20 @@
                 </li>
 
                 <li>
-                  <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                  <label for="features-input"> # of Uses:</label>
                   <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
                 </li>
               </ul>
             </div>
             
+            <br>
             <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
             <br>
             <button class="button-add" @click="onPressAddFeatures">Add</button>
-          </div>
+          </div>      
         </div>
       </collapse-transition>
-
+      
     </div>
 
     <br>
@@ -345,49 +382,49 @@
           </template>
 
           <!-- Add new -->
-            <div>
-              <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
+          <div>
+            <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
 
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li>
-                    <label class="stat-label" for="equipment-input">Amount:</label>
-                    <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
-                  </li>
+            <div class="container-inputs">
+              <ul class="list-inputs">
+                <li>
+                  <label class="stat-label" for="equipment-input">Amount:</label>
+                  <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
+                </li>
 
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
-                    <select class="picker" v-model="weaponsTempAttackModifier">
-                      <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                    </select>
-                  </li>
-                  
-                  <li>
-                    <label class="stat-label" for="equipment-input">Die Type:</label>
-                    <select class="picker" v-model="weaponTempDieType">
-                      <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                    </select>
-                  </li>
+                <li style="margin-top: 10px;">
+                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                  <select class="picker" v-model="weaponsTempAttackModifier">
+                    <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                  </select>
+                </li>
+                
+                <li>
+                  <label class="stat-label" for="equipment-input">Die Type:</label>
+                  <select class="picker" v-model="weaponTempDieType">
+                    <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                  </select>
+                </li>
 
-                  <li>
-                    <label class="stat-label" for="equipment-input">Category:</label>
-                    <select class="picker" v-model="weaponTempCategory">
-                      <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
-                    </select>
-                  </li>
+                <li>
+                  <label class="stat-label" for="equipment-input">Category:</label>
+                  <select class="picker" v-model="weaponTempCategory">
+                    <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                  </select>
+                </li>
 
-                  <li>
-                    <label class="stat-label" for="equipment-input">Proficient:</label>
-                    <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
-                  </li>
-                </ul>
-              </div>
-
-              <br>
-              <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddWeapon">Add</button>
+                <li>
+                  <label class="stat-label" for="equipment-input">Proficient:</label>
+                  <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                </li>
+              </ul>
             </div>
+
+            <br>
+            <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button class="button-add" @click="onPressAddWeapon">Add</button>
+          </div>
         </div>
       </collapse-transition>
     </div>
@@ -1743,6 +1780,30 @@ textarea {
   border: none;
   color: white;
   border-radius: 10px;
+}
+
+.edit-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.button-edit {
+  /* margin-left: auto; */
+  margin-right: 10px;
+  padding: 5px 10px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+
+.button-edit-spacer {
+  margin-right: auto;
+  margin-left: 10px;
+  padding: 5px 10px;
+  visibility: hidden;
 }
 
 .buttons-delete-update {

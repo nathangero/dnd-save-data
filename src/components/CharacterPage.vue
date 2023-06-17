@@ -436,7 +436,6 @@
                       <label class="item-name">{{ key }}</label>
                       <div class="container-edit">
                         <div>
-                          <br>
                           <label class="stat-label">Type:</label>
                           <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
                             <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
