@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <button class="button-close" @click="closeModal('')">Close</button>
+    <button class="button-close" @click="closeModal">Close</button>
     <div id="character-info" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''">
       <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 

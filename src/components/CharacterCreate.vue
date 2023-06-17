@@ -1,98 +1,455 @@
 <template>
-  <div class="body" ref="bodyRef">
-    <side-menu @click="toggleMenu"></side-menu>
+  <div id="body">
+    <button class="button-close" @click="closeModal">Close</button>
 
-    <div class="content" ref="contentRef">
-      <h1>{{ getUserInfo.name }}'s characters</h1>
-      <div class="top-buttons">
-        <button class="button-open-modal" @click="toggleModalNewCharacter">Create Character</button>
+    <h2>New Character</h2>
+    
+    <div id="character-background">
+      <div class="input-container">
+        <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
+        <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
+        <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
+
+        <div class="container-inputs">
+          <ul class="list-inputs">
+          <li>
+            <label for="character-alignment" class="stat-label">Alignment:</label>
+            <select class="picker" v-model="characterAlignment">
+              <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
+            </select>
+          </li>
+
+          <li style="margin-top: 20px;">
+            <label for="character-class" class="stat-label">Class:</label>
+            <select class="picker" v-model="characterClass">
+              <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
+            </select>
+          </li>
+        </ul>
+      </div>
+    </div>
+    </div>
+    
+    <br>
+    <div id="character-info">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(characterinfo)">Character Info</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
       </div>
 
-      <hr v-if="!isMenuOpen">
-      <hr v-if="isMenuOpen" style="visibility: hidden ;" >
+      <collapse-transition dimension="height">
+        <div v-if="isShowingCharacterInfo">
+          <div class="container-inputs">
+            <ul class="list-inputs">
+              <li>
+                <label for="stats-level" class="stat-label">Starting level:</label>
+                <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-armor-class" class="stat-label">Armor Class: </label>
+                <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li style="margin-top: 10px; margin-bottom: 10px;">
+                <label for="stats-initiative" class="stat-label">Initiative: </label>
+                <label class="stat-label">{{ getStatBonusSign(initiative) }}</label>
+              </li>
+              
+              <li>
+                <label for="stats-speed" class="stat-label">Speed: </label>
+                <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-hp" class="stat-label">Hit Points (HP):</label>
+                <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li style="margin-top: 10px;">
+                <label class="stat-label">Hit Die Type: </label>
+                <select class="picker" v-model="hp[HP_KEYS.DIE]">
+                  <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                </select>
+              </li>
+
+              <li>
+                <label for="stats-hit-die" class="stat-label"># of Hit Die: </label>
+                <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li>
+                <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
+                <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
+              </li>
+
+              <li style="margin-top: 10px;">
+                <label class="stat-label">Passive Perception: </label>
+                <label class="stat-value">{{ getStatBonusSign(passivePerception) }}</label>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </collapse-transition>
+    </div>
       
-      <!-- Character summary -->
-      <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-        <div id="users-characters-summary">
-          <div class="list-container-characters">
-            <ul class="list-characters">
-              <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
-                <div @click="toggleModalViewCharacter(key)">
-                  <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <label class="item-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
-                    <label class="item-amount" style="white-space: nowrap;">Level: {{ item[CHARACTER_KEYS.LEVEL] }}</label>
-                  </div>
-                  
-                  <label class="item-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
-                  <label class="item-description">{{ item[CHARACTER_KEYS.RACE] }}</label>
-                  <label class="item-description">Current HP: {{ item[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}</label>
-                  <!-- <label class="item-description">Campaign: {{ item[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
+
+    <br>
+    <div id="base-stats">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">Base Stats</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingBaseStats">
+          <div class="container-inputs">
+            <ul class="list-inputs" style="margin-right: 20px;">
+              <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                <div style="margin-left: 10px;">
+                  <input type="number" id="stats-label" v-model="stats[stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
+                  <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(stats[stat][STAT_VALUES_KEYS.MOD]) }}</label>
                 </div>
               </li>
             </ul>
           </div>
         </div>
-      </template>
-
-
-      <transition name="slide-up" mode="out-in">
-        <template v-if="isModalViewCharacterOpen">
-          <div class="modal-page-overlay">
-            <div class="modal-page scrollable">
-              <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
-            </div>
-          </div>
-          
-        </template>
-      </transition>
-
+      </collapse-transition>
+    </div>
       
-
-      <!-- Create a new character -->
-      <div id="create-character">
-        <transition name="slide-up" mode="out-in">
-          <template v-if="isModalNewCharacterOpen">
-            <div class="modal-page-overlay">
-              <div class="modal-page scrollable">
-                <character-create v-if="isModalNewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalNewCharacter"></character-create>
-              </div>
-            </div>
-            
-          </template>
-        </transition>
+    <br>
+    <div id="saving-throws">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">Saving Throws</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
       </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingSavingThrows">
+          <ul class="stat-list">
+            <li v-for="(stat, key) in STAT_KEYS" :key="key">
+              <div class="stat-group">
+                <input type="checkbox" class="checkbox" v-model="savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
+                <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+
+                <label class="stat-value" v-if="savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
+                  {{ getStatBonusSign(savingThrows[stat][STAT_VALUES_KEYS.MOD] + proficiencyBonus) }}
+                </label>
+                <label class="stat-value" v-if="!savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
+                  {{ getStatBonusSign(savingThrows[stat][STAT_VALUES_KEYS.MOD]) }}
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </collapse-transition>
+
     </div>
 
-    <!-- Bottom Navigation Bar -->
-    <nav class="bottom-navigation" v-if="isNavBarOpen">
-      <ul>
-        <li @click="navigateTo([ROUTER_NAMES.CAMPAIGNS])" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
-          <i class="fas fa-campaigns"></i>
-          {{ ROUTER_NAMES.CAMPAIGNS.charAt(0).toUpperCase() + ROUTER_NAMES.CAMPAIGNS.slice(1) }}
-        </li>
-        <li @click="navigateTo(ROUTER_NAMES.CHARACTERS)" :class="{ active: currentRoute === ROUTER_NAMES.CHARACTERS }">
-          <i class="fas fa-characters"></i>
-          {{ ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1) }}
-        </li><li @click="navigateTo(ROUTER_NAMES.SESSIONS)" :class="{ active: currentRoute === ROUTER_NAMES.SESSIONS }">
-          <i class="fas fa-sessions"></i>
-          {{ ROUTER_NAMES.SESSIONS.charAt(0).toUpperCase() + ROUTER_NAMES.SESSIONS.slice(1) }}
-        </li>
-      </ul>
-    </nav>
-    
+    <br>
+    <div id="skills">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">Skills</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingSkills">
+          <ul class="stat-list">
+            <li v-for="(skill, key) in SKILL_KEYS" :key="key">
+              <div class="stat-group">
+                <input type="checkbox" class="checkbox" v-model="skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
+                <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
+
+                <label class="stat-value" v-if="skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
+                  {{ getStatBonusSign(skills[skill][STAT_VALUES_KEYS.MOD] + proficiencyBonus) }}
+                </label>
+                <label class="stat-value" v-if="!skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
+                  {{ getStatBonusSign(skills[skill][STAT_VALUES_KEYS.MOD]) }}
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </collapse-transition>
+      
+    </div>
+
+    <br>
+    <div id="features-and-traits">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingFeatures">
+          <template v-if="getDictionarySize(featuresTraits) > 0">
+            <div>
+              <ul class="list">
+                <li v-for="(item, key) in featuresTraits" :key="key">
+                  <div>
+                    <label class="item-name">{{ key }}</label>
+                    <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
+                    <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                    <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
+                  </div>
+                  <button class="button-delete" @click="onPressDeleteFeatures(key)">Delete</button>
+                </li>
+              </ul>
+            </div>
+          </template>
+
+          <div>
+            <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
+            <div class="container-inputs">
+              <ul class="list-inputs">
+                <li style="margin-top: 10px;">
+                  <label>Type:</label>
+                  <select class="picker" v-model="featuresTempType">
+                    <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                  </select>
+                </li>
+
+                <li>
+                  <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                  <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                </li>
+              </ul>
+            </div>
+            
+            <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button class="button-add" @click="onPressAddFeatures">Add</button>
+          </div>
+        </div>
+      </collapse-transition>
+
+    </div>
+
+    <br>
+    <div id="equipment">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingEquipment">
+          <div style="margin-bottom: 10px;">
+            <label for="equipment-gold" class="stat-label">Starting Gold:</label>
+            <input type="number" id="equipment-gold" v-model="gold" class="input-stats" inputmode="numeric" required>
+          </div>
+
+          <template v-if="getDictionarySize(equipment) > 0">
+            <div class="list-container">
+              <ul class="list">
+                <li v-for="(item, key) in equipment" :key="key">
+                  <div>
+                    <label class="item-name">{{ key }}</label>
+                    <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                  </div>
+                  <label class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</label>
+                  <br>
+                  <button @click="onPressDeleteEquipment(key)">Delete</button>
+                </li>
+              </ul>
+            </div>
+          </template>
+          
+          <div class="equipment-container">
+            <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
+            <div>
+              <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+              <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
+            </div>
+            <br>
+            <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button class="button-add" @click="onPressAddEquipment">Add</button>
+          </div>
+        </div>
+      </collapse-transition>
+      
+    </div>
+      
+    <br>
+    <div id="languages">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingLanguages">
+          <template v-if="getDictionarySize(languages) > 0">
+            <div class="list-container">
+              <ul class="list">
+                <li v-for="(item, key) in languages" :key="key">
+                  <label class="item-name">{{ key }}</label>
+                  <label class="item-description">{{ item }}</label>
+                  <br>
+                  <button @click="onPressDeleteLanguage(key)">Delete</button>
+                </li>
+              </ul>
+            </div>
+          </template>
+
+          <div class="language-container">
+            <input class="item-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
+            <div style="margin-top: 10px;">
+              <label>Proficiency: </label>
+              <select class="picker" v-model="languagesTempProficiency">
+                <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+              </select>
+            </div>
+            <br>
+            <button class="button-add" @click="onPressAddLanguage">Add</button>
+          </div>
+        </div>
+      </collapse-transition>
+      
+    </div>
+      
+    <br>
+    <div id="proficiencies">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingProficiencies">
+          <template v-if="getDictionarySize(proficiencies) > 0">
+            <div class="list-container">
+              <ul class="list">
+                <li v-for="(item, key) in proficiencies" :key="key">
+                  <label class="item-name">{{ key }}</label>
+                  <label class="item-description">{{ item }}</label>
+                  <br>
+                  <button @click="onPressDeleteProficiency(key)">Delete</button>
+                </li>
+              </ul>
+            </div>
+          </template>
+
+          <div class="proficiency-container">
+            <input class="item-input" style="margin-bottom: 20px;" v-model="proficiencyTempName" placeholder="New proficiency name"> 
+            <br>
+            <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
+            <br>
+            <button class="button-add" @click="onPressAddProficiency">Add</button>
+          </div>
+        </div>
+      </collapse-transition>
+    </div>
+
+    <br>
+    <div id="spells">
+      <div class="h3-bar">
+        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
+        <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
+        <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingSpells">
+          <div class="container-inputs">
+            <ul class="list-inputs">
+              <li style="margin-top: 10px;">
+                <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
+                <select class="picker" v-model="spellCastingStat">
+                  <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
+                </select>
+              </li>
+
+              <li style="margin-top: 5px;">
+                <label class="stat-label">Spell Saving DC: </label>
+                <label class="stat-label">{{ getStatBonusSign(spellSavingDc) }}</label>
+              </li>
+            </ul>
+          </div>
+
+          <template v-if="getDictionarySize(spells) > 0">
+            <div class="list-container">
+              <ul class="list">
+                <li v-for="(item, level) in spells" :key="level">
+                  <template v-if="getDictionarySize(spells[level]) > 0">
+                    <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
+                    <ul class="list">
+                      <li v-for="(spell, spellName) in spells[level]" :key="spellName">
+                        <label class="item-name">{{ spellName }}</label>
+                        <br>
+                        <label class="item-description">Casting Time: {{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }}</label>
+                        <label class="item-description">Duration: {{ spell[[SPELL_CASTING_KEYS.DURATION]] }} seconds</label>
+                        <label class="item-description">Range: {{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                        <label class="item-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
+                        
+                        <br>
+                        <button @click="onPressDeleteSpell(level, spellName)">Delete</button>
+                      </li>
+                    </ul>
+                  </template>
+                </li>
+              </ul>
+            </div>
+          </template>
+
+          <input class="item-input" v-model="spellTempName" placeholder="Spell name"> 
+
+          <div class="container-inputs">
+            <ul class="list-inputs">
+              <li style="margin-top: 10px;">
+                <label for="spells-level" class="stat-label">Level:</label>
+                <select class="picker" v-model="spellTempLevel">
+                  <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_CASTING_NAMES[level] }}</option>
+                </select>
+              </li>
+
+              <li>
+                <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
+                <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+              </li>
+              
+              <li>
+                <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
+                <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+              </li>
+              
+              <li>
+                <label for="spells-range" class="stat-label">Range (in feet):</label>
+                <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
+              </li>
+            </ul>
+          </div>
+
+          <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+          <br>
+          <button class="button-add" @click="onPressAddSpell">Add</button>
+        </div>
+      </collapse-transition>
+      
+    </div>
+    <button class="button-create-character" @click="createCharacter">Create Character</button>
+
   </div>
 </template>
 
 <script>
 import { useStore } from 'vuex'
-import CharacterCreate from './CharacterCreate.vue';
-import CharacterPage from '@/components/CharacterPage.vue'
-import SideMenu from '@/components/SideMenu.vue'
+import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import { createNewCharacter } from '@/functions/rtdb'
 import Character from '@/models/character'
-import Cookies from 'js-cookie'
-import ROUTER_NAMES from '@/enums/router-names'
-import COOKIE_NAMES from '@/enums/cookie-names'
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
 import { FEATURES_KEYS } from '@/enums/dbKeys/features-keys.js'
@@ -127,9 +484,7 @@ const MIN_VALUES = {
 
 export default {
   components: {
-    CharacterCreate,
-    CharacterPage,
-    SideMenu,
+    CollapseTransition
   },
   data() {
     return {
@@ -152,7 +507,6 @@ export default {
       characterToView: new Character(),
       characterToViewId: '',
       usersCharacters: {},
-      ROUTER_NAMES: ROUTER_NAMES,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       CHARACTER_KEYS: CHARACTER_KEYS,
       CLASS_NAMES: CLASS_NAMES,
@@ -268,26 +622,7 @@ export default {
     }
   },
   mounted() {
-    if (this.store.getters.getUser.id === '') {
-      try {
-        const userCookie = Cookies.get(COOKIE_NAMES.USER)
-        if (userCookie != undefined) {
-          const userJson = JSON.parse(userCookie)
-          // console.info('userCookie: ' + JSON.stringify(userJson))
-          this.store.commit('setUser', userJson)
-        }
-        
-      } catch (error) {
-        console.info(error)
-      }
-    }
-  },
-  computed: {
-    getUserInfo() {
-      const user = this.store.getters.getUser
-      
-      return user
-    },
+    
   },
   watch: {
     'hp.max': function(newValue) {
@@ -412,6 +747,9 @@ export default {
     },
   },
   methods: {
+    closeModal() {
+      this.$emit('close')
+    },
     resetVariables() {
       this.characterName = ''
       this.characterAlignment = ''
@@ -977,443 +1315,10 @@ export default {
       }
       
     },
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen
-      this.isNavBarOpen = !this.isNavBarOpen
-      if (this.isMenuOpen) {
-        this.$refs.contentRef.style.backgroundColor = 'gray';
-        // this.$refs.bodyRef.style.height = 100%
-        
-      } else {
-        this.$refs.contentRef.style.backgroundColor = ''
-      }
-    },
-    logOut() {
-      this.store.commit('signOut')
-    },
   }
 }
 </script>
 
 <style>
-.slide-up-enter-active {
-transition: transform 0.3s;
-}
 
-.slide-up-leave-active {
-  transition: transform 0.4s;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  transform: translateY(100%);
-}
-
-.slide-up-enter-to,
-.slide-up-leave {
-  transform: translateY(0);
-}
-
-.body {
-  margin: 0%;
-  height: 110dvh;
-}
-
-.content {
-  height: 100%;
-}
-
-.hamburger-menu {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 30px;
-  height: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  /* z-index: 9999; */
-}
-
-.hamburger-line {
-  width: 100%;
-  height: 3px;
-  background-color: #000;
-}
-
-
-.menu-close {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: bold;
-  color: #007aff;
-}
-
-.list-side-menu {
-  list-style: none;
-}
-
-.list-side-menu li {
-  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-  font-size: xx-large;
-  margin-bottom: 10%;
-}
-
-
-.modal-page.scrollable {
-  overflow-y: scroll;
-  height: 100dvh;
-}
-
-.modal-page-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-page {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-}
-
-.button-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 5px 10px;
-}
-
-h2 {
-  padding-top: 50px;
-}
-
-h3 {
-  text-decoration: underline;
-}
-
-textarea {
-  width: 90%;
-  text-align: left;
-  border-radius: 10px;
-  padding: 5px;
-  font-size: larger;
-}
-
-.input-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  height: 300px; /* Adjust the height as needed */
-}
-
-.character-description {
-  border: none; /* Remove the default border */
-  border-bottom: 1px solid black; /* Add a bottom border */
-  outline: none;
-  text-align: left;
-  padding-left: 0;
-  padding-bottom: 5px;
-}
-
-.input-field {
-  width: 200px; /* Adjust the width as needed */
-  margin-bottom: 10px; /* Adjust the spacing between input fields as needed */
-}
-
-.input-stats {
-  width: 65px; /* Adjust the width as needed */
-  margin-left: 5px; /* Adjust the spacing between the label and input */
-  border: none; /* Remove the default border */
-  border-bottom: 1px solid black; /* Add a bottom border */
-  outline: none;
-  text-align: center;
-  padding-bottom: 5px;
-  font-size: larger;
-}
-
-.flex-container-stat {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-}
-
-.picker {
-  margin-right: 0;
-  font-size: larger;
-  padding: 10px;
-  background-color: white;
-  border: 1px solid black;
-  color: black;
-  border-radius: 10px;
-}
-
-.picker:focus {
-  outline: none;
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.checkbox {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  padding: 0;
-}
-
-
-/* LIST - ENTERING INPUT STYLE */
-
-.container-inputs {
-  display: flex;
-  justify-content: space-evenly;
-  margin: 0 auto; /* centers the container */
-}
-
-.list-inputs {
-  list-style: none;
-  padding: 0;
-}
-
-.list-inputs li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* LIST - ADDED ITEMS STYLE */
-
-.item-input {
-  width: 80%;
-  margin-left: 5px; /* Adjust the spacing between the label and input */
-  border: none; /* Remove the default border */
-  border-bottom: 1px solid black; /* Add a bottom border */
-  outline: none;
-  padding-left: 0;
-  padding-bottom: 5px;
-}
-
-.list-container {
-  display: flex;
-  justify-content: center;
-  width: 90%;
-  margin: 0 auto; /* centers the container */
-  border: 1px solid black;
-  border-radius: 10px; /* Rounded corners */
-}
-
-.list li {
-  text-align: left;
-  margin-bottom: 10px;
-}
-
-.item-name {
-  font-weight: bold;
-  font-size: larger;
-  margin-right: 20px;
-}
-
-.item-amount{
-  font-size: larger;
-}
-
-.item-description {
-  width: 80%;
-  font-size: larger;
-  text-align: left;
-}
-
-
-/* USER'S CHARACTERS LIST STYLE */
-
-.list-container-characters {
-  display: flex;
-  justify-content: center;
-  width: 90%;
-  margin: 0 auto; /* centers the container */
-}
-
-.list-characters li {
-  width: 90%;
-  list-style: none;
-  border: 2px solid black;
-  border-radius: 10px; /* Rounded corners */
-  text-align: left;
-  margin-bottom: 10px;
-  padding: 5px;
-}
-
-/* STAT STYLE */
-
-.stat-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 65%;
-  margin: 0 auto;
-  padding-left: 0;
-}
-
-.stat-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.stat-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.stat-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-.stat-bonus {
-  margin-left: 10px; /* Adjust as needed */
-  text-align: right;
-  font-size: larger;
-}
-
-/* WEAPON STYLES */
-
-.weapon-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 80%;
-  margin: 0 auto;
-}
-
-
-.weapon-group {
-  display: flex;
-  
-  margin-bottom: 10px;
-}
-
-.weapon-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.weapon-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-/* LANGUAGE STYLES */
-
-.language-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  width: 50%
-}
-
-.language-label {
-  text-align: left;
-  font-size: larger;
-  font-weight: bold;
-}
-
-.language-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-
-/* SPELL STYLES */
-
-.spell-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 75%;
-}
-
-.spell-group {
-  display: flex;
-  align-items: center;
-}
-
-.spell-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.spell-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-.spell-description {
-  font-size: larger;
-  width: 100%;
-  /* margin-top: 10px; */
-}
-
-/* SPELL CASTING STYLE */
-
-.spells-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-
-.button-open-modal {
-  margin: 0 auto;
-  padding: 5px 10px;
-  background-color: dimgray;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: larger;
-}
-
-.button-delete {
-  padding: 10px;
-  background-color: #dd3528;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: large;
-}
-
-.button-add {
-  padding: 10px;
-  background-color: #42B6E8;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: larger;
-}
-
-.button-create-character {
-  padding: 10px;
-  background-color: #42B6E8;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: x-large;
-  margin-top: 10%;
-  margin-bottom: 10%;
-}
 </style>
