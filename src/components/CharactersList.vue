@@ -252,11 +252,10 @@
                             <div>
                               <label class="item-name">{{ key }}</label>
                               <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
+                              <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                              <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                             </div>
-                            <label class="item-type">Type: {{ item[FEATURES_KEYS.TYPE] }}</label>
-                            <label class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</label>
-                            <br>
-                            <button @click="onPressDeleteFeatures(key)">Delete</button>
+                            <button class="button-delete" @click="onPressDeleteFeatures(key)">Delete</button>
                           </li>
                         </ul>
                       </div>
@@ -1546,7 +1545,7 @@ textarea {
   text-align: left;
   border-radius: 10px;
   padding: 5px;
-  font-size: large;
+  font-size: larger;
 }
 
 .input-container {
@@ -1665,13 +1664,13 @@ textarea {
   margin-right: 20px;
 }
 
-.item-amount {
-  font-size: large;
+.item-amount{
+  font-size: larger;
 }
 
 .item-description {
   width: 80%;
-  font-size: large;
+  font-size: larger;
   text-align: left;
 }
 
@@ -1829,13 +1828,22 @@ textarea {
   font-size: larger;
 }
 
+.button-delete {
+  padding: 10px;
+  background-color: #dd3528;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: large;
+}
+
 .button-add {
   padding: 10px;
   background-color: #42B6E8;
   border: none;
   color: white;
   border-radius: 10px;
-  font-size: large;
+  font-size: larger;
 }
 
 .button-create-character {
