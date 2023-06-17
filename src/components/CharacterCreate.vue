@@ -431,40 +431,74 @@
 
     <br>
     <div id="equipment">
-      <div class="h3-bar">
-        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
-        <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
-        <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
+      <div class="edit-buttons">
+        <div>
+          <button class="button-edit-spacer" v-if="!isEditingEquipment">Edit</button>
+          <button class="button-edit-spacer" v-if="isEditingEquipment">Finish</button>
+        </div>
+
+        <div class="h3-bar">
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
+        </div>
+        
+        <div>
+          <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Edit</button>
+          <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Finish</button>
+        </div>
       </div>
 
       <collapse-transition dimension="height">
         <div v-if="isShowingEquipment">
-          <div style="margin-bottom: 10px;">
-            <label for="equipment-gold" class="stat-label">Starting Gold:</label>
-            <input type="number" id="equipment-gold" v-model="gold" class="input-stats" inputmode="numeric" required>
-          </div>
+          <ul class="list" style="text-align: left; margin-bottom: 20px">
+            <div v-if="!isEditingEquipment">
+              <label class="item-name">Gold:</label>
+              <label class="item-amount">x{{ gold }}</label>
+            </div>
+            <div v-if="isEditingEquipment" style="margin-bottom: 20px">
+              <label class="item-name">Gold:</label>
+              <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="gold" class="input-stats" inputmode="numeric" required>
+            </div>
+          </ul>
 
           <template v-if="getDictionarySize(equipment) > 0">
             <div>
-              <ul class="list">
+              <ul class="list">                
                 <li v-for="(item, key) in equipment" :key="key">
-                  <div>
+                  <div v-if="!isEditingEquipment">
                     <label class="item-name">{{ key }}</label>
                     <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                    <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
                   </div>
-                  <label class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</label>
-                  <br>
-                  <button class="button-delete" @click="onPressDeleteEquipment(key)">Delete</button>
-                  <hr class="list-divider">
+
+                  <!-- Edit and Delete -->
+                  <div v-if="isEditingEquipment">
+                    <label class="item-name">{{ key }}:</label>
+                    <div class="container-edit">
+                      <div>
+                        <label class="stat-label" for="equipment-input">Amount:</label>
+                        <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
+                      </div>
+                      <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                    </div>
+
+                    <div class="buttons-delete-update">
+                      <button class="button-delete" @click="onPressDeleteEquipment(key)">Delete</button>
+                    </div>
+                    
+                    <hr class="list-divider">
+                  </div>
                 </li>
               </ul>
             </div>
           </template>
-          
-          <div class="equipment-container">
-            <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
+
+          <!-- Add new -->
+          <div>
+            <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
             <div>
-              <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+              <label class="stat-label" for="equipment-input">Amount:</label>
               <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
             </div>
             <br>
@@ -474,7 +508,6 @@
           </div>
         </div>
       </collapse-transition>
-      
     </div>
       
     <br>
