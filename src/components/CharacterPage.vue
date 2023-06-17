@@ -438,19 +438,19 @@
                         <div>
                           <br>
                           <label class="stat-label">Type:</label>
-                          <select class="picker" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.TYPE]">
+                          <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
                             <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                           </select>
                         </div>
                         <div>
                           <label class="stat-label" for="features-input"> # of Uses:</label>
-                          <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.USES]"> 
+                          <input class="input-stats" style="width=70%;" type="number" v-model="item[FEATURES_KEYS.USES]"> 
                         </div>
                         <br>
-                        <textarea v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                         <div class="buttons-delete-update">
                           <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
-                          <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.FEATURES][key], CHARACTER_KEYS.FEATURES)">Update</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
                         </div>
                       </div>
                       
@@ -561,40 +561,40 @@
                         <ul class="list-inputs">
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
-                            <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.AMOUNT]"> 
+                            <input class="input-stats" style="width=70%;" type="number" v-model="item[WEAPON_KEYS.AMOUNT]"> 
                           </li>
                           
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
-                            <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
+                            <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
                               <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                             </select>
                           </li>
                           
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                            <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.DIE]">
+                            <select class="picker" v-model="item[WEAPON_KEYS.DIE]">
                               <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                             </select>
                           </li>
 
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                            <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.CATEGORY]">
+                            <select class="picker" v-model="item[WEAPON_KEYS.CATEGORY]">
                               <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                             </select>
                           </li>
 
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                            <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.PROFICIENT]">
+                            <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
                           </li>
                         </ul>
                       </div>
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.WEAPONS][key], CHARACTER_KEYS.WEAPONS)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.WEAPONS)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -615,18 +615,11 @@
                       <label class="stat-label" for="equipment-input">Amount:</label>
                       <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
                     </li>
-                    
-                    <li>
-                      <label class="stat-label" for="equipment-input">Attack Bonus Mod:</label>
+
+                    <li style="margin-top: 10px;">
+                      <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
                       <select class="picker" v-model="weaponsTempAttackModifier">
-                        <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
-                      </select>
-                    </li>
-                    
-                    <li>
-                      <label class="stat-label" for="equipment-input">Damage Mod:</label>
-                      <select class="picker" v-model="weaponsTempDamageModifier">
-                        <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
+                        <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                       </select>
                     </li>
                     
@@ -1240,7 +1233,6 @@ export default {
       weaponTempCategory: '', // e.g. finesse
       weaponTempAmount: '',
       weaponsTempAttackModifier: '', // e.g. dex
-      weaponsTempDamageModifier: '', // e.g. dex
       weaponTempDieType: '', // e.g. d8
       weaponTempIsProficient: '', // e.g. d8
       weaponTempProperties: '', // e.g. finesse, light
@@ -1439,11 +1431,6 @@ export default {
         return
       }
 
-      if (this.weaponsTempDamageModifier === '') {
-        alert("Please enter a weapon damage mod")
-        return
-      }
-
       if (this.weaponTempDieType === '') {
         alert("Please enter a weapon die")
         return
@@ -1473,7 +1460,6 @@ export default {
         [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
         [WEAPON_KEYS.ATTACK_DAMAGE_MOD]: this.weaponsTempAttackModifier,
         [WEAPON_KEYS.CATEGORY]: this.weaponTempCategory,
-        [WEAPON_KEYS.DAMAGE_MOD]: this.weaponsTempDamageModifier,
         [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
         [WEAPON_KEYS.DIE]: this.weaponTempDieType,
         [WEAPON_KEYS.PROFICIENT]: this.weaponTempIsProficient,
