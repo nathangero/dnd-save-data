@@ -58,505 +58,539 @@
 
                 <h2>New Character</h2>
                 
-                <div class="input-container">
-                  <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
-                  <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
-                  <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
+                <div id="character-background">
+                  <div class="input-container">
+                    <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
+                    <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
+                    <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
 
-                  <div class="container-inputs">
-                    <ul class="list-inputs">
-                    <li>
-                      <label for="character-alignment" class="label-stats">Alignment:</label>
-                      <select class="picker" v-model="characterAlignment">
-                        <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
-                      </select>
-                    </li>
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                      <li>
+                        <label for="character-alignment" class="stat-label">Alignment:</label>
+                        <select class="picker" v-model="characterAlignment">
+                          <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
+                        </select>
+                      </li>
 
-                    <li style="margin-top: 20px;">
-                      <label for="character-class" class="label-stats">Class:</label>
-                      <select class="picker" v-model="characterClass">
-                        <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
-                      </select>
-                    </li>
-                  </ul>
+                      <li style="margin-top: 20px;">
+                        <label for="character-class" class="stat-label">Class:</label>
+                        <select class="picker" v-model="characterClass">
+                          <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
+                        </select>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
               
               <br>
-              <h3>Character Info</h3>
               <div id="character-info">
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li>
-                      <label for="stats-level" class="label-stats">Starting level:</label>
-                      <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-armor-class">Armor Class: </label>
-                      <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-initiative">Initiative: </label>
-                      <input type="number" id="stats-hit-die" v-model="initiative" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="stats-speed">Speed: </label>
-                      <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-hp" class="label-stats">Hit Points (HP):</label>
-                      <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li style="margin-top: 10px;">
-                      <label>Hit Die Type: </label>
-                      <select class="picker" v-model="hp[HP_KEYS.DIE]">
-                        <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                      </select>
-                    </li>
-
-                    <li>
-                      <label for="stats-hit-die"># of Hit Die: </label>
-                      <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
-                      <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-proficiency-bonus">Passive Perception: </label>
-                      <input type="number" id="stats-proficiency-bonus" v-model="passivePerception" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                  </ul>
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(characterinfo)">Character Info</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
                 </div>
+
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingCharacterInfo">
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                        <li>
+                          <label for="stats-level" class="stat-label">Starting level:</label>
+                          <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="stats-armor-class" class="stat-label">Armor Class: </label>
+                          <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li style="margin-top: 10px; margin-bottom: 10px;">
+                          <label for="stats-initiative" class="stat-label">Initiative: </label>
+                          <label class="stat-label">{{ getStatBonusSign(initiative) }}</label>
+                        </li>
+                        
+                        <li>
+                          <label for="stats-speed" class="stat-label">Speed: </label>
+                          <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="stats-hp" class="stat-label">Hit Points (HP):</label>
+                          <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li style="margin-top: 10px;">
+                          <label class="stat-label">Hit Die Type: </label>
+                          <select class="picker" v-model="hp[HP_KEYS.DIE]">
+                            <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                          </select>
+                        </li>
+
+                        <li>
+                          <label for="stats-hit-die" class="stat-label"># of Hit Die: </label>
+                          <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
+                          <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li style="margin-top: 10px;">
+                          <label class="stat-label">Passive Perception: </label>
+                          <label class="stat-value">{{ getStatBonusSign(passivePerception) }}</label>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </div>
+                </collapse-transition>
               </div>
+              
 
               <br>
-              <h3>Base Stats</h3>
               <div id="base-stats">
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li>
-                        <label for="stats-str" class="label-stats">Strength:</label>
-                        <input type="number" id="stats-str" v-model="stats[BASE_STAT_KEYS.STRENGTH]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="stats-dex" class="label-stats">Dexterity: </label>
-                      <input type="number" id="stats-dex" v-model="stats[BASE_STAT_KEYS.DEXTERITY]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                      
-                    <li>
-                      <label for="stats-con" class="label-stats">Consitution: </label>
-                      <input type="number" id="stats-con" v-model="stats[BASE_STAT_KEYS.CONSTITUTION]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-int" class="label-stats">Intelligence: </label>
-                      <input type="number" id="stats-int" v-model="stats[BASE_STAT_KEYS.INTELLIGENCE]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-wis" class="label-stats">Wisdom: </label>
-                      <input type="number" id="stats-wis" v-model="stats[BASE_STAT_KEYS.WISDOM]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-cha" class="label-stats">Charisma: </label>
-                      <input type="number" id="stats-cha" v-model="stats[BASE_STAT_KEYS.CHARISMA]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                  </ul>
-
-                  <!-- Bonus modifier -->
-                  <ul class="list-inputs">
-                    <li>
-                        <label for="stats-str-bonus" style="margin-left: 10px;">Bonus: </label>
-                        <input type="number" id="stats-str-bonus" v-model="stats[BASE_STAT_KEYS.STRENGTH_BONUS]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="stats-dex-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-dex-bonus" v-model="stats[BASE_STAT_KEYS.DEXTERITY_BONUS]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                      
-                    <li>
-                      <label for="stats-con-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-con-bonus" v-model="stats[BASE_STAT_KEYS.CONSTITUTION_BONUS]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-int-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-int-bonus" v-model="stats[BASE_STAT_KEYS.INTELLIGENCE_BONUS]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-wis-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-wis-bonus" v-model="stats[BASE_STAT_KEYS.WISDOM_BONUS]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="stats-cha-bonus" style="margin-left: 10px;">Bonus: </label>
-                      <input type="number" id="stats-cha-bonus" v-model="stats[BASE_STAT_KEYS.CHARISMA_BONUS]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                  </ul>
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">Base Stats</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
                 </div>
+
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingBaseStats">
+                    <div class="container-inputs">
+                      <ul class="list-inputs" style="margin-right: 20px;">
+                        <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                          <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                          <div style="margin-left: 10px;">
+                            <input type="number" id="stats-label" v-model="stats[stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
+                            <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(stats[stat][STAT_VALUES_KEYS.MOD]) }}</label>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </collapse-transition>
               </div>
               
               <br>
-              <h3>Saving Throws</h3>
               <div id="saving-throws">
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li>
-                      <label for="saving-str" class="label-stats">Strength:</label>
-                      <input type="number" id="saving-str" v-model="savingThrows[BASE_STAT_KEYS.STRENGTH]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="saving-dex" class="label-stats">Dexterity: </label>
-                      <input type="number" id="saving-dex" v-model="savingThrows[BASE_STAT_KEYS.DEXTERITY]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="saving-con" class="label-stats">Consitution: </label>
-                      <input type="number" id="saving-con" v-model="savingThrows[BASE_STAT_KEYS.CONSTITUTION]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="saving-int" class="label-stats">Intelligence: </label>
-                      <input type="number" id="saving-int" v-model="savingThrows[BASE_STAT_KEYS.INTELLIGENCE]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="saving-wis" class="label-stats">Wisdom: </label>
-                      <input type="number" id="saving-wis" v-model="savingThrows[BASE_STAT_KEYS.WISDOM]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="saving-cha" class="label-stats">Charisma: </label>
-                      <input type="number" id="saving-cha" v-model="savingThrows[BASE_STAT_KEYS.CHARISMA]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                  </ul>
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">Saving Throws</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
                 </div>
+
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingSavingThrows">
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                        <li>
+                          <label for="saving-str" class="stat-label">Strength:</label>
+                          <input type="number" id="saving-str" v-model="savingThrows[STAT_KEYS.STRENGTH]" class="input-stats" inputmode="numeric" required>
+                        </li>
+                        
+                        <li>
+                          <label for="saving-dex" class="stat-label">Dexterity: </label>
+                          <input type="number" id="saving-dex" v-model="savingThrows[STAT_KEYS.DEXTERITY]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="saving-con" class="stat-label">Consitution: </label>
+                          <input type="number" id="saving-con" v-model="savingThrows[STAT_KEYS.CONSTITUTION]" class="input-stats" inputmode="numeric" required>
+                        </li>
+                        
+                        <li>
+                          <label for="saving-int" class="stat-label">Intelligence: </label>
+                          <input type="number" id="saving-int" v-model="savingThrows[STAT_KEYS.INTELLIGENCE]" class="input-stats" inputmode="numeric" required>
+                        </li>
+                        
+                        <li>
+                          <label for="saving-wis" class="stat-label">Wisdom: </label>
+                          <input type="number" id="saving-wis" v-model="savingThrows[STAT_KEYS.WISDOM]" class="input-stats" inputmode="numeric" required>
+                        </li>
+                        
+                        <li>
+                          <label for="saving-cha" class="stat-label">Charisma: </label>
+                          <input type="number" id="saving-cha" v-model="savingThrows[STAT_KEYS.CHARISMA]" class="input-stats" inputmode="numeric" required>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </collapse-transition>
+
               </div>
 
               <br>
-              <h3>Skills</h3>
               <div id="skills">
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li>
-                      <label for="skills-acrobatics" class="label-stats">Acrobatics:</label>
-                      <input type="number" id="skills-acrobatics" v-model="skills[SKILL_KEYS.ACROBATICS]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-animal-handling" class="label-stats">Animal Hanlding:</label>
-                      <input type="number" id="skills-animal-handling" v-model="skills[SKILL_KEYS.ANIMAL_HANDLING]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-arcana" class="label-stats">Arcana:</label>
-                      <input type="number" id="skills-arcana" v-model="skills[SKILL_KEYS.ARCANA]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-athletics" class="label-stats">Athletics:</label>
-                      <input type="number" id="skills-athletics" v-model="skills[SKILL_KEYS.ATHLETICS]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-deception" class="label-stats">Deception:</label>
-                      <input type="number" id="skills-deception" v-model="skills[SKILL_KEYS.DECEPTION]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-history" class="label-stats">History:</label>
-                      <input type="number" id="skills-history" v-model="skills[SKILL_KEYS.HISTORY]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-insight" class="label-stats">Insight:</label>
-                      <input type="number" id="skills-insight" v-model="skills[SKILL_KEYS.INSIGHT]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="skills-intimidation" class="label-stats">Intimidation:</label>
-                      <input type="number" id="skills-intimidation" v-model="skills[SKILL_KEYS.INTIMIDATION]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-investigation" class="label-stats">Investigation:</label>
-                      <input type="number" id="skills-investigation" v-model="skills[SKILL_KEYS.INVESTIGATION]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-medicine" class="label-stats">Medicine:</label>
-                      <input type="number" id="skills-medicine" v-model="skills[SKILL_KEYS.MEDICINE]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-nature" class="label-stats">Nature:</label>
-                      <input type="number" id="skills-nature" v-model="skills[SKILL_KEYS.NATURE]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="skills-perception" class="label-stats">Perception:</label>
-                      <input type="number" id="skills-perception" v-model="skills[SKILL_KEYS.PERCEPTION]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-performance" class="label-stats">Performance:</label>
-                      <input type="number" id="skills-performance" v-model="skills[SKILL_KEYS.PERFORMANCE]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-persuasion" class="label-stats">Persuasion:</label>
-                      <input type="number" id="skills-persuasion" v-model="skills[SKILL_KEYS.PERSUASION]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-religion" class="label-stats">Religion:</label>
-                      <input type="number" id="skills-religion" v-model="skills[SKILL_KEYS.RELIGION]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-sleight-of-hand" class="label-stats">Slight of Hand:</label>
-                      <input type="number" id="skills-sleight-of-hand" v-model="skills[SKILL_KEYS.SLEIGHT_OF_HAND]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-stealth" class="label-stats">Stealth:</label>
-                      <input type="number" id="skills-stealth" v-model="skills[SKILL_KEYS.STEALTH]" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li>
-                      <label for="skills-survival" class="label-stats">Survival:</label>
-                      <input type="number" id="skills-survival" v-model="skills[SKILL_KEYS.SURVIVAL]" class="input-stats" inputmode="numeric" required>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <br>
-              <h3>Features & Traits</h3>
-              <div id="features-and-traits">
-
-                <template v-if="getDictionarySize(featuresTraits) > 0">
-                  <div class="list-container">
-                    <ul class="list">
-                      <li v-for="(item, key) in featuresTraits" :key="key">
-                        <div>
-                          <label class="item-name">{{ key }}</label>
-                          <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
-                        </div>
-                        <label class="item-type">Type: {{ item[FEATURES_KEYS.TYPE] }}</label>
-                        <label class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</label>
-                        <br>
-                        <button @click="onPressDeleteFeatures(key)">Delete</button>
-                      </li>
-                    </ul>
-                  </div>
-                </template>
-
-                <div>
-                  <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
-                  <div>
-                    <br>
-                    <label>Type:</label>
-                    <select class="picker" v-model="featuresTempType">
-                      <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
-                    <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
-                  </div>
-                  <br>
-                  <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
-                  <br>
-                  <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
-                </div>  
-              </div>
-
-              <br>
-              <h3>Equipment</h3>
-              <div id="equipment">
-                <div style="margin-bottom: 10px;">
-                  <label for="equipment-gold" class="label-stats">Starting Gold:</label>
-                  <input type="number" id="equipment-gold" v-model="gold" class="input-stats" inputmode="numeric" required>
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">Skills</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
                 </div>
 
-                <template v-if="getDictionarySize(equipment) > 0">
-                  <div class="list-container">
-                    <ul class="list">
-                      <li v-for="(item, key) in equipment" :key="key">
-                        <div>
-                          <label class="item-name">{{ key }}</label>
-                          <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                        </div>
-                        <label class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</label>
-                        <br>
-                        <button @click="onPressDeleteEquipment(key)">Delete</button>
-                      </li>
-                    </ul>
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingSkills">
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                        <li>
+                          <label for="skills-acrobatics" class="stat-label">Acrobatics:</label>
+                          <input type="number" id="skills-acrobatics" v-model="skills[SKILL_KEYS.ACROBATICS]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-animal-handling" class="stat-label">Animal Hanlding:</label>
+                          <input type="number" id="skills-animal-handling" v-model="skills[SKILL_KEYS.ANIMAL_HANDLING]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-arcana" class="stat-label">Arcana:</label>
+                          <input type="number" id="skills-arcana" v-model="skills[SKILL_KEYS.ARCANA]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-athletics" class="stat-label">Athletics:</label>
+                          <input type="number" id="skills-athletics" v-model="skills[SKILL_KEYS.ATHLETICS]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-deception" class="stat-label">Deception:</label>
+                          <input type="number" id="skills-deception" v-model="skills[SKILL_KEYS.DECEPTION]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-history" class="stat-label">History:</label>
+                          <input type="number" id="skills-history" v-model="skills[SKILL_KEYS.HISTORY]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-insight" class="stat-label">Insight:</label>
+                          <input type="number" id="skills-insight" v-model="skills[SKILL_KEYS.INSIGHT]" class="input-stats" inputmode="numeric" required>
+                        </li>
+                        
+                        <li>
+                          <label for="skills-intimidation" class="stat-label">Intimidation:</label>
+                          <input type="number" id="skills-intimidation" v-model="skills[SKILL_KEYS.INTIMIDATION]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-investigation" class="stat-label">Investigation:</label>
+                          <input type="number" id="skills-investigation" v-model="skills[SKILL_KEYS.INVESTIGATION]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-medicine" class="stat-label">Medicine:</label>
+                          <input type="number" id="skills-medicine" v-model="skills[SKILL_KEYS.MEDICINE]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-nature" class="stat-label">Nature:</label>
+                          <input type="number" id="skills-nature" v-model="skills[SKILL_KEYS.NATURE]" class="input-stats" inputmode="numeric" required>
+                        </li>
+                        
+                        <li>
+                          <label for="skills-perception" class="stat-label">Perception:</label>
+                          <input type="number" id="skills-perception" v-model="skills[SKILL_KEYS.PERCEPTION]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-performance" class="stat-label">Performance:</label>
+                          <input type="number" id="skills-performance" v-model="skills[SKILL_KEYS.PERFORMANCE]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-persuasion" class="stat-label">Persuasion:</label>
+                          <input type="number" id="skills-persuasion" v-model="skills[SKILL_KEYS.PERSUASION]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-religion" class="stat-label">Religion:</label>
+                          <input type="number" id="skills-religion" v-model="skills[SKILL_KEYS.RELIGION]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-sleight-of-hand" class="stat-label">Slight of Hand:</label>
+                          <input type="number" id="skills-sleight-of-hand" v-model="skills[SKILL_KEYS.SLEIGHT_OF_HAND]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-stealth" class="stat-label">Stealth:</label>
+                          <input type="number" id="skills-stealth" v-model="skills[SKILL_KEYS.STEALTH]" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li>
+                          <label for="skills-survival" class="stat-label">Survival:</label>
+                          <input type="number" id="skills-survival" v-model="skills[SKILL_KEYS.SURVIVAL]" class="input-stats" inputmode="numeric" required>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                </template>
+                </collapse-transition>
                 
-                <div class="equipment-container">
-                  <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
-                  <div>
-                    <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
-                    <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
-                  </div>
-                  <br>
-                  <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
-                  <br>
-                  <button @click="onPressAddEquipment" style="margin-top: 10px;">Add</button>
+              </div>
+
+              <br>
+              <div id="features-and-traits">
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
                 </div>
+
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingFeatures">
+                    <template v-if="getDictionarySize(featuresTraits) > 0">
+                      <div>
+                        <ul class="list">
+                          <li v-for="(item, key) in featuresTraits" :key="key">
+                            <div>
+                              <label class="item-name">{{ key }}</label>
+                              <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
+                            </div>
+                            <label class="item-type">Type: {{ item[FEATURES_KEYS.TYPE] }}</label>
+                            <label class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</label>
+                            <br>
+                            <button @click="onPressDeleteFeatures(key)">Delete</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
+
+                    <div>
+                      <input class="item-input" type="text" v-model="featuresTempName" placeholder="Feature/Trait name"> 
+                      <div class="container-inputs">
+                        <ul class="list-inputs">
+                          <li>
+                            <label>Type:</label>
+                            <select class="picker" v-model="featuresTempType">
+                              <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                            </select>
+                          </li>
+
+                          <li>
+                            <label style="margin-right: 10px;" for="features-input"> # of Uses:</label>
+                            <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                          </li>
+                        </ul>
+                      </div>
+                      
+                      <br>
+                      <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
+                    </div>
+                  </div>
+                </collapse-transition>
+
+              </div>
+
+              <br>
+              <div id="equipment">
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
+                </div>
+
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingEquipment">
+                    <div style="margin-bottom: 10px;">
+                      <label for="equipment-gold" class="stat-label">Starting Gold:</label>
+                      <input type="number" id="equipment-gold" v-model="gold" class="input-stats" inputmode="numeric" required>
+                    </div>
+
+                    <template v-if="getDictionarySize(equipment) > 0">
+                      <div class="list-container">
+                        <ul class="list">
+                          <li v-for="(item, key) in equipment" :key="key">
+                            <div>
+                              <label class="item-name">{{ key }}</label>
+                              <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                            </div>
+                            <label class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</label>
+                            <br>
+                            <button @click="onPressDeleteEquipment(key)">Delete</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
+                    
+                    <div class="equipment-container">
+                      <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="Item name"> 
+                      <div>
+                        <label style="margin-right: 10px;" for="equipment-input">Amount:</label>
+                        <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
+                      </div>
+                      <br>
+                      <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button @click="onPressAddEquipment" style="margin-top: 10px;">Add</button>
+                    </div>
+                  </div>
+                </collapse-transition>
+                
               </div>
               
               <br>
-              <h3>Languages</h3>
               <div id="languages">
-                <template v-if="getDictionarySize(languages) > 0">
-                  <div class="list-container">
-                    <ul class="list">
-                      <li v-for="(item, key) in languages" :key="key">
-                        <label class="item-name">{{ key }}</label>
-                        <label class="item-description">{{ item }}</label>
-                        <br>
-                        <button @click="onPressDeleteLanguage(key)">Delete</button>
-                      </li>
-                    </ul>
-                  </div>
-                </template>
-
-                <div class="language-container">
-                  <input class="item-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
-                  <div style="margin-top: 10px;">
-                    <label>Proficiency: </label>
-                    <select class="picker" v-model="languagesTempProficiency">
-                      <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                    </select>
-                  </div>
-                  <br>
-                  <button @click="onPressAddLanguage" style="margin-top: 10px;">Add</button>
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
                 </div>
+
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingLanguages">
+                    <template v-if="getDictionarySize(languages) > 0">
+                      <div class="list-container">
+                        <ul class="list">
+                          <li v-for="(item, key) in languages" :key="key">
+                            <label class="item-name">{{ key }}</label>
+                            <label class="item-description">{{ item }}</label>
+                            <br>
+                            <button @click="onPressDeleteLanguage(key)">Delete</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
+
+                    <div class="language-container">
+                      <input class="item-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
+                      <div style="margin-top: 10px;">
+                        <label>Proficiency: </label>
+                        <select class="picker" v-model="languagesTempProficiency">
+                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                        </select>
+                      </div>
+                      <br>
+                      <button @click="onPressAddLanguage" style="margin-top: 10px;">Add</button>
+                    </div>
+                  </div>
+                </collapse-transition>
+                
               </div>
               
               <br>
-              <h3>Proficiencies</h3>
               <div id="proficiencies">
-                <template v-if="getDictionarySize(proficiencies) > 0">
-                  <div class="list-container">
-                    <ul class="list">
-                      <li v-for="(item, key) in proficiencies" :key="key">
-                        <label class="item-name">{{ key }}</label>
-                        <label class="item-description">{{ item }}</label>
-                        <br>
-                        <button @click="onPressDeleteProficiency(key)">Delete</button>
-                      </li>
-                    </ul>
-                  </div>
-                </template>
-
-                <div class="proficiency-container">
-                  <input class="item-input" v-model="proficiencyTempName" placeholder="Proficiency name"> 
-                  <br>
-                  <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
-                  <br>
-                  <button @click="onPressAddProficiency" style="margin-top: 10px;">Add</button>
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
                 </div>
+
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingProficiencies">
+                    <template v-if="getDictionarySize(proficiencies) > 0">
+                      <div class="list-container">
+                        <ul class="list">
+                          <li v-for="(item, key) in proficiencies" :key="key">
+                            <label class="item-name">{{ key }}</label>
+                            <label class="item-description">{{ item }}</label>
+                            <br>
+                            <button @click="onPressDeleteProficiency(key)">Delete</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
+
+                    <div class="proficiency-container">
+                      <input class="item-input" style="margin-bottom: 20px;" v-model="proficiencyTempName" placeholder="New proficiency name"> 
+                      <br>
+                      <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button @click="onPressAddProficiency" style="margin-top: 10px;">Add</button>
+                    </div>
+                  </div>
+                </collapse-transition>
               </div>
 
               <br>
-              <h3>Spell Casting</h3>
               <div id="spells">
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li>
-                      <label for="spells-attack-bonus" class="label-stats">Attack Bonus:</label>
-                      <input type="number" id="spells-attack-bonus" v-model="spellAttackBonus" class="input-stats" inputmode="numeric" required>
-                    </li>
-
-                    <li style="margin-top: 10px;">
-                      <label for="spells-attack-bonus" class="label-stats">Casting Ability:</label>
-                      <select class="picker" v-model="spellCastingStat">
-                        <option v-for="stat in STAT_NAMES" :key="stat" :value="stat">{{ stat }}</option>
-                      </select>
-                    </li>
-
-                    <li>
-                      <label for="spells-save-dc" class="label-stats">Saving DC:</label>
-                      <input type="number" id="spells-save-dc" v-model="spellSavingDc" class="input-stats" inputmode="numeric" required>
-                    </li>
-                  </ul>
+                <div class="h3-bar">
+                  <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
+                  <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
+                  <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
                 </div>
 
-                <template v-if="getDictionarySize(spells) > 0">
-                  <div class="list-container">
-                    <ul class="list">
-                      <li v-for="(item, level) in spells" :key="level">
-                        <template v-if="getDictionarySize(spells[level]) > 0">
-                          <label class="item-name">{{ getSpellLevelName(level) }}:</label>
-                          <ul class="list">
-                            <li v-for="(spell, spellName) in spells[level]" :key="spellName">
-                              <label class="item-name">{{ spellName }}</label>
-                              <br>
-                              <label class="item-description">Casting Time: {{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }}</label>
-                              <label class="item-description">Duration: {{ spell[[SPELLCASTING_KEYS.DURATION]] }} seconds</label>
-                              <label class="item-description">Range: {{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
-                              <label class="item-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
-                              
-                              <br>
-                              <button @click="onPressDeleteSpell(level, spellName)">Delete</button>
-                            </li>
-                          </ul>
-                        </template>
-                      </li>
-                    </ul>
+                <collapse-transition dimension="height">
+                  <div v-if="isShowingSpells">
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                        <li style="margin-top: 10px;">
+                          <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
+                          <select class="picker" v-model="spellCastingStat">
+                            <option v-for="stat in STAT_NAMES" :key="stat" :value="stat">{{ stat }}</option>
+                          </select>
+                        </li>
+
+                        <li style="margin-top: 5px;">
+                          <label class="stat-label">Spell Saving DC: </label>
+                          <label class="stat-label">{{ getStatBonusSign(spellSavingDc) }}</label>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <template v-if="getDictionarySize(spells) > 0">
+                      <div class="list-container">
+                        <ul class="list">
+                          <li v-for="(item, level) in spells" :key="level">
+                            <template v-if="getDictionarySize(spells[level]) > 0">
+                              <label class="item-name">{{ getSpellLevelName(level) }}:</label>
+                              <ul class="list">
+                                <li v-for="(spell, spellName) in spells[level]" :key="spellName">
+                                  <label class="item-name">{{ spellName }}</label>
+                                  <br>
+                                  <label class="item-description">Casting Time: {{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }}</label>
+                                  <label class="item-description">Duration: {{ spell[[SPELLCASTING_KEYS.DURATION]] }} seconds</label>
+                                  <label class="item-description">Range: {{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
+                                  <label class="item-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
+                                  
+                                  <br>
+                                  <button @click="onPressDeleteSpell(level, spellName)">Delete</button>
+                                </li>
+                              </ul>
+                            </template>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
+
+                    <input class="item-input" v-model="spellTempName" placeholder="Spell name"> 
+
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                        <li style="margin-top: 10px;">
+                          <label for="spells-level" class="stat-label">Level:</label>
+                          <select class="picker" v-model="spellTempLevel">
+                            <option v-for="levels in SPELLCASTING_NAMES" :key="levels" :value="levels">{{ levels }}</option>
+                          </select>
+                        </li>
+
+                        <li>
+                          <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
+                          <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+                        </li>
+                        
+                        <li>
+                          <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
+                          <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+                        </li>
+                        
+                        <li>
+                          <label for="spells-range" class="stat-label">Range (in feet):</label>
+                          <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+                    <br>
+                    <button @click="onPressAddSpell" style="margin-top: 10px;">Add</button>
                   </div>
-                </template>
-
-                <input class="item-input" v-model="spellTempName" placeholder="Spell name"> 
-
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li style="margin-top: 10px;">
-                      <label for="spells-level" class="label-stats">Level:</label>
-                      <select class="picker" v-model="spellTempLevel">
-                        <option v-for="levels in SPELLCASTING_NAMES" :key="levels" :value="levels">{{ levels }}</option>
-                      </select>
-                    </li>
-
-                    <li>
-                      <label for="spells-casting-time" class="label-stats">Casting Time (# of actions):</label>
-                      <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="spells-casting-duration" class="label-stats">Duration (in seconds):</label>
-                      <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
-                    </li>
-                    
-                    <li>
-                      <label for="spells-range" class="label-stats">Range (in feet):</label>
-                      <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
-                    </li>
-                  </ul>
-                </div>
-
-                <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
-                <br>
-                <button @click="onPressAddSpell" style="margin-top: 10px;">Add</button>
+                </collapse-transition>
+                
               </div>
               <button class="button-create-character" @click="createCharacter">Create Character</button>
 
@@ -570,7 +604,7 @@
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navigation" v-if="isNavBarOpen">
       <ul>
-        <li @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
+        <li @click="navigateTo([ROUTER_NAMES.CAMPAIGNS])" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
           <i class="fas fa-campaigns"></i>
           {{ ROUTER_NAMES.CAMPAIGNS.charAt(0).toUpperCase() + ROUTER_NAMES.CAMPAIGNS.slice(1) }}
         </li>
@@ -588,9 +622,10 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import CharacterPage from '@/components/CharacterPage.vue'
 import SideMenu from '@/components/SideMenu.vue'
-import { useStore } from 'vuex'
 import { createNewCharacter } from '@/functions/rtdb'
 import Character from '@/models/character'
 import Cookies from 'js-cookie'
@@ -604,12 +639,12 @@ import { FEATURES_TYPES } from '@/enums/features-types'
 import { ALIGNMENT_TYPES } from '@/enums/alignment-types'
 import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
-import { BASE_STAT_KEYS } from '@/enums/dbKeys/baseStat-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
-import { STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
+import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
+import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 
 // TODO: Will be replaced by Firebase Remote Config
 const MAX_VALUES = {
@@ -631,13 +666,25 @@ const MIN_VALUES = {
 export default {
   components: {
     SideMenu,
-    CharacterPage
+    CharacterPage,
+    CollapseTransition
   },
   data() {
     return {
       store: useStore(),
       isModalNewCharacterOpen: false,
       isModalViewCharacterOpen: false,
+      isShowingCharacterInfo: true,
+      isShowingBaseStats: true,
+      isShowingSavingThrows: true,
+      isShowingSkills: true,
+      isShowingFeatures: true,
+      isShowingWeapons: true,
+      isShowingEquipment: true,
+      isShowingTreasure: true,
+      isShowingLanguages: true,
+      isShowingProficiencies: true,
+      isShowingSpells: true,
       isMenuOpen: false,
       isNavBarOpen: true, // show by default
       characterToView: new Character(),
@@ -645,20 +692,28 @@ export default {
       usersCharacters: {},
       ROUTER_NAMES: ROUTER_NAMES,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
-      BASE_STAT_KEYS: BASE_STAT_KEYS,
       CHARACTER_KEYS: CHARACTER_KEYS,
       CLASS_NAMES: CLASS_NAMES,
+      DEATH_SAVES_KEYS: DEATH_SAVES_KEYS,
       DIE_TYPE: DIE_TYPE,
       EQUIPMENT_KEYS: EQUIPMENT_KEYS,
       FEATURES_KEYS: FEATURES_KEYS,
       FEATURES_TYPES: FEATURES_TYPES,
       HP_KEYS: HP_KEYS,
       LANGUAGE_PROFICIENCY: LANGUAGE_PROFICIENCY,
+      MAX_VALUES: MAX_VALUES,
+      STAT_KEYS: STAT_KEYS,
+      STAT_VALUES_KEYS: STAT_VALUES_KEYS,
       STAT_NAMES: STAT_NAMES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
       SPELLCASTING_KEYS: SPELLCASTING_KEYS,
       SPELLCASTING_NAMES: SPELLCASTING_NAMES,
+      WEAPON_KEYS: WEAPON_KEYS,
+      WEAPON_CATEGORY: WEAPON_CATEGORY,
+      WEAPON_PROPERTY: WEAPON_PROPERTY,
+      WEAPON_NAMES: WEAPON_NAMES,
+      WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
       characterName: '',
       characterAlignment: '',
       characterBackground: '',
@@ -670,10 +725,10 @@ export default {
       characterRace: '',
       level: '',
       characterArmor: '',
-      [CHARACTER_KEYS.INITIATIVE]: '',
+      initiative: '0',
       characterSpeed: '',
       proficiencyBonus: '',
-      passivePerception: '',
+      passivePerception: '0',
       hp: {
         [HP_KEYS.CURRENT]: '',
         [HP_KEYS.DIE]: '',
@@ -701,7 +756,6 @@ export default {
       proficiencies: {},
       proficiencyTempName: '',
       proficiencyTempDescription: '',
-      spellAttackBonus: '',
       spellCastingStat: '', // e.g. intelligence
       spellSavingDc: '',
       spellTempName: '',
@@ -711,48 +765,43 @@ export default {
       spellTempRange: '', // in feet
       spellTempLevel: '',
       stats: {
-        [BASE_STAT_KEYS.STRENGTH]: '',
-        [BASE_STAT_KEYS.STRENGTH_BONUS]: '',
-        [BASE_STAT_KEYS.DEXTERITY]: '',
-        [BASE_STAT_KEYS.DEXTERITY_BONUS]: '',
-        [BASE_STAT_KEYS.CONSTITUTION]: '',
-        [BASE_STAT_KEYS.CONSTITUTION_BONUS]: '',
-        [BASE_STAT_KEYS.INTELLIGENCE]: '',
-        [BASE_STAT_KEYS.INTELLIGENCE_BONUS]: '',
-        [BASE_STAT_KEYS.WISDOM]: '',
-        [BASE_STAT_KEYS.WISDOM_BONUS]: '',
-        [BASE_STAT_KEYS.CHARISMA]: '',
-        [BASE_STAT_KEYS.CHARISMA_BONUS]: '',
+        [STAT_KEYS.STRENGTH]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
+        [STAT_KEYS.DEXTERITY]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
+        [STAT_KEYS.CONSTITUTION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
+        [STAT_KEYS.INTELLIGENCE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
+        [STAT_KEYS.WISDOM]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
+        [STAT_KEYS.CHARISMA]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
       },
       savingThrows: {
-        [BASE_STAT_KEYS.STRENGTH]: '',
-        [BASE_STAT_KEYS.DEXTERITY]: '',
-        [BASE_STAT_KEYS.CONSTITUTION]: '',
-        [BASE_STAT_KEYS.INTELLIGENCE]: '',
-        [BASE_STAT_KEYS.WISDOM]: '',
-        [BASE_STAT_KEYS.CHARISMA_BONUS]: '',
+        [STAT_KEYS.STRENGTH]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [STAT_KEYS.DEXTERITY]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [STAT_KEYS.CONSTITUTION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [STAT_KEYS.INTELLIGENCE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [STAT_KEYS.WISDOM]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [STAT_KEYS.CHARISMA]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
       },
       skills: {
-        [SKILL_KEYS.ACROBATICS]: '', // TODO Convert to enum 
-        [SKILL_KEYS.ANIMAL_HANDLING]: '',
-        [SKILL_KEYS.ARCANA]: '',
-        [SKILL_KEYS.ATHLETICS]: '',
-        [SKILL_KEYS.DECEPTION]: '',
-        [SKILL_KEYS.HISTORY]: '',
-        [SKILL_KEYS.INSIGHT]: '',
-        [SKILL_KEYS.INTIMIDATION]: '',
-        [SKILL_KEYS.INVESTIGATION]: '',
-        [SKILL_KEYS.MEDICINE]: '',
-        [SKILL_KEYS.NATURE]: '',
-        [SKILL_KEYS.PERCEPTION]: '',
-        [SKILL_KEYS.PERFORMANCE]: '',
-        [SKILL_KEYS.PERSUASION]: '',
-        [SKILL_KEYS.RELIGION]: '',
-        [SKILL_KEYS.SLEIGHT_OF_HAND]: '',
-        [SKILL_KEYS.STEALTH]: '',
-        [SKILL_KEYS.SURVIVAL]: '',
+        [SKILL_KEYS.ACROBATICS]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.ANIMAL_HANDLING]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.ARCANA]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.ATHLETICS]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.DECEPTION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.HISTORY]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.INSIGHT]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.INTIMIDATION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.INVESTIGATION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.MEDICINE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.NATURE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.PERCEPTION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.PERFORMANCE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.PERSUASION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.RELIGION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.SLEIGHT_OF_HAND]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.STEALTH]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.SURVIVAL]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
       },
-      spells: {}
+      spells: {},
+      weapons: {},
     }
   },
   mounted() {
@@ -784,24 +833,72 @@ export default {
     'hp.dieAmountMax': function(newValue) {
       this.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
     },
-    'stats.str': function(newValue) {
-      this.stats[BASE_STAT_KEYS.STRENGTH_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    'stats.str.value': function(newValue) {
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
+
+      this.stats[STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
+      this.savingThrows[STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.ATHLETICS][STAT_VALUES_KEYS.MOD] = statMod
     },
-    'stats.dex': function(newValue) {
-      this.stats[BASE_STAT_KEYS.DEXTERITY_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    'stats.dex.value': function(newValue) {
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
+
+      this.stats[STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
+      this.savingThrows[STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.ACROBATICS][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.SLEIGHT_OF_HAND][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.STEALTH][STAT_VALUES_KEYS.MOD] = statMod
+      this.initiative = statMod
     },
-    'stats.con': function(newValue) {
-      this.stats[BASE_STAT_KEYS.CONSTITUTION_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    'stats.con.value': function(newValue) {
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
+
+      this.stats[STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
+      this.savingThrows[STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
     },
-    'stats.int': function(newValue) {
-      this.stats[BASE_STAT_KEYS.INTELLIGENCE_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    'stats.int.value': function(newValue) {
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
+
+      this.stats[STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
+      this.savingThrows[STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.ARCANA][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.HISTORY][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.INVESTIGATION][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.NATURE][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.RELIGION][STAT_VALUES_KEYS.MOD] = statMod
     },
-    'stats.wis': function(newValue) {
-      this.stats[BASE_STAT_KEYS.WISDOM_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
+    'stats.wis.value': function(newValue) {
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
+
+      this.stats[STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
+      this.savingThrows[STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.ANIMAL_HANDLING][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.INSIGHT][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.MEDICINE][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.PERCEPTION][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.SURVIVAL][STAT_VALUES_KEYS.MOD] = statMod
+      this.passivePerception = this.calculatePassivePerception(statMod)
     },
-    'stats.cha': function(newValue) {
-      this.stats[BASE_STAT_KEYS.CHARISMA_BONUS] = Math.floor(this.getBaseStatBonus(newValue))
-    }
+    'stats.cha.value': function(newValue) {
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
+
+      this.stats[STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
+      this.savingThrows[STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.DECEPTION][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.INTIMIDATION][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.PERFORMANCE][STAT_VALUES_KEYS.MOD] = statMod
+      this.skills[SKILL_KEYS.PERSUASION][STAT_VALUES_KEYS.MOD] = statMod
+    },
+    'spellCastStat': function(newValue) {
+      if (newValue === '') {
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = 0
+      } else {
+        const profBonus = this.proficiencyBonus
+        const mod = this.stats[newValue][STAT_VALUES_KEYS.MOD]
+        this.spellSavingDc = this.calculateSpellSavingDc(profBonus, mod)
+      }
+      
+    },
   },
   methods: {
     resetVariables() {
@@ -856,26 +953,26 @@ export default {
       this.spellTempRange = '' // in feet
       this.spellTempLevel = ''
       this.stats = {
-        [BASE_STAT_KEYS.STRENGTH]: '',
-        [BASE_STAT_KEYS.STRENGTH_BONUS]: '',
-        [BASE_STAT_KEYS.DEXTERITY]: '',
-        [BASE_STAT_KEYS.DEXTERITY_BONUS]: '',
-        [BASE_STAT_KEYS.CONSTITUTION]: '',
-        [BASE_STAT_KEYS.CONSTITUTION_BONUS]: '',
-        [BASE_STAT_KEYS.INTELLIGENCE]: '',
-        [BASE_STAT_KEYS.INTELLIGENCE_BONUS]: '',
-        [BASE_STAT_KEYS.WISDOM]: '',
-        [BASE_STAT_KEYS.WISDOM_BONUS]: '',
-        [BASE_STAT_KEYS.CHARISMA]: '',
-        [BASE_STAT_KEYS.CHARISMA_BONUS]: '',
+        [STAT_KEYS.STRENGTH]: '',
+        [STAT_KEYS.STRENGTH_BONUS]: '',
+        [STAT_KEYS.DEXTERITY]: '',
+        [STAT_KEYS.DEXTERITY_BONUS]: '',
+        [STAT_KEYS.CONSTITUTION]: '',
+        [STAT_KEYS.CONSTITUTION_BONUS]: '',
+        [STAT_KEYS.INTELLIGENCE]: '',
+        [STAT_KEYS.INTELLIGENCE_BONUS]: '',
+        [STAT_KEYS.WISDOM]: '',
+        [STAT_KEYS.WISDOM_BONUS]: '',
+        [STAT_KEYS.CHARISMA]: '',
+        [STAT_KEYS.CHARISMA_BONUS]: '',
       }
       this.savingThrows = {
-        [BASE_STAT_KEYS.STRENGTH]: '',
-        [BASE_STAT_KEYS.DEXTERITY]: '',
-        [BASE_STAT_KEYS.CONSTITUTION]: '',
-        [BASE_STAT_KEYS.INTELLIGENCE]: '',
-        [BASE_STAT_KEYS.WISDOM]: '',
-        [BASE_STAT_KEYS.CHARISMA_BONUS]: '',
+        [STAT_KEYS.STRENGTH]: '',
+        [STAT_KEYS.DEXTERITY]: '',
+        [STAT_KEYS.CONSTITUTION]: '',
+        [STAT_KEYS.INTELLIGENCE]: '',
+        [STAT_KEYS.WISDOM]: '',
+        [STAT_KEYS.CHARISMA_BONUS]: '',
       }
       this.skills = {
         [SKILL_KEYS.ACROBATICS]: '', // TODO Convert to enum 
@@ -1288,8 +1385,14 @@ export default {
 
       return newCharacter
     },
-    getBaseStatBonus(stat) {
+    calculatePassivePerception(mod) {
+      return 10 + mod
+    },
+    calculateBaseStatBonus(stat) {
       return (stat - 10) / 2
+    },
+    calculateSpellSavingDc(profBonus, mod) {
+      return 8 + profBonus + mod
     },
     getDictionarySize(dict) {
       if (dict) {
@@ -1336,8 +1439,82 @@ export default {
 
       return output
     },
+    getStatModFromKey(stat) {
+      if (stat === '') {
+        return 0
+      } else {
+        return this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
+      }
+      
+    },
+    // getStatValue(statRef, statKey, valueKey) {
+    //   return this.characterToView[statRef][statKey][valueKey]
+    // },
+    getStatBonusSign(stat) {
+      if (stat < 0) {
+        return stat // the negative will already be apart of the number
+      } else {
+        return "+" + stat
+      }
+    },
     navigateTo(routeName) {
       this.$router.push({ name: routeName })
+    },
+    toggleCollapseForStat(statRef) {
+      switch (statRef) {
+        case CHARACTER_KEYS.STATS:
+          this.isShowingBaseStats = !this.isShowingBaseStats
+          break
+
+        
+        case CHARACTER_KEYS.SAVING_THROWS:
+          this.isShowingSavingThrows = !this.isShowingSavingThrows
+          break
+
+        
+        case CHARACTER_KEYS.SKILLS:
+          this.isShowingSkills = !this.isShowingSkills
+          break
+
+        
+        case CHARACTER_KEYS.FEATURES:
+          this.isShowingFeatures = !this.isShowingFeatures
+          break
+
+        
+        case CHARACTER_KEYS.WEAPONS:
+          this.isShowingWeapons = !this.isShowingWeapons
+          break
+
+        
+        case CHARACTER_KEYS.EQUIPMENT:
+          this.isShowingEquipment = !this.isShowingEquipment
+          break
+
+        
+        case CHARACTER_KEYS.TREASURES:
+          this.isShowingTreasure = !this.isShowingTreasure
+          break
+
+        
+        case CHARACTER_KEYS.LANGUAGES:
+          this.isShowingLanguages = !this.isShowingLanguages
+          break
+
+        
+        case CHARACTER_KEYS.PROFICIENCIES:
+          this.isShowingProficiencies = !this.isShowingProficiencies
+          break
+
+        
+        case CHARACTER_KEYS.SPELLS:
+          this.isShowingSpells = !this.isShowingSpells
+          break
+
+        
+        default:
+          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+      }
     },
     toggleModalNewCharacter() {
       this.isModalNewCharacterOpen = !this.isModalNewCharacterOpen
@@ -1480,10 +1657,11 @@ h3 {
 }
 
 textarea {
-  width: 80%;
+  width: 90%;
   text-align: left;
   border-radius: 10px;
   padding: 5px;
+  font-size: large;
 }
 
 .input-container {
@@ -1516,6 +1694,7 @@ textarea {
   outline: none;
   text-align: center;
   padding-bottom: 5px;
+  font-size: larger;
 }
 
 .flex-container-stat {
@@ -1526,8 +1705,13 @@ textarea {
 }
 
 .picker {
-  padding: 5px;
-  margin-left: 10px;
+  margin: 5px;
+  font-size: larger;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  border-radius: 10px;
 }
 
 
@@ -1535,7 +1719,7 @@ textarea {
 
 .container-inputs {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   margin: 0 auto; /* centers the container */
 }
 
@@ -1612,40 +1796,120 @@ textarea {
   padding: 5px;
 }
 
-/* BASE STATS STYLE */
+/* STAT STYLE */
 
-
-
-/* SAVING THROWS STYLE */
-
-
-/* SKILLS STYLE */
-
-
-
-/* FEATURES & TRAITS STYLE */
-
-
-
-
-/* EQUIPMENT STYLE */
-
-
-
-/* LANGUAGE STYLE */
-
-
-
-
-/* PROFICIENCY STYLE */
-
-.proficiency-container {
+.stat-list {
   display: flex;
   flex-direction: column;
+  list-style-type: none;
+  width: 65%;
+  margin: 0 auto;
+  padding-left: 0;
+}
+
+.stat-group {
+  display: flex;
   align-items: center;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  text-align: left;
+  font-size: larger;
+}
+
+.stat-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+.stat-bonus {
+  margin-left: 10px; /* Adjust as needed */
+  text-align: right;
+  font-size: larger;
+}
+
+/* WEAPON STYLES */
+
+.weapon-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 80%;
+  margin: 0 auto;
 }
 
 
+.weapon-group {
+  display: flex;
+  
+  margin-bottom: 10px;
+}
+
+.weapon-label {
+  text-align: left;
+  font-size: larger;
+}
+
+.weapon-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+/* LANGUAGE STYLES */
+
+.language-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 50%
+}
+
+.language-label {
+  text-align: left;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.language-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+
+/* SPELL STYLES */
+
+.spell-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 75%;
+}
+
+.spell-group {
+  display: flex;
+  align-items: center;
+}
+
+.spell-label {
+  text-align: left;
+  font-size: larger;
+}
+
+.spell-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+.spell-description {
+  font-size: larger;
+  width: 100%;
+  /* margin-top: 10px; */
+}
 
 /* SPELL CASTING STYLE */
 
@@ -1653,6 +1917,16 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+
+.button-open-modal {
+  margin: 0 auto;
+  padding: 5px 10px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 10px;
 }
 
 .button-create-character {

@@ -162,9 +162,9 @@
                     <input type="number" id="stats-armor-class" v-model="characterToView[CHARACTER_KEYS.ARMOR]" class="input-stats" inputmode="numeric" required>
                   </li>
 
-                  <li>
+                  <li style="margin-top: 10px; margin-bottom: 10px;">
                     <label for="stats-initiative" class="stat-label">Initiative: </label>
-                    <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.INITIATIVE]" class="input-stats" inputmode="numeric" required>
+                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
                   </li>
                   
                   <li>
@@ -219,9 +219,9 @@
                     <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]" class="input-stats" inputmode="numeric" required>
                   </li>
 
-                  <li style="margin-top: 10px;">
+                  <li style="margin-top: 10px; margin-bottom: 10px;">
                     <label for="stats-proficiency-bonus" class="stat-label">Passive Perception: </label>
-                    <label class="stat-label">{{ characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
+                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]) }}</label>
                   </li>
 
                   <li style="margin-top: 10px;">
@@ -233,7 +233,7 @@
                 
                   <li style="margin-top: 5px;">
                     <label class="stat-label">Spell Saving DC: </label>
-                    <label class="stat-label">{{ characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
+                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.SPELL_SAVE_DC]) }}</label>
                   </li>
                 </ul>
               </div>
@@ -1253,14 +1253,14 @@ export default {
 
   watch: {
     'characterToView.stats.str.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS][STAT_VALUES_KEYS.MOD] = statMod
     },
     'characterToView.stats.dex.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
@@ -1270,13 +1270,13 @@ export default {
       this.characterToView[CHARACTER_KEYS.INITIATIVE] = statMod
     },
     'characterToView.stats.con.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
     },
     'characterToView.stats.int.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
@@ -1287,7 +1287,7 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION][STAT_VALUES_KEYS.MOD] = statMod
     },
     'characterToView.stats.wis.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
@@ -1296,10 +1296,10 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] = 10 + statMod
+      this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] = this.calculatePassivePerception(statMod)
     },
     'characterToView.stats.cha.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
@@ -1314,7 +1314,7 @@ export default {
       } else {
         const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
         const mod = this.characterToView[CHARACTER_KEYS.STATS][newValue][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = 8 + profBonus + mod
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, mod)
       }
       
     }
@@ -1333,72 +1333,6 @@ export default {
         }
       })
       
-    },
-    getBaseStatBonus(stat) {
-      return (stat - 10) / 2
-    },
-    getDictionarySize(dict) {
-      if (dict) {
-        const count = Object.keys(dict).length;
-        return count
-      } else {
-        return 0
-      }
-    },
-    getSpellLevelName(level) {
-      var output = "Level "
-      switch (level) {
-        case SPELLCASTING_KEYS.LEVEL_1:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]
-          break
-        case SPELLCASTING_KEYS.LEVEL_2:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_2]
-          break
-        case SPELLCASTING_KEYS.LEVEL_3:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_3]
-          break
-        case SPELLCASTING_KEYS.LEVEL_4:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_4]
-          break
-        case SPELLCASTING_KEYS.LEVEL_5:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_5]
-          break
-        case SPELLCASTING_KEYS.LEVEL_6:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_6]
-          break
-        case SPELLCASTING_KEYS.LEVEL_7:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_7]
-          break
-        case SPELLCASTING_KEYS.LEVEL_8:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_8]
-          break
-        case SPELLCASTING_KEYS.LEVEL_9:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_9]
-          break
-        default:
-          output = SPELLCASTING_NAMES[SPELLCASTING_KEYS.CANTRIPS]
-          break
-      }
-
-      return output
-    },
-    getStatModFromKey(stat) {
-      if (stat === '') {
-        return 0
-      } else {
-        return this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
-      }
-      
-    },
-    getStatValue(statRef, statKey, valueKey) {
-      return this.characterToView[statRef][statKey][valueKey]
-    },
-    getStatBonusSign(stat) {
-      if (stat < 0) {
-        return stat // the negative will already be apart of the number
-      } else {
-        return "+" + stat
-      }
     },
     onPressAddFeatures() {
       if (this.featuresTempName === '') {
@@ -2007,6 +1941,78 @@ export default {
         })
       }
     },
+    calculatePassivePerception(mod) {
+      return 10 + mod
+    },
+    calculateBaseStatBonus(stat) {
+      return (stat - 10) / 2
+    },
+    calculateSpellSavingDc(profBonus, mod) {
+      return 8 + profBonus + mod
+    },
+    getDictionarySize(dict) {
+      if (dict) {
+        const count = Object.keys(dict).length;
+        return count
+      } else {
+        return 0
+      }
+    },
+    getSpellLevelName(level) {
+      var output = "Level "
+      switch (level) {
+        case SPELLCASTING_KEYS.LEVEL_1:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]
+          break
+        case SPELLCASTING_KEYS.LEVEL_2:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_2]
+          break
+        case SPELLCASTING_KEYS.LEVEL_3:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_3]
+          break
+        case SPELLCASTING_KEYS.LEVEL_4:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_4]
+          break
+        case SPELLCASTING_KEYS.LEVEL_5:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_5]
+          break
+        case SPELLCASTING_KEYS.LEVEL_6:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_6]
+          break
+        case SPELLCASTING_KEYS.LEVEL_7:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_7]
+          break
+        case SPELLCASTING_KEYS.LEVEL_8:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_8]
+          break
+        case SPELLCASTING_KEYS.LEVEL_9:
+          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_9]
+          break
+        default:
+          output = SPELLCASTING_NAMES[SPELLCASTING_KEYS.CANTRIPS]
+          break
+      }
+
+      return output
+    },
+    getStatModFromKey(stat) {
+      if (stat === '') {
+        return 0
+      } else {
+        return this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
+      }
+      
+    },
+    getStatValue(statRef, statKey, valueKey) {
+      return this.characterToView[statRef][statKey][valueKey]
+    },
+    getStatBonusSign(stat) {
+      if (stat < 0) {
+        return stat // the negative will already be apart of the number
+      } else {
+        return "+" + stat
+      }
+    },
     toggleCollapseForStat(statRef) {
       switch (statRef) {
         case CHARACTER_KEYS.STATS:
@@ -2197,6 +2203,13 @@ textarea {
 }
 
 .input-stats {
+  width: 65px; /* Adjust the width as needed */
+  margin-left: 5px; /* Adjust the spacing between the label and input */
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  text-align: center;
+  padding-bottom: 5px;
   font-size: larger;
 }
 
@@ -2221,12 +2234,13 @@ textarea {
 
 .list-inputs {
   list-style: none;
+  padding: 0;
 }
 
 .list-inputs li {
   display: flex;
-  align-items: left;
-  margin-top: 10px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* LIST - ADDED ITEMS STYLE */
