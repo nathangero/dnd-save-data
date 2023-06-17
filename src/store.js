@@ -107,7 +107,7 @@ const store = createStore({
     },
     updateCharacterInfo(state, payload) {
       // console.info('payload:', payload)
-      const { charId, info} = payload      
+      const { charId, info} = payload    
 
       return new Promise((resolve, reject) => {
         const userId = this.state.user.id

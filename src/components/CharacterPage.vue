@@ -686,6 +686,18 @@
             <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.EQUIPMENT]) > 0">
               <div>
                 <ul class="list">
+                  <li style="text-align: left; margin-bottom: 20px">
+                    <div v-if="!isEditingEquipment">
+                      <label class="item-name">Gold:</label>
+                      <label class="item-amount">x{{ characterToView[CHARACTER_KEYS.GOLD] }}</label>
+                    </div>
+                    <div v-if="isEditingEquipment" style="margin-bottom: 20px">
+                      <label class="item-name">Gold:</label>
+                      <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="characterToView[CHARACTER_KEYS.GOLD]" class="input-stats" inputmode="numeric" required>
+                      <button class="button-update" style="margin-left: 10px;" @click="onPressUpdateGold()">Update</button>
+                    </div>
+                  </li>
+                  
                   <li v-for="(item, key) in characterToView[CHARACTER_KEYS.EQUIPMENT]" :key="key">
                     <div v-if="!isEditingEquipment">
                       <label class="item-name">{{ key }}</label>
@@ -706,7 +718,7 @@
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.EQUIPMENT][key], CHARACTER_KEYS.EQUIPMENT)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(CHARACTER_KEYS.GOLD, characterToView[CHARACTER_KEYS.GOLD], CHARACTER_KEYS.GOLD)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -1916,6 +1928,30 @@ export default {
       .catch((error) => {
         console.error(error)
         alert(`An error occured updating for ${key}`)
+      })
+    },
+    onPressUpdateGold() {
+      const info = {
+        [CHARACTER_KEYS.GOLD]: this.characterToView[CHARACTER_KEYS.GOLD]
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        info: info
+      }
+
+      this.store.dispatch("updateCharacterInfo", payload).then((success) => {
+        if (success) {
+          alert(`updated gold amount`)
+        } else {
+          alert(`couldn't update gold amount for some reason`)
+        }
+
+        this.toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)
+      })
+      .catch((error) => {
+        console.error(error)
+        alert(`An error occured updating saving throws`)
       })
     },
     onPressUpdateSpell(levelKey, spellName, updatedSpell, statRef) {

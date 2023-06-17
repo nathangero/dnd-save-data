@@ -1605,7 +1605,7 @@ textarea {
 .list-characters li {
   width: 90%;
   list-style: none;
-  border: 1px solid black;
+  border: 2px solid black;
   border-radius: 10px; /* Rounded corners */
   text-align: left;
   margin-bottom: 10px;
