@@ -185,39 +185,21 @@
 
                 <collapse-transition dimension="height">
                   <div v-if="isShowingSavingThrows">
-                    <div class="container-inputs">
-                      <ul class="list-inputs">
-                        <li>
-                          <label for="saving-str" class="stat-label">Strength:</label>
-                          <input type="number" id="saving-str" v-model="savingThrows[STAT_KEYS.STRENGTH]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                        
-                        <li>
-                          <label for="saving-dex" class="stat-label">Dexterity: </label>
-                          <input type="number" id="saving-dex" v-model="savingThrows[STAT_KEYS.DEXTERITY]" class="input-stats" inputmode="numeric" required>
-                        </li>
+                    <ul class="stat-list">
+                      <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                        <div class="stat-group">
+                          <input type="checkbox" class="checkbox" v-model="savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
+                          <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
-                        <li>
-                          <label for="saving-con" class="stat-label">Consitution: </label>
-                          <input type="number" id="saving-con" v-model="savingThrows[STAT_KEYS.CONSTITUTION]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                        
-                        <li>
-                          <label for="saving-int" class="stat-label">Intelligence: </label>
-                          <input type="number" id="saving-int" v-model="savingThrows[STAT_KEYS.INTELLIGENCE]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                        
-                        <li>
-                          <label for="saving-wis" class="stat-label">Wisdom: </label>
-                          <input type="number" id="saving-wis" v-model="savingThrows[STAT_KEYS.WISDOM]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                        
-                        <li>
-                          <label for="saving-cha" class="stat-label">Charisma: </label>
-                          <input type="number" id="saving-cha" v-model="savingThrows[STAT_KEYS.CHARISMA]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                      </ul>
-                    </div>
+                          <label class="stat-value" v-if="savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
+                            {{ getStatBonusSign(savingThrows[stat][STAT_VALUES_KEYS.MOD] + proficiencyBonus) }}
+                          </label>
+                          <label class="stat-value" v-if="!savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
+                            {{ getStatBonusSign(savingThrows[stat][STAT_VALUES_KEYS.MOD]) }}
+                          </label>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </collapse-transition>
 
@@ -1712,6 +1694,20 @@ textarea {
   border: 1px solid black;
   color: black;
   border-radius: 10px;
+}
+
+.picker:focus {
+  outline: none;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  padding: 0;
 }
 
 
