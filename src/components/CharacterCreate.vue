@@ -511,44 +511,76 @@
     </div>
       
     <br>
-    <div id="languages">
-      <div class="h3-bar">
-        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
-        <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
-        <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
-      </div>
+      <div id="languages">
+        <div class="edit-buttons">
+          <div>
+            <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
+            <button class="button-edit-spacer" v-if="isEditingLanguages">Finish</button>
+          </div>
 
-      <collapse-transition dimension="height">
-        <div v-if="isShowingLanguages">
-          <template v-if="getDictionarySize(languages) > 0">
-            <div class="list-container">
-              <ul class="list">
-                <li v-for="(item, key) in languages" :key="key">
-                  <label class="item-name">{{ key }}</label>
-                  <label class="item-description">{{ item }}</label>
-                  <br>
-                  <button @click="onPressDeleteLanguage(key)">Delete</button>
-                </li>
-              </ul>
-            </div>
-          </template>
-
-          <div class="language-container">
-            <input class="item-input" type="text" v-model="languagesTempName" placeholder="Language name"> 
-            <div style="margin-top: 10px;">
-              <label>Proficiency: </label>
-              <select class="picker" v-model="languagesTempProficiency">
-                <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-              </select>
-            </div>
-            <br>
-            <button class="button-add" @click="onPressAddLanguage">Add</button>
-            <hr class="list-divider">
+          <div class="h3-bar">
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
+            <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
+            <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
+          </div>
+          
+          <div>
+            <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
+            <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
           </div>
         </div>
-      </collapse-transition>
-      
-    </div>
+
+        <collapse-transition dimension="height">
+          <div v-if="isShowingLanguages">
+            <template v-if="getDictionarySize(languages) > 0">
+              <div>
+                <ul>
+                  <li v-for="(item, key) in languages" :key="key">
+                    <div v-if="!isEditingLanguages">
+                      <div class="language-group">
+                        <p class="language-label">{{ key }}:</p>
+                        <p class="language-value">{{ item }}</p>
+                      </div>
+                    </div>
+
+                    <!-- Edit and Delete -->
+                    <div v-if="isEditingLanguages">
+                      <div style="margin-top: 10px; text-align: left;">
+                        <label class="item-name">{{ key }}:</label>
+                        <select class="picker" v-model="languages[key]">
+                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                        </select>
+                      </div>
+
+                      <div class="buttons-delete-update">
+                        <br>
+                        <button class="button-delete" @click="onPressDeleteLanguage(key)">Delete</button>
+                      </div>
+                      
+                      <hr class="list-divider">
+                    </div>
+                    
+                  </li>
+                </ul>
+              </div>
+            </template>
+
+            <!-- Add new -->
+            <div class="language-container">
+              <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
+              <div style="margin-top: 10px;">
+                <label class="stat-label">Proficiency: </label>
+                <select class="picker" v-model="languagesTempProficiency">
+                  <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                </select>
+              </div>
+              <br>
+              <button class="button-add" @click="onPressAddLanguage">Add</button>
+            </div>
+          </div>
+        </collapse-transition>
+        
+      </div>   
       
     <br>
     <div id="proficiencies">
@@ -1515,7 +1547,7 @@ export default {
 }
 </script>
 
-<style>
+<style> /* TODO: Need to make this scoped and have separate css files for styles */
 h2 {
   padding-top: 50px;
 }
@@ -1746,7 +1778,7 @@ textarea {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  width: 50%
+  width: 60%
 }
 
 .language-label {
@@ -1803,6 +1835,17 @@ textarea {
 
 /* BUTTON STYLES */
 
+.h3-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.h3-bar h3 {
+  margin-left: 10px;
+}
+
 
 .button-close {
   position: absolute;
@@ -1848,6 +1891,7 @@ textarea {
 }
 
 .button-delete {
+  margin: 0 auto;
   padding: 10px;
   background-color: #dd3528;
   border: none;
@@ -1874,5 +1918,10 @@ textarea {
   font-size: x-large;
   margin-top: 10%;
   margin-bottom: 10%;
+}
+
+
+.collapse-chevron {
+  margin: 5px;
 }
 </style>

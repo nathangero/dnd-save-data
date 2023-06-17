@@ -2131,7 +2131,7 @@ export default {
 }
 </script>
 
-<style>
+<style>  /* TODO: Need to make this scoped and have separate css files for styles */
 .slide-up-enter-active {
 transition: transform 0.3s;
 }
@@ -2338,7 +2338,7 @@ textarea {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  width: 50%
+  width: 60%
 }
 
 .language-label {
@@ -2387,6 +2387,17 @@ textarea {
 
 /* BUTTON STYLES */
 
+.h3-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.h3-bar h3 {
+  margin-left: 10px;
+}
+
 .button-close {
   position: absolute;
   top: 10px;
@@ -2402,17 +2413,6 @@ textarea {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
-}
-
-.h3-bar {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-.h3-bar h3 {
-  margin-left: 10px;
 }
 
 .edit-buttons {
