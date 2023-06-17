@@ -59,11 +59,11 @@ export async function createNewCharacter(userId, characterInfo) {
         dbRef += newKey
         set(ref(db, dbRef), characterInfo).then(() => {
             // console.info(`created a new character for user: ${userId}`)
-            resolve(true)
+            resolve(true, newKey)
         })
         .catch ((error => {
             console.error(error)
-            reject(false)
+            reject(false, '')
         }))
     })
 }

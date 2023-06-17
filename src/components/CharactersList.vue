@@ -34,17 +34,19 @@
         </div>
       </template>
 
-
-      <transition name="slide-up" mode="out-in">
-        <template v-if="isModalViewCharacterOpen">
-          <div class="modal-page-overlay">
-            <div class="modal-page scrollable">
-              <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
+      <!-- View a character -->
+      <div id="view-character">
+        <transition name="slide-up" mode="out-in">
+          <template v-if="isModalViewCharacterOpen">
+            <div class="modal-page-overlay">
+              <div class="modal-page scrollable">
+                <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
+              </div>
             </div>
-          </div>
-          
-        </template>
-      </transition>
+            
+          </template>
+        </transition>
+      </div>
 
       
 
@@ -54,7 +56,7 @@
           <template v-if="isModalNewCharacterOpen">
             <div class="modal-page-overlay">
               <div class="modal-page scrollable">
-                <character-create v-if="isModalNewCharacterOpen" @close="toggleModalNewCharacter"></character-create>
+                <character-create v-if="isModalNewCharacterOpen" @close="toggleModalNewCharacter" @created-character="toggleModalNewCharacter"></character-create>
               </div>
             </div>
             
@@ -88,7 +90,6 @@ import { useStore } from 'vuex'
 import CharacterCreate from './CharacterCreate.vue';
 import CharacterPage from '@/components/CharacterPage.vue'
 import SideMenu from '@/components/SideMenu.vue'
-import { createNewCharacter } from '@/functions/rtdb'
 import Character from '@/models/character'
 import Cookies from 'js-cookie'
 import ROUTER_NAMES from '@/enums/router-names'
@@ -141,24 +142,6 @@ export default {
     },
   },
   methods: {
-    createCharacter() {
-      console.info("@createCharacter")
-      if (this.checkIfAllValid()) {
-        const newCharacter = this.createCharacterDictionary()
-        console.info('character:', newCharacter)
-        // alert("New Character created!")
-        createNewCharacter(this.store.getters.getUser.id, newCharacter).then((success => {
-          if (success) {
-            alert("New Character created!")
-            this.resetVariables()
-            this.toggleModalNewCharacter()
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          } else {
-            alert("An error occurred creating your character. Please try again")
-          }
-        }))
-      }
-    },
     navigateTo(routeName) {
       this.$router.push({ name: routeName })
     },

@@ -12,10 +12,22 @@ const store = createStore({
     isLoggedIn: false,
   },
   mutations: {
-    addCharacter(charId, characterInfo) {
-      this.usersCharacters[charId] = characterInfo
+    addCharacterLocally(state, payload) {
+      // console.info('@addCharacter')
+      const { charId, characterToAdd } = payload
+
+      if (state.user.characters) {
+        // If dictionary already exists, just add to it
+        state.user.characters[charId] = characterToAdd
+      } else {
+        // If dicitonary doesn't exist, create it
+        const newCharacter = {
+          [charId]: characterToAdd
+        }
+        state.user.characters = newCharacter
+      }
     },
-    deleteCharacter(state, charId) {
+    deleteCharacterLocally(state, charId) {
       delete state.user.characters[charId]
     },
     signOut(state) {
@@ -235,12 +247,30 @@ const store = createStore({
         resolve(true)
       })      
     },
+    addCharacterToDb(state, newCharacter) {
+      const userId = this.state.user.id
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.createNewCharacter(userId, newCharacter).then((success, newCharId) => {
+          if (success && newCharId !== '') {
+            const payload = {
+              charId: "test",
+              characterToAdd: newCharacter
+            }
+            this.commit('addCharacterLocally', payload)
+            resolve(true)
+          }
+        })
+        .catch ((error) => {
+          reject(error)
+        })
+      })
+    },
     deleteCharacterFromDb(state, charId) {
       const userId = this.state.user.id
       return new Promise((resolve, reject) => {
         rtdbFunctions.deleteCharacter(userId, charId).then((success) => {
           if (success) {
-            this.commit('deleteCharacter', charId)
+            this.commit('deleteCharacterLocally', charId)
             resolve(true)
           }
         })

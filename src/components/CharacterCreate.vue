@@ -448,7 +448,6 @@
 <script>
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
-import { createNewCharacter } from '@/functions/rtdb'
 import Character from '@/models/character'
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
@@ -1158,13 +1157,10 @@ export default {
       if (this.checkIfAllValid()) {
         const newCharacter = this.createCharacterDictionary()
         console.info('character:', newCharacter)
-        // alert("New Character created!")
-        createNewCharacter(this.store.getters.getUser.id, newCharacter).then((success => {
+        this.store.dispatch("addCharacterToDb", newCharacter).then((success => {
           if (success) {
-            alert("New Character created!")
-            this.resetVariables()
-            this.toggleModalNewCharacter()
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            alert(`Created new character, ${this.characterName}!`)
+            this.$emit('close'); // Tell parent to close this modal
           } else {
             alert("An error occurred creating your character. Please try again")
           }
@@ -1229,18 +1225,12 @@ export default {
       }
       
     },
-    // getStatValue(statRef, statKey, valueKey) {
-    //   return this.characterToView[statRef][statKey][valueKey]
-    // },
     getStatBonusSign(stat) {
       if (stat < 0) {
         return stat // the negative will already be apart of the number
       } else {
         return "+" + stat
       }
-    },
-    navigateTo(routeName) {
-      this.$router.push({ name: routeName })
     },
     toggleCollapseForStat(statRef) {
       switch (statRef) {
@@ -1297,23 +1287,6 @@ export default {
         default:
           this.isShowingCharacterInfo = !this.isShowingCharacterInfo
       }
-    },
-    toggleModalNewCharacter() {
-      this.isModalNewCharacterOpen = !this.isModalNewCharacterOpen
-      this.isNavBarOpen = !this.isNavBarOpen
-    },
-    toggleModalViewCharacter(charId) {
-      this.isModalViewCharacterOpen = !this.isModalViewCharacterOpen
-      this.isNavBarOpen = !this.isNavBarOpen
-
-      if (this.isModalViewCharacterOpen) {
-        this.characterToView = this.store.getters.getUserCharacters[charId]
-        this.characterToViewId = charId
-      } else {
-        this.characterToView = new Character()
-        this.characterToViewId = ''
-      }
-      
     },
   }
 }
