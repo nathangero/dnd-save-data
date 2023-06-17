@@ -215,99 +215,21 @@
 
                 <collapse-transition dimension="height">
                   <div v-if="isShowingSkills">
-                    <div class="container-inputs">
-                      <ul class="list-inputs">
-                        <li>
-                          <label for="skills-acrobatics" class="stat-label">Acrobatics:</label>
-                          <input type="number" id="skills-acrobatics" v-model="skills[SKILL_KEYS.ACROBATICS]" class="input-stats" inputmode="numeric" required>
-                        </li>
+                    <ul class="stat-list">
+                      <li v-for="(skill, key) in SKILL_KEYS" :key="key">
+                        <div class="stat-group">
+                          <input type="checkbox" class="checkbox" v-model="skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
+                          <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
-                        <li>
-                          <label for="skills-animal-handling" class="stat-label">Animal Hanlding:</label>
-                          <input type="number" id="skills-animal-handling" v-model="skills[SKILL_KEYS.ANIMAL_HANDLING]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-arcana" class="stat-label">Arcana:</label>
-                          <input type="number" id="skills-arcana" v-model="skills[SKILL_KEYS.ARCANA]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-athletics" class="stat-label">Athletics:</label>
-                          <input type="number" id="skills-athletics" v-model="skills[SKILL_KEYS.ATHLETICS]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-deception" class="stat-label">Deception:</label>
-                          <input type="number" id="skills-deception" v-model="skills[SKILL_KEYS.DECEPTION]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-history" class="stat-label">History:</label>
-                          <input type="number" id="skills-history" v-model="skills[SKILL_KEYS.HISTORY]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-insight" class="stat-label">Insight:</label>
-                          <input type="number" id="skills-insight" v-model="skills[SKILL_KEYS.INSIGHT]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                        
-                        <li>
-                          <label for="skills-intimidation" class="stat-label">Intimidation:</label>
-                          <input type="number" id="skills-intimidation" v-model="skills[SKILL_KEYS.INTIMIDATION]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-investigation" class="stat-label">Investigation:</label>
-                          <input type="number" id="skills-investigation" v-model="skills[SKILL_KEYS.INVESTIGATION]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-medicine" class="stat-label">Medicine:</label>
-                          <input type="number" id="skills-medicine" v-model="skills[SKILL_KEYS.MEDICINE]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-nature" class="stat-label">Nature:</label>
-                          <input type="number" id="skills-nature" v-model="skills[SKILL_KEYS.NATURE]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                        
-                        <li>
-                          <label for="skills-perception" class="stat-label">Perception:</label>
-                          <input type="number" id="skills-perception" v-model="skills[SKILL_KEYS.PERCEPTION]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-performance" class="stat-label">Performance:</label>
-                          <input type="number" id="skills-performance" v-model="skills[SKILL_KEYS.PERFORMANCE]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-persuasion" class="stat-label">Persuasion:</label>
-                          <input type="number" id="skills-persuasion" v-model="skills[SKILL_KEYS.PERSUASION]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-religion" class="stat-label">Religion:</label>
-                          <input type="number" id="skills-religion" v-model="skills[SKILL_KEYS.RELIGION]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-sleight-of-hand" class="stat-label">Slight of Hand:</label>
-                          <input type="number" id="skills-sleight-of-hand" v-model="skills[SKILL_KEYS.SLEIGHT_OF_HAND]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-stealth" class="stat-label">Stealth:</label>
-                          <input type="number" id="skills-stealth" v-model="skills[SKILL_KEYS.STEALTH]" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li>
-                          <label for="skills-survival" class="stat-label">Survival:</label>
-                          <input type="number" id="skills-survival" v-model="skills[SKILL_KEYS.SURVIVAL]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                      </ul>
-                    </div>
+                          <label class="stat-value" v-if="skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
+                            {{ getStatBonusSign(skills[skill][STAT_VALUES_KEYS.MOD] + proficiencyBonus) }}
+                          </label>
+                          <label class="stat-value" v-if="!skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
+                            {{ getStatBonusSign(skills[skill][STAT_VALUES_KEYS.MOD]) }}
+                          </label>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </collapse-transition>
                 
