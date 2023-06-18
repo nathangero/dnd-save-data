@@ -1,0 +1,377 @@
+h2 {
+  padding-top: 50px;
+}
+
+h3 {
+  text-decoration: underline;
+}
+
+textarea {
+  width: 90%;
+  text-align: left;
+  border-radius: 10px;
+  padding: 5px;
+  font-size: larger;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 300px; /* Adjust the height as needed */
+}
+
+.character-description {
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  text-align: left;
+  padding-left: 0;
+  padding-bottom: 5px;
+}
+
+.list-divider {
+  width: 90%;
+  margin-top: 10px;
+}
+
+.input-stats {
+  width: 65px; /* Adjust the width as needed */
+  margin-left: 5px; /* Adjust the spacing between the label and input */
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  text-align: center;
+  padding-bottom: 5px;
+  font-size: larger;
+}
+
+.flex-container-stat {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+}
+
+.picker {
+  margin-right: 0;
+  font-size: larger;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  border-radius: 10px;
+}
+
+.picker:focus {
+  outline: none;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  padding: 0;
+}
+
+
+/* LIST - ENTERING INPUT STYLE */
+
+.container-inputs {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0 auto; /* centers the container */
+}
+
+.list-inputs {
+  list-style: none;
+  padding: 0;
+}
+
+.list-inputs li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LIST - ADDED ITEMS STYLE */
+
+.item-input {
+  width: 80%;
+  margin-left: 5px; /* Adjust the spacing between the label and input */
+  margin-bottom: 10px;
+  border: none; /* Remove the default border */
+  border-bottom: 1px solid black; /* Add a bottom border */
+  outline: none;
+  padding-left: 0;
+  padding-bottom: 5px;
+}
+
+.list-container {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto; /* centers the container */
+  border: 1px solid black;
+  border-radius: 10px; /* Rounded corners */
+}
+
+.list li {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-weight: bold;
+  font-size: larger;
+  margin-right: 20px;
+}
+
+.item-amount{
+  font-size: larger;
+}
+
+.item-description {
+  width: 80%;
+  font-size: larger;
+  text-align: left;
+}
+
+
+/* USER'S CHARACTERS LIST STYLE */
+
+.list-container-characters {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto; /* centers the container */
+}
+
+.list-characters li {
+  width: 90%;
+  list-style: none;
+  border: 2px solid black;
+  border-radius: 10px; /* Rounded corners */
+  text-align: left;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+/* STAT STYLE */
+
+.stat-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 65%;
+  margin: 0 auto;
+  padding-left: 0;
+}
+
+.stat-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  text-align: left;
+  font-size: larger;
+}
+
+.stat-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+.stat-bonus {
+  margin-left: 10px; /* Adjust as needed */
+  text-align: right;
+  font-size: larger;
+}
+
+/* WEAPON STYLES */
+
+.weapon-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 80%;
+  margin: 0 auto;
+}
+
+
+.weapon-group {
+  display: flex;
+  
+  margin-bottom: 10px;
+}
+
+.weapon-label {
+  text-align: left;
+  font-size: larger;
+}
+
+.weapon-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+/* LANGUAGE STYLES */
+
+.language-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 60%
+}
+
+.language-label {
+  text-align: left;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.language-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+
+/* SPELL STYLES */
+
+.spell-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 75%;
+}
+
+.spell-group {
+  display: flex;
+  align-items: center;
+}
+
+.spell-label {
+  text-align: left;
+  font-size: larger;
+}
+
+.spell-value {
+  flex-grow: 1;
+  text-align: right;
+  font-size: larger;
+}
+
+.spell-description {
+  font-size: larger;
+  width: 100%;
+  /* margin-top: 10px; */
+}
+
+/* SPELL CASTING STYLE */
+
+.spells-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* BUTTON STYLES */
+
+.h3-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.h3-bar h3 {
+  margin-left: 10px;
+}
+
+
+.button-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+
+.edit-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.button-edit {
+  /* margin-left: auto; */
+  margin-right: 10px;
+  padding: 5px 10px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+
+.button-edit-spacer {
+  margin-right: auto;
+  margin-left: 10px;
+  padding: 5px 10px;
+  visibility: hidden;
+}
+
+.buttons-delete-update {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 10px auto;
+  width: 60%;
+}
+
+.button-delete {
+  margin: 0 auto;
+  padding: 10px;
+  background-color: #dd3528;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: large;
+}
+
+.button-add {
+  padding: 10px;
+  background-color: #42B6E8;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: larger;
+}
+
+.button-create-character {
+  padding: 10px;
+  background-color: #42B6E8;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: x-large;
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+
+.collapse-chevron {
+  margin: 5px;
+}

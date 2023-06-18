@@ -28,4 +28,34 @@ const CHARACTER_KEYS = {
     WEAPONS: "weapons",
 }
 
-export { CHARACTER_KEYS }
+const CHARACTER_NAMES = {
+    [CHARACTER_KEYS.ALIGNMENT]: "Alignment",
+    [CHARACTER_KEYS.ARMOR]: "Armor",
+    [CHARACTER_KEYS.BACKGROUND]: "Bbackground",
+    [CHARACTER_KEYS.CLASS]: "Class",
+    [CHARACTER_KEYS.DEATH_SAVES]: "DeathSaves",
+    [CHARACTER_KEYS.EQUIPMENT]: "Equipment",
+    [CHARACTER_KEYS.FEATURES]: "FeaturesTraits",
+    [CHARACTER_KEYS.GOLD]: "Gold",
+    [CHARACTER_KEYS.HP]: "Hp",
+    [CHARACTER_KEYS.INITIATIVE]: "Initiative",
+    [CHARACTER_KEYS.LANGUAGES]: "Languages",
+    [CHARACTER_KEYS.LEVEL]: "Level",
+    [CHARACTER_KEYS.NAME]: "Name",
+    [CHARACTER_KEYS.PASSIVE_PERCEPTION]: "PassivePerception",
+    [CHARACTER_KEYS.PROFICIENCIES]: "Proficiencies",
+    [CHARACTER_KEYS.PROFICIENCY_BONUS]: "ProficiencyBonus",
+    [CHARACTER_KEYS.RACE]: "Race",
+    [CHARACTER_KEYS.SAVING_THROWS]: "SavingThrows",
+    [CHARACTER_KEYS.SKILLS]: "Skills",
+    [CHARACTER_KEYS.SPEED]: "Speed",
+    [CHARACTER_KEYS.SPELL_BONUS]: "SpellBonus",
+    [CHARACTER_KEYS.SPELL_CAST_STAT]: "SpellCastStat",
+    [CHARACTER_KEYS.SPELL_SAVE_DC]: "SpellSaveDc",
+    [CHARACTER_KEYS.SPELLS]: "Spells",
+    [CHARACTER_KEYS.STATS]: "Stats",
+    [CHARACTER_KEYS.TREASURES]: "Treasures",
+    [CHARACTER_KEYS.WEAPONS]: "Weapons",
+}
+
+export { CHARACTER_KEYS, CHARACTER_NAMES }

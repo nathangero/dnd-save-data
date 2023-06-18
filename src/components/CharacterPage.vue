@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <button class="button-close" @click="closeModal('')">Close</button>
+    <button class="button-close" @click="closeModal">Close</button>
     <div id="character-info" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''">
       <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 
@@ -72,7 +72,7 @@
                 
                 <li>
                   <div class="stat-group">
-                    <label class="stat-label">Speed: </label>
+                    <label class="stat-label">Speed (ft): </label>
                     <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
                   </div>
                 </li>
@@ -162,13 +162,13 @@
                     <input type="number" id="stats-armor-class" v-model="characterToView[CHARACTER_KEYS.ARMOR]" class="input-stats" inputmode="numeric" required>
                   </li>
 
-                  <li>
+                  <li style="margin-top: 10px; margin-bottom: 10px;">
                     <label for="stats-initiative" class="stat-label">Initiative: </label>
-                    <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.INITIATIVE]" class="input-stats" inputmode="numeric" required>
+                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
                   </li>
                   
                   <li>
-                    <label for="stats-speed" class="stat-label">Speed: </label>
+                    <label for="stats-speed" class="stat-label">Speed (ft): </label>
                     <input type="number" id="stats-speed" v-model="characterToView[CHARACTER_KEYS.SPEED]" class="input-stats" inputmode="numeric" required>
                   </li>
 
@@ -219,9 +219,9 @@
                     <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]" class="input-stats" inputmode="numeric" required>
                   </li>
 
-                  <li style="margin-top: 10px;">
+                  <li style="margin-top: 10px; margin-bottom: 10px;">
                     <label for="stats-proficiency-bonus" class="stat-label">Passive Perception: </label>
-                    <label class="stat-label">{{ characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
+                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]) }}</label>
                   </li>
 
                   <li style="margin-top: 10px;">
@@ -233,7 +233,7 @@
                 
                   <li style="margin-top: 5px;">
                     <label class="stat-label">Spell Saving DC: </label>
-                    <label class="stat-label">{{ characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
+                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.SPELL_SAVE_DC]) }}</label>
                   </li>
                 </ul>
               </div>
@@ -434,23 +434,34 @@
                     <!-- Edit and Delete -->
                     <div v-if="isEditingFeaturesTraits">
                       <label class="item-name">{{ key }}</label>
+                      <div class="container-inputs">
+                        <ul class="list-inputs">
+                          <li style="margin-top: 10px;">
+                            <label class="stat-label">Type:</label>
+                            <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
+                              <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                            </select>
+                          </li>
+
+                          <li>
+                            <label class="stat-label" for="features-input"> # of Uses:</label>
+                            <input class="input-stats" style="width=70%;" type="number" v-model="item[FEATURES_KEYS.USES]"> 
+                          </li>
+                        </ul>
+                      </div>
+
                       <div class="container-edit">
                         <div>
-                          <br>
-                          <label class="stat-label">Type:</label>
-                          <select class="picker" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.TYPE]">
-                            <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                          </select>
+                          
                         </div>
                         <div>
-                          <label class="stat-label" for="features-input"> # of Uses:</label>
-                          <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.USES]"> 
+                          
                         </div>
                         <br>
-                        <textarea v-model="characterToView[CHARACTER_KEYS.FEATURES][key][FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                         <div class="buttons-delete-update">
                           <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
-                          <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.FEATURES][key], CHARACTER_KEYS.FEATURES)">Update</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
                         </div>
                       </div>
                       
@@ -464,7 +475,7 @@
             <!-- Add new -->
             <template v-if="isEditingFeaturesTraits">
               <div>
-                <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/Trait name"> 
+                <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
                 <div class="container-inputs">
                   <ul class="list-inputs">
                     <li style="margin-top: 10px;">
@@ -484,7 +495,7 @@
                 <br>
                 <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddFeatures" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddFeatures">Add</button>
               </div>         
             </template>
           </div>
@@ -561,40 +572,43 @@
                         <ul class="list-inputs">
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
-                            <input class="input-stats" style="width=70%;" type="number" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.AMOUNT]"> 
+                            <input class="input-stats" style="width=70%;" type="number" v-model="item[WEAPON_KEYS.AMOUNT]"> 
                           </li>
                           
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
-                            <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
+                            <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
                               <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                             </select>
                           </li>
                           
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                            <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.DIE]">
+                            <select class="picker" v-model="item[WEAPON_KEYS.DIE]">
                               <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                             </select>
                           </li>
 
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                            <select class="picker" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.CATEGORY]">
+                            <select class="picker" v-model="item[WEAPON_KEYS.CATEGORY]">
                               <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                             </select>
                           </li>
 
                           <li style="margin-top: 10px;">
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                            <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.WEAPONS][key][WEAPON_KEYS.PROFICIENT]">
+                            <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
                           </li>
+
+                          <br>
+                          <textarea v-model="item[WEAPON_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                         </ul>
                       </div>
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.WEAPONS][key], CHARACTER_KEYS.WEAPONS)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.WEAPONS)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -615,36 +629,29 @@
                       <label class="stat-label" for="equipment-input">Amount:</label>
                       <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
                     </li>
-                    
-                    <li>
-                      <label class="stat-label" for="equipment-input">Attack Bonus Mod:</label>
+
+                    <li style="margin-top: 10px;">
+                      <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
                       <select class="picker" v-model="weaponsTempAttackModifier">
-                        <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
+                        <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                       </select>
                     </li>
                     
-                    <li>
-                      <label class="stat-label" for="equipment-input">Damage Mod:</label>
-                      <select class="picker" v-model="weaponsTempDamageModifier">
-                        <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ mod }}</option>
-                      </select>
-                    </li>
-                    
-                    <li>
+                    <li style="margin-top: 10px;">
                       <label class="stat-label" for="equipment-input">Die Type:</label>
                       <select class="picker" v-model="weaponTempDieType">
                         <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                       </select>
                     </li>
 
-                    <li>
+                    <li style="margin-top: 10px;">
                       <label class="stat-label" for="equipment-input">Category:</label>
                       <select class="picker" v-model="weaponTempCategory">
                         <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                       </select>
                     </li>
 
-                    <li>
+                    <li style="margin-top: 10px;">
                       <label class="stat-label" for="equipment-input">Proficient:</label>
                       <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
                     </li>
@@ -654,7 +661,7 @@
                 <br>
                 <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddWeapon" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddWeapon">Add</button>
               </div>
             </template>
           </div>
@@ -686,6 +693,18 @@
             <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.EQUIPMENT]) > 0">
               <div>
                 <ul class="list">
+                  <li style="text-align: left; margin-bottom: 20px">
+                    <div v-if="!isEditingEquipment">
+                      <label class="item-name">Gold:</label>
+                      <label class="item-amount">x{{ characterToView[CHARACTER_KEYS.GOLD] }}</label>
+                    </div>
+                    <div v-if="isEditingEquipment" style="margin-bottom: 20px">
+                      <label class="item-name">Gold:</label>
+                      <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="characterToView[CHARACTER_KEYS.GOLD]" class="input-stats" inputmode="numeric" required>
+                      <button class="button-update" style="margin-left: 10px;" @click="onPressUpdateGold()">Update</button>
+                    </div>
+                  </li>
+                  
                   <li v-for="(item, key) in characterToView[CHARACTER_KEYS.EQUIPMENT]" :key="key">
                     <div v-if="!isEditingEquipment">
                       <label class="item-name">{{ key }}</label>
@@ -699,14 +718,14 @@
                       <div class="container-edit">
                         <div>
                           <label class="stat-label" for="equipment-input">Amount:</label>
-                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.AMOUNT]"> 
+                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
                         </div>
-                        <textarea v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                       </div>
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.EQUIPMENT][key], CHARACTER_KEYS.EQUIPMENT)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.EQUIPMENT)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -727,7 +746,7 @@
                 <br>
                 <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddEquipment" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddEquipment">Add</button>
               </div>
             </template>
           </div>
@@ -772,14 +791,14 @@
                       <div class="container-edit">
                         <div>
                           <label class="stat-label" for="equipment-input">Amount:</label>
-                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.AMOUNT]"> 
+                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
                         </div>
-                        <textarea v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                       </div>
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.TREASURES][key], CHARACTER_KEYS.TREASURES)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.TREASURES)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -800,7 +819,7 @@
                 <br>
                 <textarea v-model="treasureTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddTreasure" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddTreasure">Add</button>
               </div>
             </template>
           </div>
@@ -852,7 +871,7 @@
                       <div class="buttons-delete-update">
                         <br>
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.LANGUAGES][key], CHARACTER_KEYS.LANGUAGES)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -874,7 +893,7 @@
                   </select>
                 </div>
                 <br>
-                <button @click="onPressAddLanguage" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddLanguage">Add</button>
               </div>
             </template>
           </div>
@@ -922,7 +941,7 @@
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.PROFICIENCIES][key], CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -939,7 +958,7 @@
                 <br>
                 <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button @click="onPressAddProficiency" style="margin-top: 10px;">Add</button>
+                <button class="button-add" @click="onPressAddProficiency">Add</button>
               </div>
             </template>
           </div>
@@ -971,29 +990,29 @@
             <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
               <div>
                 <ul class="list">
-                  <li v-for="(item, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
-                    <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS][level]) > 0">
-                      <label class="item-name">{{ getSpellLevelName(level) }}:</label>
+                  <li v-for="(levelDict, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
+                    <template v-if="getDictionarySize(levelDict) > 0">
+                      <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
                       <ul>
-                        <li v-for="(spell, spellName) in characterToView[CHARACTER_KEYS.SPELLS][level]" :key="spellName">
+                        <li v-for="(spell, spellName) in levelDict" :key="spellName">
                           <div v-if="!isEditingSpellCasting">
                             <label class="item-name">{{ spellName }}</label>
                             <br>
                             <div class="spell-list">
                               <div class="spell-group">
                                 <label class="spell-label">Casting Time:</label>
-                                <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
                               </div>
                               <div class="spell-group">
                                 <label class="spell-label">Duration:</label>
-                                <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.DURATION]] }} sec</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
                               </div>
                               <div class="spell-group">
                                 <label class="spell-label">Range:</label>
-                                <label class="spell-value">{{ spell[[SPELLCASTING_KEYS.RANGE]] }} ft</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
                               </div>
                             </div>
-                            <label class="spell-description">{{ spell[[SPELLCASTING_KEYS.DESCRIPTION]] }}</label>
+                            <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
                           </div>
 
                           <!-- Edit and Delete -->
@@ -1003,26 +1022,26 @@
                               <ul class="list-inputs">
                                 <li>
                                   <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
-                                  <input type="number" id="spells-casting-time" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
                                 </li>
                                   
                                 <li>
                                   <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
-                                  <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
                                 </li>
                                 
                                 <li>
                                   <label for="spells-range" class="stat-label">Range (in feet):</label>
-                                  <input type="number" id="spells-range" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
                                 </li>
                               </ul>
                             </div>
                             
                             <br>
-                            <textarea v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELLCASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                            <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                             <div class="buttons-delete-update">
                               <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                              <button class="button-update" @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
+                              <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
                             </div>
                       
                             <hr class="list-divider">
@@ -1043,7 +1062,7 @@
                   <li>
                     <label class="stat-label" for="spells-level">Level:</label>
                     <select class="picker" v-model="spellTempLevel">
-                      <option v-for="levels in SPELLCASTING_NAMES" :key="levels" :value="levels">{{ levels }}</option>
+                      <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
                     </select>
                   </li>
                   
@@ -1067,7 +1086,7 @@
               <br>
               <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
               <br>
-              <button @click="onPressAddSpell" style="margin-top: 10px;">Add</button>
+              <button class="button-add" @click="onPressAddSpell">Add</button>
             </template>
           </div>
         </collapse-transition>
@@ -1084,10 +1103,10 @@
           <div class="popup">
             <div class="form">
               <h1>Delete {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
-              <p>This action can't be undone</p>
-              <div class="delete-buttons">
-                <button style="margin-right: 20px;" @click="toggleDeleteCharacterPopup">Cancel</button>
-                <button @click="deleteCharacter">Delete</button>
+              <p class="delete-character-prompt">This action can't be undone</p>
+              <div class="buttons-delete-character">
+                <button class="button-cancel-delete" @click="toggleDeleteCharacterPopup">Cancel</button>
+                <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
               </div>
             </div>
           </div>
@@ -1111,10 +1130,10 @@ import { ALIGNMENT_TYPES } from '@/enums/alignment-types'
 import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
-import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/deathSaves-keys.js'
+import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
-import { SPELLCASTING_KEYS, SPELLCASTING_NAMES } from '@/enums/dbKeys/spellcasting_keys'
+import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 
 
@@ -1183,8 +1202,10 @@ export default {
       STAT_NAMES: STAT_NAMES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
-      SPELLCASTING_KEYS: SPELLCASTING_KEYS,
-      SPELLCASTING_NAMES: SPELLCASTING_NAMES,
+      SPELL_CASTING_KEYS: SPELL_CASTING_KEYS,
+      SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
+      SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
+      SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
@@ -1193,7 +1214,7 @@ export default {
       characterToView: new Character(),
       level: '',
       characterArmor: '',
-      [CHARACTER_KEYS.INITIATIVE]: '',
+      initiative: '',
       proficiencyBonus: '',
       characterSpeed: '',
       hitDieType: '', // d10
@@ -1227,7 +1248,6 @@ export default {
       weaponTempCategory: '', // e.g. finesse
       weaponTempAmount: '',
       weaponsTempAttackModifier: '', // e.g. dex
-      weaponsTempDamageModifier: '', // e.g. dex
       weaponTempDieType: '', // e.g. d8
       weaponTempIsProficient: '', // e.g. d8
       weaponTempProperties: '', // e.g. finesse, light
@@ -1240,15 +1260,27 @@ export default {
   },
 
   watch: {
+    'characterToView.proficiencyBonus': function(newValue) {
+      const stat = this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]
+      const statMod = this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
+      this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(newValue, statMod)
+    },
     'characterToView.stats.str.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS][STAT_VALUES_KEYS.MOD] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.STRENGTH) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.dex.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
@@ -1256,15 +1288,29 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.INITIATIVE] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.DEXTERITY) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.con.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.CONSTITUTION) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.int.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
@@ -1273,9 +1319,16 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION][STAT_VALUES_KEYS.MOD] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.INTELLIGENCE) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.wis.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
@@ -1284,10 +1337,17 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] = 10 + statMod
+      this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] = this.calculatePassivePerception(statMod)
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.WISDOM) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.stats.cha.value': function(newValue) {
-      const statMod = Math.floor(this.getBaseStatBonus(newValue))
+      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
 
       this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
@@ -1295,14 +1355,21 @@ export default {
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE][STAT_VALUES_KEYS.MOD] = statMod
       this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION][STAT_VALUES_KEYS.MOD] = statMod
+      
+      // Adjust spell saving dc if necessary
+      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.CHARISMA) {
+        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
+      }
     },
     'characterToView.spellCastStat': function(newValue) {
       if (newValue === '') {
         this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = 0
       } else {
         const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const mod = this.characterToView[CHARACTER_KEYS.STATS][newValue][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = 8 + profBonus + mod
+        const statMod = this.characterToView[CHARACTER_KEYS.STATS][newValue][STAT_VALUES_KEYS.MOD]
+        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
       }
       
     }
@@ -1311,82 +1378,17 @@ export default {
     closeModal() {
       this.$emit('close')
     },
-    deleteCharacter() {
+    onPressDeleteCharacter() {
       this.store.dispatch("deleteCharacterFromDb", this.characterToViewId).then((success) => {
         console.info('@CharacterPage: deleteCharacter() post store')
         if (success) {
+          alert(`Deleted ${this.characterToView[CHARACTER_KEYS.NAME]}`)
           this.closeModal()
         } else {
           alert(`ERROR deleting "${this.characterToView[CHARACTER_KEYS.NAME]}" occurred. Please try again.`)
         }
       })
       
-    },
-    getBaseStatBonus(stat) {
-      return (stat - 10) / 2
-    },
-    getDictionarySize(dict) {
-      if (dict) {
-        const count = Object.keys(dict).length;
-        return count
-      } else {
-        return 0
-      }
-    },
-    getSpellLevelName(level) {
-      var output = "Level "
-      switch (level) {
-        case SPELLCASTING_KEYS.LEVEL_1:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]
-          break
-        case SPELLCASTING_KEYS.LEVEL_2:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_2]
-          break
-        case SPELLCASTING_KEYS.LEVEL_3:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_3]
-          break
-        case SPELLCASTING_KEYS.LEVEL_4:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_4]
-          break
-        case SPELLCASTING_KEYS.LEVEL_5:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_5]
-          break
-        case SPELLCASTING_KEYS.LEVEL_6:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_6]
-          break
-        case SPELLCASTING_KEYS.LEVEL_7:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_7]
-          break
-        case SPELLCASTING_KEYS.LEVEL_8:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_8]
-          break
-        case SPELLCASTING_KEYS.LEVEL_9:
-          output += SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_9]
-          break
-        default:
-          output = SPELLCASTING_NAMES[SPELLCASTING_KEYS.CANTRIPS]
-          break
-      }
-
-      return output
-    },
-    getStatModFromKey(stat) {
-      if (stat === '') {
-        return 0
-      } else {
-        return this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
-      }
-      
-    },
-    getStatValue(statRef, statKey, valueKey) {
-      return this.characterToView[statRef][statKey][valueKey]
-    },
-    getStatBonusSign(stat) {
-      if (stat < 0) {
-        return stat // the negative will already be apart of the number
-      } else {
-        return "+" + stat
-      }
     },
     onPressAddFeatures() {
       if (this.featuresTempName === '') {
@@ -1445,11 +1447,6 @@ export default {
         return
       }
 
-      if (this.weaponsTempDamageModifier === '') {
-        alert("Please enter a weapon damage mod")
-        return
-      }
-
       if (this.weaponTempDieType === '') {
         alert("Please enter a weapon die")
         return
@@ -1479,7 +1476,6 @@ export default {
         [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
         [WEAPON_KEYS.ATTACK_DAMAGE_MOD]: this.weaponsTempAttackModifier,
         [WEAPON_KEYS.CATEGORY]: this.weaponTempCategory,
-        [WEAPON_KEYS.DAMAGE_MOD]: this.weaponsTempDamageModifier,
         [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
         [WEAPON_KEYS.DIE]: this.weaponTempDieType,
         [WEAPON_KEYS.PROFICIENT]: this.weaponTempIsProficient,
@@ -1659,42 +1655,42 @@ export default {
 
       var levelKey;
       switch (this.spellTempLevel) {
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_1]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_1
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_1]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_1
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_2]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_2
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_2]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_2
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_3]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_3
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_3]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_3
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_4]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_4
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_4]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_4
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_5]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_5
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_5]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_5
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_6]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_6
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_6]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_6
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_7]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_7
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_7]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_7
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_8]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_8
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_8]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_8
           break
-        case SPELLCASTING_NAMES[SPELLCASTING_KEYS.LEVEL_9]:
-          levelKey = SPELLCASTING_KEYS.LEVEL_9
+        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_9]:
+          levelKey = SPELL_CASTING_KEYS.LEVEL_9
           break
         default:
-          levelKey = SPELLCASTING_KEYS.CANTRIPS
+          levelKey = SPELL_CASTING_KEYS.CANTRIPS
       }
 
       const newSpell = {
-        [SPELLCASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
-        [SPELLCASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
-        [SPELLCASTING_KEYS.DURATION]: this.spellTempDuration,
-        [SPELLCASTING_KEYS.RANGE]: this.spellTempRange
+        [SPELL_CASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
+        [SPELL_CASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
+        [SPELL_CASTING_KEYS.DURATION]: this.spellTempDuration,
+        [SPELL_CASTING_KEYS.RANGE]: this.spellTempRange
       }
       
       const newEntry = {
@@ -1918,6 +1914,30 @@ export default {
         alert(`An error occured updating for ${key}`)
       })
     },
+    onPressUpdateGold() {
+      const info = {
+        [CHARACTER_KEYS.GOLD]: this.characterToView[CHARACTER_KEYS.GOLD]
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        info: info
+      }
+
+      this.store.dispatch("updateCharacterInfo", payload).then((success) => {
+        if (success) {
+          alert(`updated gold amount`)
+        } else {
+          alert(`couldn't update gold amount for some reason`)
+        }
+
+        this.toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)
+      })
+      .catch((error) => {
+        console.error(error)
+        alert(`An error occured updating saving throws`)
+      })
+    },
     onPressUpdateSpell(levelKey, spellName, updatedSpell, statRef) {
       const payload = {
         charId: this.characterToViewId,
@@ -1969,6 +1989,44 @@ export default {
             alert(`couldn't delete ${spellName} for some reason`)
           }
         })
+      }
+    },
+    calculatePassivePerception(mod) {
+      return 10 + mod
+    },
+    calculateBaseStatBonus(stat) {
+      return (stat - 10) / 2
+    },
+    calculateSpellSavingDc(profBonus, mod) {
+      if (profBonus === '') {
+        return 8 + mod
+      }
+      return 8 + profBonus + mod
+    },
+    getDictionarySize(dict) {
+      if (dict) {
+        const count = Object.keys(dict).length;
+        return count
+      } else {
+        return 0
+      }
+    },
+    getStatModFromKey(stat) {
+      if (stat === '') {
+        return 0
+      } else {
+        return this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
+      }
+      
+    },
+    getStatValue(statRef, statKey, valueKey) {
+      return this.characterToView[statRef][statKey][valueKey]
+    },
+    getStatBonusSign(stat) {
+      if (stat < 0) {
+        return stat // the negative will already be apart of the number
+      } else {
+        return "+" + stat
       }
     },
     toggleCollapseForStat(statRef) {
@@ -2090,80 +2148,8 @@ export default {
 }
 </script>
 
-<style>
-.slide-up-enter-active {
-transition: transform 0.3s;
-}
-
-.slide-up-leave-active {
-  transition: transform 0.4s;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  transform: translateY(100%);
-}
-
-.slide-up-enter-to,
-.slide-up-leave {
-  transform: translateY(0);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 200ms ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-h3 {
-  text-decoration: underline;
-}
-
-textarea {
-  width: 90%;
-  text-align: left;
-  border-radius: 10px;
-  padding: 5px;
-  font-size: large;
-}
-
-.picker {
-  margin: 5px;
-  font-size: larger;
-  padding: 10px;
-  background-color: white;
-  border: 1px solid black;
-  color: black;
-  border-radius: 10px;
-}
-
-.picker:focus {
-  outline: none;
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.checkbox {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  padding: 0;
-}
-
-.list-divider {
-  width: 90%;
-  margin-top: 10px;
-}
-
-.input-stats {
-  font-size: larger;
-}
-
+<style scoped>
+@import '../syles/character-info-stats.css';
 /* CHARACTER INFO STYLE */
 
 .character-name {
@@ -2174,239 +2160,6 @@ textarea {
 .character-info {
   font-size: 1.5em;
 }
-
-/* LIST - ENTERING INPUT STYLE */
-
-.container-inputs {
-  display: flex;
-  justify-content: space-evenly;
-  margin: 0 auto;
-}
-
-.list-inputs {
-  list-style: none;
-}
-
-.list-inputs li {
-  display: flex;
-  align-items: left;
-  margin-top: 10px;
-}
-
-/* LIST - ADDED ITEMS STYLE */
-
-.list-container-character {
-  display: flex;
-  justify-content: center;
-  /* width: 90%; */
-  margin: 0 auto;
-}
-
-/* POPUP STYLE */
-
-.popup {
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  max-width: 500px;
-}
-
-.popup.active {
-  opacity: 1;
-}
-
-/* EDITING - STYLE */
-
-.container-edit {
-  text-align: center;
-}
-
-/* STAT STYLE */
-
-.stat-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 65%;
-  margin: 0 auto;
-  padding-left: 0;
-}
-
-.stat-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.stat-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.stat-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-.stat-bonus {
-  margin-left: 10px; /* Adjust as needed */
-  text-align: right;
-  font-size: larger;
-}
-
-/* WEAPON STYLES */
-
-.weapon-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 80%;
-  margin: 0 auto;
-}
-
-
-.weapon-group {
-  display: flex;
-  
-  margin-bottom: 10px;
-}
-
-.weapon-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.weapon-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-/* LANGUAGE STYLES */
-
-.language-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  width: 50%
-}
-
-.language-label {
-  text-align: left;
-  font-size: larger;
-  font-weight: bold;
-}
-
-.language-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-
-/* SPELL STYLES */
-
-.spell-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 75%;
-}
-
-.spell-group {
-  display: flex;
-  align-items: center;
-}
-
-.spell-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.spell-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-.spell-description {
-  font-size: larger;
-  width: 100%;
-  /* margin-top: 10px; */
-}
-
-/* BUTTON STYLES */
-
-.button-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 10px;
-  background-color: dimgray;
-  border: none;
-  color: white;
-  border-radius: 10px;
-}
-
-.delete-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.h3-bar {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-.h3-bar h3 {
-  margin-left: 10px;
-}
-
-.edit-buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.button-edit {
-  /* margin-left: auto; */
-  margin-right: 10px;
-  padding: 5px 10px;
-  background-color: dimgray;
-  border: none;
-  color: white;
-  border-radius: 10px;
-}
-
-.button-edit-spacer {
-  margin-right: auto;
-  margin-left: 10px;
-  padding: 5px 10px;
-  visibility: hidden;
-}
-
-.buttons-delete-update {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  margin: 10px auto;
-  width: 60%;
-}
-
-.button-delete {
-  padding: 10px;
-  background-color: #dd3528;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: large;
-}
-
 .button-update {
   padding: 10px;
   background-color: #42B6E8;
@@ -2416,8 +2169,26 @@ textarea {
   font-size: large;
 }
 
-
-.collapse-chevron {
-  margin: 5px;
+.buttons-delete-character {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 10px auto;
+  width: 100%;
 }
+
+.button-cancel-delete {
+  padding: 10px;
+  background-color: black;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: large;
+}
+
+.delete-character-prompt {
+  font-size: larger;
+  text-align: center;
+}
+
 </style>

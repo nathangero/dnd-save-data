@@ -40,17 +40,27 @@ auth.onAuthStateChanged(() => {
 
   if (!isAuthenticated && router.currentRoute.value.name !== ROUTER_NAMES.LOGIN) {
     // Redirect to the login page if the user is not authenticated
+    alert("You've been logged out")
     router.push({ name: ROUTER_NAMES.LOGIN })
   } else {
     try {
       const user = JSON.parse(Cookies.get(COOKIE_NAMES.USER))
       if (user.id !== '') {
+        // alert('cookie says your id is still saved')
         router.push({ name: ROUTER_NAMES.DASHBOARD }); // If user is already authenticated then go to dashboard
         const uid = auth.currentUser.uid
         store.dispatch('getUserInfo', uid)
       }
     } catch (error) {
-      // console.info('signed out')
+      if (auth.currentUser.uid !== '') {
+        // alert('no id in cookie but from firebase auth')
+        router.push({ name: ROUTER_NAMES.DASHBOARD }); // If user is already authenticated then go to dashboard
+        const uid = auth.currentUser.uid
+        store.dispatch('getUserInfo', uid)
+
+      } else {
+        alert(`error with authentication: ${error}`)
+      }
     }
   }
 });
