@@ -20,7 +20,6 @@ export default class Charcter {
     savingThrows = {},
     skills = {},
     speed = '',
-    spellBonus = '',
     spellCastStat = '',
     spellSaveDc = '',
     spells = {},
@@ -46,7 +45,6 @@ export default class Charcter {
     this.savingThrows = savingThrows
     this.skills = skills
     this.speed = speed
-    this.spellBonus = spellBonus
     this.spellCastStat = spellCastStat
     this.spellSaveDc = spellSaveDc
     this.spells = spells
@@ -76,7 +74,6 @@ export default class Charcter {
       savingThrows,
       skills,
       speed,
-      spellBonus,
       spellCastStat,
       spellSaveDc,
       spells,
@@ -104,7 +101,6 @@ export default class Charcter {
       savingThrows,
       skills,
       speed,
-      spellBonus,
       spellCastStat,
       spellSaveDc,
       spells,

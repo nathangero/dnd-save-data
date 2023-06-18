@@ -452,14 +452,8 @@
       <collapse-transition dimension="height">
         <div v-if="isShowingEquipment">
           <ul class="list" style="text-align: left; margin-bottom: 20px">
-            <div v-if="!isEditingEquipment">
-              <label class="item-name">Gold:</label>
-              <label class="item-amount">x{{ gold }}</label>
-            </div>
-            <div v-if="isEditingEquipment" style="margin-bottom: 20px">
-              <label class="item-name">Gold:</label>
-              <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="gold" class="input-stats" inputmode="numeric" required>
-            </div>
+            <label class="item-name">Gold:</label>
+            <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="gold" class="input-stats" inputmode="numeric" required>
           </ul>
 
           <template v-if="getDictionarySize(equipment) > 0">
@@ -669,14 +663,14 @@
             <ul class="list-inputs">
               <li style="margin-top: 10px;">
                 <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
-                <select class="picker" v-model="spellCastingStat">
+                <select class="picker" v-model="spellCastStat">
                   <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
                 </select>
               </li>
 
               <li style="margin-top: 5px;">
                 <label class="stat-label">Spell Saving DC: </label>
-                <label class="stat-label">{{ getStatBonusSign(calculateSpellSavingDc(proficiencyBonus, getStatModFromKey(spellCastingStat))) }}</label>
+                <label class="stat-label">{{ getStatBonusSign(calculateSpellSavingDc(proficiencyBonus, getStatModFromKey(spellCastStat))) }}</label>
               </li>
             </ul>
           </div>
@@ -963,7 +957,7 @@ export default {
       languagesTempProficiency: '',
       proficiencyTempName: '',
       proficiencyTempDescription: '',
-      spellCastingStat: '', // e.g. intelligence
+      spellCastStat: '', // e.g. intelligence
       spellSavingDc: 0,
       spellTempName: '',
       spellTempCastingTime: '',
@@ -1260,7 +1254,7 @@ export default {
         this.spells[this.spellTempLevel] = newEntry
       }
 
-      console.info('this.spells:', this.spells)
+      // console.info('this.spells:', this.spells)
       
       this.spellTempName = ''
       this.spellTempLevel = ''
@@ -1308,7 +1302,7 @@ export default {
       }
     },
     checkIfAllValid() {
-      console.info("@checkIfAllValid")
+      // console.info("@checkIfAllValid")
       if (this.characterName === '') {
         alert("Please enter a character name")
         return
@@ -1364,12 +1358,7 @@ export default {
         return false
       }
 
-      if (this.spellAttackBonus === '') {
-        alert("Please put a spell attack bonus. Even if you don't have spells")
-        return
-      }
-
-      if (this.spellCastingStat === '') {
+      if (this.spellCastStat === '') {
         alert("Please select a stat your spell casting will be based off of")
         return
       }
@@ -1382,7 +1371,7 @@ export default {
       return true
     },
     checkIfStatsValid() {
-      console.info("@checkIfStatsValid")
+      // console.info("@checkIfStatsValid")
       
       if (this.stats.statsStr === '' || this.stats.statsDex === '' || this.stats.statsCon === '' || this.stats.statsInt === '' || this.stats.statsWis === '' || this.stats.statsCha === '' ||
           this.stats.statsStrBonus === '' || this.stats.statsDexBonus === '' || this.stats.statsConBonus === '' || this.stats.statsIntBonus === '' || this.stats.statsWisBonus === '' || this.stats.statsChaBonus === '') {
@@ -1399,7 +1388,7 @@ export default {
 
     },
     checkIfThrowsValid() {
-      console.info("@checkIfThrowsValid")
+      // console.info("@checkIfThrowsValid")
       if (this.savingThrows.savingStr === '' || this.savingThrows.savingDex === '' || this.savingThrows.savingCon === '' || this.savingThrows.savingInt === '' || this.savingThrows.savingWis === '' || this.savingThrows.savingCha === '') {
         return false
       }
@@ -1430,7 +1419,7 @@ export default {
       return true
     },
     createCharacter() {
-      console.info("@createCharacter")
+      // console.info("@createCharacter")
       if (this.checkIfAllValid()) {
         const newCharacter = this.createCharacterDictionary()
         console.info('character:', newCharacter)
@@ -1465,11 +1454,11 @@ export default {
         this.savingThrows,
         this.skills,
         this.characterSpeed,
-        this.spellAttackBonus,
-        this.spellCastingStat,
+        this.spellCastStat,
         this.spellSavingDc,
         this.spells,
         this.stats,
+        this.weapons,
       )
 
       return newCharacter

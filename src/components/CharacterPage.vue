@@ -1088,10 +1088,10 @@
           <div class="popup">
             <div class="form">
               <h1>Delete {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
-              <p>This action can't be undone</p>
-              <div class="delete-buttons">
-                <button style="margin-right: 20px;" @click="toggleDeleteCharacterPopup">Cancel</button>
-                <button @click="deleteCharacter">Delete</button>
+              <p class="delete-character-prompt">This action can't be undone</p>
+              <div class="buttons-delete-character">
+                <button class="button-cancel-delete" @click="toggleDeleteCharacterPopup">Cancel</button>
+                <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
               </div>
             </div>
           </div>
@@ -1363,10 +1363,11 @@ export default {
     closeModal() {
       this.$emit('close')
     },
-    deleteCharacter() {
+    onPressDeleteCharacter() {
       this.store.dispatch("deleteCharacterFromDb", this.characterToViewId).then((success) => {
         console.info('@CharacterPage: deleteCharacter() post store')
         if (success) {
+          alert(`Deleted ${this.characterToView[CHARACTER_KEYS.NAME]}`)
           this.closeModal()
         } else {
           alert(`ERROR deleting "${this.characterToView[CHARACTER_KEYS.NAME]}" occurred. Please try again.`)
@@ -2410,12 +2411,6 @@ textarea {
   border-radius: 10px;
 }
 
-.delete-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
 .edit-buttons {
   display: flex;
   flex-direction: row;
@@ -2448,9 +2443,26 @@ textarea {
   width: 60%;
 }
 
+.buttons-delete-character {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 10px auto;
+  width: 100%;
+}
+
 .button-delete {
   padding: 10px;
   background-color: #dd3528;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: large;
+}
+
+.button-cancel-delete {
+  padding: 10px;
+  background-color: black;
   border: none;
   color: white;
   border-radius: 10px;
@@ -2470,5 +2482,10 @@ textarea {
 
 .collapse-chevron {
   margin: 5px;
+}
+
+.delete-character-prompt {
+  font-size: larger;
+  text-align: center;
 }
 </style>
