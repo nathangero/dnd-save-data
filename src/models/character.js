@@ -25,6 +25,7 @@ export default class Charcter {
     spells = {},
     stats = {},
     weapons = {},
+    timeRegistered = '',
   ) {
     this.alignment = alignment
     this.armor = armor
@@ -50,6 +51,8 @@ export default class Charcter {
     this.spells = spells
     this.stats = stats
     this.weapons = weapons
+
+    this.timeRegistered = timeRegistered
   }
 
 
@@ -79,6 +82,7 @@ export default class Charcter {
       spells,
       stats,
       weapons,
+      timeRegistered,
     } = snapshot
 
     const newCharacter =  new Charcter(
@@ -106,6 +110,7 @@ export default class Charcter {
       spells,
       stats,
       weapons,
+      timeRegistered,
     )
     
     return newCharacter

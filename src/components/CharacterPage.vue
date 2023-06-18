@@ -1093,7 +1093,10 @@
       </div>
       
       <br>
-      <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
+      <div class="buttons-at-bottom">
+        <button class="button-save" style="margin-bottom: 30px;" @click="toggleSaveCharacterPopup">Save Character</button>
+        <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
+      </div>
     </div>
 
     <!-- Delete Character Popup -->
@@ -1163,6 +1166,7 @@ export default {
     return {
       store: useStore(),
       isModalViewCharacterOpen: false,
+      isSaveCharacterPopupOpen: false,
       isDeleteCharacterPopupOpen: false,
       isEditingCharInfo: false,
       isEditingBaseStats: false,
@@ -2140,6 +2144,9 @@ export default {
         default:
           this.isEditingCharInfo = !this.isEditingCharInfo
       }
+    },
+    toggleSaveCharacterPopup() {
+      this.isSaveCharacterPopupOpen = !this.isSaveCharacterPopupOpen
     },
     toggleDeleteCharacterPopup() {
       this.isDeleteCharacterPopupOpen = !this.isDeleteCharacterPopupOpen

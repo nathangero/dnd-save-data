@@ -5,6 +5,7 @@ import { ref, set, get, child, push, remove, update } from "firebase/database"
 import { db } from "@/firebase.js"
 import User from "@/models/user"
 import DB_PATHS from "@/enums/db-paths"
+import { CHARACTER_KEYS } from "@/enums/dbKeys/character-keys"
 
 export async function writeUserInDb(uid, name, email) {
     const dbRef = 'users/' + uid
@@ -56,6 +57,25 @@ export async function createNewCharacter(userId, characterInfo) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
     return new Promise((resolve, reject) => {
         const newKey = push(ref(db, dbRef)).key
+        dbRef += newKey
+        set(ref(db, dbRef), characterInfo).then(() => {
+            // console.info(`created a new character for user: ${userId}`)
+
+            createCharacterPastData(userId, newKey, characterInfo)
+            resolve(true, newKey)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false, '')
+        }))
+    })
+}
+
+
+export async function createCharacterPastData(userId, charId, characterInfo) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId + '/'
+    return new Promise((resolve, reject) => {
+        const newKey = characterInfo[CHARACTER_KEYS.TIME_REGISTERED]
         dbRef += newKey
         set(ref(db, dbRef), characterInfo).then(() => {
             // console.info(`created a new character for user: ${userId}`)

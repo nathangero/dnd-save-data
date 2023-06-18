@@ -1420,7 +1420,7 @@ export default {
     },
     createCharacter() {
       // console.info("@createCharacter")
-      if (this.checkIfAllValid()) {
+      // if (this.checkIfAllValid()) {
         const newCharacter = this.createCharacterDictionary()
         console.info('character:', newCharacter)
         this.store.dispatch("addCharacterToDb", newCharacter).then((success => {
@@ -1431,7 +1431,7 @@ export default {
             alert("An error occurred creating your character. Please try again")
           }
         }))
-      }
+      // }
     },
     createCharacterDictionary() {
       var newCharacter = new Character(
@@ -1459,6 +1459,7 @@ export default {
         this.spells,
         this.stats,
         this.weapons,
+        new Date().getTime()
       )
 
       return newCharacter
