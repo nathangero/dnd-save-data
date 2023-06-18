@@ -61,7 +61,7 @@ export async function createNewCharacter(userId, characterInfo) {
         set(ref(db, dbRef), characterInfo).then(() => {
             // console.info(`created a new character for user: ${userId}`)
 
-            createCharacterPastData(userId, newKey, characterInfo)
+            createCharacterBackup(userId, newKey, characterInfo)
             resolve(true, newKey)
         })
         .catch ((error => {
@@ -72,7 +72,7 @@ export async function createNewCharacter(userId, characterInfo) {
 }
 
 
-export async function createCharacterPastData(userId, charId, characterInfo) {
+export async function createCharacterBackup(userId, charId, characterInfo) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId + '/'
     return new Promise((resolve, reject) => {
         const newKey = characterInfo[CHARACTER_KEYS.TIME_REGISTERED]

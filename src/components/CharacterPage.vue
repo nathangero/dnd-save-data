@@ -1119,10 +1119,9 @@
           <div class="popup">
             <div class="form">
               <h1>Create backup for {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
-              <p class="delete-character-prompt">This action can't be undone</p>
               <div class="buttons-delete-character">
                 <button class="button-cancel-delete" @click="toggleSaveCharacterPopup">Cancel</button>
-                <button class="button-save" @click="onPressSaveBackup">Delete</button>
+                <button class="button-save" @click="onPressSaveBackup">Save</button>
               </div>
             </div>
           </div>
@@ -1418,7 +1417,7 @@ export default {
         charId: this.characterToViewId, 
         characterInfo: this.characterToView
       }
-      this.store.dispatch("addPastDataToDb", payload).then((success) => {
+      this.store.dispatch("addBackupToDb", payload).then((success) => {
         if (success) {
           alert(`Saved data for ${this.characterToView[CHARACTER_KEYS.NAME]}`)
           this.closeModal()
