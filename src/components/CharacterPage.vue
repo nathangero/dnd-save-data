@@ -1448,10 +1448,10 @@ export default {
       this.store.dispatch("addBackupToDb", payload).then((success) => {
         if (success) {
           alert(`Saved data for ${this.characterToView[CHARACTER_KEYS.NAME]}`)
-          this.closeModal()
         } else {
           alert(`ERROR saving data for ${this.characterToView[CHARACTER_KEYS.NAME]}. Please try again.`)
         }
+        this.closeModal()
       })
     },
     onPressDeleteCharacter() {

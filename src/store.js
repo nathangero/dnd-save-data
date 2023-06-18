@@ -274,8 +274,9 @@ const store = createStore({
     addBackupToDb(state, payload) {
       const { charId, characterInfo } = payload
       const userId = this.state.user.id
+      const timestamp = new Date().getTime()
       return new Promise((resolve, reject) => {
-        rtdbFunctions.createCharacterBackup(userId, charId, characterInfo).then((success) => {
+        rtdbFunctions.createCharacterBackup(userId, charId, characterInfo, timestamp).then((success) => {
           if (success) {
             resolve(true)
           }
