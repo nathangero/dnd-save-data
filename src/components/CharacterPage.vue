@@ -1149,13 +1149,13 @@
     <div id="view-character-backups">
       <transition name="fade" appear>
         <div class="overlay" v-if="isCharacterBackupsOpen">
-          <div class="popup">
+          <div class="popup-backup">
             <div class="form">
-              <h1>Backups for {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
+              <h1>Select a backup to view</h1>
               <ul class="list-backups">
-                <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': backupToView === backup }"
-                @click="selectBackup(timestamp)">
-                  <p>{{ timestamp }}</p>
+                <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
+                @click="selectBackup(timestamp, backup)">
+                  <p>{{ convertTimestampToString(timestamp) }}</p>
                   <!-- <p>{{ backup }}</p> -->
                 </li>
               </ul>
@@ -1273,7 +1273,8 @@ export default {
       WEAPON_NAMES: WEAPON_NAMES,
       WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
       characterToView: new Character(),
-      backupToView: new Character(),
+      selectedBackupTimestamp: '',
+      selectedBackupCharacter: new Character(),
       level: '',
       characterArmor: '',
       initiative: '',
@@ -2212,9 +2213,28 @@ export default {
     toggleCharacterBackupPopup() {
       this.isCharacterBackupsOpen = !this.isCharacterBackupsOpen
     },
-    selectBackup(timestamp) {
-      this.backupToView = timestamp
+    selectBackup(timestamp, backup) {
+      this.selectedBackupTimestamp = timestamp
+      this.selectedBackupCharacter = backup
     },
+    convertTimestampToString(timestamp) {
+      const date = new Date(Math.floor(timestamp))
+
+      // Define the options for formatting the date
+      const options = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: true, // Make a user setting?
+      };
+      
+      // Format the date using the options
+      const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+      return formattedDate
+    }
   },
 }
 </script>
@@ -2235,6 +2255,13 @@ export default {
 
 
 /* BACKUP STYLING */
+
+.popup-backup {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+  max-width: 80%;
+}
 
 .list-backups {
   list-style: none;

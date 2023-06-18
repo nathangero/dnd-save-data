@@ -95,11 +95,11 @@ export async function createCharacterBackup(userId, charId, characterInfo, times
 export async function getCharacterBackups(userId, charId) {
     // console.info('@getCharacterBackups')
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId
-
+    const CHILD_LIMIT = 2
     return new Promise((resolve, reject) => {
         get(child(ref(db), dbRef), {
             orderByKey: true,
-            limitToLast: 5
+            limitToLast: CHILD_LIMIT
         }).then((snapshot) => {
             if (snapshot.exists()) {
                 var backups = snapshot.val()
