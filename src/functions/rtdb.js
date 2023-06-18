@@ -7,6 +7,8 @@ import User from "@/models/user"
 import DB_PATHS from "@/enums/db-paths"
 import { CHARACTER_KEYS } from "@/enums/dbKeys/character-keys"
 
+
+// READ/WRITE USER
 export async function writeUserInDb(uid, name, email) {
     const dbRef = 'users/' + uid
     const values = {
@@ -27,7 +29,7 @@ export async function writeUserInDb(uid, name, email) {
 }
 
 
-export async function readUserInDb(uid) {
+export async function getUserInDb(uid) {
     const dbRef = 'users/' + uid
 
     return new Promise((resolve, reject) => {
@@ -53,6 +55,8 @@ export async function readUserInDb(uid) {
 }
 
 
+// CREATE, DELETE, READ CHARACTER
+
 export async function createNewCharacter(userId, characterInfo) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
     return new Promise((resolve, reject) => {
@@ -75,7 +79,7 @@ export async function createNewCharacter(userId, characterInfo) {
 export async function createCharacterBackup(userId, charId, characterInfo) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId + '/'
     return new Promise((resolve, reject) => {
-        const newKey = characterInfo[CHARACTER_KEYS.TIME_REGISTERED]
+        const newKey = characterInfo[CHARACTER_KEYS.TIME_CREATED]
         dbRef += newKey
         set(ref(db, dbRef), characterInfo).then(() => {
             // console.info(`created a new character for user: ${userId}`)
@@ -84,6 +88,43 @@ export async function createCharacterBackup(userId, charId, characterInfo) {
         .catch ((error => {
             console.error(error)
             reject(false, '')
+        }))
+    })
+}
+
+
+export async function getCharacterBackups(userId, charId) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId
+
+    return new Promise((resolve, reject) => {
+        get(child(ref(db), dbRef), {
+            orderByKey: true,
+            limitToLast: 5
+        }).then((snapshot) => {
+            if (snapshot.exists()) {
+                var backups = snapshot.val()
+                resolve(backups)
+            } else {
+                console.info(`No backups found for character: ${charId}`)
+                resolve(null)
+            }
+        }).catch((error) => {
+            console.error(error)
+            reject(error)
+        })
+    })
+}
+
+
+export async function deleteCharacterBackup(userId, charId, timestamp) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId + '/' + timestamp
+    return new Promise((resolve, reject) => {
+        remove(ref(db, dbRef)).then(() => {
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
         }))
     })
 }
@@ -102,7 +143,8 @@ export async function deleteCharacter(userId, charId) {
     })
 }
 
-export async function readAllCharacters(userId) {
+
+export async function getAllCharacters(userId) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS
     return new Promise((resolve, reject) => {
         get(child(ref(db), dbRef)).then((snapshot) => {
@@ -115,6 +157,9 @@ export async function readAllCharacters(userId) {
         }))
     })
 }
+
+
+// ADD, DELETE CHARACTER STAT
 
 /**
  * Adds a stat under the user's character's id.

@@ -9,7 +9,7 @@ import { CHARACTER_KEYS } from './enums/dbKeys/character-keys';
 const store = createStore({
   state: {
     user: new User(),
-    isLoggedIn: false,
+    charBackups: {},
   },
   mutations: {
     addCharacterLocally(state, payload) {
@@ -32,7 +32,6 @@ const store = createStore({
     },
     signOut(state) {
       state.user = new User()
-      state.isLoggedIn = false
 
       Cookies.remove(COOKIE_NAMES.USER)
       auth.signOut()
@@ -47,9 +46,8 @@ const store = createStore({
       Cookies.set(COOKIE_NAMES.USER, JSON.stringify(limitedUser), { expires: expirationSeconds, secure: true })
       // console.info('set the user')
     },
-    setIsLoggedIn(state, loggedIn) {
-      state.isLoggedIn = loggedIn
-      // console.info('set logged in as: ' + loggedIn)
+    setCharBackups(state, backups) {
+      state.charBackups = backups // Always overwrite the backups for a character
     }
   },
   actions: {
@@ -293,17 +291,35 @@ const store = createStore({
         })
       })
     },
+    dbGetCharacterBackups(state, charId) {
+      const userId = state.user.id
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.getCharacterBackups(userId, charId).then((backups) => {
+          if (backups) {
+            const payload = {
+              [charId]: backups
+            }
+            this.commit('setCharBackups', payload)
+            resolve(true)
+          } else {
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          reject(error)
+        })
+      })
+    },
     dbGetUsersCharacters() {
-      rtdbFunctions.readAllCharacters(this.state.user.id).then((characters) => {
+      rtdbFunctions.getAllCharacters(this.state.user.id).then((characters) => {
         console.info('characters:', characters)
       })
     },
     getUserInfo(state, uid) {
       // console.info('getUserInfo: ' + uid)
       return new Promise((resolve, reject) => {
-        rtdbFunctions.readUserInDb(uid).then((user) => {
+        rtdbFunctions.getUserInDb(uid).then((user) => {
           this.commit('setUser', user)
-          this.commit('setIsLoggedIn', true)
 
           resolve(true)
         })
@@ -319,12 +335,12 @@ const store = createStore({
     getUser(state) {
       return state.user
     },
-    isLoggedIn(state) {
-      return state.isLoggedIn
-    },
     getUserCharacters(state) {
       return state.user.characters
     },
+    getCharacterBackups(state) {
+      return state.charBackups
+    } 
   }
 })
 

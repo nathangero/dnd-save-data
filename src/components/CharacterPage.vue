@@ -1097,7 +1097,7 @@
         <ul class="buttons-at-bottom">
           <li>
             <button class="button-view-backups" style="text-decoration: line-through;">View Backups</button>
-            <button class="button-save" @click="toggleSaveCharacterPopup">Save Character</button>
+            <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
           </li>
 
           <li>

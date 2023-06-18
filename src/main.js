@@ -40,9 +40,9 @@ auth.onAuthStateChanged(() => {
 
   if (!isAuthenticated && router.currentRoute.value.name !== ROUTER_NAMES.LOGIN) {
     // Redirect to the login page if the user is not authenticated
-    alert("You've been logged out")
+    // alert("You've been logged out")
     router.push({ name: ROUTER_NAMES.LOGIN })
-  } else {
+  } else if (isAuthenticated && router.currentRoute.value.name !== ROUTER_NAMES.LOGIN) {
     try {
       const user = JSON.parse(Cookies.get(COOKIE_NAMES.USER))
       if (user.id !== '') {

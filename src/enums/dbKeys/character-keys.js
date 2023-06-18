@@ -24,7 +24,7 @@ const CHARACTER_KEYS = {
     SPELL_SAVE_DC: "spellSaveDc",
     SPELLS: "spells",
     STATS: "stats",
-    TIME_REGISTERED: "timeRegistered",
+    TIME_CREATED: "timeCreated",
     TREASURES: "treasures",
     WEAPONS: "weapons",
 }
