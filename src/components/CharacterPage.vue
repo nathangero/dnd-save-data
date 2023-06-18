@@ -975,11 +975,11 @@
             <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
               <div>
                 <ul class="list">
-                  <li v-for="(item, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
-                    <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS][level]) > 0">
-                      <label class="item-name">Level {{ SPELL_CASTING_NAMES[level] }}:</label>
+                  <li v-for="(levelDict, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
+                    <template v-if="getDictionarySize(levelDict) > 0">
+                      <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
                       <ul>
-                        <li v-for="(spell, spellName) in characterToView[CHARACTER_KEYS.SPELLS][level]" :key="spellName">
+                        <li v-for="(spell, spellName) in levelDict" :key="spellName">
                           <div v-if="!isEditingSpellCasting">
                             <label class="item-name">{{ spellName }}</label>
                             <br>
@@ -1007,26 +1007,26 @@
                               <ul class="list-inputs">
                                 <li>
                                   <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
-                                  <input type="number" id="spells-casting-time" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
                                 </li>
                                   
                                 <li>
                                   <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
-                                  <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
                                 </li>
                                 
                                 <li>
                                   <label for="spells-range" class="stat-label">Range (in feet):</label>
-                                  <input type="number" id="spells-range" v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
+                                  <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
                                 </li>
                               </ul>
                             </div>
                             
                             <br>
-                            <textarea v-model="characterToView[CHARACTER_KEYS.SPELLS][level][spellName][SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                            <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                             <div class="buttons-delete-update">
                               <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                              <button class="button-update" @click="onPressUpdateSpell(level, spellName, characterToView[CHARACTER_KEYS.SPELLS][level][spellName], CHARACTER_KEYS.SPELLS)">Update</button>
+                              <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
                             </div>
                       
                             <hr class="list-divider">
@@ -1047,7 +1047,7 @@
                   <li>
                     <label class="stat-label" for="spells-level">Level:</label>
                     <select class="picker" v-model="spellTempLevel">
-                      <option v-for="levels in SPELL_CASTING_KEYS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES[levels] }}</option>
+                      <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
                     </select>
                   </li>
                   
@@ -1118,7 +1118,7 @@ import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
-import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES } from '@/enums/dbKeys/spell-casting-keys'
+import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 
 
@@ -1190,6 +1190,7 @@ export default {
       SPELL_CASTING_KEYS: SPELL_CASTING_KEYS,
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
+      SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,

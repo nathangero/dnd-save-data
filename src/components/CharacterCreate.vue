@@ -511,103 +511,129 @@
     </div>
       
     <br>
-      <div id="languages">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingLanguages">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
-            <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
-          </div>
+    <div id="languages">
+      <div class="edit-buttons">
+        <div>
+          <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
+          <button class="button-edit-spacer" v-if="isEditingLanguages">Finish</button>
         </div>
 
-        <collapse-transition dimension="height">
-          <div v-if="isShowingLanguages">
-            <template v-if="getDictionarySize(languages) > 0">
-              <div>
-                <ul>
-                  <li v-for="(item, key) in languages" :key="key">
-                    <div v-if="!isEditingLanguages">
-                      <div class="language-group">
-                        <p class="language-label">{{ key }}:</p>
-                        <p class="language-value">{{ item }}</p>
-                      </div>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingLanguages">
-                      <div style="margin-top: 10px; text-align: left;">
-                        <label class="item-name">{{ key }}:</label>
-                        <select class="picker" v-model="languages[key]">
-                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                        </select>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <br>
-                        <button class="button-delete" @click="onPressDeleteLanguage(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                    
-                  </li>
-                </ul>
-              </div>
-            </template>
-
-            <!-- Add new -->
-            <div class="language-container">
-              <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
-              <div style="margin-top: 10px;">
-                <label class="stat-label">Proficiency: </label>
-                <select class="picker" v-model="languagesTempProficiency">
-                  <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                </select>
-              </div>
-              <br>
-              <button class="button-add" @click="onPressAddLanguage">Add</button>
-            </div>
-          </div>
-        </collapse-transition>
+        <div class="h3-bar">
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
+        </div>
         
-      </div>   
-      
-    <br>
-    <div id="proficiencies">
-      <div class="h3-bar">
-        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
-        <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
-        <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
+        <div>
+          <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
+          <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
+        </div>
       </div>
 
       <collapse-transition dimension="height">
-        <div v-if="isShowingProficiencies">
-          <template v-if="getDictionarySize(proficiencies) > 0">
-            <div class="list-container">
-              <ul class="list">
-                <li v-for="(item, key) in proficiencies" :key="key">
-                  <label class="item-name">{{ key }}</label>
-                  <label class="item-description">{{ item }}</label>
-                  <br>
-                  <button @click="onPressDeleteProficiency(key)">Delete</button>
-                  <hr class="list-divider">
+        <div v-if="isShowingLanguages">
+          <template v-if="getDictionarySize(languages) > 0">
+            <div>
+              <ul>
+                <li v-for="(item, key) in languages" :key="key">
+                  <div v-if="!isEditingLanguages">
+                    <div class="language-group">
+                      <p class="language-label">{{ key }}:</p>
+                      <p class="language-value">{{ item }}</p>
+                    </div>
+                  </div>
+
+                  <!-- Edit and Delete -->
+                  <div v-if="isEditingLanguages">
+                    <div style="margin-top: 10px; text-align: left;">
+                      <label class="item-name">{{ key }}:</label>
+                      <select class="picker" v-model="languages[key]">
+                        <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                      </select>
+                    </div>
+
+                    <div class="buttons-delete-update">
+                      <br>
+                      <button class="button-delete" @click="onPressDeleteLanguage(key)">Delete</button>
+                    </div>
+                    
+                    <hr class="list-divider">
+                  </div>
+                  
                 </li>
               </ul>
             </div>
           </template>
 
+          <!-- Add new -->
+          <div class="language-container">
+            <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
+            <div style="margin-top: 10px;">
+              <label class="stat-label">Proficiency: </label>
+              <select class="picker" v-model="languagesTempProficiency">
+                <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+              </select>
+            </div>
+            <br>
+            <button class="button-add" @click="onPressAddLanguage">Add</button>
+          </div>
+        </div>
+      </collapse-transition>
+      
+    </div>   
+      
+    <br>
+    <div id="proficiences">
+      <div class="edit-buttons">
+        <div>
+          <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
+          <button class="button-edit-spacer" v-if="isEditingProficiencies">Finish</button>
+        </div>
+
+        <div class="h3-bar">
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
+        </div>
+        
+        <div>
+          <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Edit</button>
+          <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Finish</button>
+        </div>
+      </div>
+      
+      <collapse-transition dimension="height">
+        <div v-if="isShowingProficiencies">
+          <template v-if="getDictionarySize(proficiencies) > 0">
+            <div>
+              <ul class="list">
+                <li v-for="(item, key) in proficiencies" :key="key">
+                  <div v-if="!isEditingProficiencies">
+                    <label class="item-name">{{ key }}</label>
+                    <p class="item-description">{{ item }}</p>
+                  </div>
+
+                  <!-- Edit and Delete -->
+                  <div v-if="isEditingProficiencies">
+                    <label class="item-name">{{ key }}:</label>
+                    <div class="container-edit">
+                      <textarea v-model="proficiencies[key]" rows="4" placeholder="Description"></textarea>
+                    </div>
+
+                    <div class="buttons-delete-update">
+                      <button class="button-delete" @click="onPressDeleteProficiency(key)">Delete</button>
+                    </div>
+                    
+                    <hr class="list-divider">
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </template>
+
+          <!-- Add new -->
           <div class="proficiency-container">
-            <input class="item-input" style="margin-bottom: 20px;" v-model="proficiencyTempName" placeholder="New proficiency name"> 
+            <input class="item-input" style="margin-bottom: 20px" v-model="proficiencyTempName" placeholder="New proficiency name"> 
             <br>
             <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
             <br>
@@ -618,49 +644,84 @@
     </div>
 
     <br>
-    <div id="spells">
-      <div class="h3-bar">
-        <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
-        <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
-        <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
+    <div id="spell-casting">
+      <div class="edit-buttons">
+        <div>
+          <button class="button-edit-spacer" v-if="!isEditingSpellCasting">Edit</button>
+          <button class="button-edit-spacer" v-if="isEditingSpellCasting">Finish</button>
+        </div>
+
+        <div class="h3-bar">
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
+        </div>
+        
+        <div>
+          <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Edit</button>
+          <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Finish</button>
+        </div>
       </div>
 
       <collapse-transition dimension="height">
         <div v-if="isShowingSpells">
-          <div class="container-inputs">
-            <ul class="list-inputs">
-              <li style="margin-top: 10px;">
-                <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
-                <select class="picker" v-model="spellCastingStat">
-                  <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
-                </select>
-              </li>
-
-              <li style="margin-top: 5px;">
-                <label class="stat-label">Spell Saving DC: </label>
-                <label class="stat-label">{{ getStatBonusSign(calculateSpellSavingDc(proficiencyBonus, getStatModFromKey(spellCastingStat))) }}</label>
-              </li>
-            </ul>
-          </div>
-
           <template v-if="getDictionarySize(spells) > 0">
-            <div class="list-container">
+            <div>
               <ul class="list">
-                <li v-for="(item, level) in spells" :key="level">
-                  <template v-if="getDictionarySize(spells[level]) > 0">
+                <li v-for="(levelDict, level) in spells" :key="level">
+                  <template v-if="getDictionarySize(levelDict) > 0">
                     <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
-                    <ul class="list">
-                      <li v-for="(spell, spellName) in spells[level]" :key="spellName">
-                        <label class="item-name">{{ spellName }}</label>
-                        <br>
-                        <label class="item-description">Casting Time: {{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }}</label>
-                        <label class="item-description">Duration: {{ spell[[SPELL_CASTING_KEYS.DURATION]] }} seconds</label>
-                        <label class="item-description">Range: {{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
-                        <label class="item-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
-                        
-                        <br>
-                        <button @click="onPressDeleteSpell(level, spellName)">Delete</button>
-                        <hr class="list-divider">
+                    <ul>
+                      <li v-for="(spell, spellName) in levelDict" :key="spellName">
+                        <div v-if="!isEditingSpellCasting">
+                          <label class="item-name">{{ spellName }}</label>
+                          <br>
+                          <div class="spell-list">
+                            <div class="spell-group">
+                              <label class="spell-label">Casting Time:</label>
+                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                            </div>
+                            <div class="spell-group">
+                              <label class="spell-label">Duration:</label>
+                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
+                            </div>
+                            <div class="spell-group">
+                              <label class="spell-label">Range:</label>
+                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                            </div>
+                          </div>
+                          <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
+                        </div>
+
+                        <div v-if="isEditingSpellCasting">
+                          <label class="item-name">{{ spellName }}</label>
+                          <div class="container-inputs">
+                            <ul class="list-inputs">
+                              <li>
+                                <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
+                                <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
+                              </li>
+                                
+                              <li>
+                                <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
+                                <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                              </li>
+                              
+                              <li>
+                                <label for="spells-range" class="stat-label">Range (in feet):</label>
+                                <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
+                              </li>
+                            </ul>
+                          </div>
+                          
+                          <br>
+                          <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                          <div class="buttons-delete-update">
+                            <button class="button-delete" @click="onPressDeleteSpell(level, spellName)">Delete</button>
+                          </div>
+                    
+                          <hr class="list-divider">
+                        </div>
                       </li>
                     </ul>
                   </template>
@@ -669,41 +730,43 @@
             </div>
           </template>
 
-          <input class="item-input" v-model="spellTempName" placeholder="Spell name"> 
-
+          <!-- Add new -->
+          <input class="item-input" style="margin-bottom: 10px;" type="text" v-model="spellTempName" placeholder="New spell name"> 
           <div class="container-inputs">
             <ul class="list-inputs">
-              <li style="margin-top: 10px;">
-                <label for="spells-level" class="stat-label">Level:</label>
+              <li>
+                <label class="stat-label" for="spells-level">Level:</label>
                 <select class="picker" v-model="spellTempLevel">
-                  <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_CASTING_NAMES[level] }}</option>
+                  <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
                 </select>
+              </li>
+              
+              <li>
+                <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
+                <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
               </li>
 
               <li>
-                <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
-                <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
-              </li>
-              
-              <li>
-                <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
+                <label class="stat-label" for="spells-casting-duration">Duration (in seconds):</label>
                 <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
               </li>
-              
+
               <li>
-                <label for="spells-range" class="stat-label">Range (in feet):</label>
+                <label class="stat-label" for="spells-range">Range (in feet):</label>
                 <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
               </li>
             </ul>
           </div>
 
+          <br>
           <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
           <br>
           <button class="button-add" @click="onPressAddSpell">Add</button>
         </div>
       </collapse-transition>
-      
     </div>
+
+    <br>
     <button class="button-create-character" @click="createCharacter">Create Character</button>
 
   </div>
@@ -725,7 +788,7 @@ import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
-import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES } from '@/enums/dbKeys/spell-casting-keys'
+import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 
 // TODO: Will be replaced by Firebase Remote Config
@@ -798,6 +861,7 @@ export default {
       SPELL_CASTING_KEYS: SPELL_CASTING_KEYS,
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
+      SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
@@ -1179,6 +1243,8 @@ export default {
 
         this.spells[this.spellTempLevel] = newEntry
       }
+
+      console.info('this.spells:', this.spells)
       
       this.spellTempName = ''
       this.spellTempLevel = ''
@@ -1212,15 +1278,15 @@ export default {
         delete this.proficiencies[key]
       }
     },
-    onPressDeleteSpell(key, spellName) {
-      if (key in this.spells) {
-        const levelDict = this.spells[key]
+    onPressDeleteSpell(level, spellName) {
+      if (level in this.spells) {
+        const levelDict = this.spells[level]
         if (spellName in levelDict) {
-          delete this.spells[key][spellName]
+          delete this.spells[level][spellName]
 
           // If there's nothing left in the level 
           if (this.getDictionarySize(levelDict) == 0) {
-            delete this.spells[key]
+            delete this.spells[level]
           }
         }
       }
