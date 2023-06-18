@@ -253,7 +253,7 @@ const store = createStore({
         rtdbFunctions.createNewCharacter(userId, newCharacter).then((success, newCharId) => {
           if (success && newCharId !== '') {
             const payload = {
-              charId: "test",
+              charId: newCharId,
               characterToAdd: newCharacter
             }
             this.commit('addCharacterLocally', payload)

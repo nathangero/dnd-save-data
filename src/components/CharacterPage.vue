@@ -72,7 +72,7 @@
                 
                 <li>
                   <div class="stat-group">
-                    <label class="stat-label">Speed: </label>
+                    <label class="stat-label">Speed (ft): </label>
                     <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
                   </div>
                 </li>
@@ -168,7 +168,7 @@
                   </li>
                   
                   <li>
-                    <label for="stats-speed" class="stat-label">Speed: </label>
+                    <label for="stats-speed" class="stat-label">Speed (ft): </label>
                     <input type="number" id="stats-speed" v-model="characterToView[CHARACTER_KEYS.SPEED]" class="input-stats" inputmode="numeric" required>
                   </li>
 
@@ -463,7 +463,7 @@
             <!-- Add new -->
             <template v-if="isEditingFeaturesTraits">
               <div>
-                <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/Trait name"> 
+                <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
                 <div class="container-inputs">
                   <ul class="list-inputs">
                     <li style="margin-top: 10px;">

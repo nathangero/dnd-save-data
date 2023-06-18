@@ -16,17 +16,17 @@
         <div id="users-characters-summary">
           <div class="list-container-characters">
             <ul class="list-characters">
-              <li v-for="(item, key) in store.getters.getUserCharacters" :key="key">
-                <div @click="toggleModalViewCharacter(key)">
+              <li v-for="(character, id) in store.getters.getUserCharacters" :key="id">
+                <div @click="toggleModalViewCharacter(id)">
                   <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <label class="summary-name">{{ item[CHARACTER_KEYS.NAME] }}</label>
-                    <label class="summary-amount" style="white-space: nowrap;">Level: {{ item[CHARACTER_KEYS.LEVEL] }}</label>
+                    <label class="summary-name">{{ character[CHARACTER_KEYS.NAME] }}</label>
+                    <label class="summary-amount" style="white-space: nowrap;">Level: {{ character[CHARACTER_KEYS.LEVEL] }}</label>
                   </div>
                   
-                  <label class="summary-description">{{ item[CHARACTER_KEYS.CLASS] }}</label>
-                  <label class="summary-description">{{ item[CHARACTER_KEYS.RACE] }}</label>
-                  <label class="summary-description">Current HP: {{ item[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}</label>
-                  <!-- <label class="summary-description">Campaign: {{ item[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
+                  <label class="summary-description">{{ character[CHARACTER_KEYS.CLASS] }}</label>
+                  <label class="summary-description">{{ character[CHARACTER_KEYS.RACE] }}</label>
+                  <label class="summary-description">Current HP: {{ character[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}</label>
+                  <!-- <label class="summary-description">Campaign: {{ character[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
                 </div>
               </li>
             </ul>

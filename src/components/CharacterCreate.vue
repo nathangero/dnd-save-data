@@ -58,7 +58,7 @@
               </li>
               
               <li>
-                <label for="stats-speed" class="stat-label">Speed: </label>
+                <label for="stats-speed" class="stat-label">Speed (ft): </label>
                 <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
               </li>
 
@@ -243,7 +243,7 @@
 
           <!-- Add new -->
           <div>
-            <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/Trait name"> 
+            <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
             <div class="container-inputs">
               <ul class="list-inputs">
                 <li style="margin-top: 10px;">
@@ -665,6 +665,22 @@
 
       <collapse-transition dimension="height">
         <div v-if="isShowingSpells">
+          <div class="container-inputs">
+            <ul class="list-inputs">
+              <li style="margin-top: 10px;">
+                <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
+                <select class="picker" v-model="spellCastingStat">
+                  <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
+                </select>
+              </li>
+
+              <li style="margin-top: 5px;">
+                <label class="stat-label">Spell Saving DC: </label>
+                <label class="stat-label">{{ getStatBonusSign(calculateSpellSavingDc(proficiencyBonus, getStatModFromKey(spellCastingStat))) }}</label>
+              </li>
+            </ul>
+          </div>
+
           <template v-if="getDictionarySize(spells) > 0">
             <div>
               <ul class="list">
