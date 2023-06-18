@@ -265,6 +265,20 @@ const store = createStore({
         })
       })
     },
+    addPastDataToDb(state, payload) {
+      const { charId, characterInfo } = payload
+      const userId = this.state.user.id
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.createCharacterPastData(userId, charId, characterInfo).then((success) => {
+          if (success) {
+            resolve(true)
+          }
+        })
+        .catch ((error) => {
+          reject(error)
+        })
+      })
+    },
     deleteCharacterFromDb(state, charId) {
       const userId = this.state.user.id
       return new Promise((resolve, reject) => {

@@ -1093,10 +1093,41 @@
       </div>
       
       <br>
-      <div class="buttons-at-bottom">
-        <button class="button-save" style="margin-bottom: 30px;" @click="toggleSaveCharacterPopup">Save Character</button>
-        <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
+      <div id="save-delete-buttons">
+        <ul class="buttons-at-bottom">
+          <li>
+            <button class="button-view-backups" style="text-decoration: line-through;">View Backups</button>
+            <button class="button-save" @click="toggleSaveCharacterPopup">Save Character</button>
+          </li>
+
+          <li>
+            <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
+          </li>
+        </ul>
       </div>
+    </div>
+
+    <!-- View Character Backups -->
+    <!-- <div id="view-character-backups">
+
+    </div> -->
+    
+    <!-- Save Character Data Popup -->
+    <div id="save-character">
+      <transition name="fade" appear>
+        <div class="overlay" v-if="isSaveCharacterPopupOpen">
+          <div class="popup">
+            <div class="form">
+              <h1>Create backup for {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
+              <p class="delete-character-prompt">This action can't be undone</p>
+              <div class="buttons-delete-character">
+                <button class="button-cancel-delete" @click="toggleSaveCharacterPopup">Cancel</button>
+                <button class="button-save" @click="onPressSaveBackup">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
     </div>
 
     <!-- Delete Character Popup -->
@@ -1382,9 +1413,22 @@ export default {
     closeModal() {
       this.$emit('close')
     },
+    onPressSaveBackup() {
+      const payload = {
+        charId: this.characterToViewId, 
+        characterInfo: this.characterToView
+      }
+      this.store.dispatch("addPastDataToDb", payload).then((success) => {
+        if (success) {
+          alert(`Saved data for ${this.characterToView[CHARACTER_KEYS.NAME]}`)
+          this.closeModal()
+        } else {
+          alert(`ERROR saving data for ${this.characterToView[CHARACTER_KEYS.NAME]}. Please try again.`)
+        }
+      })
+    },
     onPressDeleteCharacter() {
       this.store.dispatch("deleteCharacterFromDb", this.characterToViewId).then((success) => {
-        console.info('@CharacterPage: deleteCharacter() post store')
         if (success) {
           alert(`Deleted ${this.characterToView[CHARACTER_KEYS.NAME]}`)
           this.closeModal()
@@ -2184,6 +2228,24 @@ export default {
   width: 100%;
 }
 
+.button-view-backups {
+  padding: 10px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: larger;
+}
+
+.button-save {
+  padding: 10px;
+  background-color: #42B6E8;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: larger;
+}
+
 .button-cancel-delete {
   padding: 10px;
   background-color: black;
@@ -2196,6 +2258,20 @@ export default {
 .delete-character-prompt {
   font-size: larger;
   text-align: center;
+}
+
+
+.buttons-at-bottom {
+  list-style: none;
+}
+
+.buttons-at-bottom li {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 10px auto;
+  width: 100%;
 }
 
 </style>
