@@ -434,16 +434,28 @@
                     <!-- Edit and Delete -->
                     <div v-if="isEditingFeaturesTraits">
                       <label class="item-name">{{ key }}</label>
+                      <div class="container-inputs">
+                        <ul class="list-inputs">
+                          <li style="margin-top: 10px;">
+                            <label class="stat-label">Type:</label>
+                            <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
+                              <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                            </select>
+                          </li>
+
+                          <li>
+                            <label class="stat-label" for="features-input"> # of Uses:</label>
+                            <input class="input-stats" style="width=70%;" type="number" v-model="item[FEATURES_KEYS.USES]"> 
+                          </li>
+                        </ul>
+                      </div>
+
                       <div class="container-edit">
                         <div>
-                          <label class="stat-label">Type:</label>
-                          <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
-                            <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                          </select>
+                          
                         </div>
                         <div>
-                          <label class="stat-label" for="features-input"> # of Uses:</label>
-                          <input class="input-stats" style="width=70%;" type="number" v-model="item[FEATURES_KEYS.USES]"> 
+                          
                         </div>
                         <br>
                         <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
@@ -588,6 +600,9 @@
                             <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
                             <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
                           </li>
+
+                          <br>
+                          <textarea v-model="item[WEAPON_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                         </ul>
                       </div>
 
@@ -622,21 +637,21 @@
                       </select>
                     </li>
                     
-                    <li>
+                    <li style="margin-top: 10px;">
                       <label class="stat-label" for="equipment-input">Die Type:</label>
                       <select class="picker" v-model="weaponTempDieType">
                         <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                       </select>
                     </li>
 
-                    <li>
+                    <li style="margin-top: 10px;">
                       <label class="stat-label" for="equipment-input">Category:</label>
                       <select class="picker" v-model="weaponTempCategory">
                         <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                       </select>
                     </li>
 
-                    <li>
+                    <li style="margin-top: 10px;">
                       <label class="stat-label" for="equipment-input">Proficient:</label>
                       <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
                     </li>
@@ -703,14 +718,14 @@
                       <div class="container-edit">
                         <div>
                           <label class="stat-label" for="equipment-input">Amount:</label>
-                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.AMOUNT]"> 
+                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
                         </div>
-                        <textarea v-model="characterToView[CHARACTER_KEYS.EQUIPMENT][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                       </div>
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(CHARACTER_KEYS.GOLD, characterToView[CHARACTER_KEYS.GOLD], CHARACTER_KEYS.GOLD)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.EQUIPMENT)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -776,14 +791,14 @@
                       <div class="container-edit">
                         <div>
                           <label class="stat-label" for="equipment-input">Amount:</label>
-                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.AMOUNT]"> 
+                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
                         </div>
-                        <textarea v-model="characterToView[CHARACTER_KEYS.TREASURES][key][EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                       </div>
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.TREASURES][key], CHARACTER_KEYS.TREASURES)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.TREASURES)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -856,7 +871,7 @@
                       <div class="buttons-delete-update">
                         <br>
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.LANGUAGES][key], CHARACTER_KEYS.LANGUAGES)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -926,7 +941,7 @@
 
                       <div class="buttons-delete-update">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, characterToView[CHARACTER_KEYS.PROFICIENCIES][key], CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
                       </div>
                       
                       <hr class="list-divider">
@@ -2133,87 +2148,8 @@ export default {
 }
 </script>
 
-<style>  /* TODO: Need to make this scoped and have separate css files for styles */
-.slide-up-enter-active {
-transition: transform 0.3s;
-}
-
-.slide-up-leave-active {
-  transition: transform 0.4s;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  transform: translateY(100%);
-}
-
-.slide-up-enter-to,
-.slide-up-leave {
-  transform: translateY(0);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 200ms ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-h3 {
-  text-decoration: underline;
-}
-
-textarea {
-  width: 90%;
-  text-align: left;
-  border-radius: 10px;
-  padding: 5px;
-  font-size: large;
-}
-
-.picker {
-  margin: 5px;
-  font-size: larger;
-  padding: 10px;
-  background-color: white;
-  border: 1px solid black;
-  color: black;
-  border-radius: 10px;
-}
-
-.picker:focus {
-  outline: none;
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.checkbox {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  padding: 0;
-}
-
-.list-divider {
-  width: 90%;
-  margin-top: 10px;
-}
-
-.input-stats {
-  width: 65px; /* Adjust the width as needed */
-  margin-left: 5px; /* Adjust the spacing between the label and input */
-  border: none; /* Remove the default border */
-  border-bottom: 1px solid black; /* Add a bottom border */
-  outline: none;
-  text-align: center;
-  padding-bottom: 5px;
-  font-size: larger;
-}
-
+<style scoped>
+@import '../syles/character-info-stats.css';
 /* CHARACTER INFO STYLE */
 
 .character-name {
@@ -2224,223 +2160,13 @@ textarea {
 .character-info {
   font-size: 1.5em;
 }
-
-/* LIST - ENTERING INPUT STYLE */
-
-.container-inputs {
-  display: flex;
-  justify-content: space-evenly;
-  margin: 0 auto;
-}
-
-.list-inputs {
-  list-style: none;
-  padding: 0;
-}
-
-.list-inputs li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* LIST - ADDED ITEMS STYLE */
-
-.list-container-character {
-  display: flex;
-  justify-content: center;
-  /* width: 90%; */
-  margin: 0 auto;
-}
-
-/* POPUP STYLE */
-
-.popup {
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  max-width: 500px;
-}
-
-.popup.active {
-  opacity: 1;
-}
-
-/* EDITING - STYLE */
-
-.container-edit {
-  text-align: center;
-}
-
-/* STAT STYLE */
-
-.stat-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 65%;
-  margin: 0 auto;
-  padding-left: 0;
-}
-
-.stat-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.stat-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.stat-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-.stat-bonus {
-  margin-left: 10px; /* Adjust as needed */
-  text-align: right;
-  font-size: larger;
-}
-
-/* WEAPON STYLES */
-
-.weapon-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 80%;
-  margin: 0 auto;
-}
-
-
-.weapon-group {
-  display: flex;
-  
-  margin-bottom: 10px;
-}
-
-.weapon-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.weapon-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-/* LANGUAGE STYLES */
-
-.language-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  width: 60%
-}
-
-.language-label {
-  text-align: left;
-  font-size: larger;
-  font-weight: bold;
-}
-
-.language-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-
-/* SPELL STYLES */
-
-.spell-list {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  width: 75%;
-}
-
-.spell-group {
-  display: flex;
-  align-items: center;
-}
-
-.spell-label {
-  text-align: left;
-  font-size: larger;
-}
-
-.spell-value {
-  flex-grow: 1;
-  text-align: right;
-  font-size: larger;
-}
-
-.spell-description {
-  font-size: larger;
-  width: 100%;
-  /* margin-top: 10px; */
-}
-
-/* BUTTON STYLES */
-
-.h3-bar {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-.h3-bar h3 {
-  margin-left: 10px;
-}
-
-.button-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.button-update {
   padding: 10px;
-  background-color: dimgray;
+  background-color: #42B6E8;
   border: none;
   color: white;
   border-radius: 10px;
-}
-
-.edit-buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.button-edit {
-  /* margin-left: auto; */
-  margin-right: 10px;
-  padding: 5px 10px;
-  background-color: dimgray;
-  border: none;
-  color: white;
-  border-radius: 10px;
-}
-
-.button-edit-spacer {
-  margin-right: auto;
-  margin-left: 10px;
-  padding: 5px 10px;
-  visibility: hidden;
-}
-
-.buttons-delete-update {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  margin: 10px auto;
-  width: 60%;
+  font-size: large;
 }
 
 .buttons-delete-character {
@@ -2449,15 +2175,6 @@ textarea {
   justify-content: space-evenly;
   margin: 10px auto;
   width: 100%;
-}
-
-.button-delete {
-  padding: 10px;
-  background-color: #dd3528;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: large;
 }
 
 .button-cancel-delete {
@@ -2469,23 +2186,9 @@ textarea {
   font-size: large;
 }
 
-.button-update,
-.button-add {
-  padding: 10px;
-  background-color: #42B6E8;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: large;
-}
-
-
-.collapse-chevron {
-  margin: 5px;
-}
-
 .delete-character-prompt {
   font-size: larger;
   text-align: center;
 }
+
 </style>
