@@ -1499,11 +1499,7 @@ export default {
         statRef: CHARACTER_KEYS.FEATURES
       }
 
-      this.store.dispatch("addCharacterStat", payload).then((success) => {
-        if (success) {
-          this.addToCharacter(this.featuresTempName, newFeat, CHARACTER_KEYS.FEATURES)
-        }
-      })
+      this.store.dispatch("addCharacterStat", payload)
 
       this.featuresTempName = ''
       this.featuresTempDescription = ''
@@ -2215,20 +2211,6 @@ export default {
     },
     toggleCharacterBackupPopup() {
       this.isCharacterBackupsOpen = !this.isCharacterBackupsOpen
-    },
-    addToCharacter(key, itemToAdd, statRef) {
-      if (this.characterToView[this.characterToViewId][statRef]) {
-          console.info(`adding to ${statRef}`)
-          // Add to dict
-          this.characterToView[this.characterToViewId][statRef][key] = itemToAdd
-        } else {
-          console.info(`creating ${statRef}`)
-          // Make the dict
-          const newDict = {
-            [statRef]: itemToAdd
-          }
-          this.characterToView[this.characterToViewId] = newDict
-        }
     },
     selectBackup(timestamp) {
       this.backupToView = timestamp
