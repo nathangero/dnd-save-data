@@ -1,7 +1,7 @@
 /**
  * This file will contain all the functions that read/write the database
  */
-import { ref, set, get, child, push, remove, update } from "firebase/database"
+import { ref, set, get, child, push, remove, update, limitToLast, query } from "firebase/database"
 import { db } from "@/firebase.js"
 import User from "@/models/user"
 import DB_PATHS from "@/enums/db-paths"
@@ -95,12 +95,11 @@ export async function createCharacterBackup(userId, charId, characterInfo, times
 export async function getCharacterBackups(userId, charId) {
     // console.info('@getCharacterBackups')
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId
-    const CHILD_LIMIT = 2
+    const CHILD_LIMIT = 3
+    const childRef = ref(db, dbRef)
+    const queryRef = query(childRef, limitToLast(CHILD_LIMIT))
     return new Promise((resolve, reject) => {
-        get(child(ref(db), dbRef), {
-            orderByKey: true,
-            limitToLast: CHILD_LIMIT
-        }).then((snapshot) => {
+        get(queryRef).then((snapshot) => {
             if (snapshot.exists()) {
                 var backups = snapshot.val()
                 resolve(backups)
