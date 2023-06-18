@@ -94,6 +94,7 @@ export async function createCharacterBackup(userId, charId, characterInfo) {
 
 
 export async function getCharacterBackups(userId, charId) {
+    // console.info('@getCharacterBackups')
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId
 
     return new Promise((resolve, reject) => {
@@ -175,7 +176,7 @@ export async function addCharacterStatByKey(userId, charId, statRef, itemToAdd) 
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId + '/' + statRef + '/' 
     return new Promise((resolve, reject) => {
         update(ref(db, dbRef), itemToAdd).then(() => {
-            // console.info(`created a new character for user: ${userId}`)
+            // console.info(`updated new stat at: ${statRef} with: ${JSON.stringify(itemToAdd)}`)
             resolve(true)
         })
         .catch ((error => {

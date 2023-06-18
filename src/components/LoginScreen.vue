@@ -260,6 +260,7 @@ export default {
 </script>
 
 <style>
+@import '../syles/popup.css';
 .center-container {
   display: flex;
   justify-content: center;
@@ -308,32 +309,6 @@ input {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-
-/* add styles for popup and overlay */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.popup {
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  max-width: 500px;
-}
-
-.popup.active {
-  opacity: 1;
 }
 
 

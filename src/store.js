@@ -53,6 +53,7 @@ const store = createStore({
   actions: {
     addCharacterStat(state, payload) {
       // console.info('@addCharacterStat')
+      
       const { charId, key, value, statRef } = payload
 
       return new Promise((resolve, reject) => {
@@ -67,22 +68,29 @@ const store = createStore({
         }
 
         if (this.state.user.characters[charId][statRef]) {
-          // console.info(`adding to ${statRef}`)
+          console.info(`adding to ${statRef}`)
           // Add to dict
           this.state.user.characters[charId][statRef][key] = value
         } else {
           // console.info(`creating ${statRef}`)
           // Make the dict
-          const newDict = {
-            [statRef]: itemToAdd
-          }
-          this.state.user.characters[charId] = newDict
+          this.state.user.characters[charId][statRef] = itemToAdd
         }
         
-
         const userId = this.state.user.id
-        rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, itemToAdd)
-        resolve(true)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, itemToAdd).then((success) => {
+          if (success) {
+            // console.info('success')
+            resolve(true)
+          } else {
+            // console.info('failure')
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(false)
+        })
       })
     },
     addCharacterSpell(state, payload) {
@@ -292,9 +300,11 @@ const store = createStore({
       })
     },
     dbGetCharacterBackups(state, charId) {
-      const userId = state.user.id
+      const userId = this.state.user.id
+      
       return new Promise((resolve, reject) => {
         rtdbFunctions.getCharacterBackups(userId, charId).then((backups) => {
+          // console.info('backups:', backups)
           if (backups) {
             const payload = {
               [charId]: backups

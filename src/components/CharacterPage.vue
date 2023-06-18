@@ -1096,7 +1096,7 @@
       <div id="save-delete-buttons">
         <ul class="buttons-at-bottom">
           <li>
-            <button class="button-view-backups" style="text-decoration: line-through;">View Backups</button>
+            <button class="button-view-backups" @click="getCharacterBackups">View Backups</button>
             <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
           </li>
 
@@ -1106,11 +1106,6 @@
         </ul>
       </div>
     </div>
-
-    <!-- View Character Backups -->
-    <!-- <div id="view-character-backups">
-
-    </div> -->
     
     <!-- Save Character Data Popup -->
     <div id="save-character">
@@ -1146,6 +1141,33 @@
         </div>
       </transition>
     </div>
+
+    <!-- View Character Backups -->
+    <div v-show="isShowingLoader">
+      <loading-spinner :loadingText="LOADING_TEXT.GETING_BACKUPS"></loading-spinner>
+    </div>
+    <div id="view-character-backups">
+      <transition name="fade" appear>
+        <div class="overlay" v-if="isCharacterBackupsOpen">
+          <div class="popup">
+            <div class="form">
+              <h1>Backups for {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
+              <ul class="list-backups">
+                <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': backupToView === backup }"
+                @click="selectBackup(timestamp)">
+                  <p>{{ timestamp }}</p>
+                  <!-- <p>{{ backup }}</p> -->
+                </li>
+              </ul>
+              <div class="buttons-delete-character">
+                <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
+                <button class="button-save">View</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -1153,6 +1175,7 @@
 // import store from '@/store'
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
+import LoadingSpinner from './LoadingSpinner.vue';
 import Character from '@/models/character'
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
@@ -1168,6 +1191,7 @@ import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
+import { LOADING_TEXT } from '@/enums/loading-text';
 
 
 const MAX_VALUES = {
@@ -1184,7 +1208,7 @@ const MAX_VALUES = {
 export default {
   components: {
     CollapseTransition,
-    
+    LoadingSpinner,
   },
   props: {
     characterToViewId: {
@@ -1198,6 +1222,7 @@ export default {
       isModalViewCharacterOpen: false,
       isSaveCharacterPopupOpen: false,
       isDeleteCharacterPopupOpen: false,
+      isCharacterBackupsOpen: false,
       isEditingCharInfo: false,
       isEditingBaseStats: false,
       isEditingSavingThrows: false,
@@ -1220,6 +1245,8 @@ export default {
       isShowingLanguages: true,
       isShowingProficiencies: true,
       isShowingSpells: true,
+      isShowingLoader: false,
+      LOADING_TEXT: LOADING_TEXT,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       CHARACTER_KEYS: CHARACTER_KEYS,
       CLASS_NAMES: CLASS_NAMES,
@@ -1246,6 +1273,7 @@ export default {
       WEAPON_NAMES: WEAPON_NAMES,
       WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
       characterToView: new Character(),
+      backupToView: new Character(),
       level: '',
       characterArmor: '',
       initiative: '',
@@ -1471,7 +1499,11 @@ export default {
         statRef: CHARACTER_KEYS.FEATURES
       }
 
-      this.store.dispatch("addCharacterStat", payload)
+      this.store.dispatch("addCharacterStat", payload).then((success) => {
+        if (success) {
+          this.addToCharacter(this.featuresTempName, newFeat, CHARACTER_KEYS.FEATURES)
+        }
+      })
 
       this.featuresTempName = ''
       this.featuresTempDescription = ''
@@ -1700,39 +1732,6 @@ export default {
       }
 
 
-      var levelKey;
-      switch (this.spellTempLevel) {
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_1]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_1
-          break
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_2]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_2
-          break
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_3]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_3
-          break
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_4]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_4
-          break
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_5]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_5
-          break
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_6]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_6
-          break
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_7]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_7
-          break
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_8]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_8
-          break
-        case SPELL_CASTING_NAMES[SPELL_CASTING_KEYS.LEVEL_9]:
-          levelKey = SPELL_CASTING_KEYS.LEVEL_9
-          break
-        default:
-          levelKey = SPELL_CASTING_KEYS.CANTRIPS
-      }
-
       const newSpell = {
         [SPELL_CASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
         [SPELL_CASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
@@ -1746,7 +1745,7 @@ export default {
 
       const payload = {
         charId: this.characterToViewId,
-        levelKey: levelKey,
+        levelKey: this.spellTempLevel,
         spellName: this.spellTempName,
         newSpell: newSpell,
         newEntry: newEntry,
@@ -2076,6 +2075,26 @@ export default {
         return "+" + stat
       }
     },
+    getCharacterBackups() {
+      this.isShowingLoader = true
+      this.store.dispatch("dbGetCharacterBackups", this.characterToViewId).then((success) => {
+        if (success) {
+          setTimeout(() => {
+            this.isShowingLoader = false
+            this.toggleCharacterBackupPopup()
+          }, 1000)
+        } else {
+          alert("Didn't get any backups")
+          this.isShowingLoader = false
+        }
+
+      })
+      .catch((error) => {
+        this.isShowingLoader = false
+        console.error(error)
+        alert("Couldn't get character backups for some reason")
+      })
+    },
     toggleCollapseForStat(statRef) {
       switch (statRef) {
         case CHARACTER_KEYS.STATS:
@@ -2194,12 +2213,33 @@ export default {
     toggleDeleteCharacterPopup() {
       this.isDeleteCharacterPopupOpen = !this.isDeleteCharacterPopupOpen
     },
+    toggleCharacterBackupPopup() {
+      this.isCharacterBackupsOpen = !this.isCharacterBackupsOpen
+    },
+    addToCharacter(key, itemToAdd, statRef) {
+      if (this.characterToView[this.characterToViewId][statRef]) {
+          console.info(`adding to ${statRef}`)
+          // Add to dict
+          this.characterToView[this.characterToViewId][statRef][key] = itemToAdd
+        } else {
+          console.info(`creating ${statRef}`)
+          // Make the dict
+          const newDict = {
+            [statRef]: itemToAdd
+          }
+          this.characterToView[this.characterToViewId] = newDict
+        }
+    },
+    selectBackup(timestamp) {
+      this.backupToView = timestamp
+    },
   },
 }
 </script>
 
 <style scoped>
 @import '../syles/character-info-stats.css';
+@import '../syles/popup.css';
 /* CHARACTER INFO STYLE */
 
 .character-name {
@@ -2210,6 +2250,21 @@ export default {
 .character-info {
   font-size: 1.5em;
 }
+
+
+/* BACKUP STYLING */
+
+.list-backups {
+  list-style: none;
+  padding: 0;
+}
+
+.selected {
+  background-color: yellow;
+}
+
+/* BUTTONS STYLING */
+
 .button-update {
   padding: 10px;
   background-color: #42B6E8;
