@@ -23,7 +23,7 @@ const DEBUG_CHARACTER_BACKUPS = {
     },
     "gold": 2000,
     "hp": {
-      "current": 23,
+      "current": 21,
       "die": "d6",
       "dieAmount": 3,
       "dieAmountMax": 3,
@@ -216,7 +216,7 @@ const DEBUG_CHARACTER_BACKUPS = {
     },
     "gold": 2000,
     "hp": {
-      "current": 23,
+      "current": 22,
       "die": "d6",
       "dieAmount": 3,
       "dieAmountMax": 3,

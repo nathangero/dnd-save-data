@@ -1158,6 +1158,9 @@
                 @click="selectBackup(timestamp, backup)">
                   <p style="margin-bottom: -15px">{{ convertTimestampToString(timestamp) }}</p>
                   <hr>
+                  <div class="character-summary">
+                    <character-summary :character="backup" @openModal="toggleModalViewCharacter"></character-summary>
+                  </div>
                 </li>
               </ul>
               <div class="buttons-delete-character">
@@ -1177,6 +1180,7 @@
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
+import CharacterSummary from './CharacterSummary.vue';
 import Character from '@/models/character'
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
@@ -1210,6 +1214,7 @@ export default {
   components: {
     CollapseTransition,
     LoadingSpinner,
+    CharacterSummary
   },
   props: {
     characterToViewId: {
@@ -2273,10 +2278,17 @@ export default {
   padding: 10px 20px;
   border: 2px solid black;
   border-radius: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   text-align: center;
+}
+
+.list-backups p {
   font-size: larger;
   font-weight: bold;
+}
+
+.character-summary {
+  text-align: left;
 }
 
 .selected {
@@ -2298,8 +2310,8 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  margin: 10px auto;
-  width: 100%;
+  margin: 0px auto;
+  width: 80%;
 }
 
 .button-view-backups {
