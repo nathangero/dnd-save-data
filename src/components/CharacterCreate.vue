@@ -1,8 +1,11 @@
 <template>
   <div id="body">
-    <button class="button-close" @click="closeModal">Close</button>
+    <div class="container-button-close">
+      <div class="spacer"></div>
+      <button class="button-close" @click="closeModal">Close</button>
+    </div>
 
-    <h2>New Character</h2>
+    <h1>New Character</h1>
     
     <div id="character-background">
       <div class="input-container">

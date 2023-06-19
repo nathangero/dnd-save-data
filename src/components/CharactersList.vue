@@ -1,56 +1,42 @@
 <template>
   <div class="body" ref="bodyRef">
-    <side-menu @click="toggleMenu"></side-menu>
+    <transition name="slide-down" mode="out-in">
+      <div class="content" ref="contentRef" v-if="!isModalOpen()">
+        <side-menu @click="toggleMenu"></side-menu>
+        
+        <h1>{{ getUserInfo.name }}'s characters</h1>
+        <div class="top-buttons">
+          <button class="button-open-modal" @click="toggleModalNewCharacter">Create Character</button>
+        </div>
 
-    <div class="content" ref="contentRef">
-      <h1>{{ getUserInfo.name }}'s characters</h1>
-      <div class="top-buttons">
-        <button class="button-open-modal" @click="toggleModalNewCharacter">Create Character</button>
+        <hr v-if="!isMenuOpen">
+        <hr v-if="isMenuOpen" style="visibility: hidden ;" >
+        
+        <!-- Character summary -->
+        <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
+          <character-summary :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalViewCharacter"></character-summary>
+        </template>
       </div>
+    </transition>
 
-      <hr v-if="!isMenuOpen">
-      <hr v-if="isMenuOpen" style="visibility: hidden ;" >
-      
-      <!-- Character summary -->
-      <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-        <character-summary :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalViewCharacter"></character-summary>
+    <!-- View a character -->
+    <transition name="slide-up" mode="out-in">
+      <template v-if="isModalViewCharacterOpen">
+        <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>          
       </template>
+    </transition>
 
-      <!-- View a character -->
-      <div id="view-character">
-        <transition name="slide-up" mode="out-in">
-          <template v-if="isModalViewCharacterOpen">
-            <div class="modal-page-overlay">
-              <div class="modal-page scrollable">
-                <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
-              </div>
-            </div>
-            
-          </template>
-        </transition>
-      </div>
-
-      
-
-      <!-- Create a new character -->
-      <div id="create-character">
-        <transition name="slide-up" mode="out-in">
-          <template v-if="isModalNewCharacterOpen">
-            <div class="modal-page-overlay">
-              <div class="modal-page scrollable">
-                <character-create v-if="isModalNewCharacterOpen" @close="toggleModalNewCharacter" @created-character="toggleModalNewCharacter"></character-create>
-              </div>
-            </div>
-            
-          </template>
-        </transition>
-      </div>
-    </div>
+    <!-- Create a new character -->
+    <transition name="slide-up" mode="out-in">
+      <template v-if="isModalNewCharacterOpen">
+        <character-create v-if="isModalNewCharacterOpen" @close="toggleModalNewCharacter" @created-character="toggleModalNewCharacter"></character-create>
+      </template>
+    </transition>
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navigation" v-if="isNavBarOpen">
       <ul>
-        <li @click="navigateTo([ROUTER_NAMES.CAMPAIGNS])" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
+        <li @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
           <i class="fas fa-campaigns"></i>
           {{ ROUTER_NAMES.CAMPAIGNS.charAt(0).toUpperCase() + ROUTER_NAMES.CAMPAIGNS.slice(1) }}
         </li>
@@ -137,6 +123,9 @@ export default {
         return 0
       }
     },
+    isModalOpen() {
+      return this.isModalNewCharacterOpen || this.isModalViewCharacterOpen
+    },
     toggleModalNewCharacter() {
       this.isModalNewCharacterOpen = !this.isModalNewCharacterOpen
       this.isNavBarOpen = !this.isNavBarOpen
@@ -174,7 +163,7 @@ export default {
 @import '../syles/popup.css';
 
 .slide-up-enter-active {
-transition: transform 0.3s;
+  transition: transform 0.3s;
 }
 
 .slide-up-leave-active {
@@ -192,40 +181,12 @@ transition: transform 0.3s;
 }
 
 .body {
-  margin: 0%;
-  height: 110dvh;
+  height: 100dvh;
 }
 
 .content {
   height: 100%;
-}
-
-
-/* MODAL STYLING */
-
-.modal-page.scrollable {
-  overflow-y: scroll;
-  height: 100dvh;
-}
-
-.modal-page-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-page {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  background-color: white;
+  margin-top: 60px;
 }
 
 /* BUTTON STYLES */

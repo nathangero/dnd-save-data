@@ -1,6 +1,10 @@
 <template>
   <div class="body">
-    <button class="button-close" @click="closeModal">Close</button>
+    <div class="container-button-close">
+      <div class="spacer"></div>
+      <button class="button-close" @click="closeModal">Close</button>
+    </div>
+
     <div id="character-info" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''">
       <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 
@@ -2248,10 +2252,17 @@ export default {
 <style scoped>
 @import '../syles/character-info-stats.css';
 @import '../syles/popup.css';
+
+
+/* .body {
+  margin: 0;
+  padding: 0;
+} */
+
+
 /* CHARACTER INFO STYLE */
 
 .character-name {
-  margin-top: 50px;
   font-size: 2.5em;
 }
 
@@ -2267,6 +2278,7 @@ export default {
   border-radius: 5px;
   padding: 10px;
   width: 90%;
+  max-height: fit-content;
 }
 
 .list-backups {
@@ -2296,6 +2308,7 @@ export default {
 }
 
 /* BUTTONS STYLING */
+
 
 .button-update {
   padding: 10px;
