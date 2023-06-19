@@ -13,25 +13,7 @@
       
       <!-- Character summary -->
       <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-        <div id="users-characters-summary">
-          <div class="list-container-characters">
-            <ul class="list-characters">
-              <li v-for="(character, id) in store.getters.getUserCharacters" :key="id">
-                <div @click="toggleModalViewCharacter(id)">
-                  <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <label class="summary-name">{{ character[CHARACTER_KEYS.NAME] }}</label>
-                    <label class="summary-amount" style="white-space: nowrap;">Level: {{ character[CHARACTER_KEYS.LEVEL] }}</label>
-                  </div>
-                  
-                  <label class="summary-description">{{ character[CHARACTER_KEYS.CLASS] }}</label>
-                  <label class="summary-description">{{ character[CHARACTER_KEYS.RACE] }}</label>
-                  <label class="summary-description">Current HP: {{ character[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}</label>
-                  <!-- <label class="summary-description">Campaign: {{ character[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <character-summary :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalViewCharacter"></character-summary>
       </template>
 
       <!-- View a character -->
@@ -88,6 +70,7 @@
 <script>
 import { useStore } from 'vuex'
 import CharacterCreate from './CharacterCreate.vue';
+import CharacterSummary from './CharacterSummary.vue';
 import CharacterPage from '@/components/CharacterPage.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import Character from '@/models/character'
@@ -101,6 +84,7 @@ import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 export default {
   components: {
     CharacterCreate,
+    CharacterSummary,
     CharacterPage,
     SideMenu,
   },
@@ -185,7 +169,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+@import '../syles/character-summary.css';
+@import '../syles/popup.css';
+
 .slide-up-enter-active {
 transition: transform 0.3s;
 }
@@ -211,41 +198,6 @@ transition: transform 0.3s;
 
 .content {
   height: 100%;
-}
-
-/* CHARACTER SUMMARY STYLE */
-
-.list-container-characters {
-  display: flex;
-  justify-content: center;
-  width: 90%;
-  margin: 0 auto; /* centers the container */
-}
-
-.list-characters li {
-  width: 90%;
-  list-style: none;
-  border: 2px solid black;
-  border-radius: 10px; /* Rounded corners */
-  text-align: left;
-  margin-bottom: 10px;
-  padding: 5px;
-}
-
-.summary-name {
-  font-weight: bold;
-  font-size: larger;
-  margin-right: 20px;
-}
-
-.summary-amount{
-  font-size: larger;
-}
-
-.summary-description {
-  width: 80%;
-  font-size: larger;
-  text-align: left;
 }
 
 

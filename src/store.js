@@ -5,11 +5,13 @@ import * as rtdbFunctions from './functions/rtdb'
 import Cookies from 'js-cookie';
 import COOKIE_NAMES from '@/enums/cookie-names'
 import { CHARACTER_KEYS } from './enums/dbKeys/character-keys';
+import DEBUG_CHARACTER_BACKUPS from '@/debug/debugCharacterBackups';
 
 const store = createStore({
   state: {
     user: new User(),
     charBackups: {},
+    debugBackups: DEBUG_CHARACTER_BACKUPS
   },
   mutations: {
     addCharacterLocally(state, payload) {
@@ -351,7 +353,10 @@ const store = createStore({
     },
     getCharacterBackups(state) {
       return state.charBackups
-    } 
+    },
+    debugGetBackups(state) {
+      return state.debugBackups
+    }
   }
 })
 

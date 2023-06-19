@@ -1096,7 +1096,8 @@
       <div id="save-delete-buttons">
         <ul class="buttons-at-bottom">
           <li>
-            <button class="button-view-backups" @click="getCharacterBackups">View Backups</button>
+            <!-- <button class="button-view-backups" @click="getCharacterBackups">View Backups</button> -->
+            <button class="button-view-backups" @click="toggleCharacterBackupPopup">View Backups</button>
             <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
           </li>
 
@@ -1153,10 +1154,10 @@
             <div class="form">
               <h1>Select a backup to view</h1>
               <ul class="list-backups">
-                <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
+                <li v-for="(backup, timestamp) in store.getters.debugGetBackups" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
                 @click="selectBackup(timestamp, backup)">
-                  <p>{{ convertTimestampToString(timestamp) }}</p>
-                  <!-- <p>{{ backup }}</p> -->
+                  <p style="margin-bottom: -15px">{{ convertTimestampToString(timestamp) }}</p>
+                  <hr>
                 </li>
               </ul>
               <div class="buttons-delete-character">
@@ -2260,12 +2261,22 @@ export default {
   background-color: #fff;
   border-radius: 5px;
   padding: 10px;
-  max-width: 80%;
+  width: 90%;
 }
 
 .list-backups {
   list-style: none;
-  padding: 0;
+  padding: 0px;
+}
+
+.list-backups li {
+  padding: 10px 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+  font-size: larger;
+  font-weight: bold;
 }
 
 .selected {

@@ -14,9 +14,12 @@
 
 
 export default {
-  props: [
-    'loadingText',
-  ],
+  props: {
+    loadingText: {
+      type: String,
+      required: true  
+    }
+  },
   computed: {
     spinnerStyle () {
       return {
