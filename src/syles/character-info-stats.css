@@ -339,6 +339,25 @@ textarea {
   visibility: hidden;
 }
 
+
+
+.buttons-delete-character {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 0px auto;
+  width: 80%;
+}
+
+.button-cancel-delete {
+  padding: 10px;
+  background-color: black;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: large;
+}
+
 .buttons-delete-update {
   display: flex;
   flex-direction: row;
@@ -404,4 +423,10 @@ textarea {
 
 .collapse-chevron {
   margin: 5px;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }

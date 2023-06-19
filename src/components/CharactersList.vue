@@ -193,24 +193,9 @@ export default {
 <style scoped>
 @import '../syles/character-summary.css';
 @import '../syles/popup.css';
+@import '../syles/transitions.css';
 
-.slide-up-enter-active {
-  transition: transform 0.3s;
-}
 
-.slide-up-leave-active {
-  transition: transform 0.3s;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  transform: translateY(100%);
-}
-
-.slide-up-enter-to,
-.slide-up-leave {
-  transform: translateY(0);
-}
 
 .body {
   height: 100dvh;

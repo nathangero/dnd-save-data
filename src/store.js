@@ -32,6 +32,25 @@ const store = createStore({
     deleteCharacterLocally(state, charId) {
       delete state.user.characters[charId]
     },
+    addCharacterBackupLocally(state, payload) {
+      const { charId, timestamp, backup } = payload
+      if (state.charBackups[charId]) {
+        // If dictionary already exists, just add to it
+        state.charBackups[charId][timestamp] = backup
+      } else {
+        // If dicitonary doesn't exist, create it
+        const newCharacter = {
+          [charId]: {
+            [timestamp]: backup
+          }
+        }
+        state.charBackups = newCharacter
+      }
+    },
+    deleteCharacterBackupLocally(state, payload) {
+      const { charId, timestamp } = payload
+      delete state.user.charBackups[charId][timestamp]
+    },
     signOut(state) {
       state.user = new User()
 
@@ -50,6 +69,7 @@ const store = createStore({
     },
     setCharBackups(state, backups) {
       state.charBackups = backups // Always overwrite the backups for a character
+      // console.info('state.charBackups:', state.charBackups)
     }
   },
   actions: {
@@ -288,6 +308,43 @@ const store = createStore({
         })
       })
     },
+    deleteBackupFromDb(state, payload) {
+      const { charId, timestamp } = payload
+
+      const userId = this.state.user.id
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.deleteCharacterBackup(userId, charId, timestamp).then((success) => {
+          if (success) {
+            resolve(true)
+          } else {
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(false)
+        })
+      })
+    },
+    overwriteCharacterFromBackup(state, payload) {
+      const { charId, characterBackup } = payload
+
+      const userId = this.state.user.id
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.overwriteCharacterFromBackup(userId, charId, characterBackup).then((success) => {
+          if (success) {
+
+            resolve(true)
+          } else {
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(false)
+        })
+      })
+    },
     deleteCharacterFromDb(state, charId) {
       const userId = this.state.user.id
       return new Promise((resolve, reject) => {
@@ -307,7 +364,7 @@ const store = createStore({
       
       return new Promise((resolve, reject) => {
         rtdbFunctions.getCharacterBackups(userId, charId).then((backups) => {
-          // console.info('backups:', backups)
+          console.info('backups:', backups)
           if (backups) {
             const payload = {
               [charId]: backups
@@ -352,6 +409,7 @@ const store = createStore({
       return state.user.characters
     },
     getCharacterBackups(state) {
+      console.info("state.charBackups:", state.charBackups)
       return state.charBackups
     },
     debugGetBackups(state) {

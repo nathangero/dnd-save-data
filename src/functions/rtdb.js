@@ -129,6 +129,21 @@ export async function deleteCharacterBackup(userId, charId, timestamp) {
 }
 
 
+export async function overwriteCharacterFromBackup(userId, charId, characterBackup) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
+    return new Promise((resolve, reject) => {
+        set(ref(db, dbRef), characterBackup).then(() => {
+            // console.info(`created a new character for user: ${userId}`)
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false, '')
+        }))
+    })
+}
+
+
 export async function deleteCharacter(userId, charId) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
     return new Promise((resolve, reject) => {

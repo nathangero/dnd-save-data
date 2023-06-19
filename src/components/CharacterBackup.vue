@@ -458,14 +458,47 @@
       <ul class="buttons-at-bottom">
         <li style="margin-bottom: 30px;">
           <!-- <button class="button-view-backups" @click="getCharacterBackups">View Backups</button> -->
-          <button class="button-delete" >Delete Backup</button>
-          <button class="button-save">Use this Backup</button>
+          <button class="button-delete" @click="toggleDeleteBackupPopup">Delete Backup</button>
+          <button class="button-save" @click="toggleOverwritePopup">Use this Backup</button>
         </li>
       </ul>
     </div>
 
+    <!-- Overwrite Data Popup -->
+    <div id="overwrite-character">
+      <transition name="fade" appear>
+        <div class="overlay" v-if="isShowingOverwritePopup">
+          <div class="popup">
+            <h1>Overwrite existing data for {{ characterBackup[CHARACTER_KEYS.NAME] }}?</h1>
+            <p class="popup-message">This action can't be undone</p>
+            <div class="buttons-delete-character">
+              <button class="button-cancel-delete" @click="toggleOverwritePopup">Cancel</button>
+              <button class="button-save" @click="onPressOverwriteSave">Yes</button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
 
-    <div v-if="false">
+    <!-- Delete Backup Popup -->
+    <div id="delete-character">
+        <transition name="fade" appear>
+          <div class="overlay" v-if="isShowingDeleteBackupPopup">
+            <div class="popup">
+              <div class="form">
+                <h1>Delete backup for {{ characterBackup[CHARACTER_KEYS.NAME] }}?</h1>
+                <p class="popup-message">This action can't be undone</p>
+                <div class="buttons-delete-character">
+                  <button class="button-cancel-delete" @click="toggleDeleteBackupPopup">Cancel</button>
+                  <button class="button-delete" @click="onPressDeleteBackup">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
+
+    <div v-if="isShowingLoader">
       <loading-spinner :loadingText="LOADING_TEXT.SAVING_BACKUP"></loading-spinner>
     </div>
   </div>
@@ -504,6 +537,10 @@ export default {
     characterBackup: {
       type: Object,
       required: true
+    },
+    characterBackupId: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -520,6 +557,9 @@ export default {
       isShowingLanguages: true,
       isShowingProficiencies: true,
       isShowingSpells: true,
+      isShowingOverwritePopup: false,
+      isShowingDeleteBackupPopup: false,
+      isShowingLoader: false,
       LOADING_TEXT: LOADING_TEXT,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       CHARACTER_KEYS: CHARACTER_KEYS,
@@ -553,6 +593,82 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close')
+    },
+    onPressOverwriteSave() {
+      this.toggleOverwritePopup()
+      this.isShowingLoader = true
+      console.info('this.characterBackupId,:', this.characterBackupId,)
+      const payload = {
+        charId: this.characterBackupId,
+        characterBackup: this.characterBackup
+      }
+
+      this.store.dispatch("overwriteCharacterFromBackup", payload).then((success) => {
+        if (success) {
+          alert("Overwrote Backup")
+          setTimeout(() => {
+            this.isShowingLoader = false
+            setTimeout(() => {
+              this.closeModal()
+            }, 200);
+          }, 1000);
+        } else {
+          alert("Couldn't delete back up for some reason")
+          setTimeout(() => {
+            this.isShowingLoader = false
+            setTimeout(() => {
+              this.closeModal()
+            }, 200);
+          }, 1000);
+        }
+      })
+      .catch((error) => {
+        alert("Couldn't delete back up for reason:", error)
+        setTimeout(() => {
+          this.isShowingLoader = false
+          setTimeout(() => {
+            this.closeModal()
+          }, 200);
+        }, 1000);
+      })
+    },
+    onPressDeleteBackup() {
+      this.toggleDeleteBackupPopup()
+      this.isShowingLoader = true
+      
+      const payload = {
+        charId: this.characterBackupId,
+        timestamp: this.timeOfBackup
+      }
+      this.store.dispatch("deleteBackupFromDb", payload).then((success) => {
+        if (success) {
+          alert("Deleted Backup")
+          setTimeout(() => {
+            this.isShowingLoader = false
+            setTimeout(() => {
+              this.closeModal()
+            }, 200);
+          }, 1000);
+        } else {
+          alert("Couldn't delete back up for some reason")
+          setTimeout(() => {
+            this.isShowingLoader = false
+            setTimeout(() => {
+              this.closeModal()
+            }, 200);
+          }, 1000);
+        }
+      })
+      .catch((error) => {
+        alert("Couldn't delete back up for reason:", error)
+        setTimeout(() => {
+          this.isShowingLoader = false
+          setTimeout(() => {
+            this.closeModal()
+          }, 200);
+        }, 1000);
+      })
+      
     },
     getDictionarySize(dict) {
       if (dict) {
@@ -636,6 +752,12 @@ export default {
           this.isShowingCharacterInfo = !this.isShowingCharacterInfo
       }
     },
+    toggleOverwritePopup() {
+      this.isShowingOverwritePopup = !this.isShowingOverwritePopup
+    },
+    toggleDeleteBackupPopup() {
+      this.isShowingDeleteBackupPopup = !this.isShowingDeleteBackupPopup
+    },
   }
 }
 </script>
@@ -643,6 +765,7 @@ export default {
 <style scoped>
 @import '../syles/character-info-stats.css';
 @import '../syles/popup.css';
+@import '../syles/transitions.css';
 
 
 /* CHARACTER INFO STYLE */

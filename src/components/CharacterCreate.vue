@@ -780,7 +780,7 @@
     </div>
 
     <br>
-    <button class="button-create-character" @click="createCharacter">Create Character</button>
+    <button class="button-create-character" @click="createCharacter" :class="{ 'disabled': !checkIfCreateCharacterButtonIsDisabled() }">Create Character</button>
 
   </div>
 </template>
@@ -1304,26 +1304,82 @@ export default {
         }
       }
     },
+    checkIfCreateCharacterButtonIsDisabled() {
+      // console.info("@checkIfAllValid")
+      if (this.characterName === '') {
+        return false
+      }
+
+      if (this.characterAlignment === '') {
+        return false
+      }
+
+      if (this.characterBackground === '') {
+        return false
+      }
+
+      if (this.characterRace === '') {
+        return false
+      }
+
+      if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
+        return false
+      }
+      
+      if (this.hp.max < MIN_VALUES.HP || this.hp.max.MAX_VALUES) {
+        return false
+      } 
+      
+      if (this.hp.dieAmount < MIN_VALUES.HIT_DIE || this.hp.dieAmount > MAX_VALUES.HIT_DIE) {
+        return false
+      }
+
+      if (this.hp.die == '') {
+        return false
+      }
+      
+      if (!this.checkIfStatsValid()) {
+        return false
+      }
+
+      if (!this.checkIfThrowsValid()) {
+        return false
+      }
+
+      if (!this.checkIfSkillsValid()) {
+        return false
+      }
+
+      if (this.spellCastStat === '') {
+        return false
+      }
+
+      if (this.spellSavingDc === '') {
+        return false
+      }
+
+      return true
+    },
     checkIfAllValid() {
       // console.info("@checkIfAllValid")
       if (this.characterName === '') {
         alert("Please enter a character name")
-        return
+        return false
       }
 
       if (this.characterAlignment === '') {
         alert("Please enter an alignment")
-        return
+        return false
       }
 
       if (this.characterBackground === '') {
         alert("Please enter a background")
-        return
+        return false
       }
 
       if (this.characterRace === '') {
         alert("Please enter a race")
-        return
+        return false
       }
 
       if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
@@ -1363,12 +1419,12 @@ export default {
 
       if (this.spellCastStat === '') {
         alert("Please select a stat your spell casting will be based off of")
-        return
+        return false
       }
 
       if (this.spellSavingDc === '') {
         alert("Please enter your spell saving DC")
-        return
+        return false
       }
 
       return true
