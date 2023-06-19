@@ -853,37 +853,35 @@
         <collapse-transition dimension="height">
           <div v-if="isShowingLanguages">
             <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
-              <div>
-                <ul>
-                  <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
-                    <div v-if="!isEditingLanguages">
-                      <div class="language-group">
-                        <p class="language-label">{{ key }}:</p>
-                        <p class="language-value">{{ item }}</p>
-                      </div>
+              <ul>
+                <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
+                  <div v-if="!isEditingLanguages">
+                    <div class="language-group">
+                      <p class="language-label">{{ key }}:</p>
+                      <p class="language-value">{{ item }}</p>
+                    </div>
+                  </div>
+
+                  <!-- Edit and Delete -->
+                  <div v-if="isEditingLanguages">
+                    <div style="margin-top: 10px; text-align: left;">
+                      <label class="item-name">{{ key }}:</label>
+                      <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
+                        <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                      </select>
                     </div>
 
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingLanguages">
-                      <div style="margin-top: 10px; text-align: left;">
-                        <label class="item-name">{{ key }}:</label>
-                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
-                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                        </select>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <br>
-                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
-                      </div>
-                      
-                      <hr class="list-divider">
+                    <div class="buttons-delete-update">
+                      <br>
+                      <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
+                      <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
                     </div>
                     
-                  </li>
-                </ul>
-              </div>
+                    <hr class="list-divider">
+                  </div>
+                  
+                </li>
+              </ul>
             </template>
 
             <!-- Add new -->
@@ -928,31 +926,29 @@
         <collapse-transition dimension="height">
           <div v-if="isShowingProficiencies">
             <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
-                    <div v-if="!isEditingProficiencies">
-                      <label class="item-name">{{ key }}</label>
-                      <p class="item-description">{{ item }}</p>
+              <ul class="list">
+                <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
+                  <div v-if="!isEditingProficiencies">
+                    <label class="item-name">{{ key }}</label>
+                    <p class="item-description">{{ item }}</p>
+                  </div>
+
+                  <!-- Edit and Delete -->
+                  <div v-if="isEditingProficiencies">
+                    <label class="item-name">{{ key }}:</label>
+                    <div class="container-edit">
+                      <textarea v-model="characterToView[CHARACTER_KEYS.PROFICIENCIES][key]" rows="4" placeholder="Description"></textarea>
                     </div>
 
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingProficiencies">
-                      <label class="item-name">{{ key }}:</label>
-                      <div class="container-edit">
-                        <textarea v-model="characterToView[CHARACTER_KEYS.PROFICIENCIES][key]" rows="4" placeholder="Description"></textarea>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
-                      </div>
-                      
-                      <hr class="list-divider">
+                    <div class="buttons-delete-update">
+                      <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                      <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
                     </div>
-                  </li>
-                </ul>
-              </div>
+                    
+                    <hr class="list-divider">
+                  </div>
+                </li>
+              </ul>
             </template>
 
             <!-- Add new -->
@@ -992,70 +988,68 @@
         <collapse-transition dimension="height">
           <div v-if="isShowingSpells">
             <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(levelDict, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
-                    <template v-if="getDictionarySize(levelDict) > 0">
-                      <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
-                      <ul>
-                        <li v-for="(spell, spellName) in levelDict" :key="spellName">
-                          <div v-if="!isEditingSpellCasting">
-                            <label class="item-name">{{ spellName }}</label>
-                            <br>
-                            <div class="spell-list">
-                              <div class="spell-group">
-                                <label class="spell-label">Casting Time:</label>
-                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
-                              </div>
-                              <div class="spell-group">
-                                <label class="spell-label">Duration:</label>
-                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
-                              </div>
-                              <div class="spell-group">
-                                <label class="spell-label">Range:</label>
-                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
-                              </div>
+              <ul class="list">
+                <li v-for="(levelDict, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
+                  <template v-if="getDictionarySize(levelDict) > 0">
+                    <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
+                    <ul>
+                      <li v-for="(spell, spellName) in levelDict" :key="spellName">
+                        <div v-if="!isEditingSpellCasting">
+                          <label class="item-name">{{ spellName }}</label>
+                          <br>
+                          <div class="spell-list">
+                            <div class="spell-group">
+                              <label class="spell-label">Casting Time:</label>
+                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
                             </div>
-                            <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
+                            <div class="spell-group">
+                              <label class="spell-label">Duration:</label>
+                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
+                            </div>
+                            <div class="spell-group">
+                              <label class="spell-label">Range:</label>
+                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                            </div>
                           </div>
+                          <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
+                        </div>
 
-                          <!-- Edit and Delete -->
-                          <div v-if="isEditingSpellCasting">
-                            <label class="item-name">{{ spellName }}</label>
-                            <div class="container-inputs">
-                              <ul class="list-inputs">
-                                <li>
-                                  <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
-                                  <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
-                                </li>
-                                  
-                                <li>
-                                  <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
-                                  <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
-                                </li>
+                        <!-- Edit and Delete -->
+                        <div v-if="isEditingSpellCasting">
+                          <label class="item-name">{{ spellName }}</label>
+                          <div class="container-inputs">
+                            <ul class="list-inputs">
+                              <li>
+                                <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
+                                <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
+                              </li>
                                 
-                                <li>
-                                  <label for="spells-range" class="stat-label">Range (in feet):</label>
-                                  <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
-                                </li>
-                              </ul>
-                            </div>
-                            
-                            <br>
-                            <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                            <div class="buttons-delete-update">
-                              <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                              <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
-                            </div>
-                      
-                            <hr class="list-divider">
+                              <li>
+                                <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
+                                <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                              </li>
+                              
+                              <li>
+                                <label for="spells-range" class="stat-label">Range (in feet):</label>
+                                <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
+                              </li>
+                            </ul>
                           </div>
-                        </li>
-                      </ul>
-                    </template>
-                  </li>
-                </ul>
-              </div>
+                          
+                          <br>
+                          <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                          <div class="buttons-delete-update">
+                            <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
+                            <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
+                          </div>
+                    
+                          <hr class="list-divider">
+                        </div>
+                      </li>
+                    </ul>
+                  </template>
+                </li>
+              </ul>
             </template>
 
             <!-- Add new -->
@@ -1177,6 +1171,10 @@
         </div>
       </transition>
     </div>
+
+    <template v-if="isShowingBackup">
+      <character-backup :characterBackup="selectedBackupCharacter"></character-backup>
+    </template>
   </div>
 </template>
 
@@ -1186,6 +1184,7 @@ import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
 import CharacterSummary from './CharacterSummary.vue';
+import CharacterBackup from './CharacterBackup.vue';
 import Character from '@/models/character'
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
@@ -1219,7 +1218,8 @@ export default {
   components: {
     CollapseTransition,
     LoadingSpinner,
-    CharacterSummary
+    CharacterSummary,
+    CharacterBackup
   },
   props: {
     characterToViewId: {
@@ -1257,6 +1257,7 @@ export default {
       isShowingProficiencies: true,
       isShowingSpells: true,
       isShowingLoader: false,
+      isShowingBackup: false,
       LOADING_TEXT: LOADING_TEXT,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       CHARACTER_KEYS: CHARACTER_KEYS,
@@ -2225,6 +2226,9 @@ export default {
     },
     toggleCharacterBackupPopup() {
       this.isCharacterBackupsOpen = !this.isCharacterBackupsOpen
+    },
+    viewBackup() {
+      this.isShowingBackup = !this.isShowingBackup
     },
     selectBackup(timestamp, backup) {
       this.selectedBackupTimestamp = timestamp
