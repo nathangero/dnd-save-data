@@ -348,13 +348,21 @@ textarea {
 }
 
 .button-delete {
-  margin: 0 auto;
   padding: 10px;
   background-color: #dd3528;
   border: none;
   color: white;
   border-radius: 10px;
   font-size: large;
+}
+
+.button-save {
+  padding: 10px;
+  background-color: #42B6E8;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: larger;
 }
 
 .button-add {
@@ -377,6 +385,22 @@ textarea {
   margin-bottom: 10%;
 }
 
+.buttons-at-bottom {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0;
+}
+
+.buttons-at-bottom li {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 10px auto;
+  width: 100%;
+}
 
 .collapse-chevron {
   margin: 5px;

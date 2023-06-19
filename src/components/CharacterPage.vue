@@ -1,1145 +1,1148 @@
 <template>
   <div class="body">
-    <div class="container-button-close">
-      <div class="spacer"></div>
-      <button class="button-close" @click="closeModal">Close</button>
-    </div>
-
-    <div id="character-info" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''">
-      <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
-
-      <!-- NOT EDITABLE -->
-      <div id="character-background">
-        <ul class="stat-list">
-          <li>
-            <label class="character-info">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
-          </li>
-
-          <li>
-            <label class="character-info">{{ characterToView[CHARACTER_KEYS.BACKGROUND] }}</label>
-          </li>
-
-          <li>
-            <label class="character-info">{{ characterToView[CHARACTER_KEYS.RACE] }}</label>
-          </li>
-
-          <li>
-            <label class="character-info">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
-          </li>
-        </ul>
+    <template v-if="!isShowingBackup">
+      <div class="container-button-close">
+        <div class="spacer"></div>
+        <button class="button-close" @click="closeModal">Close</button>
       </div>
-        
-      <br>
-      <div id="character-info">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingCharInfo">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingCharInfo">Finish</button>
-          </div>
 
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(characterinfo)">Character Info</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForStat(characterinfo)">Edit</button>
-            <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForStat(characterinfo)">Finish</button>
-          </div>
+      <div id="character-info" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''">
+        <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
+
+        <!-- NOT EDITABLE -->
+        <div id="character-background">
+          <ul class="stat-list">
+            <li>
+              <label class="character-info">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
+            </li>
+
+            <li>
+              <label class="character-info">{{ characterToView[CHARACTER_KEYS.BACKGROUND] }}</label>
+            </li>
+
+            <li>
+              <label class="character-info">{{ characterToView[CHARACTER_KEYS.RACE] }}</label>
+            </li>
+
+            <li>
+              <label class="character-info">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
+            </li>
+          </ul>
         </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingCharacterInfo">
-            <div v-if="!isEditingCharInfo">
-              <ul class="stat-list">
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Level:</label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
-                  </div>
-                </li>
-
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Armor Class: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Initiative: </label>
-                    <label class="stat-value">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Speed (ft): </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label" style="margin-right: 20px;">Temp HP: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP] }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
-                    <label class="stat-value">1{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label" style="margin-right: 20px;">Hit die count: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX] }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label" style="margin-right: 20px;">Death saves successes: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES] }}/3</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label" style="margin-right: 20px;">Death saves failures: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES] }}/3</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Proficiency Bonus: </label>
-                    <label class="stat-value">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Passive Perception: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Spell Casting Stat: </label>
-                    <label class="stat-value">{{ STAT_NAMES[characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]] }}</label>
-                  </div>
-                </li>
-                
-                <li>
-                  <div class="stat-group">
-                    <label class="stat-label">Spell Saving DC: </label>
-                    <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
-                  </div>
-                </li>
-              </ul>
+          
+        <br>
+        <div id="character-info">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingCharInfo">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingCharInfo">Finish</button>
             </div>
 
-            <div v-if="isEditingCharInfo">
-              <div class="container-inputs">
-                <ul class="list-inputs">
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(characterinfo)">Character Info</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForStat(characterinfo)">Edit</button>
+              <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForStat(characterinfo)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingCharacterInfo">
+              <div v-if="!isEditingCharInfo">
+                <ul class="stat-list">
                   <li>
-                    <label for="stats-level" class="stat-label"> Current Level:</label>
-                    <input type="number" id="stats-level" v-model="characterToView[CHARACTER_KEYS.LEVEL]" class="input-stats" inputmode="numeric" required>
+                    <div class="stat-group">
+                      <label class="stat-label">Level:</label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
+                    </div>
                   </li>
 
                   <li>
-                    <label for="stats-armor-class" class="stat-label">Armor Class: </label>
-                    <input type="number" id="stats-armor-class" v-model="characterToView[CHARACTER_KEYS.ARMOR]" class="input-stats" inputmode="numeric" required>
-                  </li>
-
-                  <li style="margin-top: 10px; margin-bottom: 10px;">
-                    <label for="stats-initiative" class="stat-label">Initiative: </label>
-                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
+                    <div class="stat-group">
+                      <label class="stat-label">Armor Class: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
+                    </div>
                   </li>
                   
                   <li>
-                    <label for="stats-speed" class="stat-label">Speed (ft): </label>
-                    <input type="number" id="stats-speed" v-model="characterToView[CHARACTER_KEYS.SPEED]" class="input-stats" inputmode="numeric" required>
-                  </li>
-
-                  <li>
-                    <label for="stats-hp" class="stat-label">Hit Points - Current:</label>
-                    <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
-                  </li>
-
-                  <li>
-                    <label for="stats-hp" class="stat-label">Hit Points - Max:</label>
-                    <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
-                  </li>
-
-                  <li>
-                    <label for="stats-hp" class="stat-label">Hit Points - Temp:</label>
-                    <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label">Hit Die Type: </label>
-                    <select class="picker" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE]">
-                      <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                    </select>
-                  </li>
-
-                  <li>
-                    <label for="stats-hit-die" class="stat-label">Current # of Hit Die: </label>
-                    <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
-                  </li>
-
-                  <li>
-                    <label for="stats-hit-die" class="stat-label">Max # of Hit Die: </label>
-                    <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
-                  </li>
-                
-                  <li> 
-                    <label for="death-saves-successes" class="stat-label">Death saves successes: </label>
-                    <input type="number" id="death-saves-successes" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES]" class="input-stats" inputmode="numeric" required>
+                    <div class="stat-group">
+                      <label class="stat-label">Initiative: </label>
+                      <label class="stat-value">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
+                    </div>
                   </li>
                   
                   <li>
-                    <label for="death-saves-failures" class="stat-label">Death saves failures: </label>
-                    <input type="number" id="death-saves-failures" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES]" class="input-stats" inputmode="numeric" required>
+                    <div class="stat-group">
+                      <label class="stat-label">Speed (ft): </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
+                    </div>
                   </li>
-
+                  
                   <li>
-                    <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
-                    <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]" class="input-stats" inputmode="numeric" required>
+                    <div class="stat-group">
+                      <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+                    </div>
                   </li>
-
-                  <li style="margin-top: 10px; margin-bottom: 10px;">
-                    <label for="stats-proficiency-bonus" class="stat-label">Passive Perception: </label>
-                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]) }}</label>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label" style="margin-right: 20px;">Temp HP: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP] }}</label>
+                    </div>
                   </li>
-
-                  <li style="margin-top: 10px;">
-                    <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
-                    <select class="picker" v-model="characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]">
-                      <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ stat }}</option>
-                    </select>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
+                      <label class="stat-value">1{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
+                    </div>
                   </li>
-                
-                  <li style="margin-top: 5px;">
-                    <label class="stat-label">Spell Saving DC: </label>
-                    <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.SPELL_SAVE_DC]) }}</label>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label" style="margin-right: 20px;">Hit die count: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX] }}</label>
+                    </div>
                   </li>
-                </ul>
-              </div>
-
-              <div class="buttons-delete-update">
-                <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
-              </div>
-            </div>
-          </div>
-        </collapse-transition>
-
-      </div>
-
-      <br>
-      <div id="base-stats">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingBaseStats">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingBaseStats">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">Base Stats</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingBaseStats" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Edit</button>
-            <button class="button-edit" v-if="isEditingBaseStats" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Finish</button>
-          </div>
-        </div>
-        
-        <collapse-transition dimension="height">
-          <div v-if="isShowingBaseStats">
-            <div v-if="!isEditingBaseStats">
-              <ul class="stat-list">
-                <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                  <div class="stat-group">
-                    <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                    <label class="stat-value">{{ getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.VALUE) }}</label>
-                    <label class="stat-bonus">{{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Editing -->
-            <div v-if="isEditingBaseStats" class="isEditing">
-              <div class="container-inputs">
-                <ul class="list-inputs" style="margin-right: 20px;">
-                  <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                    <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                    <div style="margin-left: 10px;">
-                      <input type="number" id="stats-label" v-model="characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
-                      <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label" style="margin-right: 20px;">Death saves successes: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES] }}/3</label>
+                    </div>
+                  </li>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label" style="margin-right: 20px;">Death saves failures: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES] }}/3</label>
+                    </div>
+                  </li>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Proficiency Bonus: </label>
+                      <label class="stat-value">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+                    </div>
+                  </li>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Passive Perception: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
+                    </div>
+                  </li>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Spell Casting Stat: </label>
+                      <label class="stat-value">{{ STAT_NAMES[characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]] }}</label>
+                    </div>
+                  </li>
+                  
+                  <li>
+                    <div class="stat-group">
+                      <label class="stat-label">Spell Saving DC: </label>
+                      <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
                     </div>
                   </li>
                 </ul>
               </div>
 
-              <div class="buttons-delete-update">
-                <button class="button-update" @click="onPressUpdateBaseStats()">Update</button>
-              </div>
-            </div>
-          </div>
-        </collapse-transition>
-      </div>
-
-      <br>
-      <div id="saving-throws">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingSavingThrows">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingSavingThrows">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">Saving Throws</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)">Edit</button>
-            <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSavingThrows">
-            <ul class="stat-list">
-              <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]" :disabled="!isEditingSavingThrows">
-                  <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-
-                  <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
-                  </label>
-                  <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD)) }}
-                  </label>
-                </div>
-              </li>
-            </ul>
-
-            <div v-if="isEditingSavingThrows">
-              <div class="buttons-delete-update">
-                <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
-              </div>
-            </div>
-          </div>
-        </collapse-transition>
-      </div>
-      
-      <br>
-      <div id="skills">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingSkills">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingSkills">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">Skills</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForStat(CHARACTER_KEYS.SKILLS)">Edit</button>
-            <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForStat(CHARACTER_KEYS.SKILLS)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSkills">
-            <ul class="stat-list">
-              <li v-for="(skill, key) in SKILL_KEYS" :key="key">
-                <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]" :disabled="!isEditingSkills">
-                  <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
-
-                  <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
-                  </label>
-                  <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD)) }}
-                  </label>
-                </div>
-              </li>
-            </ul>
-
-            <div v-if="isEditingSkills">
-              <div class="buttons-delete-update">
-                <button class="button-update" @click="onPressUpdateSkills()">Update</button>
-              </div>
-            </div>
-          </div>
-        </collapse-transition>
-        
-      </div>
-
-      <br>
-      <div id="features-traits">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingFeaturesTraits">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingFeaturesTraits">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features & Traits</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Edit</button>
-            <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingFeatures">
-            <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.FEATURES]) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in characterToView[CHARACTER_KEYS.FEATURES]" :key="key">
-                    <div v-if="!isEditingFeaturesTraits">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
-                      <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
-                      <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingFeaturesTraits">
-                      <label class="item-name">{{ key }}</label>
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label">Type:</label>
-                            <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
-                              <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                            </select>
-                          </li>
-
-                          <li>
-                            <label class="stat-label" for="features-input"> # of Uses:</label>
-                            <input class="input-stats" style="width=70%;" type="number" v-model="item[FEATURES_KEYS.USES]"> 
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="container-edit">
-                        <div>
-                          
-                        </div>
-                        <div>
-                          
-                        </div>
-                        <br>
-                        <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                        <div class="buttons-delete-update">
-                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
-                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
-                        </div>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-
-            <!-- Add new -->
-            <template v-if="isEditingFeaturesTraits">
-              <div>
-                <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
-                <div class="container-inputs">
-                  <ul class="list-inputs">
-                    <li style="margin-top: 10px;">
-                      <label>Type:</label>
-                      <select class="picker" v-model="featuresTempType">
-                        <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                      </select>
-                    </li>
-
-                    <li>
-                      <label for="features-input"> # of Uses:</label>
-                      <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
-                    </li>
-                  </ul>
-                </div>
-                
-                <br>
-                <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
-                <br>
-                <button class="button-add" @click="onPressAddFeatures">Add</button>
-              </div>         
-            </template>
-          </div>
-        </collapse-transition>
-        
-      </div>
-
-      <br>
-      <div id="weapons">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingWeapons">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingWeapons">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">Weapons & Spells</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Edit</button>
-            <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingWeapons">
-            <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.WEAPONS]) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in characterToView[CHARACTER_KEYS.WEAPONS]" :key="key">
-                    <div v-if="!isEditingWeapons">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
-
-                      <div class="spell-list">
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
-                          <label class="spell-value" v-if="!item[WEAPON_KEYS.PROFICIENT]">
-                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})
-                          </label>
-                          <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
-                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})
-                          </label>
-
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                          <label class="spell-value">{{ item[WEAPON_KEYS.DIE] }}</label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                          <label class="spell-value">{{ item[WEAPON_KEYS.CATEGORY] }}</label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label" style="flex-grow: 1;">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                          <input type="checkbox" class="checkbox" style="margin-right: 0px;" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
-                        </div>
-                      </div>
-                      
-                      <p class="spell-label">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingWeapons">
-                      <label class="item-name">{{ key }}:</label>
-                      
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
-                            <input class="input-stats" style="width=70%;" type="number" v-model="item[WEAPON_KEYS.AMOUNT]"> 
-                          </li>
-                          
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
-                              <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                            </select>
-                          </li>
-                          
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.DIE]">
-                              <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                            </select>
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.CATEGORY]">
-                              <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
-                            </select>
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                            <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
-                          </li>
-
-                          <br>
-                          <textarea v-model="item[WEAPON_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                        </ul>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.WEAPONS)">Update</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-
-            <!-- Add new -->
-            <template v-if="isEditingWeapons">
-              <div>
-                <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
-
+              <div v-if="isEditingCharInfo">
                 <div class="container-inputs">
                   <ul class="list-inputs">
                     <li>
-                      <label class="stat-label" for="equipment-input">Amount:</label>
-                      <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
+                      <label for="stats-level" class="stat-label"> Current Level:</label>
+                      <input type="number" id="stats-level" v-model="characterToView[CHARACTER_KEYS.LEVEL]" class="input-stats" inputmode="numeric" required>
                     </li>
 
-                    <li style="margin-top: 10px;">
-                      <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
-                      <select class="picker" v-model="weaponsTempAttackModifier">
-                        <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                      </select>
+                    <li>
+                      <label for="stats-armor-class" class="stat-label">Armor Class: </label>
+                      <input type="number" id="stats-armor-class" v-model="characterToView[CHARACTER_KEYS.ARMOR]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li style="margin-top: 10px; margin-bottom: 10px;">
+                      <label for="stats-initiative" class="stat-label">Initiative: </label>
+                      <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
                     </li>
                     
+                    <li>
+                      <label for="stats-speed" class="stat-label">Speed (ft): </label>
+                      <input type="number" id="stats-speed" v-model="characterToView[CHARACTER_KEYS.SPEED]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-hp" class="stat-label">Hit Points - Current:</label>
+                      <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-hp" class="stat-label">Hit Points - Max:</label>
+                      <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-hp" class="stat-label">Hit Points - Temp:</label>
+                      <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
                     <li style="margin-top: 10px;">
-                      <label class="stat-label" for="equipment-input">Die Type:</label>
-                      <select class="picker" v-model="weaponTempDieType">
+                      <label class="stat-label">Hit Die Type: </label>
+                      <select class="picker" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE]">
                         <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                       </select>
                     </li>
 
-                    <li style="margin-top: 10px;">
-                      <label class="stat-label" for="equipment-input">Category:</label>
-                      <select class="picker" v-model="weaponTempCategory">
-                        <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
-                      </select>
+                    <li>
+                      <label for="stats-hit-die" class="stat-label">Current # of Hit Die: </label>
+                      <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-hit-die" class="stat-label">Max # of Hit Die: </label>
+                      <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
+                    </li>
+                  
+                    <li> 
+                      <label for="death-saves-successes" class="stat-label">Death saves successes: </label>
+                      <input type="number" id="death-saves-successes" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES]" class="input-stats" inputmode="numeric" required>
+                    </li>
+                    
+                    <li>
+                      <label for="death-saves-failures" class="stat-label">Death saves failures: </label>
+                      <input type="number" id="death-saves-failures" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
+                      <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li style="margin-top: 10px; margin-bottom: 10px;">
+                      <label for="stats-proficiency-bonus" class="stat-label">Passive Perception: </label>
+                      <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]) }}</label>
                     </li>
 
                     <li style="margin-top: 10px;">
-                      <label class="stat-label" for="equipment-input">Proficient:</label>
-                      <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                      <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
+                      <select class="picker" v-model="characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]">
+                        <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ stat }}</option>
+                      </select>
+                    </li>
+                  
+                    <li style="margin-top: 5px;">
+                      <label class="stat-label">Spell Saving DC: </label>
+                      <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.SPELL_SAVE_DC]) }}</label>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="buttons-delete-update">
+                  <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
+                </div>
+              </div>
+            </div>
+          </collapse-transition>
+
+        </div>
+
+        <br>
+        <div id="base-stats">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingBaseStats">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingBaseStats">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">Base Stats</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingBaseStats" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Edit</button>
+              <button class="button-edit" v-if="isEditingBaseStats" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Finish</button>
+            </div>
+          </div>
+          
+          <collapse-transition dimension="height">
+            <div v-if="isShowingBaseStats">
+              <div v-if="!isEditingBaseStats">
+                <ul class="stat-list">
+                  <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                    <div class="stat-group">
+                      <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                      <label class="stat-value">{{ getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.VALUE) }}</label>
+                      <label class="stat-bonus">{{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Editing -->
+              <div v-if="isEditingBaseStats" class="isEditing">
+                <div class="container-inputs">
+                  <ul class="list-inputs" style="margin-right: 20px;">
+                    <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                      <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                      <div style="margin-left: 10px;">
+                        <input type="number" id="stats-label" v-model="characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
+                        <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="buttons-delete-update">
+                  <button class="button-update" @click="onPressUpdateBaseStats()">Update</button>
+                </div>
+              </div>
+            </div>
+          </collapse-transition>
+        </div>
+
+        <br>
+        <div id="saving-throws">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingSavingThrows">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingSavingThrows">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">Saving Throws</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)">Edit</button>
+              <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingSavingThrows">
+              <ul class="stat-list">
+                <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                  <div class="stat-group">
+                    <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]" :disabled="!isEditingSavingThrows">
+                    <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+
+                    <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
+                      {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+                    </label>
+                    <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
+                      {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD)) }}
+                    </label>
+                  </div>
+                </li>
+              </ul>
+
+              <div v-if="isEditingSavingThrows">
+                <div class="buttons-delete-update">
+                  <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
+                </div>
+              </div>
+            </div>
+          </collapse-transition>
+        </div>
+        
+        <br>
+        <div id="skills">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingSkills">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingSkills">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">Skills</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForStat(CHARACTER_KEYS.SKILLS)">Edit</button>
+              <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForStat(CHARACTER_KEYS.SKILLS)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingSkills">
+              <ul class="stat-list">
+                <li v-for="(skill, key) in SKILL_KEYS" :key="key">
+                  <div class="stat-group">
+                    <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]" :disabled="!isEditingSkills">
+                    <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
+
+                    <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
+                      {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+                    </label>
+                    <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
+                      {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD)) }}
+                    </label>
+                  </div>
+                </li>
+              </ul>
+
+              <div v-if="isEditingSkills">
+                <div class="buttons-delete-update">
+                  <button class="button-update" @click="onPressUpdateSkills()">Update</button>
+                </div>
+              </div>
+            </div>
+          </collapse-transition>
+          
+        </div>
+
+        <br>
+        <div id="features-traits">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingFeaturesTraits">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingFeaturesTraits">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features & Traits</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Edit</button>
+              <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingFeatures">
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.FEATURES]) > 0">
+                <div>
+                  <ul class="list">
+                    <li v-for="(item, key) in characterToView[CHARACTER_KEYS.FEATURES]" :key="key">
+                      <div v-if="!isEditingFeaturesTraits">
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
+                        <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                        <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
+                      </div>
+
+                      <!-- Edit and Delete -->
+                      <div v-if="isEditingFeaturesTraits">
+                        <label class="item-name">{{ key }}</label>
+                        <div class="container-inputs">
+                          <ul class="list-inputs">
+                            <li style="margin-top: 10px;">
+                              <label class="stat-label">Type:</label>
+                              <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
+                                <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                              </select>
+                            </li>
+
+                            <li>
+                              <label class="stat-label" for="features-input"> # of Uses:</label>
+                              <input class="input-stats" style="width=70%;" type="number" v-model="item[FEATURES_KEYS.USES]"> 
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div class="container-edit">
+                          <div>
+                            
+                          </div>
+                          <div>
+                            
+                          </div>
+                          <br>
+                          <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                          <div class="buttons-delete-update">
+                            <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
+                            <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
+                          </div>
+                        </div>
+                        
+                        <hr class="list-divider">
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </template>
+
+              <!-- Add new -->
+              <template v-if="isEditingFeaturesTraits">
+                <div>
+                  <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
+                  <div class="container-inputs">
+                    <ul class="list-inputs">
+                      <li style="margin-top: 10px;">
+                        <label>Type:</label>
+                        <select class="picker" v-model="featuresTempType">
+                          <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="features-input"> # of Uses:</label>
+                        <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <br>
+                  <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+                  <br>
+                  <button class="button-add" @click="onPressAddFeatures">Add</button>
+                </div>         
+              </template>
+            </div>
+          </collapse-transition>
+          
+        </div>
+
+        <br>
+        <div id="weapons">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingWeapons">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingWeapons">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">Weapons & Spells</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Edit</button>
+              <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingWeapons">
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.WEAPONS]) > 0">
+                <div>
+                  <ul class="list">
+                    <li v-for="(item, key) in characterToView[CHARACTER_KEYS.WEAPONS]" :key="key">
+                      <div v-if="!isEditingWeapons">
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
+
+                        <div class="spell-list">
+                          <div class="spell-group">
+                            <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                            <label class="spell-value" v-if="!item[WEAPON_KEYS.PROFICIENT]">
+                              {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})
+                            </label>
+                            <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
+                              {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})
+                            </label>
+
+                          </div>
+
+                          <div class="spell-group">
+                            <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                            <label class="spell-value">{{ item[WEAPON_KEYS.DIE] }}</label>
+                          </div>
+
+                          <div class="spell-group">
+                            <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                            <label class="spell-value">{{ item[WEAPON_KEYS.CATEGORY] }}</label>
+                          </div>
+
+                          <div class="spell-group">
+                            <label class="spell-label" style="flex-grow: 1;">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                            <input type="checkbox" class="checkbox" style="margin-right: 0px;" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
+                          </div>
+                        </div>
+                        
+                        <p class="spell-label">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
+                      </div>
+
+                      <!-- Edit and Delete -->
+                      <div v-if="isEditingWeapons">
+                        <label class="item-name">{{ key }}:</label>
+                        
+                        <div class="container-inputs">
+                          <ul class="list-inputs">
+                            <li style="margin-top: 10px;">
+                              <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
+                              <input class="input-stats" style="width=70%;" type="number" v-model="item[WEAPON_KEYS.AMOUNT]"> 
+                            </li>
+                            
+                            <li style="margin-top: 10px;">
+                              <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                              <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
+                                <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                              </select>
+                            </li>
+                            
+                            <li style="margin-top: 10px;">
+                              <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                              <select class="picker" v-model="item[WEAPON_KEYS.DIE]">
+                                <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                              </select>
+                            </li>
+
+                            <li style="margin-top: 10px;">
+                              <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                              <select class="picker" v-model="item[WEAPON_KEYS.CATEGORY]">
+                                <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                              </select>
+                            </li>
+
+                            <li style="margin-top: 10px;">
+                              <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                              <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
+                            </li>
+
+                            <br>
+                            <textarea v-model="item[WEAPON_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                          </ul>
+                        </div>
+
+                        <div class="buttons-delete-update">
+                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.WEAPONS)">Update</button>
+                        </div>
+                        
+                        <hr class="list-divider">
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </template>
+
+              <!-- Add new -->
+              <template v-if="isEditingWeapons">
+                <div>
+                  <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
+
+                  <div class="container-inputs">
+                    <ul class="list-inputs">
+                      <li>
+                        <label class="stat-label" for="equipment-input">Amount:</label>
+                        <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
+                      </li>
+
+                      <li style="margin-top: 10px;">
+                        <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                        <select class="picker" v-model="weaponsTempAttackModifier">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                        </select>
+                      </li>
+                      
+                      <li style="margin-top: 10px;">
+                        <label class="stat-label" for="equipment-input">Die Type:</label>
+                        <select class="picker" v-model="weaponTempDieType">
+                          <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                        </select>
+                      </li>
+
+                      <li style="margin-top: 10px;">
+                        <label class="stat-label" for="equipment-input">Category:</label>
+                        <select class="picker" v-model="weaponTempCategory">
+                          <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                        </select>
+                      </li>
+
+                      <li style="margin-top: 10px;">
+                        <label class="stat-label" for="equipment-input">Proficient:</label>
+                        <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                      </li>
+                    </ul>
+                  </div>
+
+                  <br>
+                  <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
+                  <br>
+                  <button class="button-add" @click="onPressAddWeapon">Add</button>
+                </div>
+              </template>
+            </div>
+          </collapse-transition>
+        </div>
+
+        <br>
+        <div id="equipment">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingEquipment">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingEquipment">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Edit</button>
+              <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingEquipment">
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.EQUIPMENT]) > 0">
+                <div>
+                  <ul class="list">
+                    <li style="text-align: left; margin-bottom: 20px">
+                      <div v-if="!isEditingEquipment">
+                        <label class="item-name">Gold:</label>
+                        <label class="item-amount">x{{ characterToView[CHARACTER_KEYS.GOLD] }}</label>
+                      </div>
+                      <div v-if="isEditingEquipment" style="margin-bottom: 20px">
+                        <label class="item-name">Gold:</label>
+                        <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="characterToView[CHARACTER_KEYS.GOLD]" class="input-stats" inputmode="numeric" required>
+                        <button class="button-update" style="margin-left: 10px;" @click="onPressUpdateGold()">Update</button>
+                      </div>
+                    </li>
+                    
+                    <li v-for="(item, key) in characterToView[CHARACTER_KEYS.EQUIPMENT]" :key="key">
+                      <div v-if="!isEditingEquipment">
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                        <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                      </div>
+
+                      <!-- Edit and Delete -->
+                      <div v-if="isEditingEquipment">
+                        <label class="item-name">{{ key }}:</label>
+                        <div class="container-edit">
+                          <div>
+                            <label class="stat-label" for="equipment-input">Amount:</label>
+                            <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
+                          </div>
+                          <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        </div>
+
+                        <div class="buttons-delete-update">
+                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.EQUIPMENT)">Update</button>
+                        </div>
+                        
+                        <hr class="list-divider">
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </template>
+
+              <!-- Add new -->
+              <template v-if="isEditingEquipment">
+                <div>
+                  <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
+                  <div>
+                    <label class="stat-label" for="equipment-input">Amount:</label>
+                    <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
+                  </div>
+                  <br>
+                  <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+                  <br>
+                  <button class="button-add" @click="onPressAddEquipment">Add</button>
+                </div>
+              </template>
+            </div>
+          </collapse-transition>
+        </div>
+
+        <br>
+        <div id="treasure">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingTreasure">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingTreasure">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.TREASURES)">Treasures</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingTreasure" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingTreasure" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForStat(CHARACTER_KEYS.TREASURES)">Edit</button>
+              <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForStat(CHARACTER_KEYS.TREASURES)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingTreasure">
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.TREASURES]) > 0">
+                <div>
+                  <ul class="list">
+                    <li v-for="(item, key) in characterToView[CHARACTER_KEYS.TREASURES]" :key="key">
+                      <div v-if="!isEditingTreasure">
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                        <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                      </div>
+
+                      <!-- Edit and Delete -->
+                      <div v-if="isEditingTreasure">
+                        <label class="item-name">{{ key }}:</label>
+                        <div class="container-edit">
+                          <div>
+                            <label class="stat-label" for="equipment-input">Amount:</label>
+                            <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
+                          </div>
+                          <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                        </div>
+
+                        <div class="buttons-delete-update">
+                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.TREASURES)">Update</button>
+                        </div>
+                        
+                        <hr class="list-divider">
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </template>
+
+              <!-- Add new -->
+              <template v-if="isEditingTreasure">
+                <div>
+                  <input class="item-input" style="width=70%;" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
+                  <div>
+                    <label class="stat-label" for="equipment-input">Amount:</label>
+                    <input class="input-stats" style="width=70%;" type="number" v-model="treasureTempAmount"> 
+                  </div>
+                  <br>
+                  <textarea v-model="treasureTempDescription" rows="4" placeholder="Description"></textarea>
+                  <br>
+                  <button class="button-add" @click="onPressAddTreasure">Add</button>
+                </div>
+              </template>
+            </div>
+          </collapse-transition>
+        </div>
+        
+        <br>
+        <div id="languages">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingLanguages">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
+              <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingLanguages">
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
+                <ul>
+                  <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
+                    <div v-if="!isEditingLanguages">
+                      <div class="language-group">
+                        <p class="language-label">{{ key }}:</p>
+                        <p class="language-value">{{ item }}</p>
+                      </div>
+                    </div>
+
+                    <!-- Edit and Delete -->
+                    <div v-if="isEditingLanguages">
+                      <div style="margin-top: 10px; text-align: left;">
+                        <label class="item-name">{{ key }}:</label>
+                        <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
+                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                        </select>
+                      </div>
+
+                      <div class="buttons-delete-update">
+                        <br>
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
+                      </div>
+                      
+                      <hr class="list-divider">
+                    </div>
+                    
+                  </li>
+                </ul>
+              </template>
+
+              <!-- Add new -->
+              <template v-if="isEditingLanguages">
+                <div class="language-container">
+                  <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
+                  <div style="margin-top: 10px;">
+                    <label class="stat-label">Proficiency: </label>
+                    <select class="picker" v-model="languagesTempProficiency">
+                      <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                    </select>
+                  </div>
+                  <br>
+                  <button class="button-add" @click="onPressAddLanguage">Add</button>
+                </div>
+              </template>
+            </div>
+          </collapse-transition>
+          
+        </div>      
+
+        <br>
+        <div id="proficiences">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingProficiencies">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Edit</button>
+              <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Finish</button>
+            </div>
+          </div>
+          
+          <collapse-transition dimension="height">
+            <div v-if="isShowingProficiencies">
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
+                <ul class="list">
+                  <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
+                    <div v-if="!isEditingProficiencies">
+                      <label class="item-name">{{ key }}</label>
+                      <p class="item-description">{{ item }}</p>
+                    </div>
+
+                    <!-- Edit and Delete -->
+                    <div v-if="isEditingProficiencies">
+                      <label class="item-name">{{ key }}:</label>
+                      <div class="container-edit">
+                        <textarea v-model="characterToView[CHARACTER_KEYS.PROFICIENCIES][key]" rows="4" placeholder="Description"></textarea>
+                      </div>
+
+                      <div class="buttons-delete-update">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                      </div>
+                      
+                      <hr class="list-divider">
+                    </div>
+                  </li>
+                </ul>
+              </template>
+
+              <!-- Add new -->
+              <template v-if="isEditingProficiencies">
+                <div class="proficiency-container">
+                  <input class="item-input" v-model="proficiencyTempName" placeholder="New proficiency name"> 
+                  <br>
+                  <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
+                  <br>
+                  <button class="button-add" @click="onPressAddProficiency">Add</button>
+                </div>
+              </template>
+            </div>
+          </collapse-transition>
+        </div>
+
+        <br>
+        <div id="spell-casting">
+          <div class="edit-buttons">
+            <div>
+              <button class="button-edit-spacer" v-if="!isEditingSpellCasting">Edit</button>
+              <button class="button-edit-spacer" v-if="isEditingSpellCasting">Finish</button>
+            </div>
+
+            <div class="h3-bar">
+              <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
+              <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
+              <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
+            </div>
+            
+            <div>
+              <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Edit</button>
+              <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Finish</button>
+            </div>
+          </div>
+
+          <collapse-transition dimension="height">
+            <div v-if="isShowingSpells">
+              <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
+                <ul class="list">
+                  <li v-for="(levelDict, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
+                    <template v-if="getDictionarySize(levelDict) > 0">
+                      <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
+                      <ul>
+                        <li v-for="(spell, spellName) in levelDict" :key="spellName">
+                          <div v-if="!isEditingSpellCasting">
+                            <label class="item-name">{{ spellName }}</label>
+                            <br>
+                            <div class="spell-list">
+                              <div class="spell-group">
+                                <label class="spell-label">Casting Time:</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                              </div>
+                              <div class="spell-group">
+                                <label class="spell-label">Duration:</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
+                              </div>
+                              <div class="spell-group">
+                                <label class="spell-label">Range:</label>
+                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                              </div>
+                            </div>
+                            <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
+                          </div>
+
+                          <!-- Edit and Delete -->
+                          <div v-if="isEditingSpellCasting">
+                            <label class="item-name">{{ spellName }}</label>
+                            <div class="container-inputs">
+                              <ul class="list-inputs">
+                                <li>
+                                  <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
+                                  <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
+                                </li>
+                                  
+                                <li>
+                                  <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
+                                  <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+                                </li>
+                                
+                                <li>
+                                  <label for="spells-range" class="stat-label">Range (in feet):</label>
+                                  <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
+                                </li>
+                              </ul>
+                            </div>
+                            
+                            <br>
+                            <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                            <div class="buttons-delete-update">
+                              <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
+                              <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
+                            </div>
+                      
+                            <hr class="list-divider">
+                          </div>
+                        </li>
+                      </ul>
+                    </template>
+                  </li>
+                </ul>
+              </template>
+
+              <!-- Add new -->
+              <template v-if="isEditingSpellCasting">
+                <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
+                <div class="container-inputs">
+                  <ul class="list-inputs">
+                    <li>
+                      <label class="stat-label" for="spells-level">Level:</label>
+                      <select class="picker" v-model="spellTempLevel">
+                        <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
+                      </select>
+                    </li>
+                    
+                    <li>
+                      <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
+                      <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label class="stat-label" for="spells-casting-duration">Duration (in seconds):</label>
+                      <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+                    </li>
+
+                    <li>
+                      <label class="stat-label" for="spells-range">Range (in feet):</label>
+                      <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
                     </li>
                   </ul>
                 </div>
 
                 <br>
-                <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
+                <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
                 <br>
-                <button class="button-add" @click="onPressAddWeapon">Add</button>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </div>
-
-      <br>
-      <div id="equipment">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingEquipment">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingEquipment">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Edit</button>
-            <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Finish</button>
-          </div>
+                <button class="button-add" @click="onPressAddSpell">Add</button>
+              </template>
+            </div>
+          </collapse-transition>
         </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingEquipment">
-            <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.EQUIPMENT]) > 0">
-              <div>
-                <ul class="list">
-                  <li style="text-align: left; margin-bottom: 20px">
-                    <div v-if="!isEditingEquipment">
-                      <label class="item-name">Gold:</label>
-                      <label class="item-amount">x{{ characterToView[CHARACTER_KEYS.GOLD] }}</label>
-                    </div>
-                    <div v-if="isEditingEquipment" style="margin-bottom: 20px">
-                      <label class="item-name">Gold:</label>
-                      <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="characterToView[CHARACTER_KEYS.GOLD]" class="input-stats" inputmode="numeric" required>
-                      <button class="button-update" style="margin-left: 10px;" @click="onPressUpdateGold()">Update</button>
-                    </div>
-                  </li>
-                  
-                  <li v-for="(item, key) in characterToView[CHARACTER_KEYS.EQUIPMENT]" :key="key">
-                    <div v-if="!isEditingEquipment">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                      <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingEquipment">
-                      <label class="item-name">{{ key }}:</label>
-                      <div class="container-edit">
-                        <div>
-                          <label class="stat-label" for="equipment-input">Amount:</label>
-                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
-                        </div>
-                        <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.EQUIPMENT)">Update</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-
-            <!-- Add new -->
-            <template v-if="isEditingEquipment">
-              <div>
-                <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
-                <div>
-                  <label class="stat-label" for="equipment-input">Amount:</label>
-                  <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
-                </div>
-                <br>
-                <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
-                <br>
-                <button class="button-add" @click="onPressAddEquipment">Add</button>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
       </div>
-
+        
       <br>
-      <div id="treasure">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingTreasure">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingTreasure">Finish</button>
-          </div>
+      <div id="save-delete-buttons">
+        <ul class="buttons-at-bottom">
+          <li>
+            <!-- <button class="button-view-backups" @click="getCharacterBackups">View Backups</button> -->
+            <button class="button-view-backups" @click="toggleCharacterBackupPopup">View Backups</button>
+            <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
+          </li>
 
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.TREASURES)">Treasures</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingTreasure" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingTreasure" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForStat(CHARACTER_KEYS.TREASURES)">Edit</button>
-            <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForStat(CHARACTER_KEYS.TREASURES)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingTreasure">
-            <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.TREASURES]) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in characterToView[CHARACTER_KEYS.TREASURES]" :key="key">
-                    <div v-if="!isEditingTreasure">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                      <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingTreasure">
-                      <label class="item-name">{{ key }}:</label>
-                      <div class="container-edit">
-                        <div>
-                          <label class="stat-label" for="equipment-input">Amount:</label>
-                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
-                        </div>
-                        <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.TREASURES)">Update</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-
-            <!-- Add new -->
-            <template v-if="isEditingTreasure">
-              <div>
-                <input class="item-input" style="width=70%;" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
-                <div>
-                  <label class="stat-label" for="equipment-input">Amount:</label>
-                  <input class="input-stats" style="width=70%;" type="number" v-model="treasureTempAmount"> 
-                </div>
-                <br>
-                <textarea v-model="treasureTempDescription" rows="4" placeholder="Description"></textarea>
-                <br>
-                <button class="button-add" @click="onPressAddTreasure">Add</button>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
+          <li>
+            <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
+          </li>
+        </ul>
       </div>
       
-      <br>
-      <div id="languages">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingLanguages">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
-            <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingLanguages">
-            <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
-              <ul>
-                <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
-                  <div v-if="!isEditingLanguages">
-                    <div class="language-group">
-                      <p class="language-label">{{ key }}:</p>
-                      <p class="language-value">{{ item }}</p>
-                    </div>
-                  </div>
-
-                  <!-- Edit and Delete -->
-                  <div v-if="isEditingLanguages">
-                    <div style="margin-top: 10px; text-align: left;">
-                      <label class="item-name">{{ key }}:</label>
-                      <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
-                        <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                      </select>
-                    </div>
-
-                    <div class="buttons-delete-update">
-                      <br>
-                      <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
-                      <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
-                    </div>
-                    
-                    <hr class="list-divider">
-                  </div>
-                  
-                </li>
-              </ul>
-            </template>
-
-            <!-- Add new -->
-            <template v-if="isEditingLanguages">
-              <div class="language-container">
-                <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
-                <div style="margin-top: 10px;">
-                  <label class="stat-label">Proficiency: </label>
-                  <select class="picker" v-model="languagesTempProficiency">
-                    <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                  </select>
+      <!-- Save Character Data Popup -->
+      <div id="save-character">
+        <transition name="fade" appear>
+          <div class="overlay" v-if="isSaveCharacterPopupOpen">
+            <div class="popup">
+              <div class="form">
+                <h1>Create backup for {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
+                <div class="buttons-delete-character">
+                  <button class="button-cancel-delete" @click="toggleSaveCharacterPopup">Cancel</button>
+                  <button class="button-save" @click="onPressSaveBackup">Save</button>
                 </div>
-                <br>
-                <button class="button-add" @click="onPressAddLanguage">Add</button>
               </div>
-            </template>
+            </div>
           </div>
-        </collapse-transition>
-        
-      </div>      
-
-      <br>
-      <div id="proficiences">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingProficiencies">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Edit</button>
-            <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Finish</button>
-          </div>
-        </div>
-        
-        <collapse-transition dimension="height">
-          <div v-if="isShowingProficiencies">
-            <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
-              <ul class="list">
-                <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
-                  <div v-if="!isEditingProficiencies">
-                    <label class="item-name">{{ key }}</label>
-                    <p class="item-description">{{ item }}</p>
-                  </div>
-
-                  <!-- Edit and Delete -->
-                  <div v-if="isEditingProficiencies">
-                    <label class="item-name">{{ key }}:</label>
-                    <div class="container-edit">
-                      <textarea v-model="characterToView[CHARACTER_KEYS.PROFICIENCIES][key]" rows="4" placeholder="Description"></textarea>
-                    </div>
-
-                    <div class="buttons-delete-update">
-                      <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                      <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
-                    </div>
-                    
-                    <hr class="list-divider">
-                  </div>
-                </li>
-              </ul>
-            </template>
-
-            <!-- Add new -->
-            <template v-if="isEditingProficiencies">
-              <div class="proficiency-container">
-                <input class="item-input" v-model="proficiencyTempName" placeholder="New proficiency name"> 
-                <br>
-                <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
-                <br>
-                <button class="button-add" @click="onPressAddProficiency">Add</button>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
+        </transition>
       </div>
 
-      <br>
-      <div id="spell-casting">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingSpellCasting">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingSpellCasting">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Edit</button>
-            <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSpells">
-            <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
-              <ul class="list">
-                <li v-for="(levelDict, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
-                  <template v-if="getDictionarySize(levelDict) > 0">
-                    <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
-                    <ul>
-                      <li v-for="(spell, spellName) in levelDict" :key="spellName">
-                        <div v-if="!isEditingSpellCasting">
-                          <label class="item-name">{{ spellName }}</label>
-                          <br>
-                          <div class="spell-list">
-                            <div class="spell-group">
-                              <label class="spell-label">Casting Time:</label>
-                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
-                            </div>
-                            <div class="spell-group">
-                              <label class="spell-label">Duration:</label>
-                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
-                            </div>
-                            <div class="spell-group">
-                              <label class="spell-label">Range:</label>
-                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
-                            </div>
-                          </div>
-                          <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
-                        </div>
-
-                        <!-- Edit and Delete -->
-                        <div v-if="isEditingSpellCasting">
-                          <label class="item-name">{{ spellName }}</label>
-                          <div class="container-inputs">
-                            <ul class="list-inputs">
-                              <li>
-                                <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
-                                <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
-                              </li>
-                                
-                              <li>
-                                <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
-                                <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
-                              </li>
-                              
-                              <li>
-                                <label for="spells-range" class="stat-label">Range (in feet):</label>
-                                <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
-                              </li>
-                            </ul>
-                          </div>
-                          
-                          <br>
-                          <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                          <div class="buttons-delete-update">
-                            <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                            <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
-                          </div>
-                    
-                          <hr class="list-divider">
-                        </div>
-                      </li>
-                    </ul>
-                  </template>
-                </li>
-              </ul>
-            </template>
-
-            <!-- Add new -->
-            <template v-if="isEditingSpellCasting">
-              <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li>
-                    <label class="stat-label" for="spells-level">Level:</label>
-                    <select class="picker" v-model="spellTempLevel">
-                      <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
-                    </select>
-                  </li>
-                  
-                  <li>
-                    <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
-                    <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
-                  </li>
-
-                  <li>
-                    <label class="stat-label" for="spells-casting-duration">Duration (in seconds):</label>
-                    <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
-                  </li>
-
-                  <li>
-                    <label class="stat-label" for="spells-range">Range (in feet):</label>
-                    <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
-                  </li>
-                </ul>
+      <!-- Delete Character Popup -->
+      <div id="delete-character">
+        <transition name="fade" appear>
+          <div class="overlay" v-if="isDeleteCharacterPopupOpen">
+            <div class="popup">
+              <div class="form">
+                <h1>Delete {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
+                <p class="delete-character-prompt">This action can't be undone</p>
+                <div class="buttons-delete-character">
+                  <button class="button-cancel-delete" @click="toggleDeleteCharacterPopup">Cancel</button>
+                  <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
+                </div>
               </div>
-
-              <br>
-              <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddSpell">Add</button>
-            </template>
+            </div>
           </div>
-        </collapse-transition>
+        </transition>
       </div>
-    </div>
-      
-    <br>
-    <div id="save-delete-buttons">
-      <ul class="buttons-at-bottom">
-        <li>
-          <!-- <button class="button-view-backups" @click="getCharacterBackups">View Backups</button> -->
-          <button class="button-view-backups" @click="toggleCharacterBackupPopup">View Backups</button>
-          <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
-        </li>
-
-        <li>
-          <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
-        </li>
-      </ul>
-    </div>
+    </template>
     
-    <!-- Save Character Data Popup -->
-    <div id="save-character">
-      <transition name="fade" appear>
-        <div class="overlay" v-if="isSaveCharacterPopupOpen">
-          <div class="popup">
-            <div class="form">
-              <h1>Create backup for {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
-              <div class="buttons-delete-character">
-                <button class="button-cancel-delete" @click="toggleSaveCharacterPopup">Cancel</button>
-                <button class="button-save" @click="onPressSaveBackup">Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </transition>
-    </div>
-
-    <!-- Delete Character Popup -->
-    <div id="delete-character">
-      <transition name="fade" appear>
-        <div class="overlay" v-if="isDeleteCharacterPopupOpen">
-          <div class="popup">
-            <div class="form">
-              <h1>Delete {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
-              <p class="delete-character-prompt">This action can't be undone</p>
-              <div class="buttons-delete-character">
-                <button class="button-cancel-delete" @click="toggleDeleteCharacterPopup">Cancel</button>
-                <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </transition>
-    </div>
 
     <!-- View Character Backups -->
     <div v-show="isShowingLoader">
@@ -1148,7 +1151,7 @@
 
     <div id="view-character-backups">
       <transition name="fade" appear>
-        <div class="overlay" v-if="isCharacterBackupsOpen">
+        <div class="overlay" v-if="isCharacterBackupsPopupOpen">
           <div class="popup-backup">
             <h1>Select a backup to view</h1>
 
@@ -1165,7 +1168,7 @@
 
             <div class="buttons-delete-character">
               <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
-              <button class="button-save">View</button>
+              <button class="button-save" @click="toggleViewBackup">View</button>
             </div>
           </div>
         </div>
@@ -1173,7 +1176,7 @@
     </div>
 
     <template v-if="isShowingBackup">
-      <character-backup :characterBackup="selectedBackupCharacter"></character-backup>
+      <character-backup :timeOfBackup="convertTimestampToString(selectedBackupTimestamp)" :characterBackup="selectedBackupCharacter" @close="closeViewBackup"></character-backup>
     </template>
   </div>
 </template>
@@ -1233,7 +1236,7 @@ export default {
       isModalViewCharacterOpen: false,
       isSaveCharacterPopupOpen: false,
       isDeleteCharacterPopupOpen: false,
-      isCharacterBackupsOpen: false,
+      isCharacterBackupsPopupOpen: false,
       isEditingCharInfo: false,
       isEditingBaseStats: false,
       isEditingSavingThrows: false,
@@ -2225,10 +2228,18 @@ export default {
       this.isDeleteCharacterPopupOpen = !this.isDeleteCharacterPopupOpen
     },
     toggleCharacterBackupPopup() {
-      this.isCharacterBackupsOpen = !this.isCharacterBackupsOpen
+      this.isCharacterBackupsPopupOpen = !this.isCharacterBackupsPopupOpen
     },
-    viewBackup() {
+    toggleViewBackup() {
+      this.toggleCharacterBackupPopup()
+      window.scrollTo(0,0);
       this.isShowingBackup = !this.isShowingBackup
+    },
+    closeViewBackup() {
+      window.scrollTo(0,0);
+      this.isShowingBackup = !this.isShowingBackup
+      this.selectedBackupTimestamp = ''
+      this.selectedBackupCharacter = new Character()
     },
     selectBackup(timestamp, backup) {
       this.selectedBackupTimestamp = timestamp
@@ -2354,14 +2365,6 @@ export default {
   font-size: larger;
 }
 
-.button-save {
-  padding: 10px;
-  background-color: #42B6E8;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: larger;
-}
 
 .button-cancel-delete {
   padding: 10px;
@@ -2377,21 +2380,5 @@ export default {
   text-align: center;
 }
 
-.buttons-at-bottom {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0;
-}
-
-.buttons-at-bottom li {
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  margin: 10px auto;
-  width: 100%;
-}
 
 </style>
