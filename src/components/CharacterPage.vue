@@ -1095,21 +1095,21 @@
           </div>
         </collapse-transition>
       </div>
+    </div>
       
-      <br>
-      <div id="save-delete-buttons">
-        <ul class="buttons-at-bottom">
-          <li>
-            <!-- <button class="button-view-backups" @click="getCharacterBackups">View Backups</button> -->
-            <button class="button-view-backups" @click="toggleCharacterBackupPopup">View Backups</button>
-            <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
-          </li>
+    <br>
+    <div id="save-delete-buttons">
+      <ul class="buttons-at-bottom">
+        <li>
+          <!-- <button class="button-view-backups" @click="getCharacterBackups">View Backups</button> -->
+          <button class="button-view-backups" @click="toggleCharacterBackupPopup">View Backups</button>
+          <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
+        </li>
 
-          <li>
-            <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
-          </li>
-        </ul>
-      </div>
+        <li>
+          <button class="button-delete" style="margin-bottom: 30px;" @click="toggleDeleteCharacterPopup">Delete Character</button>
+        </li>
+      </ul>
     </div>
     
     <!-- Save Character Data Popup -->
@@ -1151,26 +1151,27 @@
     <div v-show="isShowingLoader">
       <loading-spinner :loadingText="LOADING_TEXT.GETING_BACKUPS"></loading-spinner>
     </div>
+
     <div id="view-character-backups">
       <transition name="fade" appear>
         <div class="overlay" v-if="isCharacterBackupsOpen">
           <div class="popup-backup">
-            <div class="form">
-              <h1>Select a backup to view</h1>
-              <ul class="list-backups">
+            <h1>Select a backup to view</h1>
+
+            <div class="popup-content">
+              <ul @scroll="handleScroll">
                 <li v-for="(backup, timestamp) in store.getters.debugGetBackups" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
                 @click="selectBackup(timestamp, backup)">
-                  <p style="margin-bottom: -15px">{{ convertTimestampToString(timestamp) }}</p>
+                  <p>{{ convertTimestampToString(timestamp) }}</p>
                   <hr>
-                  <div class="character-summary">
-                    <character-summary :character="backup" @openModal="toggleModalViewCharacter"></character-summary>
-                  </div>
+                  <character-summary :character="backup" @openModal="toggleModalViewCharacter"></character-summary>
                 </li>
               </ul>
-              <div class="buttons-delete-character">
-                <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
-                <button class="button-save">View</button>
-              </div>
+            </div>
+
+            <div class="buttons-delete-character">
+              <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
+              <button class="button-save">View</button>
             </div>
           </div>
         </div>
@@ -1331,7 +1332,6 @@ export default {
     this.characterToView = this.store.getters.getUserCharacters[this.characterToViewId]
     // console.info('this.characterToView:', this.characterToView)
   },
-
   watch: {
     'characterToView.proficiencyBonus': function(newValue) {
       const stat = this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]
@@ -1450,6 +1450,9 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close')
+    },
+    handleScroll(event) {
+      event.stopPropagation(); // Prevent event bubbling to the document
     },
     onPressSaveBackup() {
       const payload = {
@@ -2254,10 +2257,9 @@ export default {
 @import '../syles/popup.css';
 
 
-/* .body {
-  margin: 0;
-  padding: 0;
-} */
+.body {
+  background-color: white;
+}
 
 
 /* CHARACTER INFO STYLE */
@@ -2274,41 +2276,48 @@ export default {
 /* BACKUP STYLING */
 
 .popup-backup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background-color: #fff;
   border-radius: 5px;
-  padding: 10px;
-  width: 90%;
-  max-height: fit-content;
+  padding: 10px 0;
+  height: 95%;
+  width: 95%;
 }
 
-.list-backups {
-  list-style: none;
-  padding: 0px;
+.popup-content {
+  background-color: #fff;
+  overflow-y: auto; /* Enable vertical scrolling */
+  width: 95%;
 }
 
-.list-backups li {
+.popup-content li {
   padding: 10px 20px;
+  background-color: #fff;
   border: 2px solid black;
   border-radius: 10px;
+  list-style: none;
   margin-bottom: 10px;
-  text-align: center;
-}
-
-.list-backups p {
-  font-size: larger;
-  font-weight: bold;
-}
-
-.character-summary {
   text-align: left;
+  width: 95%;
 }
 
-.selected {
+.popup-content li.selected {
   background-color: yellow;
 }
 
-/* BUTTONS STYLING */
+.popup-content p {
+  margin-bottom: -15px;
+  font-size: larger;
+  font-weight: bold;
+}
+.popup-content p {
+  text-align: center;
+  font-size: larger;
+}
 
+/* BUTTONS STYLING */
 
 .button-update {
   padding: 10px;
@@ -2359,9 +2368,12 @@ export default {
   text-align: center;
 }
 
-
 .buttons-at-bottom {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0;
 }
 
 .buttons-at-bottom li {
