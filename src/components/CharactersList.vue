@@ -1,7 +1,7 @@
 <template>
   <div class="body" ref="bodyRef">
-    <transition name="slide-down" mode="out-in">
-      <div class="content" ref="contentRef" v-if="!isModalOpen()">
+    <transition name="slide-up" mode="out-in">
+      <div class="content" ref="contentRef" v-if="isShowingCharacterList">
         <side-menu @click="toggleMenu"></side-menu>
         
         <h1>{{ getUserInfo.name }}'s characters</h1>
@@ -77,6 +77,7 @@ export default {
   data() {
     return {
       store: useStore(),
+      isShowingCharacterList: true,
       isModalNewCharacterOpen: false,
       isModalViewCharacterOpen: false,
       isMenuOpen: false,
@@ -126,6 +127,12 @@ export default {
     isModalOpen() {
       return this.isModalNewCharacterOpen || this.isModalViewCharacterOpen
     },
+    showCharacterList() {
+      // Allow transition to play out before showing character list
+      setTimeout(() => {
+          this.isShowingCharacterList = !this.isShowingCharacterList
+        }, 200);
+    },
     toggleModalNewCharacter() {
       this.isModalNewCharacterOpen = !this.isModalNewCharacterOpen
       this.isNavBarOpen = !this.isNavBarOpen
@@ -135,11 +142,14 @@ export default {
       this.isNavBarOpen = !this.isNavBarOpen
 
       if (this.isModalViewCharacterOpen) {
+        this.isShowingCharacterList = !this.isShowingCharacterList
         this.characterToView = this.store.getters.getUserCharacters[charId]
         this.characterToViewId = charId
       } else {
         this.characterToView = new Character()
         this.characterToViewId = ''
+
+        this.showCharacterList()
       }
       
     },
@@ -147,9 +157,7 @@ export default {
       this.isMenuOpen = !this.isMenuOpen
       this.isNavBarOpen = !this.isNavBarOpen
       if (this.isMenuOpen) {
-        this.$refs.contentRef.style.backgroundColor = 'gray';
-        // this.$refs.bodyRef.style.height = 100%
-        
+        this.$refs.contentRef.style.backgroundColor = 'gray';        
       } else {
         this.$refs.contentRef.style.backgroundColor = ''
       }
@@ -186,7 +194,6 @@ export default {
 
 .content {
   height: 100%;
-  margin-top: 60px;
 }
 
 /* BUTTON STYLES */

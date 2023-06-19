@@ -70,16 +70,13 @@ transition: transform 0.3s;
 }
 
 .hamburger-menu {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  margin: 20px 20px;
   width: 30px;
   height: 25px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
-  /* z-index: 9999; */
 }
 
 .hamburger-line {
