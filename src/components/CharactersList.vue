@@ -6,7 +6,7 @@
         
         <h1>{{ getUserInfo.name }}'s characters</h1>
         <div class="top-buttons">
-          <button class="button-open-modal" @click="toggleModalNewCharacter">Create Character</button>
+          <button class="button-open-modal" @click="toggleModalForCreateCharacter">Create Character</button>
         </div>
 
         <hr v-if="!isMenuOpen">
@@ -14,7 +14,7 @@
         
         <!-- Character summary -->
         <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-          <character-summary :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalViewCharacter"></character-summary>
+          <character-summary :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
         </template>
       </div>
     </transition>
@@ -22,14 +22,14 @@
     <!-- View a character -->
     <transition name="slide-up" mode="out-in">
       <template v-if="isModalViewCharacterOpen">
-        <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>          
+        <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalForViewCharacter"></character-page>          
       </template>
     </transition>
 
     <!-- Create a new character -->
     <transition name="slide-up" mode="out-in">
       <template v-if="isModalNewCharacterOpen">
-        <character-create v-if="isModalNewCharacterOpen" @close="toggleModalNewCharacter" @created-character="toggleModalNewCharacter"></character-create>
+        <character-create v-if="isModalNewCharacterOpen" @close="toggleModalForCreateCharacter" @created-character="toggleModalForCreateCharacter"></character-create>
       </template>
     </transition>
 
@@ -78,6 +78,7 @@ export default {
     return {
       store: useStore(),
       isShowingCharacterList: true,
+      isShowingModal: false,
       isModalNewCharacterOpen: false,
       isModalViewCharacterOpen: false,
       isMenuOpen: false,
@@ -127,31 +128,54 @@ export default {
     isModalOpen() {
       return this.isModalNewCharacterOpen || this.isModalViewCharacterOpen
     },
-    showCharacterList() {
-      // Allow transition to play out before showing character list
-      setTimeout(() => {
-          this.isShowingCharacterList = !this.isShowingCharacterList
-        }, 200);
+    toggleCharacterList() {
+      this.isShowingCharacterList = !this.isShowingCharacterList
     },
-    toggleModalNewCharacter() {
+    toggleModalCreateCharacter() {
       this.isModalNewCharacterOpen = !this.isModalNewCharacterOpen
-      this.isNavBarOpen = !this.isNavBarOpen
     },
-    toggleModalViewCharacter(charId) {
+    toggleModalViewCharacter() {
       this.isModalViewCharacterOpen = !this.isModalViewCharacterOpen
-      this.isNavBarOpen = !this.isNavBarOpen
-
-      if (this.isModalViewCharacterOpen) {
-        this.isShowingCharacterList = !this.isShowingCharacterList
+    },
+    toggleModalForViewCharacter(charId) {
+      this.isShowingModal = !this.isShowingModal
+      
+      if (this.isShowingModal) {
         this.characterToView = this.store.getters.getUserCharacters[charId]
         this.characterToViewId = charId
+
+        this.toggleCharacterList()
+        setTimeout(() => {
+          this.toggleModalViewCharacter()
+          this.isNavBarOpen = !this.isNavBarOpen
+        }, 200);
       } else {
         this.characterToView = new Character()
         this.characterToViewId = ''
 
-        this.showCharacterList()
+        this.toggleModalViewCharacter()
+        setTimeout(() => {
+          this.toggleCharacterList()
+          this.isNavBarOpen = !this.isNavBarOpen
+        }, 200);
       }
+    },
+    toggleModalForCreateCharacter() {
+      this.isShowingModal = !this.isShowingModal
       
+      if (this.isShowingModal) {
+        this.toggleCharacterList()
+        setTimeout(() => {
+          this.toggleModalCreateCharacter()
+          this.isNavBarOpen = !this.isNavBarOpen
+        }, 200);
+      } else {
+        this.toggleModalCreateCharacter()
+        setTimeout(() => {
+          this.toggleCharacterList()
+          this.isNavBarOpen = !this.isNavBarOpen
+        }, 200);
+      }
     },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen
@@ -175,7 +199,7 @@ export default {
 }
 
 .slide-up-leave-active {
-  transition: transform 0.4s;
+  transition: transform 0.3s;
 }
 
 .slide-up-enter-from,
