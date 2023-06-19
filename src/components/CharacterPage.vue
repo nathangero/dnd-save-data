@@ -1159,7 +1159,7 @@
             <h1>Select a backup to view</h1>
 
             <div class="popup-content">
-              <ul @scroll="handleScroll">
+              <ul class="reverse-list">
                 <li v-for="(backup, timestamp) in store.getters.debugGetBackups" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
                 @click="selectBackup(timestamp, backup)">
                   <p>{{ convertTimestampToString(timestamp) }}</p>
@@ -2290,6 +2290,11 @@ export default {
   background-color: #fff;
   overflow-y: auto; /* Enable vertical scrolling */
   width: 95%;
+}
+
+.popup-content .reverse-list {
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .popup-content li {
