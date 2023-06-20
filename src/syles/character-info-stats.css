@@ -14,6 +14,16 @@ textarea {
   font-size: larger;
 }
 
+.character-name {
+  font-size: 2.5em;
+}
+
+.character-info {
+  font-size: 1.5em;
+  height: auto;
+  overflow: auto;
+}
+
 .input-container {
   display: flex;
   flex-direction: column;
@@ -425,8 +435,15 @@ textarea {
   margin: 5px;
 }
 
-.disabled {
+.disabled-button {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.disabled-page {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none; 
+  visibility: hidden;
 }

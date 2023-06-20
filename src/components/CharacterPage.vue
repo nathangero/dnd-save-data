@@ -6,7 +6,7 @@
         <button class="button-close" @click="closeModal">Close</button>
       </div>
 
-      <div id="character-info" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''">
+      <div class="character-to-view" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''" :class="{ 'disabled-page': isPopupOpen() }">
         <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 
         <!-- NOT EDITABLE -->
@@ -1118,7 +1118,7 @@
       </div>
         
       <br>
-      <div id="save-delete-buttons">
+      <div id="save-delete-buttons" :class="{ 'disabled-page': isPopupOpen() }">
         <ul class="buttons-at-bottom">
           <li>
             <button class="button-view-backups" @click="getCharacterBackups">View Backups</button>
@@ -1192,7 +1192,7 @@
 
             <div class="buttons-delete-character">
               <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
-              <button class="button-save" @click="toggleViewBackup" :class="{ 'disabled': selectedBackupTimestamp === '' }" >View Backup</button>
+              <button class="button-save" @click="toggleViewBackup" :class="{ 'disabled-button': selectedBackupTimestamp === '' }" >View Backup</button>
             </div>
           </div>
         </div>
@@ -1203,7 +1203,7 @@
     <transition name="slide-up" mode="in-out">
       <template v-if="isShowingBackup">
         <character-backup 
-          :time-of-backup="convertTimestampToString(selectedBackupTimestamp)" 
+          :time-of-backup="selectedBackupTimestamp" 
           :character-backup="selectedBackupCharacter" 
           :character-backup-id="characterToViewId" 
           @close="closeViewBackup"
@@ -1238,6 +1238,8 @@ import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CA
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 import { LOADING_TEXT } from '@/enums/loading-text';
 
+const TIMEOUT_LOADER = 500
+// const TIMEOUT_TRANSITION = 200
 
 const MAX_VALUES = {
   DEATH_SAVES: 3,
@@ -2126,7 +2128,7 @@ export default {
           setTimeout(() => {
             this.isShowingLoader = false
             this.toggleCharacterBackupPopup()
-          }, 1000)
+          }, TIMEOUT_LOADER)
         } else {
           alert("Didn't get any backups")
           this.isShowingLoader = false
@@ -2287,6 +2289,9 @@ export default {
       this.selectedBackupTimestamp = timestamp
       this.selectedBackupCharacter = backup
     },
+    isPopupOpen() {
+      return this.isSaveCharacterPopupOpen || this.isDeleteCharacterPopupOpen || this.isCharacterBackupsPopupOpen
+    },
     convertTimestampToString(timestamp) {
       const date = new Date(Math.floor(timestamp))
 
@@ -2304,7 +2309,7 @@ export default {
       // Format the date using the options
       const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
       return formattedDate
-    }
+    },
   },
 }
 </script>
@@ -2317,18 +2322,6 @@ export default {
 .body {
   background-color: white;
 }
-
-
-/* CHARACTER INFO STYLE */
-
-.character-name {
-  font-size: 2.5em;
-}
-
-.character-info {
-  font-size: 1.5em;
-}
-
 
 /* BACKUP STYLING */
 

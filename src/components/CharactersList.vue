@@ -66,6 +66,8 @@ import COOKIE_NAMES from '@/enums/cookie-names'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 
+// const TIMEOUT_LOADER = 500
+const TIMEOUT_TRANSITION = 200
 
 export default {
   components: {
@@ -148,7 +150,7 @@ export default {
         setTimeout(() => {
           this.toggleModalViewCharacter()
           this.isNavBarOpen = !this.isNavBarOpen
-        }, 200);
+        }, TIMEOUT_TRANSITION);
       } else {
         this.characterToView = new Character()
         this.characterToViewId = ''
@@ -157,7 +159,7 @@ export default {
         setTimeout(() => {
           this.toggleCharacterList()
           this.isNavBarOpen = !this.isNavBarOpen
-        }, 200);
+        }, TIMEOUT_TRANSITION);
       }
     },
     toggleModalForCreateCharacter() {
@@ -168,13 +170,13 @@ export default {
         setTimeout(() => {
           this.toggleModalCreateCharacter()
           this.isNavBarOpen = !this.isNavBarOpen
-        }, 200);
+        }, TIMEOUT_TRANSITION);
       } else {
         this.toggleModalCreateCharacter()
         setTimeout(() => {
           this.toggleCharacterList()
           this.isNavBarOpen = !this.isNavBarOpen
-        }, 200);
+        }, TIMEOUT_TRANSITION);
       }
     },
     toggleMenu() {

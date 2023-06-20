@@ -780,7 +780,7 @@
     </div>
 
     <br>
-    <button class="button-create-character" @click="createCharacter" :class="{ 'disabled': !checkIfCreateCharacterButtonIsDisabled() }">Create Character</button>
+    <button class="button-create-character" @click="createCharacter" :class="{ 'disabled-button': !checkIfCreateCharacterButtonIsDisabled() }">Create Character</button>
 
   </div>
 </template>

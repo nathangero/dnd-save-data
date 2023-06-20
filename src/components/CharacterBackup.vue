@@ -5,9 +5,9 @@
       <button class="button-close" @click="closeModal">Close Backup</button>
     </div>
 
-    <div id="character-info" v-if="characterBackup[CHARACTER_KEYS.NAME] !== ''">
+    <div id="character-info" v-if="characterBackup[CHARACTER_KEYS.NAME] !== ''" :class="{ 'disabled-page': isPopupOpen() }">
       <h1>Backup from:</h1>
-      <h1>{{ timeOfBackup }}</h1>
+      <h1>{{ convertTimestampToString(timeOfBackup) }}</h1>
       <hr>
       <p class="character-name">{{ characterBackup[CHARACTER_KEYS.NAME] }}</p>
 
@@ -454,7 +454,7 @@
       </div>
     </div>
 
-    <div id="save-delete-buttons">
+    <div id="save-delete-buttons" :class="{ 'disabled-page': isPopupOpen() }">
       <ul class="buttons-at-bottom">
         <li style="margin-bottom: 30px;">
           <!-- <button class="button-view-backups" @click="getCharacterBackups">View Backups</button> -->
@@ -499,7 +499,7 @@
       </div>
 
     <div v-if="isShowingLoader">
-      <loading-spinner :loading-text="LOADING_TEXT.SAVING_BACKUP"></loading-spinner>
+      <loading-spinner :loading-text="loadingText"></loading-spinner>
     </div>
   </div>
 </template>
@@ -523,6 +523,9 @@ import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-key
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 import { LOADING_TEXT } from '@/enums/loading-text';
+
+const TIMEOUT_LOADER = 500
+const TIMEOUT_TRANSITION = 200
 
 export default {
   components: {
@@ -585,6 +588,7 @@ export default {
       WEAPON_PROPERTY: WEAPON_PROPERTY,
       WEAPON_NAMES: WEAPON_NAMES,
       WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
+      loadingText: '',
     }
   },
   mounted() {
@@ -598,9 +602,10 @@ export default {
       this.$emit('close', this.characterBackup)
     },
     onPressOverwriteSave() {
+      this.loadingText = LOADING_TEXT.SAVING_BACKUP
       this.toggleOverwritePopup()
       this.isShowingLoader = true
-      console.info('this.characterBackupId,:', this.characterBackupId)
+
       const payload = {
         charId: this.characterBackupId,
         characterBackup: this.characterBackup
@@ -614,16 +619,16 @@ export default {
             this.isShowingLoader = false
             setTimeout(() => {
               this.closeModalFromOverwrite()
-            }, 200);
-          }, 500);
+            }, TIMEOUT_TRANSITION);
+          }, TIMEOUT_LOADER);
         } else {
           alert("Couldn't delete back up for some reason")
           setTimeout(() => {
             this.isShowingLoader = false
             setTimeout(() => {
               this.closeModal()
-            }, 200);
-          }, 1000);
+            }, TIMEOUT_TRANSITION);
+          }, TIMEOUT_LOADER);
         }
       })
       .catch((error) => {
@@ -632,11 +637,12 @@ export default {
           this.isShowingLoader = false
           setTimeout(() => {
             this.closeModal()
-          }, 200);
-        }, 1000);
+          }, TIMEOUT_TRANSITION);
+        }, TIMEOUT_LOADER);
       })
     },
     onPressDeleteBackup() {
+      this.loadingText = LOADING_TEXT.DELETE_BACKUP
       this.toggleDeleteBackupPopup()
       this.isShowingLoader = true
       
@@ -644,6 +650,7 @@ export default {
         charId: this.characterBackupId,
         timestamp: this.timeOfBackup
       }
+      
       this.store.dispatch("deleteBackupFromDb", payload).then((success) => {
         if (success) {
           alert("Deleted Backup")
@@ -762,6 +769,27 @@ export default {
     toggleDeleteBackupPopup() {
       this.isShowingDeleteBackupPopup = !this.isShowingDeleteBackupPopup
     },
+    isPopupOpen() {
+      return this.isShowingOverwritePopup || this.isShowingDeleteBackupPopup
+    },
+    convertTimestampToString(timestamp) {
+      const date = new Date(Math.floor(timestamp))
+
+      // Define the options for formatting the date
+      const options = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: true, // Make a user setting?
+      };
+      
+      // Format the date using the options
+      const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+      return formattedDate
+    }
   }
 }
 </script>
@@ -772,12 +800,4 @@ export default {
 @import '../syles/transitions.css';
 
 
-/* CHARACTER INFO STYLE */
-.character-name {
-  font-size: 2.5em;
-}
-
-.character-info {
-  font-size: 1.5em;
-}
 </style>
