@@ -5,9 +5,9 @@ const ALIGNMENT_TYPES = {
     NEUTRAL_GOOD: "Neutral Good",
     NEUTRAL_NEUTRAL: "Neutral Neutral",
     NEUTRAL_EVIL: "Neutral Good",
-    CHAOTIC_GOOD: "Lawful Good",
-    CHAOTIC_NEUTRAL: "Lawful Good",
-    CHAOTIC_EVIL: "Lawful Good",
+    CHAOTIC_GOOD: "Chaotic Good",
+    CHAOTIC_NEUTRAL: "Chaotic Neutral",
+    CHAOTIC_EVIL: "Chaotic Evil",
 }
 
 export { ALIGNMENT_TYPES }
