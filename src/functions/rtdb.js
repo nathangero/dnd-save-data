@@ -6,6 +6,7 @@ import { db } from "@/firebase.js"
 import User from "@/models/user"
 import DB_PATHS from "@/enums/db-paths"
 import { CHARACTER_KEYS } from "@/enums/dbKeys/character-keys"
+import { CONST_NUMS } from "@/enums/constant-numbers"
 
 
 // READ/WRITE USER
@@ -76,6 +77,21 @@ export async function createNewCharacter(userId, characterInfo) {
 }
 
 
+export async function deleteCharacter(userId, charId) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
+    return new Promise((resolve, reject) => {
+        remove(ref(db, dbRef)).then(() => {
+            deleteAllCharacterBackups(userId, charId) // Delete all backups for just deleted character
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+
 export async function createCharacterBackup(userId, charId, characterInfo, timestamp) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_BACKUPS + charId + '/'
     return new Promise((resolve, reject) => {
@@ -95,9 +111,9 @@ export async function createCharacterBackup(userId, charId, characterInfo, times
 export async function getCharacterBackups(userId, charId) {
     // console.info('@getCharacterBackups')
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_BACKUPS + charId
-    const CHILD_LIMIT = 3
+    
     const childRef = ref(db, dbRef)
-    const queryRef = query(childRef, limitToLast(CHILD_LIMIT))
+    const queryRef = query(childRef, limitToLast(CONST_NUMS.BACKUP_LIMIT))
     return new Promise((resolve, reject) => {
         get(queryRef).then((snapshot) => {
             if (snapshot.exists()) {
@@ -129,6 +145,20 @@ export async function deleteCharacterBackup(userId, charId, timestamp) {
 }
 
 
+export async function deleteAllCharacterBackups(userId, charId) {
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_BACKUPS + charId
+    return new Promise((resolve, reject) => {
+        remove(ref(db, dbRef)).then(() => {
+            resolve(true)
+        })
+        .catch ((error => {
+            console.error(error)
+            reject(false)
+        }))
+    })
+}
+
+
 export async function overwriteCharacterFromBackup(userId, charId, characterBackup) {
     var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
     return new Promise((resolve, reject) => {
@@ -139,20 +169,6 @@ export async function overwriteCharacterFromBackup(userId, charId, characterBack
         .catch ((error => {
             console.error(error)
             reject(false, '')
-        }))
-    })
-}
-
-
-export async function deleteCharacter(userId, charId) {
-    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHARACTERS + charId
-    return new Promise((resolve, reject) => {
-        remove(ref(db, dbRef)).then(() => {
-            resolve(true)
-        })
-        .catch ((error => {
-            console.error(error)
-            reject(false)
         }))
     })
 }

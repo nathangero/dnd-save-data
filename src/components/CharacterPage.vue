@@ -1179,6 +1179,7 @@
       <div class="overlay" v-if="isCharacterBackupsPopupOpen">
         <div class="popup-backup">
           <h1>Select a backup to view</h1>
+          <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
           <div class="popup-content">
             <ul class="reverse-list">
@@ -1222,6 +1223,7 @@ import LoadingSpinner from './LoadingSpinner.vue';
 import CharacterSummary from './CharacterSummary.vue';
 import CharacterBackup from './CharacterBackup.vue';
 import Character from '@/models/character'
+import { CONST_NUMS } from "@/enums/constant-numbers"
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
 import { FEATURES_KEYS } from '@/enums/dbKeys/features-keys.js'
@@ -1296,6 +1298,7 @@ export default {
       isShowingSpells: true,
       isShowingLoader: false,
       isShowingBackup: false,
+      CONST_NUMS: CONST_NUMS,
       LOADING_TEXT: LOADING_TEXT,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       CHARACTER_KEYS: CHARACTER_KEYS,
@@ -1507,7 +1510,7 @@ export default {
     onPressDeleteCharacter() {
       this.store.dispatch("deleteCharacterFromDb", this.characterToViewId).then((success) => {
         if (success) {
-          alert(`Deleted ${this.characterToView[CHARACTER_KEYS.NAME]}`)
+          alert(`Deleted ${this.characterToView[CHARACTER_KEYS.NAME]} data and the backups`)
           this.closeModal()
         } else {
           alert(`ERROR deleting "${this.characterToView[CHARACTER_KEYS.NAME]}" occurred. Please try again.`)
