@@ -77,7 +77,7 @@ export async function createNewCharacter(userId, characterInfo) {
 
 
 export async function createCharacterBackup(userId, charId, characterInfo, timestamp) {
-    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId + '/'
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_BACKUPS + charId + '/'
     return new Promise((resolve, reject) => {
         dbRef += timestamp
         set(ref(db, dbRef), characterInfo).then(() => {
@@ -94,7 +94,7 @@ export async function createCharacterBackup(userId, charId, characterInfo, times
 
 export async function getCharacterBackups(userId, charId) {
     // console.info('@getCharacterBackups')
-    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_BACKUPS + charId
     const CHILD_LIMIT = 3
     const childRef = ref(db, dbRef)
     const queryRef = query(childRef, limitToLast(CHILD_LIMIT))
@@ -116,7 +116,7 @@ export async function getCharacterBackups(userId, charId) {
 
 
 export async function deleteCharacterBackup(userId, charId, timestamp) {
-    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_PAST_DATA + charId + '/' + timestamp
+    var dbRef = DB_PATHS.USERS + userId + '/' + DB_PATHS.CHAR_BACKUPS + charId + '/' + timestamp
     return new Promise((resolve, reject) => {
         remove(ref(db, dbRef)).then(() => {
             resolve(true)

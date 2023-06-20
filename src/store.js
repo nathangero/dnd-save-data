@@ -333,8 +333,8 @@ const store = createStore({
       return new Promise((resolve, reject) => {
         rtdbFunctions.overwriteCharacterFromBackup(userId, charId, characterBackup).then((success) => {
           if (success) {
-
-            resolve(true)
+            this.state.user.characters[charId] = characterBackup // Overwrite locally
+            resolve(true, characterBackup)
           } else {
             reject(false)
           }
@@ -364,7 +364,7 @@ const store = createStore({
       
       return new Promise((resolve, reject) => {
         rtdbFunctions.getCharacterBackups(userId, charId).then((backups) => {
-          console.info('backups:', backups)
+          // console.info('backups:', backups)
           if (backups) {
             const payload = {
               [charId]: backups
@@ -409,7 +409,6 @@ const store = createStore({
       return state.user.characters
     },
     getCharacterBackups(state) {
-      console.info("state.charBackups:", state.charBackups)
       return state.charBackups
     },
     debugGetBackups(state) {

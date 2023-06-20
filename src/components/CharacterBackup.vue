@@ -499,7 +499,7 @@
       </div>
 
     <div v-if="isShowingLoader">
-      <loading-spinner :loadingText="LOADING_TEXT.SAVING_BACKUP"></loading-spinner>
+      <loading-spinner :loading-text="LOADING_TEXT.SAVING_BACKUP"></loading-spinner>
     </div>
   </div>
 </template>
@@ -588,16 +588,19 @@ export default {
     }
   },
   mounted() {
-    
+
   },
   methods: {
     closeModal() {
       this.$emit('close')
     },
+    closeModalFromOverwrite() {
+      this.$emit('close', this.characterBackup)
+    },
     onPressOverwriteSave() {
       this.toggleOverwritePopup()
       this.isShowingLoader = true
-      console.info('this.characterBackupId,:', this.characterBackupId,)
+      console.info('this.characterBackupId,:', this.characterBackupId)
       const payload = {
         charId: this.characterBackupId,
         characterBackup: this.characterBackup
@@ -606,12 +609,13 @@ export default {
       this.store.dispatch("overwriteCharacterFromBackup", payload).then((success) => {
         if (success) {
           alert("Overwrote Backup")
+          
           setTimeout(() => {
             this.isShowingLoader = false
             setTimeout(() => {
-              this.closeModal()
+              this.closeModalFromOverwrite()
             }, 200);
-          }, 1000);
+          }, 500);
         } else {
           alert("Couldn't delete back up for some reason")
           setTimeout(() => {

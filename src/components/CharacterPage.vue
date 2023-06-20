@@ -1202,7 +1202,12 @@
     
     <transition name="slide-up" mode="in-out">
       <template v-if="isShowingBackup">
-        <character-backup :timeOfBackup="convertTimestampToString(selectedBackupTimestamp)" :characterBackup="selectedBackupCharacter" @close="closeViewBackup"></character-backup>
+        <character-backup 
+          :time-of-backup="convertTimestampToString(selectedBackupTimestamp)" 
+          :character-backup="selectedBackupCharacter" 
+          :character-backup-id="characterToViewId" 
+          @close="closeViewBackup"
+        ></character-backup>
       </template>
     </transition>
     
@@ -2265,7 +2270,14 @@ export default {
       window.scrollTo(0,0);
       this.isShowingBackup = !this.isShowingBackup
     },
-    closeViewBackup() {
+    closeViewBackup(characterBackup) {
+      console.info('@closeViewBackup')
+
+      if (characterBackup) {
+        console.info('overwrote with backup:', characterBackup)
+        this.characterToView = characterBackup
+      }
+
       window.scrollTo(0,0);
       this.isShowingBackup = !this.isShowingBackup
       this.selectedBackupTimestamp = ''

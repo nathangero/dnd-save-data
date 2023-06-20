@@ -1,7 +1,7 @@
 const DB_PATHS = {
     CAMPAIGNS: 'campaigns/',
     CHARACTERS: 'characters/',
-    CHAR_PAST_DATA: 'charBackup/',
+    CHAR_BACKUPS: 'charBackup/',
     SESSIONS: 'sessions/',
     USERS: 'users/',
 }
