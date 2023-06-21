@@ -16,7 +16,7 @@
         <div class="container-inputs">
           <ul class="list-inputs">
           <li>
-            <label for="character-alignment" class="stat-label">Alignment:</label>
+            <label for="character-alignment" class="stat-label" style="margin-right: 10px;">Alignment:</label>
             <select class="picker" v-model="characterAlignment">
               <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
             </select>
@@ -1473,7 +1473,6 @@ export default {
         return false
       }
 
-      alert("you can finish creating your character now")
       return true
     },
     checkIfAllValid() {
@@ -1632,6 +1631,7 @@ export default {
         this.spellCastStat,
         this.spellSavingDc,
         this.spells,
+        this.spellSlots,
         this.stats,
         this.weapons,
         new Date().getTime()
