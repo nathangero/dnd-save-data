@@ -64,12 +64,8 @@
         </transition>
 
         <!-- Loading Spinner -->
-        <div class="v-spinner" v-show="isLoggingIn">
-          <div class="spinner-background">
-            <div class="v-clip" v-bind:style="spinnerStyle">
-            </div>
-            <p class="logging-in-text">Logging In</p>
-          </div>
+        <div v-show="isLoggingIn">
+          <loading-spinner :loadingText="LOADING_TEXT.LOGGING_IN"></loading-spinner>
         </div>
         
         <footer class="footer">
@@ -81,17 +77,19 @@
 </template>
   
 <script>
+import LoadingSpinner from './LoadingSpinner.vue'
 import ROUTER_PATHS from '@/enums/router-paths'
+import APP_VERSION from "@/enums/app-version"
 import { auth } from "@/firebase.js"
 import { useStore } from 'vuex'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"
 import { writeUserInDb } from "@/functions/rtdb.js"
-import APP_VERSION from "@/enums/app-version"
+import { LOADING_TEXT } from "@/enums/loading-text"
 
 export default {
   name: 'LoginScreen',
   components: {
-    // PulseLoader: PulseLoader
+    LoadingSpinner,
   },
   data() {
     return {
@@ -107,24 +105,12 @@ export default {
       showSignup: false,
       showResetPassword: false,
       isLoggingIn: false,
-      APP_VERSION: APP_VERSION
+      APP_VERSION: APP_VERSION,
+      LOADING_TEXT: LOADING_TEXT,
     }
   },
   mounted() {
     // console.info('@LoginScreen')
-  },
-  watch: {
-    '$store.state.isLoggedIn'(newValue, oldValue) {
-      // Wait till the user is logged in before going to the dashboard
-      if (newValue && !oldValue) {
-        // When at login, give time to load the user profile before switching to the dashboard
-        setTimeout(() => {
-          this.isLoggingIn = false
-          this.$router.push(ROUTER_PATHS.DASHBOARD)
-        }, 1500)
-        
-      }
-    }
   },
   methods: {
     async resetPassword() {
@@ -153,7 +139,13 @@ export default {
           this.store.dispatch('getUserInfo', firebaseUser.uid).then((success) => {
             if (!success) {
               alert("Invalid email/password")
+              return
             }
+
+            setTimeout(() => {
+              this.isLoggingIn = false
+              this.$router.push(ROUTER_PATHS.DASHBOARD)
+            }, 1500)
           }).catch(() => {
             this.isLoggingIn = false
             alert("User doesn't exist")
@@ -268,6 +260,7 @@ export default {
 </script>
 
 <style>
+@import '../syles/popup.css';
 .center-container {
   display: flex;
   justify-content: center;
@@ -319,32 +312,6 @@ input {
 }
 
 
-/* add styles for popup and overlay */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.popup {
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  max-width: 500px;
-}
-
-.popup.active {
-  opacity: 1;
-}
-
-
 .signup-buttons {
   display: flex;
   justify-content: space-between;
@@ -372,70 +339,6 @@ input {
 .signup-buttons button {
   margin-right: 10px;
   margin-left: 10px;
-}
-
-.spinner-background {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 200px;
-  height: 200px;
-  background-color: #fff;
-  border-radius: 10px;
-}
-
-.v-spinner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  color: black;
-}
-
-.v-spinner .v-clip {
-  -webkit-animation: v-clipDelay 1.25s 0s infinite linear;
-  animation: v-clipDelay 1.25s 0s infinite linear;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  display: inline-block;
-  height: 100px;
-  width: 100px;
-  border: 5px solid #5dc596;
-  border-radius: 50%;
-  background-color: #fff;
-  position: relative;
-}
-
-.logging-in-text {
-  color: black;
-  margin-top: 20px;
-}
-
-@-webkit-keyframes v-clipDelay
-{
-  100%
-  {
-    -webkit-transform: rotate(360deg) scale(1);
-            transform: rotate(360deg) scale(1);
-  }
-}
-
-@keyframes v-clipDelay
-{
-  100%
-  {
-    -webkit-transform: rotate(360deg) scale(1);
-            transform: rotate(360deg) scale(1);
-  }
 }
 
 

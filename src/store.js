@@ -5,17 +5,19 @@ import * as rtdbFunctions from './functions/rtdb'
 import Cookies from 'js-cookie';
 import COOKIE_NAMES from '@/enums/cookie-names'
 import { CHARACTER_KEYS } from './enums/dbKeys/character-keys';
+import DEBUG_CHARACTER_BACKUPS from '@/debug/debugCharacterBackups';
 
 const store = createStore({
   state: {
     user: new User(),
-    isLoggedIn: false,
+    charBackups: {},
+    debugBackups: DEBUG_CHARACTER_BACKUPS
   },
   mutations: {
     addCharacterLocally(state, payload) {
       // console.info('@addCharacter')
       const { charId, characterToAdd } = payload
-
+      
       if (state.user.characters) {
         // If dictionary already exists, just add to it
         state.user.characters[charId] = characterToAdd
@@ -30,9 +32,27 @@ const store = createStore({
     deleteCharacterLocally(state, charId) {
       delete state.user.characters[charId]
     },
+    addCharacterBackupLocally(state, payload) {
+      const { charId, timestamp, backup } = payload
+      if (state.charBackups[charId]) {
+        // If dictionary already exists, just add to it
+        state.charBackups[charId][timestamp] = backup
+      } else {
+        // If dicitonary doesn't exist, create it
+        const newCharacter = {
+          [charId]: {
+            [timestamp]: backup
+          }
+        }
+        state.charBackups = newCharacter
+      }
+    },
+    deleteCharacterBackupLocally(state, payload) {
+      const { charId, timestamp } = payload
+      delete state.user.charBackups[charId][timestamp]
+    },
     signOut(state) {
       state.user = new User()
-      state.isLoggedIn = false
 
       Cookies.remove(COOKIE_NAMES.USER)
       auth.signOut()
@@ -47,14 +67,15 @@ const store = createStore({
       Cookies.set(COOKIE_NAMES.USER, JSON.stringify(limitedUser), { expires: expirationSeconds, secure: true })
       // console.info('set the user')
     },
-    setIsLoggedIn(state, loggedIn) {
-      state.isLoggedIn = loggedIn
-      // console.info('set logged in as: ' + loggedIn)
+    setCharBackups(state, backups) {
+      state.charBackups = backups // Always overwrite the backups for a character
+      // console.info('state.charBackups:', state.charBackups)
     }
   },
   actions: {
     addCharacterStat(state, payload) {
       // console.info('@addCharacterStat')
+      
       const { charId, key, value, statRef } = payload
 
       return new Promise((resolve, reject) => {
@@ -75,16 +96,23 @@ const store = createStore({
         } else {
           // console.info(`creating ${statRef}`)
           // Make the dict
-          const newDict = {
-            [statRef]: itemToAdd
-          }
-          this.state.user.characters[charId] = newDict
+          this.state.user.characters[charId][statRef] = itemToAdd
         }
         
-
         const userId = this.state.user.id
-        rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, itemToAdd)
-        resolve(true)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, statRef, itemToAdd).then((success) => {
+          if (success) {
+            // console.info('success')
+            resolve(true)
+          } else {
+            // console.info('failure')
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(false)
+        })
       })
     },
     addCharacterSpell(state, payload) {
@@ -118,8 +146,9 @@ const store = createStore({
       })      
     },
     updateCharacterInfo(state, payload) {
-      // console.info('payload:', payload)
-      const { charId, info} = payload    
+      // console.info('@updateCharacterInfo')
+      
+      const { charId, info } = payload    
 
       return new Promise((resolve, reject) => {
         const userId = this.state.user.id
@@ -229,7 +258,7 @@ const store = createStore({
     },
     deleteCharacterSpell(state, payload) {
       const { charId, levelKey, spellName, statRef } = payload
-      console.info('payload:', payload)
+      // console.info('payload:', payload)
 
       return new Promise((resolve, reject) => {
         if (levelKey === undefined || levelKey === '' || spellName === undefined || spellName === '') {
@@ -250,7 +279,8 @@ const store = createStore({
     addCharacterToDb(state, newCharacter) {
       const userId = this.state.user.id
       return new Promise((resolve, reject) => {
-        rtdbFunctions.createNewCharacter(userId, newCharacter).then((success, newCharId) => {
+        rtdbFunctions.createNewCharacter(userId, newCharacter).then((payload) => {
+          const { success, newCharId } = payload
           if (success && newCharId !== '') {
             const payload = {
               charId: newCharId,
@@ -262,6 +292,58 @@ const store = createStore({
         })
         .catch ((error) => {
           reject(error)
+        })
+      })
+    },
+    addBackupToDb(state, payload) {
+      const { charId, characterInfo } = payload
+      const userId = this.state.user.id
+      const timestamp = new Date().getTime()
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.createCharacterBackup(userId, charId, characterInfo, timestamp).then((success) => {
+          if (success) {
+            resolve(true)
+          }
+        })
+        .catch ((error) => {
+          reject(error)
+        })
+      })
+    },
+    deleteBackupFromDb(state, payload) {
+      const { charId, timestamp } = payload
+
+      const userId = this.state.user.id
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.deleteCharacterBackup(userId, charId, timestamp).then((success) => {
+          if (success) {
+            resolve(true)
+          } else {
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(false)
+        })
+      })
+    },
+    overwriteCharacterFromBackup(state, payload) {
+      const { charId, characterBackup } = payload
+
+      const userId = this.state.user.id
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.overwriteCharacterFromBackup(userId, charId, characterBackup).then((success) => {
+          if (success) {
+            this.state.user.characters[charId] = characterBackup // Overwrite locally
+            resolve(true, characterBackup)
+          } else {
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(false)
         })
       })
     },
@@ -279,17 +361,37 @@ const store = createStore({
         })
       })
     },
+    dbGetCharacterBackups(state, charId) {
+      const userId = this.state.user.id
+      
+      return new Promise((resolve, reject) => {
+        rtdbFunctions.getCharacterBackups(userId, charId).then((backups) => {
+          // console.info('backups:', backups)
+          if (backups) {
+            const payload = {
+              [charId]: backups
+            }
+            this.commit('setCharBackups', payload)
+            resolve(true)
+          } else {
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          reject(error)
+        })
+      })
+    },
     dbGetUsersCharacters() {
-      rtdbFunctions.readAllCharacters(this.state.user.id).then((characters) => {
+      rtdbFunctions.getAllCharacters(this.state.user.id).then((characters) => {
         console.info('characters:', characters)
       })
     },
     getUserInfo(state, uid) {
       // console.info('getUserInfo: ' + uid)
       return new Promise((resolve, reject) => {
-        rtdbFunctions.readUserInDb(uid).then((user) => {
+        rtdbFunctions.getUserInDb(uid).then((user) => {
           this.commit('setUser', user)
-          this.commit('setIsLoggedIn', true)
 
           resolve(true)
         })
@@ -305,12 +407,15 @@ const store = createStore({
     getUser(state) {
       return state.user
     },
-    isLoggedIn(state) {
-      return state.isLoggedIn
-    },
     getUserCharacters(state) {
       return state.user.characters
     },
+    getCharacterBackups(state) {
+      return state.charBackups
+    },
+    debugGetBackups(state) {
+      return state.debugBackups
+    }
   }
 })
 

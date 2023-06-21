@@ -1,0 +1,32 @@
+.list-container-characters {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    margin: 0 auto; /* centers the container */
+  }
+  
+  .list-characters li {
+    width: 90%;
+    list-style: none;
+    border: 2px solid black;
+    border-radius: 10px; /* Rounded corners */
+    text-align: left;
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+  
+  .summary-name {
+    font-weight: bold;
+    font-size: larger;
+    margin-right: 20px;
+  }
+  
+  .summary-amount{
+    font-size: larger;
+  }
+  
+  .summary-description {
+    width: 80%;
+    font-size: larger;
+    text-align: left;
+  }

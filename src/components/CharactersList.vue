@@ -1,74 +1,42 @@
 <template>
   <div class="body" ref="bodyRef">
-    <side-menu @click="toggleMenu"></side-menu>
-
-    <div class="content" ref="contentRef">
-      <h1>{{ getUserInfo.name }}'s characters</h1>
-      <div class="top-buttons">
-        <button class="button-open-modal" @click="toggleModalNewCharacter">Create Character</button>
-      </div>
-
-      <hr v-if="!isMenuOpen">
-      <hr v-if="isMenuOpen" style="visibility: hidden ;" >
-      
-      <!-- Character summary -->
-      <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-        <div id="users-characters-summary">
-          <div class="list-container-characters">
-            <ul class="list-characters">
-              <li v-for="(character, id) in store.getters.getUserCharacters" :key="id">
-                <div @click="toggleModalViewCharacter(id)">
-                  <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <label class="summary-name">{{ character[CHARACTER_KEYS.NAME] }}</label>
-                    <label class="summary-amount" style="white-space: nowrap;">Level: {{ character[CHARACTER_KEYS.LEVEL] }}</label>
-                  </div>
-                  
-                  <label class="summary-description">{{ character[CHARACTER_KEYS.CLASS] }}</label>
-                  <label class="summary-description">{{ character[CHARACTER_KEYS.RACE] }}</label>
-                  <label class="summary-description">Current HP: {{ character[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}</label>
-                  <!-- <label class="summary-description">Campaign: {{ character[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
-                </div>
-              </li>
-            </ul>
-          </div>
+    <transition name="slide-up" mode="out-in">
+      <div class="content" ref="contentRef" v-if="isShowingCharacterList">
+        <side-menu @click="toggleMenu"></side-menu>
+        
+        <h1>{{ getUserInfo.name }}'s characters</h1>
+        <div class="top-buttons">
+          <button class="button-open-modal" @click="toggleModalForCreateCharacter">Create Character</button>
         </div>
+
+        <hr v-if="!isMenuOpen">
+        <hr v-if="isMenuOpen" style="visibility: hidden ;" >
+        
+        <!-- Character summary -->
+        <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
+          <character-summary :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
+        </template>
+      </div>
+    </transition>
+
+    <!-- View a character -->
+    <transition name="slide-up" mode="out-in">
+      <template v-if="isModalViewCharacterOpen">
+        <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalForViewCharacter"></character-page>          
       </template>
+    </transition>
 
-      <!-- View a character -->
-      <div id="view-character">
-        <transition name="slide-up" mode="out-in">
-          <template v-if="isModalViewCharacterOpen">
-            <div class="modal-page-overlay">
-              <div class="modal-page scrollable">
-                <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalViewCharacter"></character-page>
-              </div>
-            </div>
-            
-          </template>
-        </transition>
-      </div>
-
-      
-
-      <!-- Create a new character -->
-      <div id="create-character">
-        <transition name="slide-up" mode="out-in">
-          <template v-if="isModalNewCharacterOpen">
-            <div class="modal-page-overlay">
-              <div class="modal-page scrollable">
-                <character-create v-if="isModalNewCharacterOpen" @close="toggleModalNewCharacter" @created-character="toggleModalNewCharacter"></character-create>
-              </div>
-            </div>
-            
-          </template>
-        </transition>
-      </div>
-    </div>
+    <!-- Create a new character -->
+    <transition name="slide-up" mode="out-in">
+      <template v-if="isModalNewCharacterOpen">
+        <character-create v-if="isModalNewCharacterOpen" @close="toggleModalForCreateCharacter" @created-character="toggleModalForCreateCharacter"></character-create>
+      </template>
+    </transition>
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navigation" v-if="isNavBarOpen">
       <ul>
-        <li @click="navigateTo([ROUTER_NAMES.CAMPAIGNS])" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
+        <li @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
           <i class="fas fa-campaigns"></i>
           {{ ROUTER_NAMES.CAMPAIGNS.charAt(0).toUpperCase() + ROUTER_NAMES.CAMPAIGNS.slice(1) }}
         </li>
@@ -88,6 +56,7 @@
 <script>
 import { useStore } from 'vuex'
 import CharacterCreate from './CharacterCreate.vue';
+import CharacterSummary from './CharacterSummary.vue';
 import CharacterPage from '@/components/CharacterPage.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import Character from '@/models/character'
@@ -97,16 +66,21 @@ import COOKIE_NAMES from '@/enums/cookie-names'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 
+// const TIMEOUT_LOADER = 500
+const TIMEOUT_TRANSITION = 200
 
 export default {
   components: {
     CharacterCreate,
+    CharacterSummary,
     CharacterPage,
     SideMenu,
   },
   data() {
     return {
       store: useStore(),
+      isShowingCharacterList: true,
+      isShowingModal: false,
       isModalNewCharacterOpen: false,
       isModalViewCharacterOpen: false,
       isMenuOpen: false,
@@ -153,30 +127,65 @@ export default {
         return 0
       }
     },
-    toggleModalNewCharacter() {
-      this.isModalNewCharacterOpen = !this.isModalNewCharacterOpen
-      this.isNavBarOpen = !this.isNavBarOpen
+    isModalOpen() {
+      return this.isModalNewCharacterOpen || this.isModalViewCharacterOpen
     },
-    toggleModalViewCharacter(charId) {
+    toggleCharacterList() {
+      this.isShowingCharacterList = !this.isShowingCharacterList
+    },
+    toggleModalCreateCharacter() {
+      this.isModalNewCharacterOpen = !this.isModalNewCharacterOpen
+    },
+    toggleModalViewCharacter() {
       this.isModalViewCharacterOpen = !this.isModalViewCharacterOpen
-      this.isNavBarOpen = !this.isNavBarOpen
-
-      if (this.isModalViewCharacterOpen) {
+    },
+    toggleModalForViewCharacter(charId) {
+      // console.info('charId:', charId)
+      this.isShowingModal = !this.isShowingModal
+      
+      if (this.isShowingModal) {
         this.characterToView = this.store.getters.getUserCharacters[charId]
         this.characterToViewId = charId
+        // console.info('this.characterToViewId:', this.characterToViewId)
+
+        this.toggleCharacterList()
+        setTimeout(() => {
+          this.toggleModalViewCharacter()
+          this.isNavBarOpen = !this.isNavBarOpen
+        }, TIMEOUT_TRANSITION);
       } else {
         this.characterToView = new Character()
         this.characterToViewId = ''
+
+        this.toggleModalViewCharacter()
+        setTimeout(() => {
+          this.toggleCharacterList()
+          this.isNavBarOpen = !this.isNavBarOpen
+        }, TIMEOUT_TRANSITION);
       }
+    },
+    toggleModalForCreateCharacter() {
+      this.isShowingModal = !this.isShowingModal
       
+      if (this.isShowingModal) {
+        this.toggleCharacterList()
+        setTimeout(() => {
+          this.toggleModalCreateCharacter()
+          this.isNavBarOpen = !this.isNavBarOpen
+        }, TIMEOUT_TRANSITION);
+      } else {
+        this.toggleModalCreateCharacter()
+        setTimeout(() => {
+          this.toggleCharacterList()
+          this.isNavBarOpen = !this.isNavBarOpen
+        }, TIMEOUT_TRANSITION);
+      }
     },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen
       this.isNavBarOpen = !this.isNavBarOpen
       if (this.isMenuOpen) {
-        this.$refs.contentRef.style.backgroundColor = 'gray';
-        // this.$refs.bodyRef.style.height = 100%
-        
+        this.$refs.contentRef.style.backgroundColor = 'gray';        
       } else {
         this.$refs.contentRef.style.backgroundColor = ''
       }
@@ -185,95 +194,19 @@ export default {
 }
 </script>
 
-<style>
-.slide-up-enter-active {
-transition: transform 0.3s;
-}
+<style scoped>
+@import '../syles/character-summary.css';
+@import '../syles/popup.css';
+@import '../syles/transitions.css';
 
-.slide-up-leave-active {
-  transition: transform 0.4s;
-}
 
-.slide-up-enter-from,
-.slide-up-leave-to {
-  transform: translateY(100%);
-}
-
-.slide-up-enter-to,
-.slide-up-leave {
-  transform: translateY(0);
-}
 
 .body {
-  margin: 0%;
-  height: 110dvh;
+  height: 100dvh;
 }
 
 .content {
   height: 100%;
-}
-
-/* CHARACTER SUMMARY STYLE */
-
-.list-container-characters {
-  display: flex;
-  justify-content: center;
-  width: 90%;
-  margin: 0 auto; /* centers the container */
-}
-
-.list-characters li {
-  width: 90%;
-  list-style: none;
-  border: 2px solid black;
-  border-radius: 10px; /* Rounded corners */
-  text-align: left;
-  margin-bottom: 10px;
-  padding: 5px;
-}
-
-.summary-name {
-  font-weight: bold;
-  font-size: larger;
-  margin-right: 20px;
-}
-
-.summary-amount{
-  font-size: larger;
-}
-
-.summary-description {
-  width: 80%;
-  font-size: larger;
-  text-align: left;
-}
-
-
-/* MODAL STYLING */
-
-.modal-page.scrollable {
-  overflow-y: scroll;
-  height: 100dvh;
-}
-
-.modal-page-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-page {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  background-color: white;
 }
 
 /* BUTTON STYLES */

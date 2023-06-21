@@ -1,8 +1,11 @@
 <template>
   <div id="body">
-    <button class="button-close" @click="closeModal">Close</button>
+    <div class="container-button-close">
+      <div class="spacer"></div>
+      <button class="button-close" @click="closeModal">Close</button>
+    </div>
 
-    <h2>New Character</h2>
+    <h1>New Character</h1>
     
     <div id="character-background">
       <div class="input-container">
@@ -13,7 +16,7 @@
         <div class="container-inputs">
           <ul class="list-inputs">
           <li>
-            <label for="character-alignment" class="stat-label">Alignment:</label>
+            <label for="character-alignment" class="stat-label" style="margin-right: 10px;">Alignment:</label>
             <select class="picker" v-model="characterAlignment">
               <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
             </select>
@@ -247,14 +250,14 @@
             <div class="container-inputs">
               <ul class="list-inputs">
                 <li style="margin-top: 10px;">
-                  <label>Type:</label>
+                  <label class="stat-label">Type:</label>
                   <select class="picker" v-model="featuresTempType">
                     <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                   </select>
                 </li>
 
                 <li>
-                  <label for="features-input"> # of Uses:</label>
+                  <label class="stat-label" for="features-input"> # of Uses:</label>
                   <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
                 </li>
               </ul>
@@ -302,14 +305,20 @@
 
                     <div class="spell-list">
                       <div class="spell-group">
-                        <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                        <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
                         <label class="spell-value" v-if="!item[WEAPON_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})
+                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
                         </label>
                         <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]) + proficiencyBonus) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})
+                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + proficiencyBonus) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
                         </label>
+                      </div>
 
+                      <div class="spell-group">
+                        <label class="spell-label">{{ WEAPON_NAMES.DAMAGE_MOD }}:</label>
+                        <label class="spell-value">
+                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                        </label>
                       </div>
 
                       <div class="spell-group">
@@ -343,8 +352,8 @@
                         </li>
                         
                         <li style="margin-top: 10px;">
-                          <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
-                          <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
+                          <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                          <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
                             <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                           </select>
                         </li>
@@ -393,7 +402,7 @@
                 </li>
 
                 <li style="margin-top: 10px;">
-                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                  <label class="stat-label" style="margin-right: 10px;">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
                   <select class="picker" v-model="weaponsTempAttackModifier">
                     <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                   </select>
@@ -563,7 +572,7 @@
           <div class="language-container">
             <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
             <div style="margin-top: 10px;">
-              <label class="stat-label">Proficiency: </label>
+              <label class="stat-label" style="margin-right: 10px;">Proficiency: </label>
               <select class="picker" v-model="languagesTempProficiency">
                 <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
               </select>
@@ -638,6 +647,86 @@
     </div>
 
     <br>
+    <div id="spell-slots">
+      <div class="edit-buttons">
+        <div>
+          <button class="button-edit-spacer" v-if="!isEditingSpellSlots">Edit</button>
+          <button class="button-edit-spacer" v-if="isEditingSpellSlots">Finish</button>
+        </div>
+
+        <div class="h3-bar">
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">Spell Slots</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
+        </div>
+        
+        <div>
+          <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Edit</button>
+          <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Finish</button>
+        </div>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingSpellSlots">
+          <template v-if="getDictionarySize(spellSlots) > 0">
+            <div>
+              <ul class="list">
+                <li v-for="(item, key) in spellSlots" :key="key">
+                  <div v-if="!isEditingSpellSlots">
+                    <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
+                    <label class="item-amount">{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
+                  </div>
+
+                  <!-- Edit and Delete -->
+                  <div v-if="isEditingSpellSlots">
+                    <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
+                    
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                        <li style="margin-top: 10px;">
+                          <label class="stat-label" for="equipment-input"># of slots:</label>
+                          <input class="input-stats" style="width=70%;" type="number" v-model="item[SPELL_SLOT_KEYS.MAX]"> 
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="buttons-delete-update">
+                      <button class="button-delete" @click="onPressDeleteSpellSlot(key)">Delete</button>
+                    </div>
+                    
+                    <hr class="list-divider">
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </template>
+
+          <!-- Add new -->
+          <div>
+            <div class="container-inputs">
+              <ul class="list-inputs">
+                <li style="margin-top: 10px;">
+                  <label class="stat-label">Level:</label>
+                  <select class="picker" v-model="spellSlotTempLevel">
+                    <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                  </select>
+                </li>
+
+                <li>
+                  <label class="stat-label" for="equipment-input"># of slots:</label>
+                  <input class="input-stats" style="width=70%;" type="number" v-model="spellSlotTempSlots"> 
+                </li>
+              </ul>
+            </div>
+
+            <br>
+            <button class="button-add" @click="onPressAddSpellSlot">Add</button>
+          </div>
+        </div>
+      </collapse-transition>
+    </div>
+
+    <br>
     <div id="spell-casting">
       <div class="edit-buttons">
         <div>
@@ -662,7 +751,7 @@
           <div class="container-inputs">
             <ul class="list-inputs">
               <li style="margin-top: 10px;">
-                <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
+                <label for="spells-attack-bonus" class="stat-label" style="margin-right: 10px;">Casting Ability:</label>
                 <select class="picker" v-model="spellCastStat">
                   <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
                 </select>
@@ -777,7 +866,7 @@
     </div>
 
     <br>
-    <button class="button-create-character" @click="createCharacter">Create Character</button>
+    <button class="button-create-character" @click="createCharacter" :class="{ 'disabled-button': !checkIfCreateCharacterButtonIsDisabled() }">Create Character</button>
 
   </div>
 </template>
@@ -798,7 +887,8 @@ import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
-import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
+import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
+import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 
 // TODO: Will be replaced by Firebase Remote Config
@@ -838,6 +928,7 @@ export default {
       isEditingLanguages: false,
       isEditingProficiencies: false,
       isEditingSpellCasting: false,
+      isEditingSpellSlots: false,
       isShowingCharacterInfo: true,
       isShowingBaseStats: true,
       isShowingSavingThrows: true,
@@ -849,6 +940,7 @@ export default {
       isShowingLanguages: true,
       isShowingProficiencies: true,
       isShowingSpells: true,
+      isShowingSpellSlots: true,
       isMenuOpen: false,
       isNavBarOpen: true, // show by default
       usersCharacters: {},
@@ -872,6 +964,8 @@ export default {
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
       SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
+      SPELL_SLOT_KEYS: SPELL_SLOT_KEYS,
+      SPELL_SLOT_NAMES_PICKER: SPELL_SLOT_NAMES_PICKER,
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
@@ -882,6 +976,7 @@ export default {
       languages: {},
       proficiencies: {},
       spells: {},
+      spellSlots: {},
       weapons: {},
       deathSaves: {
         [DEATH_SAVES_KEYS.SUCCESSES]: 0, 
@@ -965,6 +1060,8 @@ export default {
       spellTempDuration: '', // in seconds
       spellTempRange: '', // in feet
       spellTempLevel: '',
+      spellSlotTempLevel: '',
+      spellSlotTempSlots: '',
       weaponTempName: '',
       weaponTempCategory: '', // e.g. finesse
       weaponTempAmount: '',
@@ -1123,7 +1220,7 @@ export default {
 
       const newItem = {
         [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
-        [WEAPON_KEYS.ATTACK_DAMAGE_MOD]: this.weaponsTempAttackModifier,
+        [WEAPON_KEYS.ATTACK_DAMAGE_STAT]: this.weaponsTempAttackModifier,
         [WEAPON_KEYS.CATEGORY]: this.weaponTempCategory,
         [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
         [WEAPON_KEYS.DIE]: this.weaponTempDieType,
@@ -1263,6 +1360,27 @@ export default {
       this.spellTempDuration = ''
       this.spellTempRange = ''
     },
+    onPressAddSpellSlot() {
+      if (this.spellSlotTempLevel === '') {
+        alert("Selected a spell level")
+        return
+      }
+
+      if (this.spellSlotTempSlots === '') {
+        alert("Enter slot amount")
+        return
+      }
+
+      const slot = {
+        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
+        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
+      }
+
+      this.spellSlots[this.spellSlotTempLevel] = slot
+      
+      this.spellSlotTempLevel = ''
+      this.spellSlotTempSlots = ''
+    },
     onPressDeleteFeatures(key) {
       if (key in this.featuresTraits) {
         delete this.featuresTraits[key]
@@ -1301,26 +1419,87 @@ export default {
         }
       }
     },
+    onPressDeleteSpellSlot(key) {
+      if (key in this.spellSlots) {
+        delete this.spellSlots[key]
+      }
+    },
+    checkIfCreateCharacterButtonIsDisabled() {
+      // console.info("@checkIfAllValid")
+      if (this.characterName === '') {
+        return false
+      }
+
+      if (this.characterAlignment === '') {
+        return false
+      }
+
+      if (this.characterBackground === '') {
+        return false
+      }
+
+      if (this.characterRace === '') {
+        return false
+      }
+
+      if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
+        return false
+      }
+      
+      if (this.hp.max < MIN_VALUES.HP || this.hp.max.MAX_VALUES) {
+        return false
+      } 
+      
+      if (this.hp.dieAmount < MIN_VALUES.HIT_DIE || this.hp.dieAmount > MAX_VALUES.HIT_DIE) {
+        return false
+      }
+
+      if (this.hp.die == '') {
+        return false
+      }
+      
+      if (!this.checkIfStatsValid()) {
+        return false
+      }
+
+      if (!this.checkIfThrowsValid()) {
+        return false
+      }
+
+      if (!this.checkIfSkillsValid()) {
+        return false
+      }
+
+      if (this.spellCastStat === '') {
+        return false
+      }
+
+      if (this.spellSavingDc === '') {
+        return false
+      }
+
+      return true
+    },
     checkIfAllValid() {
       // console.info("@checkIfAllValid")
       if (this.characterName === '') {
         alert("Please enter a character name")
-        return
+        return false
       }
 
       if (this.characterAlignment === '') {
         alert("Please enter an alignment")
-        return
+        return false
       }
 
       if (this.characterBackground === '') {
         alert("Please enter a background")
-        return
+        return false
       }
 
       if (this.characterRace === '') {
         alert("Please enter a race")
-        return
+        return false
       }
 
       if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
@@ -1360,12 +1539,12 @@ export default {
 
       if (this.spellCastStat === '') {
         alert("Please select a stat your spell casting will be based off of")
-        return
+        return false
       }
 
       if (this.spellSavingDc === '') {
         alert("Please enter your spell saving DC")
-        return
+        return false
       }
 
       return true
@@ -1457,8 +1636,10 @@ export default {
         this.spellCastStat,
         this.spellSavingDc,
         this.spells,
+        this.spellSlots,
         this.stats,
         this.weapons,
+        new Date().getTime()
       )
 
       return newCharacter
@@ -1507,53 +1688,47 @@ export default {
         case CHARACTER_KEYS.STATS:
           this.isShowingBaseStats = !this.isShowingBaseStats
           break
-
         
         case CHARACTER_KEYS.SAVING_THROWS:
           this.isShowingSavingThrows = !this.isShowingSavingThrows
           break
-
         
         case CHARACTER_KEYS.SKILLS:
           this.isShowingSkills = !this.isShowingSkills
           break
-
         
         case CHARACTER_KEYS.FEATURES:
           this.isShowingFeatures = !this.isShowingFeatures
           break
-
         
         case CHARACTER_KEYS.WEAPONS:
           this.isShowingWeapons = !this.isShowingWeapons
           break
 
-        
         case CHARACTER_KEYS.EQUIPMENT:
           this.isShowingEquipment = !this.isShowingEquipment
           break
 
-        
         case CHARACTER_KEYS.TREASURES:
           this.isShowingTreasure = !this.isShowingTreasure
           break
-
         
         case CHARACTER_KEYS.LANGUAGES:
           this.isShowingLanguages = !this.isShowingLanguages
           break
-
         
         case CHARACTER_KEYS.PROFICIENCIES:
           this.isShowingProficiencies = !this.isShowingProficiencies
           break
 
-        
         case CHARACTER_KEYS.SPELLS:
           this.isShowingSpells = !this.isShowingSpells
           break
 
-        
+        case CHARACTER_KEYS.SPELL_SLOTS:
+          this.isShowingSpellSlots = !this.isShowingSpellSlots
+          break
+
         default:
           this.isShowingCharacterInfo = !this.isShowingCharacterInfo
       }
@@ -1564,51 +1739,45 @@ export default {
           this.isEditingBaseStats = !this.isEditingBaseStats
           break
 
-        
         case CHARACTER_KEYS.SAVING_THROWS:
           this.isEditingSavingThrows = !this.isEditingSavingThrows
           break
-
         
         case CHARACTER_KEYS.SKILLS:
           this.isEditingSkills = !this.isEditingSkills
           break
-
         
         case CHARACTER_KEYS.FEATURES:
           this.isEditingFeaturesTraits = !this.isEditingFeaturesTraits
           break
-
         
         case CHARACTER_KEYS.WEAPONS:
           this.isEditingWeapons = !this.isEditingWeapons
           break
-
         
         case CHARACTER_KEYS.EQUIPMENT:
           this.isEditingEquipment = !this.isEditingEquipment
           break
 
-        
         case CHARACTER_KEYS.TREASURES:
           this.isEditingTreasure = !this.isEditingTreasure
           break
 
-        
         case CHARACTER_KEYS.LANGUAGES:
           this.isEditingLanguages = !this.isEditingLanguages
           break
-
         
         case CHARACTER_KEYS.PROFICIENCIES:
           this.isEditingProficiencies = !this.isEditingProficiencies
           break
-
         
         case CHARACTER_KEYS.SPELLS:
           this.isEditingSpellCasting = !this.isEditingSpellCasting
           break
 
+        case CHARACTER_KEYS.SPELL_SLOTS:
+          this.isEditingSpellSlots = !this.isEditingSpellSlots
+          break
         
         default:
           this.isEditingCharInfo = !this.isEditingCharInfo
