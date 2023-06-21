@@ -39,7 +39,7 @@ I also wanted to take this opportunity to learn things outside of work: web dev,
 
 
 ## What problem I solved
-    Aside from having a mobile character sheet and hopefully removing the need to use pencil and eraser again, I really wanted to have everything calculated for me.
+Aside from having a protable character sheet and hopefully removing the need to use pencil and eraser again, *I really wanted to have everything calculated for me.*  
 My friends and I are brand new D&D players as of the creation of this project, and our DM is so so patient with us in figuring out how dice rolls work in any situation, and how our skills work in and outside of battle. So, I had the thought of just having everything calculated based off of the Base Stats like Strength, Dexterity, Constitution, etc. I think it worked out pretty well! Assuming all the math is correct, nothing that's based off of a Stat Modifier should ever need to be manually updated by the user. It should all be calculated automatically anytime the base stats like Strength and Dexterity are changed.
 
 ## Future plans
