@@ -1371,7 +1371,6 @@ export default {
       }
 
       this.spellSlots[this.spellSlotTempLevel] = slot
-      console.info('this.spellSlots:', this.spellSlots)
       
       this.spellSlotTempLevel = ''
       this.spellSlotTempSlots = ''
@@ -1683,48 +1682,39 @@ export default {
         case CHARACTER_KEYS.STATS:
           this.isShowingBaseStats = !this.isShowingBaseStats
           break
-
         
         case CHARACTER_KEYS.SAVING_THROWS:
           this.isShowingSavingThrows = !this.isShowingSavingThrows
           break
-
         
         case CHARACTER_KEYS.SKILLS:
           this.isShowingSkills = !this.isShowingSkills
           break
-
         
         case CHARACTER_KEYS.FEATURES:
           this.isShowingFeatures = !this.isShowingFeatures
           break
-
         
         case CHARACTER_KEYS.WEAPONS:
           this.isShowingWeapons = !this.isShowingWeapons
           break
 
-        
         case CHARACTER_KEYS.EQUIPMENT:
           this.isShowingEquipment = !this.isShowingEquipment
           break
 
-        
         case CHARACTER_KEYS.TREASURES:
           this.isShowingTreasure = !this.isShowingTreasure
           break
-
         
         case CHARACTER_KEYS.LANGUAGES:
           this.isShowingLanguages = !this.isShowingLanguages
           break
-
         
         case CHARACTER_KEYS.PROFICIENCIES:
           this.isShowingProficiencies = !this.isShowingProficiencies
           break
 
-        
         case CHARACTER_KEYS.SPELLS:
           this.isShowingSpells = !this.isShowingSpells
           break
@@ -1733,7 +1723,6 @@ export default {
           this.isShowingSpellSlots = !this.isShowingSpellSlots
           break
 
-        
         default:
           this.isShowingCharacterInfo = !this.isShowingCharacterInfo
       }
@@ -1744,51 +1733,41 @@ export default {
           this.isEditingBaseStats = !this.isEditingBaseStats
           break
 
-        
         case CHARACTER_KEYS.SAVING_THROWS:
           this.isEditingSavingThrows = !this.isEditingSavingThrows
           break
-
         
         case CHARACTER_KEYS.SKILLS:
           this.isEditingSkills = !this.isEditingSkills
           break
-
         
         case CHARACTER_KEYS.FEATURES:
           this.isEditingFeaturesTraits = !this.isEditingFeaturesTraits
           break
-
         
         case CHARACTER_KEYS.WEAPONS:
           this.isEditingWeapons = !this.isEditingWeapons
           break
-
         
         case CHARACTER_KEYS.EQUIPMENT:
           this.isEditingEquipment = !this.isEditingEquipment
           break
 
-        
         case CHARACTER_KEYS.TREASURES:
           this.isEditingTreasure = !this.isEditingTreasure
           break
 
-        
         case CHARACTER_KEYS.LANGUAGES:
           this.isEditingLanguages = !this.isEditingLanguages
           break
-
         
         case CHARACTER_KEYS.PROFICIENCIES:
           this.isEditingProficiencies = !this.isEditingProficiencies
           break
-
         
         case CHARACTER_KEYS.SPELLS:
           this.isEditingSpellCasting = !this.isEditingSpellCasting
           break
-
 
         case CHARACTER_KEYS.SPELL_SLOTS:
           this.isEditingSpellSlots = !this.isEditingSpellSlots
