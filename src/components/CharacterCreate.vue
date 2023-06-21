@@ -641,6 +641,86 @@
     </div>
 
     <br>
+    <div id="spell-slots">
+      <div class="edit-buttons">
+        <div>
+          <button class="button-edit-spacer" v-if="!isEditingSpellSlots">Edit</button>
+          <button class="button-edit-spacer" v-if="isEditingSpellSlots">Finish</button>
+        </div>
+
+        <div class="h3-bar">
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">Spell Slots</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
+        </div>
+        
+        <div>
+          <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Edit</button>
+          <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Finish</button>
+        </div>
+      </div>
+
+      <collapse-transition dimension="height">
+        <div v-if="isShowingSpellSlots">
+          <template v-if="getDictionarySize(spellSlots) > 0">
+            <div>
+              <ul class="list">
+                <li v-for="(item, key) in spellSlots" :key="key">
+                  <div v-if="!isEditingSpellSlots">
+                    <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
+                    <label class="item-amount">{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
+                  </div>
+
+                  <!-- Edit and Delete -->
+                  <div v-if="isEditingSpellSlots">
+                    <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
+                    
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                        <li style="margin-top: 10px;">
+                          <label class="stat-label" for="equipment-input"># of slots:</label>
+                          <input class="input-stats" style="width=70%;" type="number" v-model="item[SPELL_SLOT_KEYS.MAX]"> 
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="buttons-delete-update">
+                      <button class="button-delete" @click="onPressDeleteSpellSlot(key)">Delete</button>
+                    </div>
+                    
+                    <hr class="list-divider">
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </template>
+
+          <!-- Add new -->
+          <div>
+            <div class="container-inputs">
+              <ul class="list-inputs">
+                <li style="margin-top: 10px;">
+                  <label class="stat-label">Level:</label>
+                  <select class="picker" v-model="spellSlotTempLevel">
+                    <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                  </select>
+                </li>
+
+                <li>
+                  <label class="stat-label" for="equipment-input"># of slots:</label>
+                  <input class="input-stats" style="width=70%;" type="number" v-model="spellSlotTempSlots"> 
+                </li>
+              </ul>
+            </div>
+
+            <br>
+            <button class="button-add" @click="onPressAddSpellSlot">Add</button>
+          </div>
+        </div>
+      </collapse-transition>
+    </div>
+
+    <br>
     <div id="spell-casting">
       <div class="edit-buttons">
         <div>
@@ -801,7 +881,8 @@ import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
-import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
+import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
+import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 
 // TODO: Will be replaced by Firebase Remote Config
@@ -841,6 +922,7 @@ export default {
       isEditingLanguages: false,
       isEditingProficiencies: false,
       isEditingSpellCasting: false,
+      isEditingSpellSlots: false,
       isShowingCharacterInfo: true,
       isShowingBaseStats: true,
       isShowingSavingThrows: true,
@@ -852,6 +934,7 @@ export default {
       isShowingLanguages: true,
       isShowingProficiencies: true,
       isShowingSpells: true,
+      isShowingSpellSlots: true,
       isMenuOpen: false,
       isNavBarOpen: true, // show by default
       usersCharacters: {},
@@ -875,6 +958,8 @@ export default {
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
       SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
+      SPELL_SLOT_KEYS: SPELL_SLOT_KEYS,
+      SPELL_SLOT_NAMES_PICKER: SPELL_SLOT_NAMES_PICKER,
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
@@ -885,6 +970,7 @@ export default {
       languages: {},
       proficiencies: {},
       spells: {},
+      spellSlots: {},
       weapons: {},
       deathSaves: {
         [DEATH_SAVES_KEYS.SUCCESSES]: 0, 
@@ -968,6 +1054,8 @@ export default {
       spellTempDuration: '', // in seconds
       spellTempRange: '', // in feet
       spellTempLevel: '',
+      spellSlotTempLevel: '',
+      spellSlotTempSlots: '',
       weaponTempName: '',
       weaponTempCategory: '', // e.g. finesse
       weaponTempAmount: '',
@@ -1266,6 +1354,28 @@ export default {
       this.spellTempDuration = ''
       this.spellTempRange = ''
     },
+    onPressAddSpellSlot() {
+      if (this.spellSlotTempLevel === '') {
+        alert("Selected a spell level")
+        return
+      }
+
+      if (this.spellSlotTempSlots === '') {
+        alert("Enter slot amount")
+        return
+      }
+
+      const slot = {
+        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
+        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
+      }
+
+      this.spellSlots[this.spellSlotTempLevel] = slot
+      console.info('this.spellSlots:', this.spellSlots)
+      
+      this.spellSlotTempLevel = ''
+      this.spellSlotTempSlots = ''
+    },
     onPressDeleteFeatures(key) {
       if (key in this.featuresTraits) {
         delete this.featuresTraits[key]
@@ -1302,6 +1412,11 @@ export default {
             delete this.spells[level]
           }
         }
+      }
+    },
+    onPressDeleteSpellSlot(key) {
+      if (key in this.spellSlots) {
+        delete this.spellSlots[key]
       }
     },
     checkIfCreateCharacterButtonIsDisabled() {
@@ -1614,6 +1729,10 @@ export default {
           this.isShowingSpells = !this.isShowingSpells
           break
 
+        case CHARACTER_KEYS.SPELL_SLOTS:
+          this.isShowingSpellSlots = !this.isShowingSpellSlots
+          break
+
         
         default:
           this.isShowingCharacterInfo = !this.isShowingCharacterInfo
@@ -1670,6 +1789,10 @@ export default {
           this.isEditingSpellCasting = !this.isEditingSpellCasting
           break
 
+
+        case CHARACTER_KEYS.SPELL_SLOTS:
+          this.isEditingSpellSlots = !this.isEditingSpellSlots
+          break
         
         default:
           this.isEditingCharInfo = !this.isEditingCharInfo

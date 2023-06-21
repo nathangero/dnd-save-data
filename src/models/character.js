@@ -23,6 +23,7 @@ export default class Charcter {
     spellCastStat = '',
     spellSaveDc = '',
     spells = {},
+    spellSlots = {},
     stats = {},
     weapons = {},
     timeCreated = '',
@@ -49,6 +50,7 @@ export default class Charcter {
     this.spellCastStat = spellCastStat
     this.spellSaveDc = spellSaveDc
     this.spells = spells
+    this.spellSlots = spellSlots
     this.stats = stats
     this.weapons = weapons
 
@@ -80,9 +82,10 @@ export default class Charcter {
       spellCastStat,
       spellSaveDc,
       spells,
+      spellSlots,
       stats,
       weapons,
-      timeRegistered,
+      timeCreated,
     } = snapshot
 
     const newCharacter =  new Charcter(
@@ -108,9 +111,10 @@ export default class Charcter {
       spellCastStat,
       spellSaveDc,
       spells,
+      spellSlots,
       stats,
       weapons,
-      timeRegistered,
+      timeCreated,
     )
     
     return newCharacter

@@ -23,6 +23,7 @@ const CHARACTER_KEYS = {
     SPELL_CAST_STAT: "spellCastStat",
     SPELL_SAVE_DC: "spellSaveDc",
     SPELLS: "spells",
+    SPELL_SLOTS: "spellSlots",
     STATS: "stats",
     TIME_CREATED: "timeCreated",
     TREASURES: "treasures",
