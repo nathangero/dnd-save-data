@@ -35,6 +35,7 @@ I also wanted to take this opportunity to learn things outside of work: web dev,
 
 ## Coding design decisions
 - I'm really proud of the way I use v-for to print out the Base Stats, Saving Throws, and Skills sections. I had the idea after discovering how to use const dictionaries/objects (my makeshift enums for Javascript), for v-for to print out something. I know it requires perfect parity for order from the database key names to just the names the user sees on their device, but I think it was worth it. It made the coding a lot simpler to read and edit for me.
+- I like enums. I use them all the time at work so it's just second nature to me to use them, especially for database keys/paths. Having a database key written down once and just use its reference everywhere else is SO convenient. Not to mention it makes refactoring a breeze!
 
 
 ## What problem I solved
