@@ -552,14 +552,20 @@
 
                             <div class="spell-list">
                               <div class="spell-group">
-                                <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                                <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
                                 <label class="spell-value" v-if="!item[WEAPON_KEYS.PROFICIENT]">
-                                  {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})
+                                  {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
                                 </label>
                                 <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
-                                  {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]] }})
+                                  {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
                                 </label>
+                              </div>
 
+                              <div class="spell-group">
+                                <label class="spell-label">{{ WEAPON_NAMES.DAMAGE_MOD }}:</label>
+                                <label class="spell-value">
+                                  {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                                </label>
                               </div>
 
                               <div class="spell-group">
@@ -593,8 +599,8 @@
                                 </li>
                                 
                                 <li style="margin-top: 10px;">
-                                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
-                                  <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_MOD]">
+                                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                                  <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
                                     <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                                   </select>
                                 </li>
@@ -648,7 +654,7 @@
                           </li>
 
                           <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
                             <select class="picker" v-model="weaponsTempAttackModifier">
                               <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                             </select>
@@ -1695,7 +1701,7 @@ export default {
 
       const newItem = {
         [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
-        [WEAPON_KEYS.ATTACK_DAMAGE_MOD]: this.weaponsTempAttackModifier,
+        [WEAPON_KEYS.ATTACK_DAMAGE_STAT]: this.weaponsTempAttackModifier,
         [WEAPON_KEYS.CATEGORY]: this.weaponTempCategory,
         [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
         [WEAPON_KEYS.DIE]: this.weaponTempDieType,
