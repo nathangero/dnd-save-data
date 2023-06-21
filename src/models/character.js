@@ -25,7 +25,7 @@ export default class Charcter {
     spells = {},
     stats = {},
     weapons = {},
-    timeRegistered = '',
+    timeCreated = '',
   ) {
     this.alignment = alignment
     this.armor = armor
@@ -52,7 +52,7 @@ export default class Charcter {
     this.stats = stats
     this.weapons = weapons
 
-    this.timeRegistered = timeRegistered
+    this.timeCreated = timeCreated
   }
 
 

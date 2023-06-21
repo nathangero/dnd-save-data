@@ -140,11 +140,13 @@ export default {
       this.isModalViewCharacterOpen = !this.isModalViewCharacterOpen
     },
     toggleModalForViewCharacter(charId) {
+      // console.info('charId:', charId)
       this.isShowingModal = !this.isShowingModal
       
       if (this.isShowingModal) {
         this.characterToView = this.store.getters.getUserCharacters[charId]
         this.characterToViewId = charId
+        // console.info('this.characterToViewId:', this.characterToViewId)
 
         this.toggleCharacterList()
         setTimeout(() => {

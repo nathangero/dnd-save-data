@@ -17,7 +17,7 @@ const store = createStore({
     addCharacterLocally(state, payload) {
       // console.info('@addCharacter')
       const { charId, characterToAdd } = payload
-
+      
       if (state.user.characters) {
         // If dictionary already exists, just add to it
         state.user.characters[charId] = characterToAdd
@@ -90,7 +90,7 @@ const store = createStore({
         }
 
         if (this.state.user.characters[charId][statRef]) {
-          console.info(`adding to ${statRef}`)
+          // console.info(`adding to ${statRef}`)
           // Add to dict
           this.state.user.characters[charId][statRef][key] = value
         } else {
@@ -146,8 +146,9 @@ const store = createStore({
       })      
     },
     updateCharacterInfo(state, payload) {
-      // console.info('payload:', payload)
-      const { charId, info} = payload    
+      // console.info('@updateCharacterInfo')
+      
+      const { charId, info } = payload    
 
       return new Promise((resolve, reject) => {
         const userId = this.state.user.id
@@ -257,7 +258,7 @@ const store = createStore({
     },
     deleteCharacterSpell(state, payload) {
       const { charId, levelKey, spellName, statRef } = payload
-      console.info('payload:', payload)
+      // console.info('payload:', payload)
 
       return new Promise((resolve, reject) => {
         if (levelKey === undefined || levelKey === '' || spellName === undefined || spellName === '') {
@@ -278,7 +279,8 @@ const store = createStore({
     addCharacterToDb(state, newCharacter) {
       const userId = this.state.user.id
       return new Promise((resolve, reject) => {
-        rtdbFunctions.createNewCharacter(userId, newCharacter).then((success, newCharId) => {
+        rtdbFunctions.createNewCharacter(userId, newCharacter).then((payload) => {
+          const { success, newCharId } = payload
           if (success && newCharId !== '') {
             const payload = {
               charId: newCharId,

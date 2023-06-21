@@ -1371,6 +1371,7 @@ export default {
     }
   },
   mounted() {
+    window.scrollTo(0,0);
     this.characterToView = this.store.getters.getUserCharacters[this.characterToViewId]
     // console.info('this.characterToView:', this.characterToView)
   },

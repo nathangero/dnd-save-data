@@ -65,9 +65,12 @@ export async function createNewCharacter(userId, characterInfo) {
         dbRef += newKey
         set(ref(db, dbRef), characterInfo).then(() => {
             // console.info(`created a new character for user: ${userId}`)
-
+            const resolvePayload = {
+                success: true,
+                newCharId: newKey
+            }
             createCharacterBackup(userId, newKey, characterInfo, characterInfo[CHARACTER_KEYS.TIME_CREATED])
-            resolve(true, newKey)
+            resolve(resolvePayload)
         })
         .catch ((error => {
             console.error(error)
