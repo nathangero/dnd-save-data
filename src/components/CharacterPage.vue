@@ -1051,7 +1051,7 @@
                 </template>
 
                 <!-- Add new -->
-                <div>
+                <template v-if="isEditingSpellSlots">
                   <div class="container-inputs">
                     <ul class="list-inputs">
                       <li style="margin-top: 10px;">
@@ -1070,7 +1070,7 @@
 
                   <br>
                   <button class="button-add" @click="onPressAddSpellSlot">Add</button>
-                </div>
+                </template>
               </div>
             </collapse-transition>
           </div>
