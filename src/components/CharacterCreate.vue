@@ -250,14 +250,14 @@
             <div class="container-inputs">
               <ul class="list-inputs">
                 <li style="margin-top: 10px;">
-                  <label>Type:</label>
+                  <label class="stat-label">Type:</label>
                   <select class="picker" v-model="featuresTempType">
                     <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                   </select>
                 </li>
 
                 <li>
-                  <label for="features-input"> # of Uses:</label>
+                  <label class="stat-label" for="features-input"> # of Uses:</label>
                   <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
                 </li>
               </ul>
@@ -396,7 +396,7 @@
                 </li>
 
                 <li style="margin-top: 10px;">
-                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
+                  <label class="stat-label" style="margin-right: 10px;">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_MOD] }}:</label>
                   <select class="picker" v-model="weaponsTempAttackModifier">
                     <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                   </select>
@@ -566,7 +566,7 @@
           <div class="language-container">
             <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
             <div style="margin-top: 10px;">
-              <label class="stat-label">Proficiency: </label>
+              <label class="stat-label" style="margin-right: 10px;">Proficiency: </label>
               <select class="picker" v-model="languagesTempProficiency">
                 <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
               </select>
@@ -745,7 +745,7 @@
           <div class="container-inputs">
             <ul class="list-inputs">
               <li style="margin-top: 10px;">
-                <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
+                <label for="spells-attack-bonus" class="stat-label" style="margin-right: 10px;">Casting Ability:</label>
                 <select class="picker" v-model="spellCastStat">
                   <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
                 </select>
