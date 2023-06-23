@@ -13,9 +13,10 @@ const SPELL_CASTING_KEYS = {
     LEVEL_7: "level_7",
     LEVEL_8: "level_8",
     LEVEL_9: "level_9",
-    CASTING_TIME: 'casting_time',
+    CASTING_TIME: 'castingTime',
     DESCRIPTION: 'description',
     DURATION: 'duration',
+    DURATION_TYPE: "durationType",
     RANGE: 'range',
 }
 
@@ -73,4 +74,13 @@ const SPELL_SLOT_NAMES_PICKER = {
     [SPELL_CASTING_LEVELS.LEVEL_9]: "9",
 }
 
-export { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER }
+
+
+const SPELL_CASTING_DURATION_TYPES = {
+    INSTANT: "instant",
+    SECOND: "seconds",
+    MINUTE: "minutes",
+    HOUR: "hours"
+}
+
+export { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER, SPELL_CASTING_DURATION_TYPES }
