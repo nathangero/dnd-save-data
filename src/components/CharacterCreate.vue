@@ -228,7 +228,7 @@
                       </div>
                       <div>
                         <label class="stat-label" for="features-input"> # of Uses:</label>
-                        <input class="input-stats" style="width=70%;" type="number" v-model="item[FEATURES_KEYS.USES]"> 
+                        <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
                       </div>
                       <br>
                       <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
@@ -258,7 +258,7 @@
 
                 <li>
                   <label class="stat-label" for="features-input"> # of Uses:</label>
-                  <input class="input-stats" style="width=70%;" type="number" v-model="featuresTempUses"> 
+                  <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
                 </li>
               </ul>
             </div>
@@ -348,7 +348,7 @@
                       <ul class="list-inputs">
                         <li style="margin-top: 10px;">
                           <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
-                          <input class="input-stats" style="width=70%;" type="number" v-model="item[WEAPON_KEYS.AMOUNT]"> 
+                          <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="item[WEAPON_KEYS.AMOUNT]"> 
                         </li>
                         
                         <li style="margin-top: 10px;">
@@ -398,7 +398,7 @@
               <ul class="list-inputs">
                 <li>
                   <label class="stat-label" for="equipment-input">Amount:</label>
-                  <input class="input-stats" style="width=70%;" type="number" v-model="weaponTempAmount"> 
+                  <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="weaponTempAmount"> 
                 </li>
 
                 <li style="margin-top: 10px;">
@@ -481,7 +481,7 @@
                     <div class="container-edit">
                       <div>
                         <label class="stat-label" for="equipment-input">Amount:</label>
-                        <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
+                        <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
                       </div>
                       <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                     </div>
@@ -502,7 +502,7 @@
             <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
             <div>
               <label class="stat-label" for="equipment-input">Amount:</label>
-              <input class="input-stats" style="width=70%;" type="number" v-model="equipmentTempAmount"> 
+              <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="equipmentTempAmount"> 
             </div>
             <br>
             <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
@@ -685,7 +685,7 @@
                       <ul class="list-inputs">
                         <li style="margin-top: 10px;">
                           <label class="stat-label" for="equipment-input"># of slots:</label>
-                          <input class="input-stats" style="width=70%;" type="number" v-model="item[SPELL_SLOT_KEYS.MAX]"> 
+                          <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="item[SPELL_SLOT_KEYS.MAX]"> 
                         </li>
                       </ul>
                     </div>
@@ -714,7 +714,7 @@
 
                 <li>
                   <label class="stat-label" for="equipment-input"># of slots:</label>
-                  <input class="input-stats" style="width=70%;" type="number" v-model="spellSlotTempSlots"> 
+                  <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
                 </li>
               </ul>
             </div>
@@ -780,10 +780,12 @@
                               <label class="spell-label">Casting Time:</label>
                               <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
                             </div>
+
                             <div class="spell-group">
                               <label class="spell-label">Duration:</label>
-                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
+                              <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
                             </div>
+
                             <div class="spell-group">
                               <label class="spell-label">Range:</label>
                               <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
@@ -800,10 +802,14 @@
                                 <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
                                 <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
                               </li>
-                                
-                              <li>
-                                <label for="spells-casting-duration" class="stat-label">Duration (in seconds):</label>
-                                <input type="number" id="spells-casting-duration" style="width: 80px;" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required>
+
+                              <li style="margin-top: 20px">
+                                <label class="stat-label" style="margin: 0;">Duration:</label>
+                                <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+
+                                <select class="picker" v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
+                                  <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                                </select>
                               </li>
                               
                               <li>
@@ -845,9 +851,13 @@
                 <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
               </li>
 
-              <li>
-                <label class="stat-label" for="spells-casting-duration">Duration (in seconds):</label>
-                <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+              <li style="margin-top: 20px">
+                <label class="stat-label" style="margin: 0;">Duration:</label>
+                <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+
+                <select class="picker" v-model="spellTempDurationType">
+                  <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                </select>
               </li>
 
               <li>
@@ -887,7 +897,7 @@ import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
 import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
-import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
+import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER, SPELL_CASTING_DURATION_TYPES } from '@/enums/dbKeys/spell-casting-keys'
 import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 
@@ -966,6 +976,7 @@ export default {
       SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
       SPELL_SLOT_KEYS: SPELL_SLOT_KEYS,
       SPELL_SLOT_NAMES_PICKER: SPELL_SLOT_NAMES_PICKER,
+      SPELL_CASTING_DURATION_TYPES: SPELL_CASTING_DURATION_TYPES,
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
@@ -1057,7 +1068,8 @@ export default {
       spellTempName: '',
       spellTempCastingTime: '',
       spellTempDescription: '',
-      spellTempDuration: '', // in seconds
+      spellTempDuration: '',
+      spellTempDurationType: '', // instant, seconds, minutes, hours
       spellTempRange: '', // in feet
       spellTempLevel: '',
       spellSlotTempLevel: '',
@@ -1067,7 +1079,7 @@ export default {
       weaponTempAmount: '',
       weaponsTempAttackModifier: '', // e.g. dex
       weaponTempDieType: '', // e.g. d8
-      weaponTempIsProficient: '', // e.g. d8
+      weaponTempIsProficient: false,
       weaponTempProperties: '', // e.g. finesse, light
       weaponTempDescription: '',
     }
@@ -1081,6 +1093,15 @@ export default {
     },
     'hp.dieAmountMax': function(newValue) {
       this.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
+    },
+    'spellTempDurationType': function(newValue) {
+      if (newValue === SPELL_CASTING_DURATION_TYPES.INSTANT) {
+        this.spellTempDuration = 0
+      } else {
+        if (this.spellTempDuration === 0) {
+          this.spellTempDuration = ''
+        }
+      }
     },
     'stats.str.value': function(newValue) {
       const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
@@ -1158,10 +1179,10 @@ export default {
         return
       }
 
-      if (this.featuresTempDescription === '') {
-        alert("Please enter a feature description")
-        return
-      }
+      // if (this.featuresTempDescription === '') {
+      //   alert("Please enter a feature description")
+      //   return
+      // }
 
       const newFeat = {
         [FEATURES_KEYS.DESCRIPTION]: this.featuresTempDescription,
@@ -1188,11 +1209,6 @@ export default {
         return
       }
 
-      if (this.weaponsTempAttackModifier === '') {
-        alert("Please enter a weapon attack mod")
-        return
-      }
-
       if (this.weaponTempDieType === '') {
         alert("Please enter a weapon die")
         return
@@ -1203,14 +1219,8 @@ export default {
         return
       }
 
-      if (this.weaponTempIsProficient === '') {
-        alert("Please decide if you're proficient in the weapon")
-        return
-      }
-
-      if (this.weaponTempDescription === '') {
-        alert("Please enter a weapon description")
-        return
+      if (this.weaponTempIsProficient == '') {
+        this.weaponTempIsProficient = false
       }
 
       // if (this.weaponTempProperties === '') {
@@ -1251,10 +1261,10 @@ export default {
         return
       }
 
-      if (this.equipmentTempDescription === '') {
-        alert("Please enter an equipment description")
-        return
-      }
+      // if (this.equipmentTempDescription === '') {
+      //   alert("Please enter an equipment description")
+      //   return
+      // }
 
       const newItem = {
         [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
@@ -1289,8 +1299,8 @@ export default {
         return 
       }
 
-      if (this.proficiencyTempDescription == '') {
-        alert("Please enter a proficiency proficiency")
+      if (this.proficiencyTempDescription === '') {
+        alert("Please enter a proficiency description")
         return
       }
 
@@ -1320,21 +1330,27 @@ export default {
         return
       }
 
+      if (this.spellTempDurationType === '') {
+        alert("Please enter a Casting Duration Type")
+        return
+      }
+
       if (this.spellTempRange === '' || this.spellTempRange <= 0) {
         alert("Please enter a Casting Range")
         return
       }
 
-      if (this.spellTempDescription === '') {
-        alert("Please enter a Casting Description")
-        return
-      }
+      // if (this.spellTempDescription === '') {
+      //   alert("Please enter a Casting Description")
+      //   return
+      // }
 
 
       const newSpell = {
         [SPELL_CASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
         [SPELL_CASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
         [SPELL_CASTING_KEYS.DURATION]: this.spellTempDuration,
+        [SPELL_CASTING_KEYS.DURATION_TYPE]: this.spellTempDurationType,
         [SPELL_CASTING_KEYS.RANGE]: this.spellTempRange
       }
       
@@ -1358,6 +1374,7 @@ export default {
       this.spellTempCastingTime = ''
       this.spellTempDescription = ''
       this.spellTempDuration = ''
+      this.spellTempDurationType = ''
       this.spellTempRange = ''
     },
     onPressAddSpellSlot() {

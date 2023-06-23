@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>DND Save Data</h1>
+  <div class="body">
+    <h1 style="margin-top: 60px;">DND Save Data</h1>
     <div class="center-container">
       <div class="login-screen-container">
         <div class="form">
@@ -261,6 +261,8 @@ export default {
 
 <style>
 @import '../syles/popup.css';
+
+
 .center-container {
   display: flex;
   justify-content: center;
