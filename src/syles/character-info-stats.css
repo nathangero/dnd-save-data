@@ -108,13 +108,15 @@ textarea {
   align-items: center;
 }
 
-input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input {
+/* firefox */
+input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 
