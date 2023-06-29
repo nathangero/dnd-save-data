@@ -1192,9 +1192,13 @@
                           <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
                         </li>
 
-                        <li>
-                          <label class="stat-label" for="spells-casting-duration">Duration (in seconds):</label>
-                          <input type="number" id="spells-casting-duration" style="width: 100px;" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required>
+                        <li style="margin-top: 20px">
+                          <label class="stat-label" style="margin: 0;">Duration:</label>
+                          <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+
+                          <select class="picker" v-model="spellTempDurationType">
+                            <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                          </select>
                         </li>
 
                         <li>
