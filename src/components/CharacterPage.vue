@@ -1139,6 +1139,49 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingSpells">
+                  <!-- Add new -->
+                  <template v-if="isEditingSpellCasting">
+                    <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
+                    <div class="container-inputs">
+                      <ul class="list-inputs">
+                        <li>
+                          <label class="stat-label" for="spells-level">Level:</label>
+                          <select class="picker" v-model="spellTempLevel">
+                            <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
+                          </select>
+                        </li>
+                        
+                        <li>
+                          <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
+                          <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+                        </li>
+
+                        <li style="margin-top: 20px">
+                          <label class="stat-label" style="margin: 0;">Duration:</label>
+                          <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+
+                          <select class="picker" v-model="spellTempDurationType">
+                            <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                          </select>
+                        </li>
+
+                        <li>
+                          <label class="stat-label" for="spells-range">Range (in feet):</label>
+                          <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <br>
+                    <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+                    <br>
+                    <button class="button-add" @click="onPressAddSpell">Add</button>
+
+                    <ul class="list">
+                      <hr class="list-divider">
+                    </ul>
+                  </template>
+
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
                     <ul class="list">
                       <li v-for="(levelDict, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
@@ -1208,45 +1251,6 @@
                         </template>
                       </li>
                     </ul>
-                  </template>
-
-                  <!-- Add new -->
-                  <template v-if="isEditingSpellCasting">
-                    <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
-                    <div class="container-inputs">
-                      <ul class="list-inputs">
-                        <li>
-                          <label class="stat-label" for="spells-level">Level:</label>
-                          <select class="picker" v-model="spellTempLevel">
-                            <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
-                          </select>
-                        </li>
-                        
-                        <li>
-                          <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
-                          <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
-                        </li>
-
-                        <li style="margin-top: 20px">
-                          <label class="stat-label" style="margin: 0;">Duration:</label>
-                          <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
-
-                          <select class="picker" v-model="spellTempDurationType">
-                            <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
-                          </select>
-                        </li>
-
-                        <li>
-                          <label class="stat-label" for="spells-range">Range (in feet):</label>
-                          <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <br>
-                    <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
-                    <br>
-                    <button class="button-add" @click="onPressAddSpell">Add</button>
                   </template>
                 </div>
               </collapse-transition>
@@ -1888,7 +1892,7 @@ export default {
         return
       }
 
-      if (this.spellTempDuration === '' || this.spellTempDuration <= 0) {
+      if (this.spellTempDuration === '' || this.spellTempDuration < 0) {
         alert("Please enter a Casting Duration")
         return
       }
@@ -1902,11 +1906,6 @@ export default {
         alert("Please enter a Casting Range")
         return
       }
-
-      // if (this.spellTempDescription === '') {
-      //   alert("Please enter a Casting Description")
-      //   return
-      // }
 
 
       const newSpell = {
