@@ -553,6 +553,57 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingWeapons">
+                  <!-- Add new -->
+                  <template v-if="isEditingWeapons">
+                    <div>
+                      <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
+
+                      <div class="container-inputs">
+                        <ul class="list-inputs">
+                          <li>
+                            <label class="stat-label" for="equipment-input">Amount:</label>
+                            <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="weaponTempAmount"> 
+                          </li>
+
+                          <li style="margin-top: 10px;">
+                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                            <select class="picker" v-model="weaponsTempAttackModifier">
+                              <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                            </select>
+                          </li>
+                          
+                          <li style="margin-top: 10px;">
+                            <label class="stat-label" for="equipment-input">Die Type:</label>
+                            <select class="picker" v-model="weaponTempDieType">
+                              <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                            </select>
+                          </li>
+
+                          <li style="margin-top: 10px;">
+                            <label class="stat-label" for="equipment-input">Category:</label>
+                            <select class="picker" v-model="weaponTempCategory">
+                              <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                            </select>
+                          </li>
+
+                          <li style="margin-top: 10px;">
+                            <label class="stat-label" for="equipment-input">Proficient:</label>
+                            <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                          </li>
+                        </ul>
+                      </div>
+
+                      <br>
+                      <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button class="button-add" @click="onPressAddWeapon">Add</button>
+                      
+                      <ul class="list">
+                        <hr class="list-divider">
+                      </ul>
+                    </div>
+                  </template>
+                  
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.WEAPONS]) > 0">
                     <div>
                       <ul class="list">
@@ -649,53 +700,6 @@
                           </div>
                         </li>
                       </ul>
-                    </div>
-                  </template>
-
-                  <!-- Add new -->
-                  <template v-if="isEditingWeapons">
-                    <div>
-                      <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
-
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li>
-                            <label class="stat-label" for="equipment-input">Amount:</label>
-                            <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="weaponTempAmount"> 
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                            <select class="picker" v-model="weaponsTempAttackModifier">
-                              <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                            </select>
-                          </li>
-                          
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">Die Type:</label>
-                            <select class="picker" v-model="weaponTempDieType">
-                              <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                            </select>
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">Category:</label>
-                            <select class="picker" v-model="weaponTempCategory">
-                              <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
-                            </select>
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">Proficient:</label>
-                            <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
-                          </li>
-                        </ul>
-                      </div>
-
-                      <br>
-                      <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
-                      <br>
-                      <button class="button-add" @click="onPressAddWeapon">Add</button>
                     </div>
                   </template>
                 </div>
