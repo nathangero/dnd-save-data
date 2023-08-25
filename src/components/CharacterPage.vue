@@ -900,6 +900,25 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingLanguages">
+                  <!-- Add new -->
+                  <template v-if="isEditingLanguages">
+                    <div class="language-container">
+                      <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
+                      <div style="margin-top: 10px;">
+                        <label class="stat-label">Proficiency: </label>
+                        <select class="picker" v-model="languagesTempProficiency">
+                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                        </select>
+                      </div>
+                      <br>
+                      <button class="button-add" @click="onPressAddLanguage">Add</button>
+
+                      <ul class="list">
+                        <hr class="list-divider">
+                      </ul>
+                    </div>
+                  </template>
+                  
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
                     <ul>
                       <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
@@ -930,21 +949,6 @@
                         
                       </li>
                     </ul>
-                  </template>
-
-                  <!-- Add new -->
-                  <template v-if="isEditingLanguages">
-                    <div class="language-container">
-                      <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
-                      <div style="margin-top: 10px;">
-                        <label class="stat-label">Proficiency: </label>
-                        <select class="picker" v-model="languagesTempProficiency">
-                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                        </select>
-                      </div>
-                      <br>
-                      <button class="button-add" @click="onPressAddLanguage">Add</button>
-                    </div>
                   </template>
                 </div>
               </collapse-transition>
@@ -1675,11 +1679,6 @@ export default {
         alert("Please enter feature uses")
         return
       }
-
-      // if (this.featuresTempDescription === '') {
-      //   alert("Please enter a feature description")
-      //   return
-      // }
 
       const newFeat = {
         [FEATURES_KEYS.DESCRIPTION]: this.featuresTempDescription,
