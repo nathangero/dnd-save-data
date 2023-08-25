@@ -153,6 +153,13 @@
                           <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
                         </div>
                       </li>
+                      
+                      <li>
+                        <div class="stat-group">
+                          <label class="stat-label">Inspiration: </label>
+                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INSPIRATION] }}</label>
+                        </div>
+                      </li>
                     </ul>
                   </div>
 
@@ -241,6 +248,11 @@
                         <li style="margin-top: 5px;">
                           <label class="stat-label">Spell Saving DC: </label>
                           <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.SPELL_SAVE_DC]) }}</label>
+                        </li>
+
+                        <li>
+                          <label for="stats-proficiency-bonus" class="stat-label">Inspriation: </label>
+                          <input type="number" id="stats-inspiration" v-model="characterToView[CHARACTER_KEYS.INSPIRATION]" class="input-stats" inputmode="numeric" required>
                         </li>
                       </ul>
                     </div>
@@ -1958,6 +1970,7 @@ export default {
         [CHARACTER_KEYS.LEVEL]: this.characterToView[CHARACTER_KEYS.LEVEL],
         [CHARACTER_KEYS.ARMOR]: this.characterToView[CHARACTER_KEYS.ARMOR],
         [CHARACTER_KEYS.INITIATIVE]: this.characterToView[CHARACTER_KEYS.INITIATIVE],
+        [CHARACTER_KEYS.INSPIRATION]: this.characterToView[CHARACTER_KEYS.INSPIRATION],
         [CHARACTER_KEYS.SPEED]: this.characterToView[CHARACTER_KEYS.SPEED],
         [CHARACTER_KEYS.HP]: this.characterToView[CHARACTER_KEYS.HP],
         [CHARACTER_KEYS.PROFICIENCY_BONUS]: this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS],

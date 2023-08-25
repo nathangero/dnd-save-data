@@ -9,6 +9,7 @@ const CHARACTER_KEYS = {
     GOLD: "gold",
     HP: "hp",
     INITIATIVE: "initiative",
+    INSPIRATION: "inspiration",
     LANGUAGES: "languages",
     LEVEL: "level",
     NAME: "name",
