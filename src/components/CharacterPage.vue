@@ -918,7 +918,7 @@
                       </ul>
                     </div>
                   </template>
-                  
+
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
                     <ul>
                       <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
@@ -980,6 +980,21 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingProficiencies">
+                  <!-- Add new -->
+                  <template v-if="isEditingProficiencies">
+                    <div class="proficiency-container">
+                      <input class="item-input" v-model="proficiencyTempName" placeholder="New proficiency name"> 
+                      <br>
+                      <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button class="button-add" @click="onPressAddProficiency">Add</button>
+
+                      <ul class="list">
+                        <hr class="list-divider">
+                      </ul>
+                    </div>
+                  </template>
+                  
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
                     <ul class="list">
                       <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
@@ -1004,17 +1019,6 @@
                         </div>
                       </li>
                     </ul>
-                  </template>
-
-                  <!-- Add new -->
-                  <template v-if="isEditingProficiencies">
-                    <div class="proficiency-container">
-                      <input class="item-input" v-model="proficiencyTempName" placeholder="New proficiency name"> 
-                      <br>
-                      <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
-                      <br>
-                      <button class="button-add" @click="onPressAddProficiency">Add</button>
-                    </div>
                   </template>
                 </div>
               </collapse-transition>
