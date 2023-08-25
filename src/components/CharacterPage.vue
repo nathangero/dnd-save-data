@@ -603,7 +603,7 @@
                       </ul>
                     </div>
                   </template>
-                  
+
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.WEAPONS]) > 0">
                     <div>
                       <ul class="list">
@@ -730,6 +730,25 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingEquipment">
+                  <!-- Add new -->
+                  <template v-if="isEditingEquipment">
+                    <div>
+                      <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
+                      <div>
+                        <label class="stat-label" for="equipment-input">Amount:</label>
+                        <input class="input-stats" style="width=70%;" v-model="equipmentTempAmount" type="number" inputmode="numeric"> 
+                      </div>
+                      <br>
+                      <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button class="button-add" @click="onPressAddEquipment">Add</button>
+
+                      <ul class="list">
+                        <hr class="list-divider">
+                      </ul>
+                    </div>
+                  </template>
+
                   <ul class="list">
                     <li style="text-align: left; margin-bottom: 20px">
                       <div v-if="!isEditingEquipment">
@@ -772,21 +791,6 @@
                         </div>
                       </li>
                     </ul>
-                  </template>
-
-                  <!-- Add new -->
-                  <template v-if="isEditingEquipment">
-                    <div>
-                      <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
-                      <div>
-                        <label class="stat-label" for="equipment-input">Amount:</label>
-                        <input class="input-stats" style="width=70%;" v-model="equipmentTempAmount" type="number" inputmode="numeric"> 
-                      </div>
-                      <br>
-                      <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
-                      <br>
-                      <button class="button-add" @click="onPressAddEquipment">Add</button>
-                    </div>
                   </template>
                 </div>
               </collapse-transition>
