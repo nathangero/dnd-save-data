@@ -820,6 +820,25 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingTreasure">
+                  <!-- Add new -->
+                  <template v-if="isEditingTreasure">
+                    <div>
+                      <input class="item-input" style="width=70%;" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
+                      <div>
+                        <label class="stat-label" for="equipment-input">Amount:</label>
+                        <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="treasureTempAmount"> 
+                      </div>
+                      <br>
+                      <textarea v-model="treasureTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button class="button-add" @click="onPressAddTreasure">Add</button>
+
+                      <ul class="list">
+                        <hr class="list-divider">
+                      </ul>
+                    </div>
+                  </template>
+
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.TREASURES]) > 0">
                     <div>
                       <ul class="list">
@@ -850,21 +869,6 @@
                           </div>
                         </li>
                       </ul>
-                    </div>
-                  </template>
-
-                  <!-- Add new -->
-                  <template v-if="isEditingTreasure">
-                    <div>
-                      <input class="item-input" style="width=70%;" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
-                      <div>
-                        <label class="stat-label" for="equipment-input">Amount:</label>
-                        <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="treasureTempAmount"> 
-                      </div>
-                      <br>
-                      <textarea v-model="treasureTempDescription" rows="4" placeholder="Description"></textarea>
-                      <br>
-                      <button class="button-add" @click="onPressAddTreasure">Add</button>
                     </div>
                   </template>
                 </div>
@@ -1722,11 +1726,6 @@ export default {
         this.weaponTempIsProficient = false
       }
 
-      // if (this.weaponTempProperties === '') {
-      //   alert("Please enter a weapon properties")
-      //   return
-      // }
-
       const newItem = {
         [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
         [WEAPON_KEYS.ATTACK_DAMAGE_STAT]: this.weaponsTempAttackModifier,
@@ -1767,11 +1766,6 @@ export default {
         return
       }
 
-      // if (this.equipmentTempDescription === '') {
-      //   alert("Please enter an equipment description")
-      //   return
-      // }
-
       const newItem = {
         [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
         [EQUIPMENT_KEYS.DESCRIPTION]: this.equipmentTempDescription
@@ -1801,11 +1795,6 @@ export default {
         return
       }
 
-      // if (this.treasureTempDescription === '') {
-      //   alert("Please enter an treasure description")
-      //   return
-      // }
-
       const newItem = {
         [EQUIPMENT_KEYS.AMOUNT]: this.treasureTempAmount,
         [EQUIPMENT_KEYS.DESCRIPTION]: this.treasureTempDescription
@@ -1820,7 +1809,7 @@ export default {
 
       this.store.dispatch("addCharacterStat", payload)
       
-      this.treasureTempAmount = ''
+      this.treasureTempName = ''
       this.treasureTempAmount = ''
       this.treasureTempDescription = ''
     },
