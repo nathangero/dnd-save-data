@@ -994,7 +994,7 @@
                       </ul>
                     </div>
                   </template>
-                  
+
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
                     <ul class="list">
                       <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
@@ -1048,6 +1048,32 @@
 
             <collapse-transition dimension="height">
               <div v-if="isShowingSpellSlots">
+                <!-- Add new -->
+                <template v-if="isEditingSpellSlots">
+                  <div class="container-inputs">
+                    <ul class="list-inputs">
+                      <li style="margin-top: 10px;">
+                        <label class="stat-label">Level:</label>
+                        <select class="picker" v-model="spellSlotTempLevel">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label class="stat-label" for="equipment-input"># of slots:</label>
+                        <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
+                      </li>
+                    </ul>
+                  </div>
+
+                  <br>
+                  <button class="button-add" @click="onPressAddSpellSlot">Add</button>
+
+                  <ul class="list">
+                    <hr class="list-divider">
+                  </ul>
+                </template>
+
                 <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELL_SLOTS]) > 0">
                   <div>
                     <ul class="list">
@@ -1085,28 +1111,6 @@
                       </li>
                     </ul>
                   </div>
-                </template>
-
-                <!-- Add new -->
-                <template v-if="isEditingSpellSlots">
-                  <div class="container-inputs">
-                    <ul class="list-inputs">
-                      <li style="margin-top: 10px;">
-                        <label class="stat-label">Level:</label>
-                        <select class="picker" v-model="spellSlotTempLevel">
-                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
-                        </select>
-                      </li>
-
-                      <li>
-                        <label class="stat-label" for="equipment-input"># of slots:</label>
-                        <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
-                      </li>
-                    </ul>
-                  </div>
-
-                  <br>
-                  <button class="button-add" @click="onPressAddSpellSlot">Add</button>
                 </template>
               </div>
             </collapse-transition>
