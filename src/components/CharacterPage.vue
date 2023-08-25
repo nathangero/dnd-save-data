@@ -447,6 +447,39 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingFeatures">
+                  
+                  <!-- Add new -->
+                  <template v-if="isEditingFeaturesTraits">
+                    <div>
+                      <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
+                      <div class="container-inputs">
+                        <ul class="list-inputs">
+                          <li style="margin-top: 10px;">
+                            <label>Type:</label>
+                            <select class="picker" v-model="featuresTempType">
+                              <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                            </select>
+                          </li>
+
+                          <li>
+                            <label for="features-input"> # of Uses:</label>
+                            <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
+                          </li>
+                        </ul>
+                      </div>
+                      
+                      <br>
+                      <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button class="button-add" @click="onPressAddFeatures">Add</button>
+
+                      <ul class="list">
+                        <hr class="list-divider">
+                      </ul>
+                      
+                    </div>
+                  </template>
+
                   <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.FEATURES]) > 0">
                     <div>
                       <ul class="list">
@@ -478,13 +511,6 @@
                             </div>
 
                             <div class="container-edit">
-                              <div>
-                                
-                              </div>
-                              <div>
-                                
-                              </div>
-                              <br>
                               <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
                               <div class="buttons-delete-update">
                                 <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
@@ -497,33 +523,6 @@
                         </li>
                       </ul>
                     </div>
-                  </template>
-
-                  <!-- Add new -->
-                  <template v-if="isEditingFeaturesTraits">
-                    <div>
-                      <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li style="margin-top: 10px;">
-                            <label>Type:</label>
-                            <select class="picker" v-model="featuresTempType">
-                              <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                            </select>
-                          </li>
-
-                          <li>
-                            <label for="features-input"> # of Uses:</label>
-                            <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
-                          </li>
-                        </ul>
-                      </div>
-                      
-                      <br>
-                      <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
-                      <br>
-                      <button class="button-add" @click="onPressAddFeatures">Add</button>
-                    </div>         
                   </template>
                 </div>
               </collapse-transition>
