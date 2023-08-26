@@ -15,7 +15,7 @@ const routes = [
     component: LoginScreen
   },
   {
-    path: ROUTER_PATHS.DASHBOARD,
+    path: ROUTER_PATHS.CHARACTERS,
     name: ROUTER_NAMES.DASHBOARD,
     component: DashBoard
   },

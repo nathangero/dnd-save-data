@@ -144,7 +144,7 @@ export default {
 
             setTimeout(() => {
               this.isLoggingIn = false
-              this.$router.push(ROUTER_PATHS.DASHBOARD)
+              this.$router.push(ROUTER_PATHS.CHARACTERS)
             }, 1500)
           }).catch(() => {
             this.isLoggingIn = false
