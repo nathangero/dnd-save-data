@@ -1,3 +1,7 @@
+.character-to-view {
+  margin-top: 80px;
+}
+
 h2 {
   padding-top: 50px;
 }
@@ -328,7 +332,77 @@ input[type="number"] {
   flex: 1;
 }
 
+.navigation-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.jump-to-menu {
+  position: absolute;
+  top: 100%; /* Position the menu below the button */
+  left: 0;
+  background-color: white;
+  border-bottom: 3px solid dimgray; /* Add a border to the bottom */
+  border-right: 3px solid dimgray; /* Add a border to the right */
+  border-radius: 4px;
+  display: none; /* Hide the menu by default */
+  max-height: 340px; /* Adjust the height as needed */
+  overflow-y: auto;
+}
+
+.jump-to-menu a {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  font-weight: bold;
+  font-size: larger;
+  transition: background-color 0.2s ease;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.jump-to-menu li {
+  border-bottom: 1px solid #ccc; /* Add a border below each link */
+
+}
+
+.jump-to-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+.jump-to-menu a:last-child {
+  border-bottom: none; /* Remove the border on the last link */
+}
+
+.show-menu {
+  display: block; /* Show the menu when the button is clicked */
+}
+
+
+.button-jump-to {
+  /* position: fixed;
+  top: 10px;
+  left: 10px; */
+  padding: 10px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  margin: 5px;
+}
+
 .button-close {
+  /* position: fixed;
+  top: 10px;
+  right: 10px; */
   padding: 10px;
   background-color: dimgray;
   border: none;

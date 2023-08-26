@@ -201,9 +201,9 @@ export default {
 
 
 
-.body {
-  height: 100dvh;
-}
+/* .body { */
+  /* height: 100dvh; */
+/* } */
 
 .content {
   height: 100%;

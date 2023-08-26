@@ -117,7 +117,7 @@ const store = createStore({
     },
     addCharacterSpell(state, payload) {
       const { charId, levelKey, spellName, newSpell, newEntry, statRef } = payload
-      // console.info('payload:', payload)
+      console.info('payload:', payload)
 
       return new Promise((resolve, reject) => {
         if (levelKey === undefined || levelKey === '' || spellName === undefined || spellName === '' || newEntry === undefined || newEntry === '') {
@@ -126,13 +126,20 @@ const store = createStore({
           return
         }
 
-        if (levelKey in this.state.user.characters[charId][statRef]) {
-          // If there's a level key already in the dictionary. Prevents overwritting the whole level of spells
-          this.state.user.characters[charId][statRef][levelKey][spellName] = newSpell
+        if (!(statRef in this.state.user.characters[charId])) { // check if spells exist for character
+          let levelDict = { [levelKey]: newEntry}
+          this.state.user.characters[charId][statRef] = levelDict
+          
         } else {
-          // If there's a new entry for the level key. 
-          this.state.user.characters[charId][statRef][levelKey] = newEntry
-        }  
+          if (levelKey in this.state.user.characters[charId][statRef]) {
+            // If there's a level key already in the dictionary. Prevents overwritting the whole level of spells
+            this.state.user.characters[charId][statRef][levelKey][spellName] = newSpell
+          } else {
+            // If there's a new entry for the level key. 
+            this.state.user.characters[charId][statRef][levelKey] = newEntry
+          }   
+        }
+             
         
         const itemToAdd = {
           [spellName]: newSpell
