@@ -2,16 +2,79 @@
   <div class="body">
     <transition name="slide-up" mode="out-in">
       <div v-if="!isShowingBackup">
-        <div class="container-button-close">
-          <div class="spacer"></div>
+        <div class="navigation-bar">
+          <button class="button-jump-to" @click="openJumpToMenu">Jump to</button>
+          <template v-if="isShowingJumpToMenu">
+            <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
+              <ul class="list-inputs">
+                <li>
+                  <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('character-info')">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('base-stats')">{{ CHARACTER_SECTIONS.BASE_STATS }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('saving-throws')">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('skills')">{{ CHARACTER_SECTIONS.SKILLS }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('features-traits')">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('weapons')">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('equipment')">{{ CHARACTER_SECTIONS.EQUIPMENT }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('treasure')">{{ CHARACTER_SECTIONS.TREASURES }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('languages')">{{ CHARACTER_SECTIONS.LANGUAGES }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('proficiences')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('spell-slots')">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('spell-casting')">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</a>
+                </li>
+
+                <li>
+                  <a @click="scrollToSection('save-delete-buttons')">Backup Character</a>
+                </li>
+              </ul>
+
+              <!-- Add more links for other sections -->
+            </div>
+          </template>
           <button class="button-close" @click="closeModal">Close</button>
         </div>
 
         <div class="character-to-view" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''" :class="{ 'disabled-page': isPopupOpen() }">
-          <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
 
           <!-- NOT EDITABLE -->
           <div id="character-background">
+            <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
             <ul class="stat-list">
               <li>
                 <label class="character-info">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
@@ -1363,6 +1426,7 @@ import LoadingSpinner from './LoadingSpinner.vue';
 import CharacterSummary from './CharacterSummary.vue';
 import CharacterBackup from './CharacterBackup.vue';
 import Character from '@/models/character'
+import { CHARACTER_SECTIONS } from "@/enums/character-sections"
 import { CONST_NUMS } from "@/enums/constant-numbers"
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
@@ -1441,6 +1505,8 @@ export default {
       isShowingSpellSlots: true,
       isShowingLoader: false,
       isShowingBackup: false,
+      isShowingJumpToMenu: false,
+      CHARACTER_SECTIONS: CHARACTER_SECTIONS,
       CONST_NUMS: CONST_NUMS,
       LOADING_TEXT: LOADING_TEXT,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
@@ -1650,6 +1716,18 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close')
+    },
+    openJumpToMenu() {
+      this.isShowingJumpToMenu = !this.isShowingJumpToMenu
+    },
+    scrollToSection(sectionId) {
+      this.isShowingJumpToMenu = false; // Close the jump-to menu after clicking a link
+      const sectionElement = document.getElementById(sectionId);
+      if (sectionElement) {
+        const sectionTop = sectionElement.getBoundingClientRect().top;
+        const adjustedScrollTop = sectionTop + window.scrollY - 80;
+        window.scrollTo({ top: adjustedScrollTop, behavior: 'smooth' });
+      }
     },
     onPressSaveBackup() {
       const payload = {
