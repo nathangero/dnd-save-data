@@ -12,13 +12,12 @@
     border-radius: 10px; /* Rounded corners */
     text-align: left;
     margin-bottom: 10px;
-    padding: 5px;
+    padding: 5px 25px;
   }
   
   .summary-name {
     font-weight: bold;
     font-size: larger;
-    margin-right: 20px;
   }
   
   .summary-amount{
