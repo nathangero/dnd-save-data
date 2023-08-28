@@ -293,6 +293,35 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingFeatures">
+            <!-- Add new -->
+            <div>
+              <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
+              <div class="container-inputs">
+                <ul class="list-inputs">
+                  <li style="margin-top: 10px;">
+                    <label class="stat-label">Type:</label>
+                    <select class="picker" v-model="featuresTempType">
+                      <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                    </select>
+                  </li>
+
+                  <li>
+                    <label class="stat-label" for="features-input"> # of Uses:</label>
+                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
+                  </li>
+                </ul>
+              </div>
+              
+              <br>
+              <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+              <br>
+              <button class="button-add" @click="onPressAddFeatures">Add</button>
+
+              <ul class="list">
+                <hr class="list-divider">
+              </ul>
+            </div>
+
             <template v-if="getDictionarySize(featuresTraits) > 0">
               <div>
                 <ul class="list">
@@ -330,32 +359,7 @@
                   </li>
                 </ul>
               </div>
-            </template>
-
-            <!-- Add new -->
-            <div>
-              <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label">Type:</label>
-                    <select class="picker" v-model="featuresTempType">
-                      <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                    </select>
-                  </li>
-
-                  <li>
-                    <label class="stat-label" for="features-input"> # of Uses:</label>
-                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
-                  </li>
-                </ul>
-              </div>
-              
-              <br>
-              <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddFeatures">Add</button>
-            </div>      
+            </template>   
           </div>
         </collapse-transition>
         
@@ -383,6 +387,55 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingWeapons">
+            <!-- Add new -->
+            <div>
+              <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
+
+              <div class="container-inputs">
+                <ul class="list-inputs">
+                  <li>
+                    <label class="stat-label" for="equipment-input">Amount:</label>
+                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="weaponTempAmount"> 
+                  </li>
+
+                  <li style="margin-top: 10px;">
+                    <label class="stat-label" style="margin-right: 10px;">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                    <select class="picker" v-model="weaponsTempAttackModifier">
+                      <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                    </select>
+                  </li>
+                  
+                  <li style="margin-top: 10px;">
+                    <label class="stat-label" for="equipment-input">Die Type:</label>
+                    <select class="picker" v-model="weaponTempDieType">
+                      <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                    </select>
+                  </li>
+
+                  <li style="margin-top: 10px;">
+                    <label class="stat-label" for="equipment-input">Category:</label>
+                    <select class="picker" v-model="weaponTempCategory">
+                      <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                    </select>
+                  </li>
+
+                  <li style="margin-top: 10px;">
+                    <label class="stat-label" for="equipment-input">Proficient:</label>
+                    <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                  </li>
+                </ul>
+              </div>
+
+              <br>
+              <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
+              <br>
+              <button class="button-add" @click="onPressAddWeapon">Add</button>
+
+              <ul class="list">
+                <hr class="list-divider">
+              </ul>
+            </div>
+
             <template v-if="getDictionarySize(weapons) > 0">
               <div>
                 <ul class="list">
@@ -477,51 +530,6 @@
                 </ul>
               </div>
             </template>
-
-            <!-- Add new -->
-            <div>
-              <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
-
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li>
-                    <label class="stat-label" for="equipment-input">Amount:</label>
-                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="weaponTempAmount"> 
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" style="margin-right: 10px;">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                    <select class="picker" v-model="weaponsTempAttackModifier">
-                      <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                    </select>
-                  </li>
-                  
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" for="equipment-input">Die Type:</label>
-                    <select class="picker" v-model="weaponTempDieType">
-                      <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                    </select>
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" for="equipment-input">Category:</label>
-                    <select class="picker" v-model="weaponTempCategory">
-                      <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
-                    </select>
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" for="equipment-input">Proficient:</label>
-                    <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
-                  </li>
-                </ul>
-              </div>
-
-              <br>
-              <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddWeapon">Add</button>
-            </div>
           </div>
         </collapse-transition>
       </div>
@@ -552,6 +560,23 @@
               <label class="item-name">Gold:</label>
               <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="gold" class="input-stats" inputmode="numeric" required>
             </ul>
+
+            <!-- Add new -->
+            <div>
+              <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
+              <div>
+                <label class="stat-label" for="equipment-input">Amount:</label>
+                <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="equipmentTempAmount"> 
+              </div>
+              <br>
+              <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+              <br>
+              <button class="button-add" @click="onPressAddEquipment">Add</button>
+
+              <ul class="list">
+                <hr class="list-divider">
+              </ul>
+            </div>
 
             <template v-if="getDictionarySize(equipment) > 0">
               <div>
@@ -584,19 +609,6 @@
                 </ul>
               </div>
             </template>
-
-            <!-- Add new -->
-            <div>
-              <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
-              <div>
-                <label class="stat-label" for="equipment-input">Amount:</label>
-                <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="equipmentTempAmount"> 
-              </div>
-              <br>
-              <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddEquipment">Add</button>
-            </div>
           </div>
         </collapse-transition>
       </div>
@@ -623,6 +635,23 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingLanguages">
+            <!-- Add new -->
+            <div class="language-container">
+              <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
+              <div style="margin-top: 10px;">
+                <label class="stat-label" style="margin-right: 10px;">Proficiency: </label>
+                <select class="picker" v-model="languagesTempProficiency">
+                  <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                </select>
+              </div>
+              <br>
+              <button class="button-add" @click="onPressAddLanguage">Add</button>
+
+              <ul class="list">
+                <hr class="list-divider">
+              </ul>
+            </div>
+
             <template v-if="getDictionarySize(languages) > 0">
               <div>
                 <ul>
@@ -655,19 +684,6 @@
                 </ul>
               </div>
             </template>
-
-            <!-- Add new -->
-            <div class="language-container">
-              <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
-              <div style="margin-top: 10px;">
-                <label class="stat-label" style="margin-right: 10px;">Proficiency: </label>
-                <select class="picker" v-model="languagesTempProficiency">
-                  <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                </select>
-              </div>
-              <br>
-              <button class="button-add" @click="onPressAddLanguage">Add</button>
-            </div>
           </div>
         </collapse-transition>
         
@@ -695,6 +711,19 @@
         
         <collapse-transition dimension="height">
           <div v-if="isShowingProficiencies">
+            <!-- Add new -->
+            <div class="proficiency-container">
+              <input class="item-input" style="margin-bottom: 20px" v-model="proficiencyTempName" placeholder="New proficiency name"> 
+              <br>
+              <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
+              <br>
+              <button class="button-add" @click="onPressAddProficiency">Add</button>
+
+              <ul class="list">
+                <hr class="list-divider">
+              </ul>
+            </div>
+
             <template v-if="getDictionarySize(proficiencies) > 0">
               <div>
                 <ul class="list">
@@ -721,15 +750,6 @@
                 </ul>
               </div>
             </template>
-
-            <!-- Add new -->
-            <div class="proficiency-container">
-              <input class="item-input" style="margin-bottom: 20px" v-model="proficiencyTempName" placeholder="New proficiency name"> 
-              <br>
-              <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddProficiency">Add</button>
-            </div>
           </div>
         </collapse-transition>
       </div>
@@ -756,6 +776,32 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingSpellSlots">
+            <!-- Add new -->
+            <div>
+              <div class="container-inputs">
+                <ul class="list-inputs">
+                  <li style="margin-top: 10px;">
+                    <label class="stat-label">Level:</label>
+                    <select class="picker" v-model="spellSlotTempLevel">
+                      <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                    </select>
+                  </li>
+
+                  <li>
+                    <label class="stat-label" for="equipment-input"># of slots:</label>
+                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
+                  </li>
+                </ul>
+              </div>
+
+              <br>
+              <button class="button-add" @click="onPressAddSpellSlot">Add</button>
+
+              <ul class="list">
+                <hr class="list-divider">
+              </ul>
+            </div>
+
             <template v-if="getDictionarySize(spellSlots) > 0">
               <div>
                 <ul class="list">
@@ -788,28 +834,6 @@
                 </ul>
               </div>
             </template>
-
-            <!-- Add new -->
-            <div>
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label">Level:</label>
-                    <select class="picker" v-model="spellSlotTempLevel">
-                      <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
-                    </select>
-                  </li>
-
-                  <li>
-                    <label class="stat-label" for="equipment-input"># of slots:</label>
-                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
-                  </li>
-                </ul>
-              </div>
-
-              <br>
-              <button class="button-add" @click="onPressAddSpellSlot">Add</button>
-            </div>
           </div>
         </collapse-transition>
       </div>
@@ -849,6 +873,49 @@
                   <label class="stat-label">Spell Saving DC: </label>
                   <label class="stat-label">{{ getStatBonusSign(calculateSpellSavingDc(proficiencyBonus, getStatModFromKey(spellCastStat))) }}</label>
                 </li>
+              </ul>
+            </div>
+
+            <!-- Add new -->
+            <div>
+              <input class="item-input" style="margin-bottom: 10px;" type="text" v-model="spellTempName" placeholder="New spell name"> 
+              <div class="container-inputs">
+                <ul class="list-inputs">
+                  <li>
+                    <label class="stat-label" for="spells-level">Level:</label>
+                    <select class="picker" v-model="spellTempLevel">
+                      <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
+                    </select>
+                  </li>
+                  
+                  <li>
+                    <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
+                    <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+                  </li>
+
+                  <li style="margin-top: 20px">
+                    <label class="stat-label" style="margin: 0;">Duration:</label>
+                    <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+
+                    <select class="picker" v-model="spellTempDurationType">
+                      <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                    </select>
+                  </li>
+
+                  <li>
+                    <label class="stat-label" for="spells-range">Range (in feet):</label>
+                    <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
+                  </li>
+                </ul>
+              </div>
+
+              <br>
+              <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+              <br>
+              <button class="button-add" @click="onPressAddSpell">Add</button>
+
+              <ul class="list">
+                <hr class="list-divider">
               </ul>
             </div>
 
@@ -922,43 +989,6 @@
                 </ul>
               </div>
             </template>
-
-            <!-- Add new -->
-            <input class="item-input" style="margin-bottom: 10px;" type="text" v-model="spellTempName" placeholder="New spell name"> 
-            <div class="container-inputs">
-              <ul class="list-inputs">
-                <li>
-                  <label class="stat-label" for="spells-level">Level:</label>
-                  <select class="picker" v-model="spellTempLevel">
-                    <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
-                  </select>
-                </li>
-                
-                <li>
-                  <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
-                  <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
-                </li>
-
-                <li style="margin-top: 20px">
-                  <label class="stat-label" style="margin: 0;">Duration:</label>
-                  <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
-
-                  <select class="picker" v-model="spellTempDurationType">
-                    <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
-                  </select>
-                </li>
-
-                <li>
-                  <label class="stat-label" for="spells-range">Range (in feet):</label>
-                  <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
-                </li>
-              </ul>
-            </div>
-
-            <br>
-            <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
-            <br>
-            <button class="button-add" @click="onPressAddSpell">Add</button>
           </div>
         </collapse-transition>
       </div>
