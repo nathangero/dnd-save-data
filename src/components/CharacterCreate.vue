@@ -195,17 +195,18 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingBaseStats">
-            <div class="container-inputs">
-              <ul class="list-inputs" style="margin-right: 20px;">
-                <li v-for="(stat, key) in STAT_KEYS" :key="key">
+            <ul class="stat-list">
+              <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                <div class="stat-group">
                   <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                  <div class="spacer"></div>
                   <div style="margin-left: 10px;">
                     <input type="number" id="stats-label" v-model="stats[stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
                     <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(stats[stat][STAT_VALUES_KEYS.MOD]) }}</label>
                   </div>
-                </li>
-              </ul>
-            </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </collapse-transition>
       </div>

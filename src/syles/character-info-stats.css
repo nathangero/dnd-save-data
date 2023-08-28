@@ -197,7 +197,7 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  width: 65%;
+  width: 75%;
   margin: 0 auto;
   padding-left: 0;
 }
