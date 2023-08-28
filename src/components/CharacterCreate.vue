@@ -58,7 +58,7 @@
             </li>
 
             <li>
-              <a @click="scrollToSection('save-delete-buttons')">Backup Character</a>
+              <a @click="scrollToSection('create-character')">Create Character</a>
             </li>
           </ul>
 
@@ -995,7 +995,7 @@
     </div>
 
     <br>
-    <button class="button-create-character" @click="createCharacter" :class="{ 'disabled-button': !checkIfCreateCharacterButtonIsDisabled() }">Create Character</button>
+    <button id="create-character" class="button-create-character" @click="createCharacter" :class="{ 'disabled-button': !checkIfCreateCharacterButtonIsDisabled() }">Create Character</button>
 
   </div>
 </template>
@@ -1472,7 +1472,7 @@ export default {
         return
       }
 
-      if (this.spellTempDuration === '' || this.spellTempDuration <= 0) {
+      if (this.spellTempDuration === '' || this.spellTempDuration < 0) {
         alert("Please enter a Casting Duration")
         return
       }
