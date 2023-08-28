@@ -67,32 +67,33 @@
       </template>
       <button class="button-close" @click="closeModal">Close</button>
     </div>
-    <h1>New Character</h1>
+
     <div class="character-to-view">
       <div id="character-background">
         <div class="input-container">
+          <h1>New Character</h1>
           <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
           <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
           <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
 
           <div class="container-inputs">
             <ul class="list-inputs">
-            <li>
-              <label for="character-alignment" class="stat-label" style="margin-right: 10px;">Alignment:</label>
-              <select class="picker" v-model="characterAlignment">
-                <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
-              </select>
-            </li>
+              <li style="padding-top: 10px">
+                <label for="character-alignment" class="stat-label" style="margin-right: 10px;">Alignment:</label>
+                <select class="picker" v-model="characterAlignment">
+                  <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
+                </select>
+              </li>
 
-            <li style="margin-top: 20px;">
-              <label for="character-class" class="stat-label">Class:</label>
-              <select class="picker" v-model="characterClass">
-                <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
-              </select>
-            </li>
-          </ul>
+              <li style="margin-top: 20px;">
+                <label for="character-class" class="stat-label">Class:</label>
+                <select class="picker" v-model="characterClass">
+                  <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
+                </select>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
       </div>
       
       <br>
@@ -105,57 +106,81 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingCharacterInfo">
-            <div class="container-inputs">
-              <ul class="list-inputs">
-                <li>
+            <ul class="stat-list">
+              <li>
+                <div class="stat-group">
                   <label for="stats-level" class="stat-label">Starting level:</label>
+                  <div class="spacer"></div>
                   <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
-                </li>
+                </div>
+              </li>
 
-                <li>
+              <li>
+                <div class="stat-group">
                   <label for="stats-armor-class" class="stat-label">Armor Class: </label>
+                  <div class="spacer"></div>
                   <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
-                </li>
+                </div>
+              </li>
 
-                <li style="margin-top: 10px; margin-bottom: 10px;">
+              <li style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="stat-group">
                   <label for="stats-initiative" class="stat-label">Initiative: </label>
+                  <div class="spacer"></div>
                   <label class="stat-label">{{ getStatBonusSign(stats[STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD]) }}</label>
-                </li>
-                
-                <li>
+                </div>
+              </li>
+
+              <li>
+                <div class="stat-group">
                   <label for="stats-speed" class="stat-label">Speed (ft): </label>
+                  <div class="spacer"></div>
                   <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
-                </li>
+                </div>
+              </li>
 
-                <li>
+              <li>
+                <div class="stat-group">
                   <label for="stats-hp" class="stat-label">Hit Points (HP):</label>
+                  <div class="spacer"></div>
                   <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
-                </li>
+                </div>
+              </li>
 
-                <li style="margin-top: 10px;">
+              <li style="margin-top: 10px;">
+                <div class="stat-group">
                   <label class="stat-label">Hit Die Type: </label>
+                  <div class="spacer"></div>
                   <select class="picker" v-model="hp[HP_KEYS.DIE]">
                     <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                   </select>
-                </li>
+                </div>
+              </li>
 
-                <li>
+              <li>
+                <div class="stat-group">
                   <label for="stats-hit-die" class="stat-label"># of Hit Die: </label>
+                  <div class="spacer"></div>
                   <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
-                </li>
+                </div>
+              </li>
 
-                <li>
+              <li style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="stat-group">
                   <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
-                  <input type="number" id="stats-proficiency-bonus" v-model="proficiencyBonus" class="input-stats" inputmode="numeric" required>
-                </li>
+                  <div class="spacer"></div>
+                  <label class="stat-value">{{ getStatBonusSign(proficiencyBonus) }}</label>
+                </div>
+              </li>
 
-                <li style="margin-top: 10px;">
+              <li style="margin-top: 10px;">
+                <div class="stat-group">
                   <label class="stat-label">Passive Perception: </label>
+                  <div class="spacer"></div>
                   <label class="stat-value">{{ getStatBonusSign(calculatePassivePerception(stats[STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD])) }}</label>
-                </li>
-
-              </ul>
-            </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </collapse-transition>
       </div>
@@ -1110,10 +1135,10 @@ export default {
       characterRace: '',
       level: '',
       characterArmor: '',
-      initiative: '0',
+      initiative: 0,
       characterSpeed: '',
-      proficiencyBonus: '',
-      passivePerception: '0',
+      proficiencyBonus: 0,
+      passivePerception: 0,
       hitDieType: '', // d10
       hitDieAmount: '', // 3
       equipmentTempName: '',
@@ -1159,6 +1184,19 @@ export default {
     },
     'hp.dieAmountMax': function(newValue) {
       this.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
+    },
+    'level': function(newValue) {
+      if (newValue <= 4) {
+        this.proficiencyBonus = 2
+      } else if (newValue <= 8) {
+        this.proficiencyBonus = 3
+      } else if (newValue <= 12) {
+        this.proficiencyBonus = 4
+      } else if (newValue <= 16) {
+        this.proficiencyBonus = 5
+      } else {
+        this.proficiencyBonus = 6
+      }
     },
     'spellTempDurationType': function(newValue) {
       if (newValue === SPELL_CASTING_DURATION_TYPES.INSTANT) {
