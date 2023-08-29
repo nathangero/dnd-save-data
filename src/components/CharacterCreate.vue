@@ -305,6 +305,13 @@
                     </select>
                   </li>
 
+                  <li style="margin-top: 10px;">
+                    <label class="stat-label">Action Type:</label>
+                    <select class="picker" v-model="featuresTempAction">
+                      <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                    </select>
+                  </li>
+
                   <li>
                     <label class="stat-label" for="features-input"> # of Uses:</label>
                     <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
@@ -1009,6 +1016,7 @@ import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
 import { FEATURES_KEYS } from '@/enums/dbKeys/features-keys.js'
 import { LANGUAGE_PROFICIENCY } from '@/enums/language-proficiency'
+import { ACTION_TYPES }  from '@/enums/action-types'
 import { FEATURES_TYPES } from '@/enums/features-types'
 import { ALIGNMENT_TYPES } from '@/enums/alignment-types'
 import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
@@ -1076,6 +1084,7 @@ export default {
       isShowingJumpToMenu: false,
       usersCharacters: {},
       CHARACTER_SECTIONS: CHARACTER_SECTIONS,
+      ACTION_TYPES: ACTION_TYPES,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       CHARACTER_KEYS: CHARACTER_KEYS,
       CLASS_NAMES: CLASS_NAMES,
@@ -1178,6 +1187,7 @@ export default {
       featuresTempName: '',
       featuresTempDescription: '',
       featuresTempType: '', // Racial, Class, Other
+      featuresTempAction: '', // Action, Bonus, Reaction, None
       featuresTempUseable: true,
       featuresTempUses: '',
       gold: '', 
@@ -1326,12 +1336,8 @@ export default {
         return
       }
 
-      // if (this.featuresTempDescription === '') {
-      //   alert("Please enter a feature description")
-      //   return
-      // }
-
       const newFeat = {
+        [FEATURES_KEYS.ACTION]: this.featuresTempAction,
         [FEATURES_KEYS.DESCRIPTION]: this.featuresTempDescription,
         [FEATURES_KEYS.TYPE]: this.featuresTempType,
         [FEATURES_KEYS.USES]: this.featuresTempUses
@@ -1341,6 +1347,7 @@ export default {
       this.featuresTraits[this.featuresTempName] = newFeat
 
       this.featuresTempName = ''
+      this.featuresTempAction = ''
       this.featuresTempDescription = ''
       this.featuresTempType = ''
       this.featuresTempUses = ''
