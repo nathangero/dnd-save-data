@@ -1011,7 +1011,7 @@
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import Character from '@/models/character'
-import SavingThrow from '@/models/saving-throws'
+import SavingThrows from '@/models/saving-throws'
 import Skill from '@/models/skill'
 import Stat from '@/models/stat'
 import { CHARACTER_SECTIONS } from "@/enums/character-sections"
@@ -1145,12 +1145,12 @@ export default {
         [STAT_KEYS.CHARISMA]: new Stat(),
       },
       savingThrows: {
-        [STAT_KEYS.STRENGTH]: new SavingThrow(),
-        [STAT_KEYS.DEXTERITY]: new SavingThrow(),
-        [STAT_KEYS.CONSTITUTION]: new SavingThrow(),
-        [STAT_KEYS.INTELLIGENCE]: new SavingThrow(),
-        [STAT_KEYS.WISDOM]: new SavingThrow(),
-        [STAT_KEYS.CHARISMA]: new SavingThrow(),
+        [STAT_KEYS.STRENGTH]: new SavingThrows(),
+        [STAT_KEYS.DEXTERITY]: new SavingThrows(),
+        [STAT_KEYS.CONSTITUTION]: new SavingThrows(),
+        [STAT_KEYS.INTELLIGENCE]: new SavingThrows(),
+        [STAT_KEYS.WISDOM]: new SavingThrows(),
+        [STAT_KEYS.CHARISMA]: new SavingThrows(),
       },
       skills: {
         [SKILL_KEYS.ACROBATICS]: new Skill(),

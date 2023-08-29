@@ -122,28 +122,28 @@
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Level:</label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.LEVEL] }}</label>
+                          <label class="stat-value">{{ characterToView.level }}</label>
                         </div>
                       </li>
 
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Armor Class: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.ARMOR] }}</label>
+                          <label class="stat-value">{{ characterToView.armor }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Initiative: </label>
-                          <label class="stat-value">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
+                          <label class="stat-value">{{ getStatBonusSign(characterToView.stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Speed (ft): </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPEED] }}</label>
+                          <label class="stat-value">{{ characterToView.speed }}</label>
                         </div>
                       </li>
                       
@@ -178,49 +178,49 @@
                       <li>
                         <div class="stat-group">
                           <label class="stat-label" style="margin-right: 20px;">Death saves successes: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES] }}/3</label>
+                          <label class="stat-value">{{ characterToView.deathSaves.successes }}/3</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label" style="margin-right: 20px;">Death saves failures: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES] }}/3</label>
+                          <label class="stat-value">{{ characterToView.deathSaves.failures }}/3</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Proficiency Bonus: </label>
-                          <label class="stat-value">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+                          <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Passive Perception: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
+                          <label class="stat-value">{{ calculatePassivePerception() }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Spell Casting Stat: </label>
-                          <label class="stat-value">{{ STAT_NAMES[characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]] }}</label>
+                          <label class="stat-value">{{ STAT_NAMES[characterToView.spellCastStat] }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Spell Saving DC: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
+                          <label class="stat-value">{{ calculateSpellSavingDc(characterToView.stats[characterToView.spellCastStat].calculateMod()) }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Inspiration: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.INSPIRATION] }}</label>
+                          <label class="stat-value">{{ characterToView.inspiration }}</label>
                         </div>
                       </li>
                     </ul>
@@ -231,22 +231,22 @@
                       <ul class="list-inputs">
                         <li>
                           <label for="stats-level" class="stat-label"> Current Level:</label>
-                          <input type="number" id="stats-level" v-model="characterToView[CHARACTER_KEYS.LEVEL]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-level" v-model="characterToView.level" class="input-stats" inputmode="numeric" required>
                         </li>
 
                         <li>
                           <label for="stats-armor-class" class="stat-label">Armor Class: </label>
-                          <input type="number" id="stats-armor-class" v-model="characterToView[CHARACTER_KEYS.ARMOR]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-armor-class" v-model="characterToView.armor" class="input-stats" inputmode="numeric" required>
                         </li>
 
                         <li style="margin-top: 10px; margin-bottom: 10px;">
                           <label for="stats-initiative" class="stat-label">Initiative: </label>
-                          <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.INITIATIVE]) }}</label>
+                          <label class="stat-value">{{ getStatBonusSign(characterToView.stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                         </li>
                         
                         <li>
                           <label for="stats-speed" class="stat-label">Speed (ft): </label>
-                          <input type="number" id="stats-speed" v-model="characterToView[CHARACTER_KEYS.SPEED]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-speed" v-model="characterToView.speed" class="input-stats" inputmode="numeric" required>
                         </li>
 
                         <li>
@@ -283,22 +283,22 @@
                       
                         <li> 
                           <label for="death-saves-successes" class="stat-label">Death saves successes: </label>
-                          <input type="number" id="death-saves-successes" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="death-saves-successes" v-model="characterToView.deathSaves.successes" class="input-stats" inputmode="numeric" required>
                         </li>
                         
                         <li>
                           <label for="death-saves-failures" class="stat-label">Death saves failures: </label>
-                          <input type="number" id="death-saves-failures" v-model="characterToView[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="death-saves-failures" v-model="characterToView.deathSaves.failures" class="input-stats" inputmode="numeric" required>
                         </li>
 
                         <li>
                           <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
-                          <input type="number" id="stats-proficiency-bonus" v-model="characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]" class="input-stats" inputmode="numeric" required>
+                          <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
                         </li>
 
                         <li style="margin-top: 10px; margin-bottom: 10px;">
                           <label for="stats-proficiency-bonus" class="stat-label">Passive Perception: </label>
-                          <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]) }}</label>
+                          <label class="stat-label">{{ getStatBonusSign(calculatePassivePerception()) }}</label>
                         </li>
 
                         <li style="margin-top: 10px;">
@@ -310,12 +310,12 @@
                       
                         <li style="margin-top: 5px;">
                           <label class="stat-label">Spell Saving DC: </label>
-                          <label class="stat-label">{{ getStatBonusSign(characterToView[CHARACTER_KEYS.SPELL_SAVE_DC]) }}</label>
+                          <label class="stat-value">{{ calculateSpellSavingDc(characterToView.stats[characterToView.spellCastStat].calculateMod()) }}</label>
                         </li>
 
                         <li>
                           <label for="stats-proficiency-bonus" class="stat-label">Inspriation: </label>
-                          <input type="number" id="stats-inspiration" v-model="characterToView[CHARACTER_KEYS.INSPIRATION]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-inspiration" v-model="characterToView.inspiration" class="input-stats" inputmode="numeric" required>
                         </li>
                       </ul>
                     </div>
@@ -358,8 +358,8 @@
                       <li v-for="(stat, key) in STAT_KEYS" :key="key">
                         <div class="stat-group">
                           <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                          <label class="stat-value">{{ getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.VALUE) }}</label>
-                          <label class="stat-bonus">{{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                          <label class="stat-value">{{ characterToView.stats[stat].value }}</label>
+                          <label class="stat-bonus">{{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}</label>
                         </div>
                       </li>
                     </ul>
@@ -372,8 +372,8 @@
                         <li v-for="(stat, key) in STAT_KEYS" :key="key">
                           <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
                           <div style="margin-left: 10px;">
-                            <input type="number" id="stats-label" v-model="characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
-                            <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                            <input type="number" id="stats-label" v-model="characterToView.stats[stat].value" class="input-stats" inputmode="numeric" required>
+                            <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}</label>
                           </div>
                         </li>
                       </ul>
@@ -414,14 +414,14 @@
                   <ul class="stat-list">
                     <li v-for="(stat, key) in STAT_KEYS" :key="key">
                       <div class="stat-group">
-                        <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]" :disabled="!isEditingSavingThrows">
+                        <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
                         <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
-                        <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+                        <label class="stat-value" v-if="characterToView.savingThrows[stat].proficient">
+                          {{ getStatBonusSign(characterToView.stats[stat].calculateMod() + getProficiencyBonus()) }}
                         </label>
-                        <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD)) }}
+                        <label class="stat-value" v-if="!characterToView.savingThrows[stat].proficient">
+                          {{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}
                         </label>
                       </div>
                     </li>
@@ -463,14 +463,14 @@
                   <ul class="stat-list">
                     <li v-for="(skill, key) in SKILL_KEYS" :key="key">
                       <div class="stat-group">
-                        <input type="checkbox" class="checkbox" v-model="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]" :disabled="!isEditingSkills">
+                        <input type="checkbox" class="checkbox" v-model="characterToView.skills[skill].proficient" :disabled="!isEditingSkills">
                         <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
-                        <label class="stat-value" v-if="characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+                        <label class="stat-value" v-if="characterToView.skills[skill].proficient">
+                          {{ getStatBonusSign(characterToView.stats[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
                         </label>
-                        <label class="stat-value" v-if="!characterToView[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD)) }}
+                        <label class="stat-value" v-if="!characterToView.skills[skill].proficient">
+                          {{ getStatBonusSign(characterToView.stats[SKILL_MODS[skill]].calculateMod()) }}
                         </label>
                       </div>
                     </li>
@@ -1438,7 +1438,7 @@ import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
-import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
+import { SKILL_KEYS, SKILL_NAMES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER, SPELL_CASTING_DURATION_TYPES } from '@/enums/dbKeys/spell-casting-keys'
 import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
@@ -1525,6 +1525,7 @@ export default {
       STAT_NAMES: STAT_NAMES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
+      SKILL_MODS: SKILL_MODS,
       SPELL_CASTING_KEYS: SPELL_CASTING_KEYS,
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
@@ -1542,8 +1543,6 @@ export default {
       selectedBackupCharacter: new Character(),
       level: '',
       characterArmor: '',
-      initiative: '',
-      proficiencyBonus: '',
       characterSpeed: '',
       hitDieType: '', // d10
       hitDieAmount: '', // 3
@@ -1562,7 +1561,6 @@ export default {
       proficiencyTempDescription: '',
       spellAttackBonus: '',
       spellCastingStat: '', // e.g. intelligence
-      spellSavingDc: '',
       spellTempName: '',
       spellTempCastingTime: '',
       spellTempDescription: '',
@@ -1587,122 +1585,10 @@ export default {
   },
   mounted() {
     window.scrollTo(0,0);
-    this.characterToView = this.store.getters.getUserCharacters[this.characterToViewId]
-    // console.info('this.characterToView:', this.characterToView)
+    this.characterToView = Character.convertCharacterToObj(this.store.getters.getUserCharacters[this.characterToViewId])
+    console.info('this.characterToView:', this.characterToView)
   },
   watch: {
-    'characterToView.proficiencyBonus': function(newValue) {
-      const stat = this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]
-      const statMod = this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
-      this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(newValue, statMod)
-    },
-    'characterToView.stats.str.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS][STAT_VALUES_KEYS.MOD] = statMod
-      
-      // Adjust spell saving dc if necessary
-      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.STRENGTH) {
-        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
-      }
-    },
-    'characterToView.stats.dex.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.INITIATIVE] = statMod
-      
-      // Adjust spell saving dc if necessary
-      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.DEXTERITY) {
-        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
-      }
-    },
-    'characterToView.stats.con.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
-      
-      // Adjust spell saving dc if necessary
-      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.CONSTITUTION) {
-        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
-      }
-    },
-    'characterToView.stats.int.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ARCANA][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.HISTORY][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION][STAT_VALUES_KEYS.MOD] = statMod
-      
-      // Adjust spell saving dc if necessary
-      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.INTELLIGENCE) {
-        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
-      }
-    },
-    'characterToView.stats.wis.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INSIGHT][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION] = this.calculatePassivePerception(statMod)
-      
-      // Adjust spell saving dc if necessary
-      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.WISDOM) {
-        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
-      }
-    },
-    'characterToView.stats.cha.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.DECEPTION][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE][STAT_VALUES_KEYS.MOD] = statMod
-      this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION][STAT_VALUES_KEYS.MOD] = statMod
-      
-      // Adjust spell saving dc if necessary
-      if (this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT] == STAT_KEYS.CHARISMA) {
-        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const statMod = this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
-      }
-    },
-    'characterToView.spellCastStat': function(newValue) {
-      if (newValue === '') {
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = 0
-      } else {
-        const profBonus = this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]
-        const statMod = this.characterToView[CHARACTER_KEYS.STATS][newValue][STAT_VALUES_KEYS.MOD]
-        this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC] = this.calculateSpellSavingDc(profBonus, statMod)
-      }
-    },
     'spellTempDurationType': function(newValue) {
       if (newValue === SPELL_CASTING_DURATION_TYPES.INSTANT) {
         this.spellTempDuration = 0
@@ -1822,7 +1708,6 @@ export default {
         [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
         [WEAPON_KEYS.DIE]: this.weaponTempDieType,
         [WEAPON_KEYS.PROFICIENT]: this.weaponTempIsProficient,
-        // [WEAPON_KEYS.PROPERTIES]: this.weaponTempProperties,
       }
 
       const payload = {
@@ -2047,16 +1932,12 @@ export default {
     },
     onPressUpdateCharacterInfo() {
       const info = {
-        [CHARACTER_KEYS.LEVEL]: this.characterToView[CHARACTER_KEYS.LEVEL],
-        [CHARACTER_KEYS.ARMOR]: this.characterToView[CHARACTER_KEYS.ARMOR],
-        [CHARACTER_KEYS.INITIATIVE]: this.characterToView[CHARACTER_KEYS.INITIATIVE],
-        [CHARACTER_KEYS.INSPIRATION]: this.characterToView[CHARACTER_KEYS.INSPIRATION],
-        [CHARACTER_KEYS.SPEED]: this.characterToView[CHARACTER_KEYS.SPEED],
+        [CHARACTER_KEYS.LEVEL]: this.characterToView.level,
+        [CHARACTER_KEYS.ARMOR]: this.characterToView.armor,
+        [CHARACTER_KEYS.INSPIRATION]: this.characterToView.inspiration,
+        [CHARACTER_KEYS.SPEED]: this.characterToView.speed,
         [CHARACTER_KEYS.HP]: this.characterToView[CHARACTER_KEYS.HP],
-        [CHARACTER_KEYS.PROFICIENCY_BONUS]: this.characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS],
-        [CHARACTER_KEYS.PASSIVE_PERCEPTION]: this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION],
         [CHARACTER_KEYS.SPELL_CAST_STAT]: this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT],
-        [CHARACTER_KEYS.SPELL_SAVE_DC]: this.characterToView[CHARACTER_KEYS.SPELL_SAVE_DC],
       }
 
       const payload = {
@@ -2322,17 +2203,15 @@ export default {
         })
       }
     },
-    calculatePassivePerception(mod) {
-      return 10 + mod
+    calculatePassivePerception() {
+      const result = 10 + this.characterToView.stats[STAT_KEYS.WISDOM].calculateMod()
+      return result
     },
     calculateBaseStatBonus(stat) {
       return (stat - 10) / 2
     },
-    calculateSpellSavingDc(profBonus, mod) {
-      if (profBonus === '') {
-        return 8 + mod
-      }
-      return 8 + profBonus + mod
+    calculateSpellSavingDc(mod) {
+      return 8 + this.getProficiencyBonus() + mod
     },
     getDictionarySize(dict) {
       if (dict) {
@@ -2358,6 +2237,19 @@ export default {
         return stat // the negative will already be apart of the number
       } else {
         return "+" + stat
+      }
+    },
+    getProficiencyBonus() {
+      if (this.characterToView.level <= 4) {
+        return 2
+      } else if (this.characterToView.level <= 8) {
+        return 3
+      } else if (this.characterToView.level <= 12) {
+        return 4
+      } else if (this.characterToView.level <= 16) {
+        return 5
+      } else {
+        return 6
       }
     },
     getCharacterBackups() {
