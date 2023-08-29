@@ -227,98 +227,147 @@
                   </div>
 
                   <div v-if="isEditingCharInfo">
-                    <div class="container-inputs">
-                      <ul class="list-inputs">
-                        <li>
+                    <ul class="stat-list">
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-level" class="stat-label"> Current Level:</label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-level" v-model="characterToView.level" class="input-stats" inputmode="numeric" required>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li>
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-armor-class" class="stat-label">Armor Class: </label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-armor-class" v-model="characterToView.armor" class="input-stats" inputmode="numeric" required>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li style="margin-top: 10px; margin-bottom: 10px;">
+                      <li style="margin-top: 10px; margin-bottom: 10px;">
+                        <div class="stat-group">
                           <label for="stats-initiative" class="stat-label">Initiative: </label>
+                          <div class="spacer"></div>
                           <label class="stat-value">{{ getStatBonusSign(characterToView.stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
-                        </li>
-                        
-                        <li>
+                        </div>
+                      </li>
+                      
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-speed" class="stat-label">Speed (ft): </label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-speed" v-model="characterToView.speed" class="input-stats" inputmode="numeric" required>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li>
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-hp" class="stat-label">Hit Points - Current:</label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li>
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-hp" class="stat-label">Hit Points - Max:</label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li>
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-hp" class="stat-label">Hit Points - Temp:</label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li style="margin-top: 10px;">
+                      <li style="margin-top: 10px;">
+                        <div class="stat-group">
                           <label class="stat-label">Hit Die Type: </label>
                           <select class="picker" v-model="characterToView.hp[HP_KEYS.DIE]">
+                          <div class="spacer"></div>
                             <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                           </select>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li>
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-hit-die" class="stat-label">Current # of Hit Die: </label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li>
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-hit-die" class="stat-label">Max # of Hit Die: </label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
-                        </li>
-                      
-                        <li> 
+                        </div>
+                      </li>
+                    
+                      <li>
+                        <div class="stat-group">
                           <label for="death-saves-successes" class="stat-label">Death saves successes: </label>
+                          <div class="spacer"></div>
                           <input type="number" id="death-saves-successes" v-model="characterToView.deathSaves.successes" class="input-stats" inputmode="numeric" required>
-                        </li>
-                        
-                        <li>
+                        </div>
+                      </li>
+                      
+                      <li>
+                        <div class="stat-group">
                           <label for="death-saves-failures" class="stat-label">Death saves failures: </label>
+                          <div class="spacer"></div>
                           <input type="number" id="death-saves-failures" v-model="characterToView.deathSaves.failures" class="input-stats" inputmode="numeric" required>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li>
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
+                          <div class="spacer"></div>
                           <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li style="margin-top: 10px; margin-bottom: 10px;">
+                      <li style="margin-top: 10px; margin-bottom: 10px;">
+                        <div class="stat-group">
                           <label for="stats-proficiency-bonus" class="stat-label">Passive Perception: </label>
+                          <div class="spacer"></div>
                           <label class="stat-label">{{ getStatBonusSign(calculatePassivePerception()) }}</label>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li style="margin-top: 10px;">
+                      <li style="margin-top: 10px;">
+                        <div class="stat-group">
                           <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
+                          <div class="spacer"></div>
                           <select class="picker" v-model="characterToView.spellCastStat">
                             <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
                           </select>
-                        </li>
-                      
-                        <li style="margin-top: 5px;">
+                        </div>
+                      </li>
+                    
+                      <li style="margin-top: 5px;">
+                        <div class="stat-group">
                           <label class="stat-label">Spell Saving DC: </label>
+                          <div class="spacer"></div>
                           <label class="stat-value">{{ calculateSpellSavingDc(characterToView.stats[characterToView.spellCastStat].calculateMod()) }}</label>
-                        </li>
+                        </div>
+                      </li>
 
-                        <li>
+                      <li>
+                        <div class="stat-group">
                           <label for="stats-proficiency-bonus" class="stat-label">Inspriation: </label>
+                          <div class="spacer"></div>
                           <input type="number" id="stats-inspiration" v-model="characterToView.inspiration" class="input-stats" inputmode="numeric" required>
-                        </li>
-                      </ul>
-                    </div>
+                        </div>
+                      </li>
+                    </ul>
 
                     <div class="buttons-delete-update">
                       <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
@@ -367,17 +416,18 @@
 
                   <!-- Editing -->
                   <div v-if="isEditingBaseStats" class="isEditing">
-                    <div class="container-inputs">
-                      <ul class="list-inputs" style="margin-right: 20px;">
-                        <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                    <ul class="stat-list">
+                      <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                        <div class="stat-group">
                           <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                          <div class="spacer"></div>
                           <div style="margin-left: 10px;">
                             <input type="number" id="stats-label" v-model="characterToView.stats[stat].value" class="input-stats" inputmode="numeric" required>
                             <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}</label>
                           </div>
-                        </li>
-                      </ul>
-                    </div>
+                        </div>
+                      </li>
+                    </ul>
 
                     <div class="buttons-delete-update">
                       <button class="button-update" @click="onPressUpdateBaseStats()">Update</button>
