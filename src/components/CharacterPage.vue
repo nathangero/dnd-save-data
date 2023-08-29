@@ -70,26 +70,26 @@
           <button class="button-close" @click="closeModal">Close</button>
         </div>
 
-        <div class="character-to-view" v-if="characterToView[CHARACTER_KEYS.NAME] !== ''" :class="{ 'disabled-page': isPopupOpen() }">
+        <div class="character-to-view" v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
 
           <!-- NOT EDITABLE -->
           <div id="character-background">
-            <p class="character-name">{{ characterToView[CHARACTER_KEYS.NAME] }}</p>
+            <p class="character-name">{{ characterToView.name }}</p>
             <ul class="stat-list">
               <li>
-                <label class="character-info">{{ characterToView[CHARACTER_KEYS.CLASS] }}</label>
+                <label class="character-info">{{ characterToView.class }}</label>
               </li>
 
               <li>
-                <label class="character-info">{{ characterToView[CHARACTER_KEYS.BACKGROUND] }}</label>
+                <label class="character-info">{{ characterToView.background }}</label>
               </li>
 
               <li>
-                <label class="character-info">{{ characterToView[CHARACTER_KEYS.RACE] }}</label>
+                <label class="character-info">{{ characterToView.race }}</label>
               </li>
 
               <li>
-                <label class="character-info">{{ characterToView[CHARACTER_KEYS.ALIGNMENT] }}</label>
+                <label class="character-info">{{ characterToView.alignment }}</label>
               </li>
             </ul>
           </div>
@@ -303,7 +303,7 @@
 
                         <li style="margin-top: 10px;">
                           <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
-                          <select class="picker" v-model="characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]">
+                          <select class="picker" v-model="characterToView.spellCastStat">
                             <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
                           </select>
                         </li>
@@ -543,10 +543,10 @@
                     </div>
                   </template>
 
-                  <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.FEATURES]) > 0">
+                  <template v-if="getDictionarySize(characterToView.featuresTraits) > 0">
                     <div>
                       <ul class="list">
-                        <li v-for="(item, key) in characterToView[CHARACTER_KEYS.FEATURES]" :key="key">
+                        <li v-for="(item, key) in characterToView.featuresTraits" :key="key">
                           <div v-if="!isEditingFeaturesTraits">
                             <label class="item-name">{{ key }}</label>
                             <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
@@ -667,10 +667,10 @@
                     </div>
                   </template>
 
-                  <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.WEAPONS]) > 0">
+                  <template v-if="getDictionarySize(characterToView.weapons) > 0">
                     <div>
                       <ul class="list">
-                        <li v-for="(item, key) in characterToView[CHARACTER_KEYS.WEAPONS]" :key="key">
+                        <li v-for="(item, key) in characterToView.weapons" :key="key">
                           <div v-if="!isEditingWeapons">
                             <label class="item-name">{{ key }}</label>
                             <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
@@ -816,18 +816,18 @@
                     <li style="text-align: left; margin-bottom: 20px">
                       <div v-if="!isEditingEquipment">
                         <label class="item-name">Gold:</label>
-                        <label class="item-amount">x{{ characterToView[CHARACTER_KEYS.GOLD] }}</label>
+                        <label class="item-amount">x{{ characterToView.gold }}</label>
                       </div>
                       <div v-if="isEditingEquipment" style="margin-bottom: 20px">
                         <label class="item-name">Gold:</label>
-                        <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="characterToView[CHARACTER_KEYS.GOLD]" class="input-stats" inputmode="numeric" required>
+                        <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="characterToView.gold" class="input-stats" inputmode="numeric" required>
                         <button class="button-update" style="margin-left: 10px;" @click="onPressUpdateGold()">Update</button>
                       </div>
                     </li>
                   </ul>
-                  <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.EQUIPMENT]) > 0">
+                  <template v-if="getDictionarySize(characterToView.equipment) > 0">
                     <ul class="list">                      
-                      <li v-for="(item, key) in characterToView[CHARACTER_KEYS.EQUIPMENT]" :key="key">
+                      <li v-for="(item, key) in characterToView.equipment" :key="key">
                         <div v-if="!isEditingEquipment">
                           <label class="item-name">{{ key }}</label>
                           <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
@@ -902,10 +902,10 @@
                     </div>
                   </template>
 
-                  <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.TREASURES]) > 0">
+                  <template v-if="getDictionarySize(characterToView.treasures) > 0">
                     <div>
                       <ul class="list">
-                        <li v-for="(item, key) in characterToView[CHARACTER_KEYS.TREASURES]" :key="key">
+                        <li v-for="(item, key) in characterToView.treasures" :key="key">
                           <div v-if="!isEditingTreasure">
                             <label class="item-name">{{ key }}</label>
                             <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
@@ -982,9 +982,9 @@
                     </div>
                   </template>
 
-                  <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.LANGUAGES]) > 0">
+                  <template v-if="getDictionarySize(characterToView.languages) > 0">
                     <ul>
-                      <li v-for="(item, key) in characterToView[CHARACTER_KEYS.LANGUAGES]" :key="key">
+                      <li v-for="(item, key) in characterToView.languages" :key="key">
                         <div v-if="!isEditingLanguages">
                           <div class="language-group">
                             <p class="language-label">{{ key }}:</p>
@@ -996,7 +996,7 @@
                         <div v-if="isEditingLanguages">
                           <div style="margin-top: 10px; text-align: left;">
                             <label class="item-name">{{ key }}:</label>
-                            <select class="picker" v-model="characterToView[CHARACTER_KEYS.LANGUAGES][key]">
+                            <select class="picker" v-model="characterToView.languages[key]">
                               <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
                             </select>
                           </div>
@@ -1058,9 +1058,9 @@
                     </div>
                   </template>
 
-                  <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.PROFICIENCIES]) > 0">
+                  <template v-if="getDictionarySize(characterToView.proficiencies) > 0">
                     <ul class="list">
-                      <li v-for="(item, key) in characterToView[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
+                      <li v-for="(item, key) in characterToView.proficiencies" :key="key">
                         <div v-if="!isEditingProficiencies">
                           <label class="item-name">{{ key }}</label>
                           <p class="item-description">{{ item }}</p>
@@ -1070,7 +1070,7 @@
                         <div v-if="isEditingProficiencies">
                           <label class="item-name">{{ key }}:</label>
                           <div class="container-edit">
-                            <textarea v-model="characterToView[CHARACTER_KEYS.PROFICIENCIES][key]" rows="4" placeholder="Description"></textarea>
+                            <textarea v-model="characterToView.proficiencies[key]" rows="4" placeholder="Description"></textarea>
                           </div>
 
                           <div class="buttons-delete-update">
@@ -1137,10 +1137,10 @@
                   </ul>
                 </template>
 
-                <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELL_SLOTS]) > 0">
+                <template v-if="getDictionarySize(characterToView.spellSlots) > 0">
                   <div>
                     <ul class="list">
-                      <li v-for="(item, key) in characterToView[CHARACTER_KEYS.SPELL_SLOTS]" :key="key">
+                      <li v-for="(item, key) in characterToView.spellSlots" :key="key">
                         <div v-if="!isEditingSpellSlots">
                           <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
                           <label class="item-amount">{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
@@ -1204,50 +1204,52 @@
                 <div v-if="isShowingSpells">
                   <!-- Add new -->
                   <template v-if="isEditingSpellCasting">
-                    <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
-                    <div class="container-inputs">
-                      <ul class="list-inputs">
-                        <li>
-                          <label class="stat-label" for="spells-level">Level:</label>
-                          <select class="picker" v-model="spellTempLevel">
-                            <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
-                          </select>
-                        </li>
-                        
-                        <li>
-                          <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
-                          <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
-                        </li>
+                    <div>
+                      <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
+                      <div class="container-inputs">
+                        <ul class="list-inputs">
+                          <li>
+                            <label class="stat-label" for="spells-level">Level:</label>
+                            <select class="picker" v-model="spellTempLevel">
+                              <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
+                            </select>
+                          </li>
+                          
+                          <li>
+                            <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
+                            <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
+                          </li>
 
-                        <li style="margin-top: 20px">
-                          <label class="stat-label" style="margin: 0;">Duration:</label>
-                          <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+                          <li style="margin-top: 20px">
+                            <label class="stat-label" style="margin: 0;">Duration:</label>
+                            <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
 
-                          <select class="picker" v-model="spellTempDurationType">
-                            <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
-                          </select>
-                        </li>
+                            <select class="picker" v-model="spellTempDurationType">
+                              <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                            </select>
+                          </li>
 
-                        <li>
-                          <label class="stat-label" for="spells-range">Range (in feet):</label>
-                          <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
-                        </li>
+                          <li>
+                            <label class="stat-label" for="spells-range">Range (in feet):</label>
+                            <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <br>
+                      <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+                      <br>
+                      <button class="button-add" @click="onPressAddSpell">Add</button>
+
+                      <ul class="list">
+                        <hr class="list-divider">
                       </ul>
                     </div>
-
-                    <br>
-                    <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
-                    <br>
-                    <button class="button-add" @click="onPressAddSpell">Add</button>
-
-                    <ul class="list">
-                      <hr class="list-divider">
-                    </ul>
                   </template>
 
-                  <template v-if="getDictionarySize(characterToView[CHARACTER_KEYS.SPELLS]) > 0">
+                  <template v-if="getDictionarySize(characterToView.spells) > 0">
                     <ul class="list">
-                      <li v-for="(levelDict, level) in characterToView[CHARACTER_KEYS.SPELLS]" :key="level">
+                      <li v-for="(levelDict, level) in characterToView.spells" :key="level">
                         <template v-if="getDictionarySize(levelDict) > 0">
                           <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
                           <ul>
@@ -1342,7 +1344,7 @@
             <div class="overlay" v-if="isSaveCharacterPopupOpen">
               <div class="popup">
                 <div class="form">
-                  <h1>Create backup for {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
+                  <h1>Create backup for {{ characterToView.name }}?</h1>
                   <div class="buttons-delete-character">
                     <button class="button-cancel-delete" @click="toggleSaveCharacterPopup">Cancel</button>
                     <button class="button-save" @click="onPressSaveBackup">Save</button>
@@ -1359,7 +1361,7 @@
             <div class="overlay" v-if="isDeleteCharacterPopupOpen">
               <div class="popup">
                 <div class="form">
-                  <h1>Delete {{ characterToView[CHARACTER_KEYS.NAME] }}?</h1>
+                  <h1>Delete {{ characterToView.name }}?</h1>
                   <p class="popup-message">This action can't be undone</p>
                   <div class="buttons-delete-character">
                     <button class="button-cancel-delete" @click="toggleDeleteCharacterPopup">Cancel</button>
@@ -1622,9 +1624,9 @@ export default {
       }
       this.store.dispatch("addBackupToDb", payload).then((success) => {
         if (success) {
-          alert(`Saved data for ${this.characterToView[CHARACTER_KEYS.NAME]}`)
+          alert(`Saved data for ${this.characterToView.name}`)
         } else {
-          alert(`ERROR saving data for ${this.characterToView[CHARACTER_KEYS.NAME]}. Please try again.`)
+          alert(`ERROR saving data for ${this.characterToView.name}. Please try again.`)
         }
         this.closeModal()
       })
@@ -1632,10 +1634,10 @@ export default {
     onPressDeleteCharacter() {
       this.store.dispatch("deleteCharacterFromDb", this.characterToViewId).then((success) => {
         if (success) {
-          alert(`Deleted ${this.characterToView[CHARACTER_KEYS.NAME]} data and the backups`)
+          alert(`Deleted ${this.characterToView.name} data and the backups`)
           this.closeModal()
         } else {
-          alert(`ERROR deleting "${this.characterToView[CHARACTER_KEYS.NAME]}" occurred. Please try again.`)
+          alert(`ERROR deleting "${this.characterToView.name}" occurred. Please try again.`)
         }
       })
       
@@ -1970,33 +1972,33 @@ export default {
       }
 
       const savingThrows = {
-        [STAT_KEYS.STRENGTH]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.STRENGTH],
-        [STAT_KEYS.DEXTERITY]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.DEXTERITY],
-        [STAT_KEYS.CONSTITUTION]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CONSTITUTION],
-        [STAT_KEYS.INTELLIGENCE]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.INTELLIGENCE],
-        [STAT_KEYS.WISDOM]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.WISDOM],
-        [STAT_KEYS.CHARISMA]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CHARISMA],
+        [STAT_KEYS.STRENGTH]: this.characterToView.savingThrows[STAT_KEYS.STRENGTH],
+        [STAT_KEYS.DEXTERITY]: this.characterToView.savingThrows[STAT_KEYS.DEXTERITY],
+        [STAT_KEYS.CONSTITUTION]: this.characterToView.savingThrows[STAT_KEYS.CONSTITUTION],
+        [STAT_KEYS.INTELLIGENCE]: this.characterToView.savingThrows[STAT_KEYS.INTELLIGENCE],
+        [STAT_KEYS.WISDOM]: this.characterToView.savingThrows[STAT_KEYS.WISDOM],
+        [STAT_KEYS.CHARISMA]: this.characterToView.savingThrows[STAT_KEYS.CHARISMA],
       }
 
       const skills = {
-        [SKILL_KEYS.ACROBATICS]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS],
-        [SKILL_KEYS.ANIMAL_HANDLING]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING],
-        [SKILL_KEYS.ARCANA]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ARCANA],
-        [SKILL_KEYS.ATHLETICS]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS],
-        [SKILL_KEYS.DECEPTION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.DECEPTION],
-        [SKILL_KEYS.HISTORY]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.HISTORY],
-        [SKILL_KEYS.INSIGHT]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INSIGHT],
-        [SKILL_KEYS.INTIMIDATION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION],
-        [SKILL_KEYS.INVESTIGATION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION],
-        [SKILL_KEYS.MEDICINE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE],
-        [SKILL_KEYS.NATURE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE],
-        [SKILL_KEYS.PERCEPTION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION],
-        [SKILL_KEYS.PERFORMANCE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE],
-        [SKILL_KEYS.PERSUASION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION],
-        [SKILL_KEYS.RELIGION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION],
-        [SKILL_KEYS.SLEIGHT_OF_HAND]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND],
-        [SKILL_KEYS.STEALTH]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH],
-        [SKILL_KEYS.SURVIVAL]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL],
+        [SKILL_KEYS.ACROBATICS]: this.characterToView.skills[SKILL_KEYS.ACROBATICS],
+        [SKILL_KEYS.ANIMAL_HANDLING]: this.characterToView.skills[SKILL_KEYS.ANIMAL_HANDLING],
+        [SKILL_KEYS.ARCANA]: this.characterToView.skills[SKILL_KEYS.ARCANA],
+        [SKILL_KEYS.ATHLETICS]: this.characterToView.skills[SKILL_KEYS.ATHLETICS],
+        [SKILL_KEYS.DECEPTION]: this.characterToView.skills[SKILL_KEYS.DECEPTION],
+        [SKILL_KEYS.HISTORY]: this.characterToView.skills[SKILL_KEYS.HISTORY],
+        [SKILL_KEYS.INSIGHT]: this.characterToView.skills[SKILL_KEYS.INSIGHT],
+        [SKILL_KEYS.INTIMIDATION]: this.characterToView.skills[SKILL_KEYS.INTIMIDATION],
+        [SKILL_KEYS.INVESTIGATION]: this.characterToView.skills[SKILL_KEYS.INVESTIGATION],
+        [SKILL_KEYS.MEDICINE]: this.characterToView.skills[SKILL_KEYS.MEDICINE],
+        [SKILL_KEYS.NATURE]: this.characterToView.skills[SKILL_KEYS.NATURE],
+        [SKILL_KEYS.PERCEPTION]: this.characterToView.skills[SKILL_KEYS.PERCEPTION],
+        [SKILL_KEYS.PERFORMANCE]: this.characterToView.skills[SKILL_KEYS.PERFORMANCE],
+        [SKILL_KEYS.PERSUASION]: this.characterToView.skills[SKILL_KEYS.PERSUASION],
+        [SKILL_KEYS.RELIGION]: this.characterToView.skills[SKILL_KEYS.RELIGION],
+        [SKILL_KEYS.SLEIGHT_OF_HAND]: this.characterToView.skills[SKILL_KEYS.SLEIGHT_OF_HAND],
+        [SKILL_KEYS.STEALTH]: this.characterToView.skills[SKILL_KEYS.STEALTH],
+        [SKILL_KEYS.SURVIVAL]: this.characterToView.skills[SKILL_KEYS.SURVIVAL],
       }
 
       const payload = {
@@ -2004,8 +2006,6 @@ export default {
         stats: stats,
         savingThrows: savingThrows,
         skills: skills,
-        [CHARACTER_KEYS.INITIATIVE]: this.characterToView[CHARACTER_KEYS.INITIATIVE],
-        [CHARACTER_KEYS.PASSIVE_PERCEPTION]: this.characterToView[CHARACTER_KEYS.PASSIVE_PERCEPTION]
       }
 
       this.store.dispatch("updateCharacterBaseStats", payload).then((success) => {
@@ -2024,12 +2024,12 @@ export default {
     },
     onPressUpdateSavingThrows() {
       const savingThrows = {
-        [STAT_KEYS.STRENGTH]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.STRENGTH],
-        [STAT_KEYS.DEXTERITY]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.DEXTERITY],
-        [STAT_KEYS.CONSTITUTION]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CONSTITUTION],
-        [STAT_KEYS.INTELLIGENCE]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.INTELLIGENCE],
-        [STAT_KEYS.WISDOM]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.WISDOM],
-        [STAT_KEYS.CHARISMA]: this.characterToView[CHARACTER_KEYS.SAVING_THROWS][STAT_KEYS.CHARISMA],
+        [STAT_KEYS.STRENGTH]: this.characterToView.savingThrows[STAT_KEYS.STRENGTH],
+        [STAT_KEYS.DEXTERITY]: this.characterToView.savingThrows[STAT_KEYS.DEXTERITY],
+        [STAT_KEYS.CONSTITUTION]: this.characterToView.savingThrows[STAT_KEYS.CONSTITUTION],
+        [STAT_KEYS.INTELLIGENCE]: this.characterToView.savingThrows[STAT_KEYS.INTELLIGENCE],
+        [STAT_KEYS.WISDOM]: this.characterToView.savingThrows[STAT_KEYS.WISDOM],
+        [STAT_KEYS.CHARISMA]: this.characterToView.savingThrows[STAT_KEYS.CHARISMA],
       }
 
       const info = {
@@ -2057,24 +2057,24 @@ export default {
     },
     onPressUpdateSkills() {
       const skills = {
-        [SKILL_KEYS.ACROBATICS]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ACROBATICS],
-        [SKILL_KEYS.ANIMAL_HANDLING]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ANIMAL_HANDLING],
-        [SKILL_KEYS.ARCANA]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ARCANA],
-        [SKILL_KEYS.ATHLETICS]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.ATHLETICS],
-        [SKILL_KEYS.DECEPTION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.DECEPTION],
-        [SKILL_KEYS.HISTORY]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.HISTORY],
-        [SKILL_KEYS.INSIGHT]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INSIGHT],
-        [SKILL_KEYS.INTIMIDATION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INTIMIDATION],
-        [SKILL_KEYS.INVESTIGATION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.INVESTIGATION],
-        [SKILL_KEYS.MEDICINE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.MEDICINE],
-        [SKILL_KEYS.NATURE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.NATURE],
-        [SKILL_KEYS.PERCEPTION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERCEPTION],
-        [SKILL_KEYS.PERFORMANCE]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERFORMANCE],
-        [SKILL_KEYS.PERSUASION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.PERSUASION],
-        [SKILL_KEYS.RELIGION]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.RELIGION],
-        [SKILL_KEYS.SLEIGHT_OF_HAND]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SLEIGHT_OF_HAND],
-        [SKILL_KEYS.STEALTH]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.STEALTH],
-        [SKILL_KEYS.SURVIVAL]: this.characterToView[CHARACTER_KEYS.SKILLS][SKILL_KEYS.SURVIVAL],
+        [SKILL_KEYS.ACROBATICS]: this.characterToView.skills[SKILL_KEYS.ACROBATICS],
+        [SKILL_KEYS.ANIMAL_HANDLING]: this.characterToView.skills[SKILL_KEYS.ANIMAL_HANDLING],
+        [SKILL_KEYS.ARCANA]: this.characterToView.skills[SKILL_KEYS.ARCANA],
+        [SKILL_KEYS.ATHLETICS]: this.characterToView.skills[SKILL_KEYS.ATHLETICS],
+        [SKILL_KEYS.DECEPTION]: this.characterToView.skills[SKILL_KEYS.DECEPTION],
+        [SKILL_KEYS.HISTORY]: this.characterToView.skills[SKILL_KEYS.HISTORY],
+        [SKILL_KEYS.INSIGHT]: this.characterToView.skills[SKILL_KEYS.INSIGHT],
+        [SKILL_KEYS.INTIMIDATION]: this.characterToView.skills[SKILL_KEYS.INTIMIDATION],
+        [SKILL_KEYS.INVESTIGATION]: this.characterToView.skills[SKILL_KEYS.INVESTIGATION],
+        [SKILL_KEYS.MEDICINE]: this.characterToView.skills[SKILL_KEYS.MEDICINE],
+        [SKILL_KEYS.NATURE]: this.characterToView.skills[SKILL_KEYS.NATURE],
+        [SKILL_KEYS.PERCEPTION]: this.characterToView.skills[SKILL_KEYS.PERCEPTION],
+        [SKILL_KEYS.PERFORMANCE]: this.characterToView.skills[SKILL_KEYS.PERFORMANCE],
+        [SKILL_KEYS.PERSUASION]: this.characterToView.skills[SKILL_KEYS.PERSUASION],
+        [SKILL_KEYS.RELIGION]: this.characterToView.skills[SKILL_KEYS.RELIGION],
+        [SKILL_KEYS.SLEIGHT_OF_HAND]: this.characterToView.skills[SKILL_KEYS.SLEIGHT_OF_HAND],
+        [SKILL_KEYS.STEALTH]: this.characterToView.skills[SKILL_KEYS.STEALTH],
+        [SKILL_KEYS.SURVIVAL]: this.characterToView.skills[SKILL_KEYS.SURVIVAL],
       }
 
       const info = {

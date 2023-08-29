@@ -31,6 +31,7 @@ export default class Character {
     weapons = {},
     timeCreated = '',
     inspiration = 0,
+    treasures = {},
   ) {
     this.alignment = alignment
     this.armor = armor
@@ -57,6 +58,7 @@ export default class Character {
 
     this.timeCreated = timeCreated
     this.inspiration = inspiration
+    this.treasures = treasures
   }
 
   static convertCharacterToObj(character) {
@@ -123,7 +125,8 @@ export default class Character {
       stats,
       character.weapons,
       character.timeCreated,
-      character.inspiration
+      character.inspiration,
+      character.treasures
     )
 
     return charObj
