@@ -150,28 +150,28 @@
                       <li>
                         <div class="stat-group">
                           <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+                          <label class="stat-value">{{ characterToView.hp[HP_KEYS.CURRENT] }}/{{ characterToView.hp[HP_KEYS.MAX] }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label" style="margin-right: 20px;">Temp HP: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP] }}</label>
+                          <label class="stat-value">{{ characterToView.hp[HP_KEYS.TEMP] }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
-                          <label class="stat-value">1{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
+                          <label class="stat-value">1{{ characterToView.hp[HP_KEYS.DIE] }}</label>
                         </div>
                       </li>
                       
                       <li>
                         <div class="stat-group">
                           <label class="stat-label" style="margin-right: 20px;">Hit die count: </label>
-                          <label class="stat-value">{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX] }}</label>
+                          <label class="stat-value">{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX] }}</label>
                         </div>
                       </li>
                       
@@ -251,34 +251,34 @@
 
                         <li>
                           <label for="stats-hp" class="stat-label">Hit Points - Current:</label>
-                          <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
                         </li>
 
                         <li>
                           <label for="stats-hp" class="stat-label">Hit Points - Max:</label>
-                          <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
                         </li>
 
                         <li>
                           <label for="stats-hp" class="stat-label">Hit Points - Temp:</label>
-                          <input type="number" id="stats-hp" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
                         </li>
 
                         <li style="margin-top: 10px;">
                           <label class="stat-label">Hit Die Type: </label>
-                          <select class="picker" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE]">
+                          <select class="picker" v-model="characterToView.hp[HP_KEYS.DIE]">
                             <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                           </select>
                         </li>
 
                         <li>
                           <label for="stats-hit-die" class="stat-label">Current # of Hit Die: </label>
-                          <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
                         </li>
 
                         <li>
                           <label for="stats-hit-die" class="stat-label">Max # of Hit Die: </label>
-                          <input type="number" id="stats-hit-die" v-model="characterToView[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
+                          <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
                         </li>
                       
                         <li> 
@@ -1938,7 +1938,7 @@ export default {
         [CHARACTER_KEYS.ARMOR]: this.characterToView.armor,
         [CHARACTER_KEYS.INSPIRATION]: this.characterToView.inspiration,
         [CHARACTER_KEYS.SPEED]: this.characterToView.speed,
-        [CHARACTER_KEYS.HP]: this.characterToView[CHARACTER_KEYS.HP],
+        [CHARACTER_KEYS.HP]: this.characterToView.hp,
         [CHARACTER_KEYS.SPELL_CAST_STAT]: this.characterToView.spellCastStat,
       }
 

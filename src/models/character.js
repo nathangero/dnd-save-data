@@ -3,6 +3,8 @@ import Stat from "./stat"
 import SavingThrows from "./saving-throws"
 import Skill from "./skill"
 import { SKILL_KEYS } from "@/enums/dbKeys/skill-keys"
+import Hp from "./hp"
+import { HP_KEYS } from "@/enums/dbKeys/hp-keys"
 
 export default class Character {
     
@@ -62,6 +64,15 @@ export default class Character {
   }
 
   static convertCharacterToObj(character) {
+    let hp = new Hp(
+      character.hp[HP_KEYS.CURRENT],
+      character.hp[HP_KEYS.DIE],
+      character.hp[HP_KEYS.DIE_AMOUNT_CURR],
+      character.hp[HP_KEYS.DIE_AMOUNT_MAX],
+      character.hp[HP_KEYS.MAX],
+      character.hp[HP_KEYS.TEMP],
+
+    )
     
     let stats = {
         [STAT_KEYS.STRENGTH]: new Stat(character.stats[STAT_KEYS.STRENGTH].value),
@@ -110,7 +121,7 @@ export default class Character {
       character.equipment,
       character.featuresTraits,
       character.gold,
-      character.hp,
+      hp,
       character.languages,
       character.level,
       character.name,
