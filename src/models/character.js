@@ -112,7 +112,7 @@ export default class Character {
       character.languages,
       character.level,
       character.name,
-      character.proficiences,
+      character.proficiencies,
       character.race,
       savingThrows,
       skills,

@@ -682,7 +682,7 @@
                                   {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
                                 </label>
                                 <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
-                                  {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + characterToView[CHARACTER_KEYS.PROFICIENCY_BONUS]) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                                  {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + getProficiencyBonus()) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
                                 </label>
                               </div>
 
@@ -1586,7 +1586,7 @@ export default {
   mounted() {
     window.scrollTo(0,0);
     this.characterToView = Character.convertCharacterToObj(this.store.getters.getUserCharacters[this.characterToViewId])
-    console.info('this.characterToView:', this.characterToView)
+    // console.info('this.characterToView:', this.characterToView)
   },
   watch: {
     'spellTempDurationType': function(newValue) {
@@ -1961,12 +1961,12 @@ export default {
     },
     onPressUpdateBaseStats() {
       const stats = {
-        [STAT_KEYS.STRENGTH]: this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.STRENGTH],
-        [STAT_KEYS.DEXTERITY]: this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.DEXTERITY],
-        [STAT_KEYS.CONSTITUTION]: this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CONSTITUTION],
-        [STAT_KEYS.INTELLIGENCE]: this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.INTELLIGENCE],
-        [STAT_KEYS.WISDOM]: this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.WISDOM],
-        [STAT_KEYS.CHARISMA]: this.characterToView[CHARACTER_KEYS.STATS][STAT_KEYS.CHARISMA],
+        [STAT_KEYS.STRENGTH]: this.characterToView.stats[STAT_KEYS.STRENGTH],
+        [STAT_KEYS.DEXTERITY]: this.characterToView.stats[STAT_KEYS.DEXTERITY],
+        [STAT_KEYS.CONSTITUTION]: this.characterToView.stats[STAT_KEYS.CONSTITUTION],
+        [STAT_KEYS.INTELLIGENCE]: this.characterToView.stats[STAT_KEYS.INTELLIGENCE],
+        [STAT_KEYS.WISDOM]: this.characterToView.stats[STAT_KEYS.WISDOM],
+        [STAT_KEYS.CHARISMA]: this.characterToView.stats[STAT_KEYS.CHARISMA],
       }
 
       const savingThrows = {
@@ -2225,7 +2225,7 @@ export default {
       if (stat === '') {
         return 0
       } else {
-        return this.characterToView[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
+        return this.characterToView.stats[stat].calculateMod()
       }
       
     },
