@@ -10,18 +10,15 @@ export default class Charcter {
     featuresTraits = {},
     gold = '',
     hp = {},
-    initiative = 1,
     languages = {},
     level = 1,
     name = '',
     proficiencies = {},
-    proficiencyBonus = '',
     race = '',
     savingThrows = {},
     skills = {},
     speed = '',
     spellCastStat = '',
-    spellSaveDc = '',
     spells = {},
     spellSlots = {},
     stats = {},
@@ -37,18 +34,15 @@ export default class Charcter {
     this.featuresTraits = featuresTraits
     this.gold = gold
     this.hp = hp
-    this.initiative = initiative
     this.languages = languages
     this.level = level
     this.name = name
     this.proficiencies = proficiencies
-    this.proficiencyBonus = proficiencyBonus
     this.race = race
     this.savingThrows = savingThrows
     this.skills = skills
     this.speed = speed
     this.spellCastStat = spellCastStat
-    this.spellSaveDc = spellSaveDc
     this.spells = spells
     this.spellSlots = spellSlots
     this.stats = stats
@@ -69,18 +63,15 @@ export default class Charcter {
       featuresTraits,
       gold,
       hp,
-      initiative,
       languages,
       level,
       name,
       proficiencies,
-      proficiencyBonus,
       race,
       savingThrows,
       skills,
       speed,
       spellCastStat,
-      spellSaveDc,
       spells,
       spellSlots,
       stats,
@@ -98,18 +89,15 @@ export default class Charcter {
       featuresTraits,
       gold,
       hp,
-      initiative,
       languages,
       level,
       name,
       proficiencies,
-      proficiencyBonus,
       race,
       savingThrows,
       skills,
       speed,
       spellCastStat,
-      spellSaveDc,
       spells,
       spellSlots,
       stats,

@@ -127,7 +127,7 @@
                 <div class="stat-group">
                   <label for="stats-initiative" class="stat-label">Initiative: </label>
                   <div class="spacer"></div>
-                  <label class="stat-label">{{ getStatBonusSign(stats[STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD]) }}</label>
+                  <label class="stat-label">{{ getStatBonusSign(stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                 </div>
               </li>
 
@@ -169,7 +169,7 @@
                 <div class="stat-group">
                   <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
                   <div class="spacer"></div>
-                  <label class="stat-value">{{ getStatBonusSign(proficiencyBonus) }}</label>
+                  <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
                 </div>
               </li>
 
@@ -177,7 +177,7 @@
                 <div class="stat-group">
                   <label class="stat-label">Passive Perception: </label>
                   <div class="spacer"></div>
-                  <label class="stat-value">{{ getStatBonusSign(calculatePassivePerception(stats[STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD])) }}</label>
+                  <label class="stat-value">{{ calculatePassivePerception() }}</label>
                 </div>
               </li>
             </ul>
@@ -201,8 +201,8 @@
                   <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
                   <div class="spacer"></div>
                   <div style="margin-left: 10px;">
-                    <input type="number" id="stats-label" v-model="stats[stat][STAT_VALUES_KEYS.VALUE]" class="input-stats" inputmode="numeric" required>
-                    <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(stats[stat][STAT_VALUES_KEYS.MOD]) }}</label>
+                    <input type="number" id="stats-label" v-model="stats[stat].value" class="input-stats" inputmode="numeric" required>
+                    <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(stats[stat].calculateMod()) }}</label>
                   </div>
                 </div>
               </li>
@@ -224,14 +224,14 @@
             <ul class="stat-list">
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
                 <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
+                  <input type="checkbox" class="checkbox" v-model="savingThrows[stat].proficient">
                   <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
-                  <label class="stat-value" v-if="savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(savingThrows[stat][STAT_VALUES_KEYS.MOD] + proficiencyBonus) }}
+                  <label class="stat-value" v-if="savingThrows[stat].proficient">
+                    {{ getStatBonusSign(stats[stat].calculateMod() + getProficiencyBonus()) }}
                   </label>
                   <label class="stat-value" v-if="!savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(savingThrows[stat][STAT_VALUES_KEYS.MOD]) }}
+                    {{ getStatBonusSign(stats[stat].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -254,14 +254,14 @@
             <ul class="stat-list">
               <li v-for="(skill, key) in SKILL_KEYS" :key="key">
                 <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
+                  <input type="checkbox" class="checkbox" v-model="skills[skill].proficient">
                   <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
-                  <label class="stat-value" v-if="skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(skills[skill][STAT_VALUES_KEYS.MOD] + proficiencyBonus) }}
+                  <label class="stat-value" v-if="skills[skill].proficient">
+                    {{ getStatBonusSign(stats[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
                   </label>
-                  <label class="stat-value" v-if="!skills[skill][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(skills[skill][STAT_VALUES_KEYS.MOD]) }}
+                  <label class="stat-value" v-if="!skills[skill].proficient">
+                    {{ getStatBonusSign(stats[SKILL_MODS[skill]].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -563,7 +563,7 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingEquipment">
-            <ul class="list" style="text-align: left; margin-bottom: 20px">
+            <ul class="list" style="text-align: center; margin-bottom: 20px">
               <label class="item-name">Gold:</label>
               <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="gold" class="input-stats" inputmode="numeric" required>
             </ul>
@@ -878,7 +878,7 @@
 
                 <li style="margin-top: 5px;">
                   <label class="stat-label">Spell Saving DC: </label>
-                  <label class="stat-label">{{ getStatBonusSign(calculateSpellSavingDc(proficiencyBonus, getStatModFromKey(spellCastStat))) }}</label>
+                  <label class="stat-label">{{ calculateSpellSavingDc(getProficiencyBonus(), getStatModFromKey(spellCastStat)) }}</label>
                 </li>
               </ul>
             </div>
@@ -1011,6 +1011,9 @@
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import Character from '@/models/character'
+import SavingThrow from '@/models/saving-throws'
+import Skill from '@/models/skill'
+import Stat from '@/models/stat'
 import { CHARACTER_SECTIONS } from "@/enums/character-sections"
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
@@ -1023,7 +1026,7 @@ import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
-import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
+import { SKILL_KEYS, SKILL_NAMES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER, SPELL_CASTING_DURATION_TYPES } from '@/enums/dbKeys/spell-casting-keys'
 import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
@@ -1101,6 +1104,7 @@ export default {
       STAT_NAMES: STAT_NAMES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
+      SKILL_MODS: SKILL_MODS,
       SPELL_CASTING_KEYS: SPELL_CASTING_KEYS,
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
@@ -1133,40 +1137,40 @@ export default {
         [HP_KEYS.TEMP]: 0
       },
       stats: {
-        [STAT_KEYS.STRENGTH]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
-        [STAT_KEYS.DEXTERITY]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
-        [STAT_KEYS.CONSTITUTION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
-        [STAT_KEYS.INTELLIGENCE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
-        [STAT_KEYS.WISDOM]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
-        [STAT_KEYS.CHARISMA]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.VALUE]: ''},
+        [STAT_KEYS.STRENGTH]: new Stat(),
+        [STAT_KEYS.DEXTERITY]: new Stat(),
+        [STAT_KEYS.CONSTITUTION]: new Stat(),
+        [STAT_KEYS.INTELLIGENCE]: new Stat(),
+        [STAT_KEYS.WISDOM]: new Stat(),
+        [STAT_KEYS.CHARISMA]: new Stat(),
       },
       savingThrows: {
-        [STAT_KEYS.STRENGTH]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [STAT_KEYS.DEXTERITY]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [STAT_KEYS.CONSTITUTION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [STAT_KEYS.INTELLIGENCE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [STAT_KEYS.WISDOM]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [STAT_KEYS.CHARISMA]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [STAT_KEYS.STRENGTH]: new SavingThrow(),
+        [STAT_KEYS.DEXTERITY]: new SavingThrow(),
+        [STAT_KEYS.CONSTITUTION]: new SavingThrow(),
+        [STAT_KEYS.INTELLIGENCE]: new SavingThrow(),
+        [STAT_KEYS.WISDOM]: new SavingThrow(),
+        [STAT_KEYS.CHARISMA]: new SavingThrow(),
       },
       skills: {
-        [SKILL_KEYS.ACROBATICS]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.ANIMAL_HANDLING]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.ARCANA]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.ATHLETICS]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.DECEPTION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.HISTORY]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.INSIGHT]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.INTIMIDATION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.INVESTIGATION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.MEDICINE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.NATURE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.PERCEPTION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.PERFORMANCE]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.PERSUASION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.RELIGION]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.SLEIGHT_OF_HAND]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.STEALTH]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
-        [SKILL_KEYS.SURVIVAL]: { [STAT_VALUES_KEYS.MOD]: 0, [STAT_VALUES_KEYS.PROFICIENT]: false},
+        [SKILL_KEYS.ACROBATICS]: new Skill(),
+        [SKILL_KEYS.ANIMAL_HANDLING]: new Skill(),
+        [SKILL_KEYS.ARCANA]: new Skill(),
+        [SKILL_KEYS.ATHLETICS]: new Skill(),
+        [SKILL_KEYS.DECEPTION]: new Skill(),
+        [SKILL_KEYS.HISTORY]: new Skill(),
+        [SKILL_KEYS.INSIGHT]: new Skill(),
+        [SKILL_KEYS.INTIMIDATION]: new Skill(),
+        [SKILL_KEYS.INVESTIGATION]: new Skill(),
+        [SKILL_KEYS.MEDICINE]: new Skill(),
+        [SKILL_KEYS.NATURE]: new Skill(),
+        [SKILL_KEYS.PERCEPTION]: new Skill(),
+        [SKILL_KEYS.PERFORMANCE]: new Skill(),
+        [SKILL_KEYS.PERSUASION]: new Skill(),
+        [SKILL_KEYS.RELIGION]: new Skill(),
+        [SKILL_KEYS.SLEIGHT_OF_HAND]: new Skill(),
+        [SKILL_KEYS.STEALTH]: new Skill(),
+        [SKILL_KEYS.SURVIVAL]: new Skill(),
       },
       characterName: '',
       characterAlignment: '',
@@ -1175,10 +1179,7 @@ export default {
       characterRace: '',
       level: '',
       characterArmor: '',
-      initiative: 0,
       characterSpeed: '',
-      proficiencyBonus: 0,
-      passivePerception: 0,
       hitDieType: '', // d10
       hitDieAmount: '', // 3
       equipmentTempName: '',
@@ -1196,7 +1197,6 @@ export default {
       proficiencyTempName: '',
       proficiencyTempDescription: '',
       spellCastStat: '', // e.g. intelligence
-      spellSavingDc: 0,
       spellTempName: '',
       spellTempCastingTime: '',
       spellTempDescription: '',
@@ -1226,19 +1226,6 @@ export default {
     'hp.dieAmountMax': function(newValue) {
       this.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
     },
-    'level': function(newValue) {
-      if (newValue <= 4) {
-        this.proficiencyBonus = 2
-      } else if (newValue <= 8) {
-        this.proficiencyBonus = 3
-      } else if (newValue <= 12) {
-        this.proficiencyBonus = 4
-      } else if (newValue <= 16) {
-        this.proficiencyBonus = 5
-      } else {
-        this.proficiencyBonus = 6
-      }
-    },
     'spellTempDurationType': function(newValue) {
       if (newValue === SPELL_CASTING_DURATION_TYPES.INSTANT) {
         this.spellTempDuration = 0
@@ -1247,61 +1234,6 @@ export default {
           this.spellTempDuration = ''
         }
       }
-    },
-    'stats.str.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.stats[STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
-      this.savingThrows[STAT_KEYS.STRENGTH][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.ATHLETICS][STAT_VALUES_KEYS.MOD] = statMod
-    },
-    'stats.dex.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.stats[STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
-      this.savingThrows[STAT_KEYS.DEXTERITY][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.ACROBATICS][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.SLEIGHT_OF_HAND][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.STEALTH][STAT_VALUES_KEYS.MOD] = statMod
-      this.initiative = statMod
-    },
-    'stats.con.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.stats[STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
-      this.savingThrows[STAT_KEYS.CONSTITUTION][STAT_VALUES_KEYS.MOD] = statMod
-    },
-    'stats.int.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.stats[STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
-      this.savingThrows[STAT_KEYS.INTELLIGENCE][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.ARCANA][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.HISTORY][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.INVESTIGATION][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.NATURE][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.RELIGION][STAT_VALUES_KEYS.MOD] = statMod
-    },
-    'stats.wis.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.stats[STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
-      this.savingThrows[STAT_KEYS.WISDOM][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.ANIMAL_HANDLING][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.INSIGHT][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.MEDICINE][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.PERCEPTION][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.SURVIVAL][STAT_VALUES_KEYS.MOD] = statMod
-    },
-    'stats.cha.value': function(newValue) {
-      const statMod = Math.floor(this.calculateBaseStatBonus(newValue))
-
-      this.stats[STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
-      this.savingThrows[STAT_KEYS.CHARISMA][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.DECEPTION][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.INTIMIDATION][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.PERFORMANCE][STAT_VALUES_KEYS.MOD] = statMod
-      this.skills[SKILL_KEYS.PERSUASION][STAT_VALUES_KEYS.MOD] = statMod
     },
   },
   methods: {
@@ -1645,10 +1577,6 @@ export default {
         return false
       }
 
-      if (this.spellSavingDc === '') {
-        return false
-      }
-
       return true
     },
     checkIfAllValid() {
@@ -1710,11 +1638,6 @@ export default {
 
       if (this.spellCastStat === '') {
         alert("Please select a stat your spell casting will be based off of")
-        return false
-      }
-
-      if (this.spellSavingDc === '') {
-        alert("Please enter your spell saving DC")
         return false
       }
 
@@ -1794,18 +1717,15 @@ export default {
         this.featuresTraits,
         this.gold,
         this.hp,
-        this.initiative,
         this.languages,
         this.level,
         this.characterName,
         this.proficiencies,
-        this.proficiencyBonus,
         this.characterRace,
         this.savingThrows,
         this.skills,
         this.characterSpeed,
         this.spellCastStat,
-        this.spellSavingDc,
         this.spells,
         this.spellSlots,
         this.stats,
@@ -1815,9 +1735,8 @@ export default {
 
       return newCharacter
     },
-    calculatePassivePerception(mod) {
-      const result = 10 + mod
-      this.passivePerception = result
+    calculatePassivePerception() {
+      const result = 10 + this.stats[STAT_KEYS.WISDOM].calculateMod()
       return result
     },
     calculateBaseStatBonus(stat) {
@@ -1828,7 +1747,6 @@ export default {
         return 8 + mod
       }
       const result = 8 + profBonus + mod
-      this.spellSavingDc = result
       return result
     },
     getDictionarySize(dict) {
@@ -1843,7 +1761,7 @@ export default {
       if (stat === '') {
         return 0
       } else {
-        return this.stats[stat][STAT_VALUES_KEYS.MOD]
+        return this.stats[stat].calculateMod()
       }
       
     },
@@ -1852,6 +1770,19 @@ export default {
         return stat // the negative will already be apart of the number
       } else {
         return "+" + stat
+      }
+    },
+    getProficiencyBonus() {
+      if (this.level <= 4) {
+        return 2
+      } else if (this.level <= 8) {
+        return 3
+      } else if (this.level <= 12) {
+        return 4
+      } else if (this.level <= 16) {
+        return 5
+      } else {
+        return 6
       }
     },
     toggleCollapseForStat(statRef) {
