@@ -48,7 +48,7 @@
                 </li>
 
                 <li>
-                  <a @click="scrollToSection('proficiences')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
+                  <a @click="scrollToSection('proficiencies')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
                 </li>
 
                 <li>
@@ -304,7 +304,7 @@
                         <li style="margin-top: 10px;">
                           <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
                           <select class="picker" v-model="characterToView[CHARACTER_KEYS.SPELL_CAST_STAT]">
-                            <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ stat }}</option>
+                            <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
                           </select>
                         </li>
                       
@@ -1021,7 +1021,7 @@
           </div>      
 
           <br>
-          <div id="proficiences">
+          <div id="proficiencies">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
@@ -1937,7 +1937,7 @@ export default {
         [CHARACTER_KEYS.INSPIRATION]: this.characterToView.inspiration,
         [CHARACTER_KEYS.SPEED]: this.characterToView.speed,
         [CHARACTER_KEYS.HP]: this.characterToView[CHARACTER_KEYS.HP],
-        [CHARACTER_KEYS.SPELL_CAST_STAT]: this.characterToView[CHARACTER_KEYS.SPELL_CAST_STAT],
+        [CHARACTER_KEYS.SPELL_CAST_STAT]: this.characterToView.spellCastStat,
       }
 
       const payload = {
@@ -2128,7 +2128,7 @@ export default {
     },
     onPressUpdateGold() {
       const info = {
-        [CHARACTER_KEYS.GOLD]: this.characterToView[CHARACTER_KEYS.GOLD]
+        [CHARACTER_KEYS.GOLD]: this.characterToView.gold
       }
 
       const payload = {
@@ -2184,8 +2184,8 @@ export default {
       }
     },
     onPressDeleteSpell(levelKey, spellName, statRef) {
-      if (spellName in this.characterToView[statRef][levelKey]) {
-        delete this.characterToView[statRef][levelKey][spellName]
+      if (spellName in this.characterToView.spells[levelKey]) {
+        delete this.characterToView.spells[levelKey][spellName]
         
         const payload = {
           charId: this.characterToViewId, 
