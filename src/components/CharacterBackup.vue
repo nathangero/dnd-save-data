@@ -1,17 +1,80 @@
 <template>
   <div class="body">
-    <div class="container-button-close">
-      <div class="spacer"></div>
+    <div class="navigation-bar">
+      <button class="button-jump-to" @click="openJumpToMenu">Jump to</button>
+      <template v-if="isShowingJumpToMenu">
+        <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
+          <ul class="list-inputs">
+            <li>
+              <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('character-info')">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('base-stats')">{{ CHARACTER_SECTIONS.BASE_STATS }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('saving-throws')">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('skills')">{{ CHARACTER_SECTIONS.SKILLS }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('features-traits')">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('weapons')">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('equipment')">{{ CHARACTER_SECTIONS.EQUIPMENT }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('treasure')">{{ CHARACTER_SECTIONS.TREASURES }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('languages')">{{ CHARACTER_SECTIONS.LANGUAGES }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('proficiencies')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('spell-slots')">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('spell-casting')">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</a>
+            </li>
+
+            <li>
+              <a @click="scrollToSection('save-delete-buttons')">Delete/Use Backup</a>
+            </li>
+          </ul>
+
+          <!-- Add more links for other sections -->
+        </div>
+      </template>
       <button class="button-close" @click="closeModal">Close Backup</button>
     </div>
 
-    <div id="character-info" v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
-      <h1>Backup from:</h1>
-      <h1>{{ convertTimestampToString(timeOfBackup) }}</h1>
-      <hr>
-      <p class="character-name">{{ characterToView.name }}</p>
-
+    <div class="character-to-view" v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
       <div id="character-background">
+        <h1>Backup from:</h1>
+        <h1>{{ convertTimestampToString(timeOfBackup) }}</h1>
+        <hr>
+        <p class="character-name">{{ characterToView.name }}</p>
+
         <ul class="stat-list">
           <li>
             <label class="character-info">{{ characterToView.class }}</label>
@@ -402,7 +465,7 @@
       </div>      
 
       <br>
-      <div id="proficiences">
+      <div id="proficiencies">
         <div class="h3-bar">
           <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
           <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
@@ -549,6 +612,7 @@ import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
 import Character from '@/models/character'
+import { CHARACTER_SECTIONS } from "@/enums/character-sections"
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
 import { FEATURES_KEYS } from '@/enums/dbKeys/features-keys.js'
@@ -601,6 +665,8 @@ export default {
       isShowingOverwritePopup: false,
       isShowingDeleteBackupPopup: false,
       isShowingLoader: false,
+      isShowingJumpToMenu: false,
+      CHARACTER_SECTIONS: CHARACTER_SECTIONS,
       LOADING_TEXT: LOADING_TEXT,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
       CHARACTER_KEYS: CHARACTER_KEYS,
@@ -640,6 +706,18 @@ export default {
     },
     closeModalFromOverwrite() {
       this.$emit('close', this.characterToView)
+    },
+    openJumpToMenu() {
+      this.isShowingJumpToMenu = !this.isShowingJumpToMenu
+    },
+    scrollToSection(sectionId) {
+      this.isShowingJumpToMenu = false; // Close the jump-to menu after clicking a link
+      const sectionElement = document.getElementById(sectionId);
+      if (sectionElement) {
+        const sectionTop = sectionElement.getBoundingClientRect().top;
+        const adjustedScrollTop = sectionTop + window.scrollY - 80;
+        window.scrollTo({ top: adjustedScrollTop, behavior: 'smooth' });
+      }
     },
     onPressOverwriteSave() {
       this.loadingText = LOADING_TEXT.SAVING_BACKUP
