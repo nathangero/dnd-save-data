@@ -337,6 +337,7 @@
                       <label class="item-name">{{ key }}</label>
                       <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
                       <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                      <p class="item-description" style="margin-bottom: 5px;">Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
                       <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                     </div>
 
@@ -350,6 +351,14 @@
                             <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                           </select>
                         </div>
+
+                        <div style="margin-top: 10px;">
+                          <label class="stat-label">Action Type:</label>
+                          <select class="picker" v-model="item[FEATURES_KEYS.ACTION]">
+                            <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                          </select>
+                        </div>
+
                         <div>
                           <label class="stat-label" for="features-input"> # of Uses:</label>
                           <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
@@ -1011,7 +1020,7 @@
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import Character from '@/models/character'
-import SavingThrow from '@/models/saving-throws'
+import SavingThrows from '@/models/saving-throws'
 import Skill from '@/models/skill'
 import Stat from '@/models/stat'
 import { CHARACTER_SECTIONS } from "@/enums/character-sections"
@@ -1145,12 +1154,12 @@ export default {
         [STAT_KEYS.CHARISMA]: new Stat(),
       },
       savingThrows: {
-        [STAT_KEYS.STRENGTH]: new SavingThrow(),
-        [STAT_KEYS.DEXTERITY]: new SavingThrow(),
-        [STAT_KEYS.CONSTITUTION]: new SavingThrow(),
-        [STAT_KEYS.INTELLIGENCE]: new SavingThrow(),
-        [STAT_KEYS.WISDOM]: new SavingThrow(),
-        [STAT_KEYS.CHARISMA]: new SavingThrow(),
+        [STAT_KEYS.STRENGTH]: new SavingThrows(),
+        [STAT_KEYS.DEXTERITY]: new SavingThrows(),
+        [STAT_KEYS.CONSTITUTION]: new SavingThrows(),
+        [STAT_KEYS.INTELLIGENCE]: new SavingThrows(),
+        [STAT_KEYS.WISDOM]: new SavingThrows(),
+        [STAT_KEYS.CHARISMA]: new SavingThrows(),
       },
       skills: {
         [SKILL_KEYS.ACROBATICS]: new Skill(),
