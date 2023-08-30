@@ -112,6 +112,10 @@ textarea {
   align-items: center;
 }
 
+.spacer {
+  flex: 1; /* Takes up remaining space */
+}
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -193,7 +197,7 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  width: 65%;
+  width: 75%;
   margin: 0 auto;
   padding-left: 0;
 }
