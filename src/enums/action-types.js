@@ -3,6 +3,7 @@ const ACTION_TYPES = {
     ACTION: "Action",
     BONUS: "Bonus",
     REACTION: "Reaction",
+    OTHER: "Other",
 }
 
 export { ACTION_TYPES }

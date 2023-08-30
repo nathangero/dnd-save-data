@@ -568,14 +568,21 @@
                       <div class="container-inputs">
                         <ul class="list-inputs">
                           <li style="margin-top: 10px;">
-                            <label>Type:</label>
+                            <label class="stat-label">Type:</label>
                             <select class="picker" v-model="featuresTempType">
                               <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                             </select>
                           </li>
 
+                          <li style="margin-top: 10px;">
+                            <label class="stat-label">Action Type:</label>
+                            <select class="picker" v-model="featuresTempAction">
+                              <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                            </select>
+                          </li>
+
                           <li>
-                            <label for="features-input"> # of Uses:</label>
+                            <label for="features-input" class="stat-label"> # of Uses:</label>
                             <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
                           </li>
                         </ul>
@@ -601,6 +608,7 @@
                             <label class="item-name">{{ key }}</label>
                             <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
                             <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                            <p class="item-description" style="margin-bottom: 5px;">Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
                             <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                           </div>
 
@@ -613,6 +621,13 @@
                                   <label class="stat-label">Type:</label>
                                   <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
                                     <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                                  </select>
+                                </li>
+
+                                <li style="margin-top: 10px;">
+                                  <label class="stat-label">Action Type:</label>
+                                  <select class="picker" v-model="item[FEATURES_KEYS.ACTION]">
+                                    <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
                                   </select>
                                 </li>
 
@@ -1479,6 +1494,7 @@ import CharacterSummary from './CharacterSummary.vue';
 import CharacterBackup from './CharacterBackup.vue';
 import Character from '@/models/character'
 import { CHARACTER_SECTIONS } from "@/enums/character-sections"
+import { ACTION_TYPES }  from '@/enums/action-types'
 import { CONST_NUMS } from "@/enums/constant-numbers"
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
@@ -1559,6 +1575,7 @@ export default {
       isShowingBackup: false,
       isShowingJumpToMenu: false,
       CHARACTER_SECTIONS: CHARACTER_SECTIONS,
+      ACTION_TYPES: ACTION_TYPES,
       CONST_NUMS: CONST_NUMS,
       LOADING_TEXT: LOADING_TEXT,
       ALIGNMENT_TYPES: ALIGNMENT_TYPES,
@@ -1604,6 +1621,7 @@ export default {
       featuresTempName: '',
       featuresTempDescription: '',
       featuresTempType: '', // Racial, Class, Other
+      featuresTempAction: '', // Action, Bonus, Reaction
       featuresTempUseable: true,
       featuresTempUses: '',
       gold: '',
