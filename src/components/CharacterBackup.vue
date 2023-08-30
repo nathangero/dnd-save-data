@@ -5,7 +5,7 @@
       <button class="button-close" @click="closeModal">Close Backup</button>
     </div>
 
-    <div id="character-info" v-if="characterBackup[CHARACTER_KEYS.NAME] !== ''" :class="{ 'disabled-page': isPopupOpen() }">
+    <div id="character-info" v-if="characterBackup.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
       <h1>Backup from:</h1>
       <h1>{{ convertTimestampToString(timeOfBackup) }}</h1>
       <hr>
@@ -66,35 +66,35 @@
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Speed (ft): </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.SPEED] }}</label>
+                  <label class="stat-value">{{ characterBackup.speed }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.HP][HP_KEYS.CURRENT] }}/{{ characterBackup[CHARACTER_KEYS.HP][HP_KEYS.MAX] }}</label>
+                  <label class="stat-value">{{ characterBackup.hp[HP_KEYS.CURRENT] }}/{{ characterBackup.hp[HP_KEYS.MAX] }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Temp HP: </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.HP][HP_KEYS.TEMP] }}</label>
+                  <label class="stat-value">{{ characterBackup.hp[HP_KEYS.TEMP] }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
-                  <label class="stat-value">1{{ characterBackup[CHARACTER_KEYS.HP][HP_KEYS.DIE] }}</label>
+                  <label class="stat-value">1{{ characterBackup.hp[HP_KEYS.DIE] }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Hit die count: </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterBackup[CHARACTER_KEYS.HP][HP_KEYS.DIE_AMOUNT_MAX] }}</label>
+                  <label class="stat-value">{{ characterBackup.hp[HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterBackup.hp[HP_KEYS.DIE_AMOUNT_MAX] }}</label>
                 </div>
               </li>
               
@@ -514,6 +514,7 @@
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
+import Character from '@/models/character'
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
 import { FEATURES_KEYS } from '@/enums/dbKeys/features-keys.js'
@@ -544,7 +545,7 @@ export default {
       required: true
     },
     characterBackup: {
-      type: Object,
+      type: Character,
       required: true
     },
     characterBackupId: {
