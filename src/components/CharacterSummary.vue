@@ -59,7 +59,7 @@ export default {
   },
   mounted() {
     // console.info('listOfCharacters:', this.listOfCharacters)
-    console.info('character:', this.character)
+    // console.info('character:', this.character)
   },
   methods: {
     onPressCharacterSummary(charId) {

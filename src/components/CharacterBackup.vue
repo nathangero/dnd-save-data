@@ -5,28 +5,28 @@
       <button class="button-close" @click="closeModal">Close Backup</button>
     </div>
 
-    <div id="character-info" v-if="characterBackup.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
+    <div id="character-info" v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
       <h1>Backup from:</h1>
       <h1>{{ convertTimestampToString(timeOfBackup) }}</h1>
       <hr>
-      <p class="character-name">{{ characterBackup[CHARACTER_KEYS.NAME] }}</p>
+      <p class="character-name">{{ characterToView.name }}</p>
 
       <div id="character-background">
         <ul class="stat-list">
           <li>
-            <label class="character-info">{{ characterBackup[CHARACTER_KEYS.CLASS] }}</label>
+            <label class="character-info">{{ characterToView.class }}</label>
           </li>
 
           <li>
-            <label class="character-info">{{ characterBackup[CHARACTER_KEYS.BACKGROUND] }}</label>
+            <label class="character-info">{{ characterToView.background }}</label>
           </li>
 
           <li>
-            <label class="character-info">{{ characterBackup[CHARACTER_KEYS.RACE] }}</label>
+            <label class="character-info">{{ characterToView.race }}</label>
           </li>
 
           <li>
-            <label class="character-info">{{ characterBackup[CHARACTER_KEYS.ALIGNMENT] }}</label>
+            <label class="character-info">{{ characterToView.alignment }}</label>
           </li>
         </ul>
       </div>
@@ -45,98 +45,105 @@
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Level:</label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.LEVEL] }}</label>
+                  <label class="stat-value">{{ characterToView.level }}</label>
                 </div>
               </li>
 
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Armor Class: </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.ARMOR] }}</label>
+                  <label class="stat-value">{{ characterToView.armor }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Initiative: </label>
-                  <label class="stat-value">{{ getStatBonusSign(characterBackup[CHARACTER_KEYS.INITIATIVE]) }}</label>
+                  <label class="stat-value">{{ getStatBonusSign(characterToView.stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Speed (ft): </label>
-                  <label class="stat-value">{{ characterBackup.speed }}</label>
+                  <label class="stat-value">{{ characterToView.speed }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
-                  <label class="stat-value">{{ characterBackup.hp[HP_KEYS.CURRENT] }}/{{ characterBackup.hp[HP_KEYS.MAX] }}</label>
+                  <label class="stat-value">{{ characterToView.hp[HP_KEYS.CURRENT] }}/{{ characterToView.hp[HP_KEYS.MAX] }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Temp HP: </label>
-                  <label class="stat-value">{{ characterBackup.hp[HP_KEYS.TEMP] }}</label>
+                  <label class="stat-value">{{ characterToView.hp[HP_KEYS.TEMP] }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
-                  <label class="stat-value">1{{ characterBackup.hp[HP_KEYS.DIE] }}</label>
+                  <label class="stat-value">1{{ characterToView.hp[HP_KEYS.DIE] }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Hit die count: </label>
-                  <label class="stat-value">{{ characterBackup.hp[HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterBackup.hp[HP_KEYS.DIE_AMOUNT_MAX] }}</label>
+                  <label class="stat-value">{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX] }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Death saves successes: </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.SUCCESSES] }}/3</label>
+                  <label class="stat-value">{{ characterToView.deathSaves.successes }}/3</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label" style="margin-right: 20px;">Death saves failures: </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.DEATH_SAVES][DEATH_SAVES_KEYS.FAILURES] }}/3</label>
+                  <label class="stat-value">{{ characterToView.deathSaves.failures }}/3</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Proficiency Bonus: </label>
-                  <label class="stat-value">{{ getStatBonusSign(characterBackup[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}</label>
+                  <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Passive Perception: </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.PASSIVE_PERCEPTION] }}</label>
+                  <label class="stat-value">{{ calculatePassivePerception() }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Spell Casting Stat: </label>
-                  <label class="stat-value">{{ STAT_NAMES[characterBackup[CHARACTER_KEYS.SPELL_CAST_STAT]] }}</label>
+                  <label class="stat-value">{{ STAT_NAMES[characterToView.spellCastStat] }}</label>
                 </div>
               </li>
               
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Spell Saving DC: </label>
-                  <label class="stat-value">{{ characterBackup[CHARACTER_KEYS.SPELL_SAVE_DC] }}</label>
+                  <label class="stat-value">{{ calculateSpellSavingDc(characterToView.stats[characterToView.spellCastStat].calculateMod()) }}</label>
+                </div>
+              </li>
+              
+              <li>
+                <div class="stat-group">
+                  <label class="stat-label">Inspiration: </label>
+                  <label class="stat-value">{{ characterToView.inspiration }}</label>
                 </div>
               </li>
             </ul>
@@ -158,8 +165,8 @@
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
                 <div class="stat-group">
                   <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                  <label class="stat-value">{{ getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.VALUE) }}</label>
-                  <label class="stat-bonus">{{ getStatBonusSign(getStatValue(CHARACTER_KEYS.STATS, stat, STAT_VALUES_KEYS.MOD)) }}</label>
+                  <label class="stat-value">{{ characterToView.stats[stat].value }}</label>
+                  <label class="stat-bonus">{{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}</label>
                 </div>
               </li>
             </ul>
@@ -180,14 +187,14 @@
             <ul class="stat-list">
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
                 <div class="stat-group">
-                  <input type="checkbox" class="checkbox" :checked="characterBackup[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]" :disabled="true">
+                  <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
                   <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
-                  <label class="stat-value" v-if="characterBackup[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD) + characterBackup[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+                  <label class="stat-value" v-if="characterToView.savingThrows[stat].proficient">
+                    {{ getStatBonusSign(characterToView.stats[stat].calculateMod() + getProficiencyBonus()) }}
                   </label>
-                  <label class="stat-value" v-if="!characterBackup[CHARACTER_KEYS.SAVING_THROWS][stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SAVING_THROWS, stat, STAT_VALUES_KEYS.MOD)) }}
+                  <label class="stat-value" v-if="!characterToView.savingThrows[stat].proficient">
+                    {{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -209,14 +216,14 @@
             <ul class="stat-list">
               <li v-for="(skill, key) in SKILL_KEYS" :key="key">
                 <div class="stat-group">
-                  <input type="checkbox" class="checkbox" :checked="characterBackup[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]" :disabled="true">
+                  <input type="checkbox" class="checkbox" v-model="characterToView.skills[skill].proficient" :disabled="!isEditingSkills">
                   <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
-                  <label class="stat-value" v-if="characterBackup[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD) + characterBackup[CHARACTER_KEYS.PROFICIENCY_BONUS]) }}
+                  <label class="stat-value" v-if="characterToView.skills[skill].proficient">
+                    {{ getStatBonusSign(characterToView.stats[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
                   </label>
-                  <label class="stat-value" v-if="!characterBackup[CHARACTER_KEYS.SKILLS][skill][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(getStatValue(CHARACTER_KEYS.SKILLS, skill, STAT_VALUES_KEYS.MOD)) }}
+                  <label class="stat-value" v-if="!characterToView.skills[skill].proficient">
+                    {{ getStatBonusSign(characterToView.stats[SKILL_MODS[skill]].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -236,13 +243,14 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingFeatures">
-            <template v-if="getDictionarySize(characterBackup[CHARACTER_KEYS.FEATURES]) > 0">
+            <template v-if="getDictionarySize(characterToView.featuresTraits) > 0">
               <div>
                 <ul class="list">
-                  <li v-for="(item, key) in characterBackup[CHARACTER_KEYS.FEATURES]" :key="key">
+                  <li v-for="(item, key) in characterToView.featuresTraits" :key="key">
                     <label class="item-name">{{ key }}</label>
                     <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
                     <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                    <p class="item-description" style="margin-bottom: 5px;">Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
                     <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                   </li>
                 </ul>
@@ -263,10 +271,10 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingWeapons">
-            <template v-if="getDictionarySize(characterBackup[CHARACTER_KEYS.WEAPONS]) > 0">
+            <template v-if="getDictionarySize(characterToView.weapons) > 0">
               <div>
                 <ul class="list">
-                  <li v-for="(item, key) in characterBackup[CHARACTER_KEYS.WEAPONS]" :key="key">
+                  <li v-for="(item, key) in characterToView.weapons" :key="key">
                     <label class="item-name">{{ key }}</label>
                     <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
 
@@ -277,7 +285,7 @@
                           {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
                         </label>
                         <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + characterBackup[CHARACTER_KEYS.PROFICIENCY_BONUS]) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + getProficiencyBonus()) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
                         </label>
                       </div>
 
@@ -323,15 +331,15 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingEquipment">
-            <template v-if="getDictionarySize(characterBackup[CHARACTER_KEYS.EQUIPMENT]) > 0">
+            <template v-if="getDictionarySize(characterToView.equipment) > 0">
               <div>
                 <ul class="list">
                   <li style="text-align: left; margin-bottom: 20px">
                     <label class="item-name">Gold:</label>
-                    <label class="item-amount">x{{ characterBackup[CHARACTER_KEYS.GOLD] }}</label>
+                    <label class="item-amount">x{{ characterToView.gold }}</label>
                   </li>
                   
-                  <li v-for="(item, key) in characterBackup[CHARACTER_KEYS.EQUIPMENT]" :key="key">
+                  <li v-for="(item, key) in characterToView.equipment" :key="key">
                     <label class="item-name">{{ key }}</label>
                     <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
                     <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
@@ -353,10 +361,10 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingTreasure">
-            <template v-if="getDictionarySize(characterBackup[CHARACTER_KEYS.TREASURES]) > 0">
+            <template v-if="getDictionarySize(characterToView.treasures) > 0">
               <div>
                 <ul class="list">
-                  <li v-for="(item, key) in characterBackup[CHARACTER_KEYS.TREASURES]" :key="key">
+                  <li v-for="(item, key) in characterToView.treasures" :key="key">
                     <label class="item-name">{{ key }}</label>
                     <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
                     <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
@@ -378,9 +386,9 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingLanguages">
-            <template v-if="getDictionarySize(characterBackup[CHARACTER_KEYS.LANGUAGES]) > 0">
+            <template v-if="getDictionarySize(characterToView.languages) > 0">
               <ul>
-                <li v-for="(item, key) in characterBackup[CHARACTER_KEYS.LANGUAGES]" :key="key">
+                <li v-for="(item, key) in characterToView.languages" :key="key">
                   <div class="language-group">
                     <p class="language-label">{{ key }}:</p>
                     <p class="language-value">{{ item }}</p>
@@ -403,13 +411,39 @@
         
         <collapse-transition dimension="height">
           <div v-if="isShowingProficiencies">
-            <template v-if="getDictionarySize(characterBackup[CHARACTER_KEYS.PROFICIENCIES]) > 0">
+            <template v-if="getDictionarySize(characterToView.proficiencies) > 0">
               <ul class="list">
-                <li v-for="(item, key) in characterBackup[CHARACTER_KEYS.PROFICIENCIES]" :key="key">
+                <li v-for="(item, key) in characterToView.proficiencies" :key="key">
                   <label class="item-name">{{ key }}</label>
                   <p class="item-description">{{ item }}</p>
                 </li>
               </ul>
+            </template>
+          </div>
+        </collapse-transition>
+      </div>
+
+      <br>
+      <div id="spell-slots">
+        <div class="h3-bar">
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">Spell Slots</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
+        </div>
+
+        <collapse-transition dimension="height">
+          <div v-if="isShowingSpellSlots">
+            <template v-if="getDictionarySize(characterToView.spellSlots) > 0">
+              <div>
+                <ul class="list">
+                  <li v-for="(item, key) in characterToView.spellSlots" :key="key">
+                    <div v-if="!isEditingSpellSlots">
+                      <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
+                      <label class="item-amount">{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </template>
           </div>
         </collapse-transition>
@@ -425,9 +459,9 @@
 
         <collapse-transition dimension="height">
           <div v-if="isShowingSpells">
-            <template v-if="getDictionarySize(characterBackup[CHARACTER_KEYS.SPELLS]) > 0">
+            <template v-if="getDictionarySize(characterToView.spells) > 0">
               <ul class="list">
-                <li v-for="(levelDict, level) in characterBackup[CHARACTER_KEYS.SPELLS]" :key="level">
+                <li v-for="(levelDict, level) in characterToView.spells" :key="level">
                   <template v-if="getDictionarySize(levelDict) > 0">
                     <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
                     <ul>
@@ -463,7 +497,7 @@
     <div id="save-delete-buttons" :class="{ 'disabled-page': isPopupOpen() }">
       <ul class="buttons-at-bottom">
         <li style="margin-bottom: 30px;">
-          <!-- <button class="button-view-backups" @click="getCharacterBackups">View Backups</button> -->
+          <!-- <button class="button-view-backups" @click="getcharacterToViews">View Backups</button> -->
           <button class="button-delete" @click="toggleDeleteBackupPopup">Delete Backup</button>
           <button class="button-save" @click="toggleOverwritePopup">Use this Backup</button>
         </li>
@@ -475,7 +509,7 @@
       <transition name="fade" appear>
         <div class="overlay" v-if="isShowingOverwritePopup">
           <div class="popup">
-            <h1>Overwrite existing data for {{ characterBackup[CHARACTER_KEYS.NAME] }}?</h1>
+            <h1>Overwrite existing data for {{ characterToView.name }}?</h1>
             <p class="popup-message">This action can't be undone</p>
             <div class="buttons-delete-character">
               <button class="button-cancel-delete" @click="toggleOverwritePopup">Cancel</button>
@@ -492,7 +526,7 @@
           <div class="overlay" v-if="isShowingDeleteBackupPopup">
             <div class="popup">
               <div class="form">
-                <h1>Delete backup for {{ characterBackup[CHARACTER_KEYS.NAME] }}?</h1>
+                <h1>Delete backup for {{ characterToView.name }}?</h1>
                 <p class="popup-message">This action can't be undone</p>
                 <div class="buttons-delete-character">
                   <button class="button-cancel-delete" @click="toggleDeleteBackupPopup">Cancel</button>
@@ -525,7 +559,7 @@ import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
-import { SKILL_KEYS, SKILL_NAMES } from '@/enums/dbKeys/skill-keys.js'
+import { SKILL_KEYS, SKILL_NAMES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
@@ -540,18 +574,14 @@ export default {
     LoadingSpinner
   },
   props: {
-    timeOfBackup: { // TODO
+    backups: {
+      type:[Object],
+      required: true
+    },
+    timeOfBackup: {
       type: String,
       required: true
     },
-    characterBackup: {
-      type: Character,
-      required: true
-    },
-    characterBackupId: {
-      type: String,
-      required: true
-    }
   },
   data() {
     return {
@@ -566,6 +596,7 @@ export default {
       isShowingTreasure: true,
       isShowingLanguages: true,
       isShowingProficiencies: true,
+      isShowingSpellSlots: true,
       isShowingSpells: true,
       isShowingOverwritePopup: false,
       isShowingDeleteBackupPopup: false,
@@ -586,6 +617,7 @@ export default {
       STAT_NAMES: STAT_NAMES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
+      SKILL_MODS: SKILL_MODS,
       SPELL_CASTING_KEYS: SPELL_CASTING_KEYS,
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
@@ -596,17 +628,18 @@ export default {
       WEAPON_NAMES: WEAPON_NAMES,
       WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
       loadingText: '',
+      characterToView: new Character(),
     }
   },
   mounted() {
-
+    this.characterToView = Character.convertCharacterToObj(this.backups[this.timeOfBackup])
   },
   methods: {
     closeModal() {
       this.$emit('close')
     },
     closeModalFromOverwrite() {
-      this.$emit('close', this.characterBackup)
+      this.$emit('close', this.characterToView)
     },
     onPressOverwriteSave() {
       this.loadingText = LOADING_TEXT.SAVING_BACKUP
@@ -614,8 +647,8 @@ export default {
       this.isShowingLoader = true
 
       const payload = {
-        charId: this.characterBackupId,
-        characterBackup: this.characterBackup
+        charId: this.characterToViewId,
+        characterToView: this.characterToView
       }
 
       this.store.dispatch("overwriteCharacterFromBackup", payload).then((success) => {
@@ -654,7 +687,7 @@ export default {
       this.isShowingLoader = true
       
       const payload = {
-        charId: this.characterBackupId,
+        charId: this.characterToViewId,
         timestamp: this.timeOfBackup
       }
       
@@ -688,6 +721,13 @@ export default {
       })
       
     },
+    calculatePassivePerception() {
+      const result = 10 + this.characterToView.stats[STAT_KEYS.WISDOM].calculateMod()
+      return result
+    },
+    calculateSpellSavingDc(mod) {
+      return 8 + this.getProficiencyBonus() + mod
+    },
     getDictionarySize(dict) {
       if (dict) {
         const count = Object.keys(dict).length;
@@ -700,18 +740,31 @@ export default {
       if (stat === '') {
         return 0
       } else {
-        return this.characterBackup[CHARACTER_KEYS.STATS][stat][STAT_VALUES_KEYS.MOD]
+        return this.characterToView.stats[stat].calculateMod()
       }
       
     },
     getStatValue(statRef, statKey, valueKey) {
-      return this.characterBackup[statRef][statKey][valueKey]
+      return this.characterToView[statRef][statKey][valueKey]
     },
     getStatBonusSign(stat) {
       if (stat < 0) {
         return stat // the negative will already be apart of the number
       } else {
         return "+" + stat
+      }
+    },
+    getProficiencyBonus() {
+      if (this.characterToView.level <= 4) {
+        return 2
+      } else if (this.characterToView.level <= 8) {
+        return 3
+      } else if (this.characterToView.level <= 12) {
+        return 4
+      } else if (this.characterToView.level <= 16) {
+        return 5
+      } else {
+        return 6
       }
     },
     toggleCollapseForStat(statRef) {
@@ -760,6 +813,9 @@ export default {
           this.isShowingProficiencies = !this.isShowingProficiencies
           break
 
+        case CHARACTER_KEYS.SPELL_SLOTS:
+          this.isShowingSpellSlots = !this.isShowingSpellSlots
+          break
         
         case CHARACTER_KEYS.SPELLS:
           this.isShowingSpells = !this.isShowingSpells

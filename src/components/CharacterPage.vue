@@ -560,7 +560,6 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingFeatures">
-                  
                   <!-- Add new -->
                   <template v-if="isEditingFeaturesTraits">
                     <div>
@@ -1474,9 +1473,8 @@
     <transition name="slide-up" mode="in-out">
       <template v-if="isShowingBackup">
         <character-backup 
-          :time-of-backup="selectedBackupTimestamp" 
-          :character-backup="selectedBackupCharacter" 
-          :character-backup-id="characterToViewId" 
+          :backups="store.getters.getCharacterBackups[this.characterToViewId]"
+          :time-of-backup="selectedBackupTimestamp"
           @close="closeViewBackup"
         ></character-backup>
       </template>
@@ -2275,9 +2273,6 @@ export default {
       const result = 10 + this.characterToView.stats[STAT_KEYS.WISDOM].calculateMod()
       return result
     },
-    calculateBaseStatBonus(stat) {
-      return (stat - 10) / 2
-    },
     calculateSpellSavingDc(mod) {
       return 8 + this.getProficiencyBonus() + mod
     },
@@ -2488,6 +2483,7 @@ export default {
       this.selectedBackupCharacter = new Character()
     },
     selectBackup(timestamp, backup) {
+      console.info('timestamp:', timestamp, "type?", typeof timestamp)
       this.selectedBackupTimestamp = timestamp
       this.selectedBackupCharacter = backup
     },
