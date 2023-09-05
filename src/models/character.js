@@ -29,7 +29,7 @@ export default class Character {
     spellCastStat = '',
     spells = {},
     spellSlots = {},
-    stats = {},
+    scores = {},
     weapons = {},
     timeCreated = '',
     inspiration = 0,
@@ -55,7 +55,7 @@ export default class Character {
     this.spellCastStat = spellCastStat
     this.spells = spells
     this.spellSlots = spellSlots
-    this.stats = stats
+    this.scores = scores
     this.weapons = weapons
 
     this.timeCreated = timeCreated
@@ -75,12 +75,12 @@ export default class Character {
     )
     
     let stats = {
-        [STAT_KEYS.STRENGTH]: new Stat(character.stats[STAT_KEYS.STRENGTH].value),
-        [STAT_KEYS.DEXTERITY]: new Stat(character.stats[STAT_KEYS.DEXTERITY].value),
-        [STAT_KEYS.CONSTITUTION]: new Stat(character.stats[STAT_KEYS.CONSTITUTION].value),
-        [STAT_KEYS.INTELLIGENCE]: new Stat(character.stats[STAT_KEYS.INTELLIGENCE].value),
-        [STAT_KEYS.WISDOM]: new Stat(character.stats[STAT_KEYS.WISDOM].value),
-        [STAT_KEYS.CHARISMA]: new Stat(character.stats[STAT_KEYS.CHARISMA].value),
+        [STAT_KEYS.STRENGTH]: new Stat(character.scores[STAT_KEYS.STRENGTH].value),
+        [STAT_KEYS.DEXTERITY]: new Stat(character.scores[STAT_KEYS.DEXTERITY].value),
+        [STAT_KEYS.CONSTITUTION]: new Stat(character.scores[STAT_KEYS.CONSTITUTION].value),
+        [STAT_KEYS.INTELLIGENCE]: new Stat(character.scores[STAT_KEYS.INTELLIGENCE].value),
+        [STAT_KEYS.WISDOM]: new Stat(character.scores[STAT_KEYS.WISDOM].value),
+        [STAT_KEYS.CHARISMA]: new Stat(character.scores[STAT_KEYS.CHARISMA].value),
       }
     let savingThrows = {
         [STAT_KEYS.STRENGTH]: new SavingThrows(character.savingThrows[STAT_KEYS.STRENGTH].proficient),

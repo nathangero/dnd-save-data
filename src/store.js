@@ -171,20 +171,20 @@ const store = createStore({
     },
     updateCharacterAbilityScores(state, payload) {
       // console.info('payload:', payload)
-      const { charId, stats, savingThrows, skills} = payload      
+      const { charId, scores, } = payload      
 
       return new Promise((resolve, reject) => {
-        if (stats === undefined || stats === '' || savingThrows === undefined || savingThrows === '' || skills === undefined || skills === '') {
+        if (scores === undefined || scores === '') {
           console.info('something is undefined')
           reject(false)
           return
         }
 
-        this.state.user.characters[charId][CHARACTER_KEYS.SCORES] = stats // Update all the stats
+        this.state.user.characters[charId][CHARACTER_KEYS.SCORES] = scores // Update all the scores
         
-        // Update all the stats with numbers since they're all connected from ability scores
+        // Update all the scores with numbers since they're all connected from ability scores
         const userId = this.state.user.id
-        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SCORES, stats)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SCORES, scores)
         resolve(true)
       })
       

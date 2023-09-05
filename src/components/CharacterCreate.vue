@@ -1046,7 +1046,7 @@ const MAX_VALUES = {
   LEVEL: 20,
   HP: 600,
   HIT_DIE: 10,
-  STATS: 20,
+  SCORES: 20,
   STATS_BONUS: 5,
   SAVING_THROWS: 5,
   SKILLS: 15,
@@ -1145,7 +1145,7 @@ export default {
         [HP_KEYS.MAX]: '',
         [HP_KEYS.TEMP]: 0
       },
-      stats: {
+      scores: {
         [STAT_KEYS.STRENGTH]: new Stat(),
         [STAT_KEYS.DEXTERITY]: new Stat(),
         [STAT_KEYS.CONSTITUTION]: new Stat(),
@@ -1631,7 +1631,7 @@ export default {
       }
       
       if (!this.checkIfStatsValid()) {
-        alert(`Stats cannot be blank or greater than ${MAX_VALUES.STATS} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
+        alert(`Stats cannot be blank or greater than ${MAX_VALUES.SCORES} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
         return false
       }
 
@@ -1655,13 +1655,13 @@ export default {
     checkIfStatsValid() {
       // console.info("@checkIfStatsValid")
       
-      if (this.stats.statsStr === '' || this.stats.statsDex === '' || this.stats.statsCon === '' || this.stats.statsInt === '' || this.stats.statsWis === '' || this.stats.statsCha === '' ||
-          this.stats.statsStrBonus === '' || this.stats.statsDexBonus === '' || this.stats.statsConBonus === '' || this.stats.statsIntBonus === '' || this.stats.statsWisBonus === '' || this.stats.statsChaBonus === '') {
+      if (this.scores.statsStr === '' || this.scores.statsDex === '' || this.scores.statsCon === '' || this.scores.statsInt === '' || this.scores.statsWis === '' || this.scores.statsCha === '' ||
+          this.scores.statsStrBonus === '' || this.scores.statsDexBonus === '' || this.scores.statsConBonus === '' || this.scores.statsIntBonus === '' || this.scores.statsWisBonus === '' || this.scores.statsChaBonus === '') {
             return false
       }
 
-      if (this.stats.statsStr > MAX_VALUES.STATS && this.stats.statsDex > MAX_VALUES.STATS && this.stats.statsCon > MAX_VALUES.STATS && this.stats.statsInt > MAX_VALUES.STATS && this.stats.statsWis > MAX_VALUES.STATS && this.stats.statsCha > MAX_VALUES.STATS &&
-          this.stats.statsStrBonus > MAX_VALUES.STATS_BONUS && this.stats.statsDexBonus > MAX_VALUES.STATS_BONUS && this.stats.statsConBonus > MAX_VALUES.STATS_BONUS && this.stats.statsIntBonus > MAX_VALUES.STATS_BONUS && this.stats.statsWisBonus > MAX_VALUES.STATS_BONUS && this.stats.statsChaBonus > MAX_VALUES.STATS_BONUS) {
+      if (this.scores.statsStr > MAX_VALUES.SCORES && this.scores.statsDex > MAX_VALUES.SCORES && this.scores.statsCon > MAX_VALUES.SCORES && this.scores.statsInt > MAX_VALUES.SCORES && this.scores.statsWis > MAX_VALUES.SCORES && this.scores.statsCha > MAX_VALUES.SCORES &&
+          this.scores.statsStrBonus > MAX_VALUES.STATS_BONUS && this.scores.statsDexBonus > MAX_VALUES.STATS_BONUS && this.scores.statsConBonus > MAX_VALUES.STATS_BONUS && this.scores.statsIntBonus > MAX_VALUES.STATS_BONUS && this.scores.statsWisBonus > MAX_VALUES.STATS_BONUS && this.scores.statsChaBonus > MAX_VALUES.STATS_BONUS) {
         return false
 
       }
@@ -1737,7 +1737,7 @@ export default {
         this.spellCastStat,
         this.spells,
         this.spellSlots,
-        this.stats,
+        this.scores,
         this.weapons,
         new Date().getTime()
       )
@@ -1745,7 +1745,7 @@ export default {
       return newCharacter
     },
     calculatePassivePerception() {
-      const result = 10 + this.stats[STAT_KEYS.WISDOM].calculateMod()
+      const result = 10 + this.scores[STAT_KEYS.WISDOM].calculateMod()
       return result
     },
     calculateBaseStatBonus(stat) {
@@ -1770,7 +1770,7 @@ export default {
       if (stat === '') {
         return 0
       } else {
-        return this.stats[stat].calculateMod()
+        return this.scores[stat].calculateMod()
       }
       
     },
@@ -1899,5 +1899,5 @@ export default {
 </script>
 
 <style scoped> /* TODO: Need to make this scoped and have separate css files for styles */
-@import '../syles/character-info-stats.css';
+@import '../syles/character-info-scores.css';
 </style>

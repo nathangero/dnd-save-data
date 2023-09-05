@@ -122,7 +122,7 @@
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Initiative: </label>
-                  <label class="stat-value">{{ getStatBonusSign(characterToView.stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
+                  <label class="stat-value">{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                 </div>
               </li>
               
@@ -199,7 +199,7 @@
               <li>
                 <div class="stat-group">
                   <label class="stat-label">Spell Saving DC: </label>
-                  <label class="stat-value">{{ calculateSpellSavingDc(characterToView.stats[characterToView.spellCastStat].calculateMod()) }}</label>
+                  <label class="stat-value">{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</label>
                 </div>
               </li>
               
@@ -228,8 +228,8 @@
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
                 <div class="stat-group">
                   <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                  <label class="stat-value">{{ characterToView.stats[stat].value }}</label>
-                  <label class="stat-bonus">{{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}</label>
+                  <label class="stat-value">{{ characterToView.scores[stat].value }}</label>
+                  <label class="stat-bonus">{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
                 </div>
               </li>
             </ul>
@@ -254,10 +254,10 @@
                   <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
                   <label class="stat-value" v-if="characterToView.savingThrows[stat].proficient">
-                    {{ getStatBonusSign(characterToView.stats[stat].calculateMod() + getProficiencyBonus()) }}
+                    {{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}
                   </label>
                   <label class="stat-value" v-if="!characterToView.savingThrows[stat].proficient">
-                    {{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}
+                    {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -283,10 +283,10 @@
                   <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
                   <label class="stat-value" v-if="characterToView.skills[skill].proficient">
-                    {{ getStatBonusSign(characterToView.stats[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
+                    {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
                   </label>
                   <label class="stat-value" v-if="!characterToView.skills[skill].proficient">
-                    {{ getStatBonusSign(characterToView.stats[SKILL_MODS[skill]].calculateMod()) }}
+                    {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -800,7 +800,7 @@ export default {
       
     },
     calculatePassivePerception() {
-      const result = 10 + this.characterToView.stats[STAT_KEYS.WISDOM].calculateMod()
+      const result = 10 + this.characterToView.scores[STAT_KEYS.WISDOM].calculateMod()
       return result
     },
     calculateSpellSavingDc(mod) {
@@ -818,7 +818,7 @@ export default {
       if (stat === '') {
         return 0
       } else {
-        return this.characterToView.stats[stat].calculateMod()
+        return this.characterToView.scores[stat].calculateMod()
       }
       
     },
@@ -936,7 +936,7 @@ export default {
 </script>
 
 <style scoped>
-@import '../syles/character-info-stats.css';
+@import '../syles/character-info-scores.css';
 @import '../syles/popup.css';
 @import '../syles/transitions.css';
 
