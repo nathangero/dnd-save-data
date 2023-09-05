@@ -169,7 +169,7 @@ const store = createStore({
       })
       
     },
-    updateCharacterBaseStats(state, payload) {
+    updateCharacterAbilityScores(state, payload) {
       // console.info('payload:', payload)
       const { charId, stats, savingThrows, skills} = payload      
 
@@ -180,15 +180,11 @@ const store = createStore({
           return
         }
 
-        this.state.user.characters[charId][CHARACTER_KEYS.STATS] = stats // Update all the stats
-        this.state.user.characters[charId][CHARACTER_KEYS.SAVING_THROWS] = savingThrows // Update all the saving Throws
-        this.state.user.characters[charId][CHARACTER_KEYS.SKILLS] = skills // Update all the skills
+        this.state.user.characters[charId][CHARACTER_KEYS.SCORES] = stats // Update all the stats
         
-        // Update all the stats with numbers since they're all connected from base stats
+        // Update all the stats with numbers since they're all connected from ability scores
         const userId = this.state.user.id
-        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.STATS, stats)
-        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SAVING_THROWS, savingThrows)
-        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SKILLS, skills)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SCORES, stats)
         resolve(true)
       })
       

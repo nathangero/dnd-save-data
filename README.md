@@ -34,13 +34,13 @@ I also wanted to take this opportunity to learn things outside of work: web dev,
 - I used checkboxes to mark Proficiency in a Saving Throw or Skill because it's the only thing that resembled the little circles in the character sheet. 
 
 ## Coding design decisions
-- I'm really proud of the way I use v-for to print out the Base Stats, Saving Throws, and Skills sections. I had the idea after discovering how to use const dictionaries/objects (my makeshift enums for Javascript), for v-for to print out something. I know it requires perfect parity for order from the database key names to just the names the user sees on their device, but I think it was worth it. It made the coding a lot simpler to read and edit for me.
+- I'm really proud of the way I use v-for to print out the Ability Scores, Saving Throws, and Skills sections. I had the idea after discovering how to use const dictionaries/objects (my makeshift enums for Javascript), for v-for to print out something. I know it requires perfect parity for order from the database key names to just the names the user sees on their device, but I think it was worth it. It made the coding a lot simpler to read and edit for me.
 - I like enums. I use them all the time at work so it's just second nature to me to use them, especially for database keys/paths. Having a database key written down once and just use its reference everywhere else is SO convenient. Not to mention it makes refactoring a breeze!
 
 
 ## What problem I solved
 Aside from having a protable character sheet and hopefully removing the need to use pencil and eraser again, *I really wanted to have everything calculated for me.*  
-My friends and I are brand new D&D players as of the creation of this project, and our DM is so so patient with us in figuring out how dice rolls work in any situation, and how our skills work in and outside of battle. So, I had the thought of just having everything calculated based off of the Base Stats like Strength, Dexterity, Constitution, etc. I think it worked out pretty well! Assuming all the math is correct, nothing that's based off of a Stat Modifier should ever need to be manually updated by the user. It should all be calculated automatically anytime the base stats like Strength and Dexterity are changed.
+My friends and I are brand new D&D players as of the creation of this project, and our DM is so so patient with us in figuring out how dice rolls work in any situation, and how our skills work in and outside of battle. So, I had the thought of just having everything calculated based off of the Ability Scores like Strength, Dexterity, Constitution, etc. I think it worked out pretty well! Assuming all the math is correct, nothing that's based off of a Stat Modifier should ever need to be manually updated by the user. It should all be calculated automatically anytime the ability scores like Strength and Dexterity are changed.
 
 ## Future plans
 - Integrate Firebase Remote Config

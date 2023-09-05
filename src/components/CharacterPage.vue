@@ -383,26 +383,26 @@
           <section id="ability-scores">
             <div class="edit-buttons">
               <div>
-                <button class="button-edit-spacer" v-if="!isEditingBaseStats">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingBaseStats">Finish</button>
+                <button class="button-edit-spacer" v-if="!isEditingAbilityScores">Edit</button>
+                <button class="button-edit-spacer" v-if="isEditingAbilityScores">Finish</button>
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
+                <font-awesome-icon icon="chevron-up" v-if="!isShowingAbilityScores" class="collapse-chevron"/>
+                <font-awesome-icon icon="chevron-down" v-if="isShowingAbilityScores" class="collapse-chevron"/>
               </div>
               
               <div>
-                <button class="button-edit" v-if="!isEditingBaseStats" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Edit</button>
-                <button class="button-edit" v-if="isEditingBaseStats" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Finish</button>
+                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForStat(CHARACTER_KEYS.SCORES)">Edit</button>
+                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForStat(CHARACTER_KEYS.SCORES)">Finish</button>
               </div>
             </div>
             
             <div id="collapse">
               <collapse-transition dimension="height">
-                <div v-if="isShowingBaseStats">
-                  <div v-if="!isEditingBaseStats">
+                <div v-if="isShowingAbilityScores">
+                  <div v-if="!isEditingAbilityScores">
                     <ul class="stat-list">
                       <li v-for="(stat, key) in STAT_KEYS" :key="key">
                         <div class="stat-group">
@@ -415,7 +415,7 @@
                   </div>
 
                   <!-- Editing -->
-                  <div v-if="isEditingBaseStats" class="isEditing">
+                  <div v-if="isEditingAbilityScores" class="isEditing">
                     <ul class="stat-list">
                       <li v-for="(stat, key) in STAT_KEYS" :key="key">
                         <div class="stat-group">
@@ -1546,7 +1546,7 @@ export default {
       isDeleteCharacterPopupOpen: false,
       isCharacterBackupsPopupOpen: false,
       isEditingCharInfo: false,
-      isEditingBaseStats: false,
+      isEditingAbilityScores: false,
       isEditingSavingThrows: false,
       isEditingSkills: false,
       isEditingFeaturesTraits: false,
@@ -1558,7 +1558,7 @@ export default {
       isEditingSpellCasting: false,
       isEditingSpellSlots: false,
       isShowingCharacterInfo: true,
-      isShowingBaseStats: true,
+      isShowingAbilityScores: true,
       isShowingSavingThrows: true,
       isShowingSkills: true,
       isShowingFeatures: true,
@@ -2037,55 +2037,23 @@ export default {
         [STAT_KEYS.CHARISMA]: this.characterToView.stats[STAT_KEYS.CHARISMA],
       }
 
-      const savingThrows = {
-        [STAT_KEYS.STRENGTH]: this.characterToView.savingThrows[STAT_KEYS.STRENGTH],
-        [STAT_KEYS.DEXTERITY]: this.characterToView.savingThrows[STAT_KEYS.DEXTERITY],
-        [STAT_KEYS.CONSTITUTION]: this.characterToView.savingThrows[STAT_KEYS.CONSTITUTION],
-        [STAT_KEYS.INTELLIGENCE]: this.characterToView.savingThrows[STAT_KEYS.INTELLIGENCE],
-        [STAT_KEYS.WISDOM]: this.characterToView.savingThrows[STAT_KEYS.WISDOM],
-        [STAT_KEYS.CHARISMA]: this.characterToView.savingThrows[STAT_KEYS.CHARISMA],
-      }
-
-      const skills = {
-        [SKILL_KEYS.ACROBATICS]: this.characterToView.skills[SKILL_KEYS.ACROBATICS],
-        [SKILL_KEYS.ANIMAL_HANDLING]: this.characterToView.skills[SKILL_KEYS.ANIMAL_HANDLING],
-        [SKILL_KEYS.ARCANA]: this.characterToView.skills[SKILL_KEYS.ARCANA],
-        [SKILL_KEYS.ATHLETICS]: this.characterToView.skills[SKILL_KEYS.ATHLETICS],
-        [SKILL_KEYS.DECEPTION]: this.characterToView.skills[SKILL_KEYS.DECEPTION],
-        [SKILL_KEYS.HISTORY]: this.characterToView.skills[SKILL_KEYS.HISTORY],
-        [SKILL_KEYS.INSIGHT]: this.characterToView.skills[SKILL_KEYS.INSIGHT],
-        [SKILL_KEYS.INTIMIDATION]: this.characterToView.skills[SKILL_KEYS.INTIMIDATION],
-        [SKILL_KEYS.INVESTIGATION]: this.characterToView.skills[SKILL_KEYS.INVESTIGATION],
-        [SKILL_KEYS.MEDICINE]: this.characterToView.skills[SKILL_KEYS.MEDICINE],
-        [SKILL_KEYS.NATURE]: this.characterToView.skills[SKILL_KEYS.NATURE],
-        [SKILL_KEYS.PERCEPTION]: this.characterToView.skills[SKILL_KEYS.PERCEPTION],
-        [SKILL_KEYS.PERFORMANCE]: this.characterToView.skills[SKILL_KEYS.PERFORMANCE],
-        [SKILL_KEYS.PERSUASION]: this.characterToView.skills[SKILL_KEYS.PERSUASION],
-        [SKILL_KEYS.RELIGION]: this.characterToView.skills[SKILL_KEYS.RELIGION],
-        [SKILL_KEYS.SLEIGHT_OF_HAND]: this.characterToView.skills[SKILL_KEYS.SLEIGHT_OF_HAND],
-        [SKILL_KEYS.STEALTH]: this.characterToView.skills[SKILL_KEYS.STEALTH],
-        [SKILL_KEYS.SURVIVAL]: this.characterToView.skills[SKILL_KEYS.SURVIVAL],
-      }
-
       const payload = {
         charId: this.characterToViewId,
         stats: stats,
-        savingThrows: savingThrows,
-        skills: skills,
       }
 
-      this.store.dispatch("updateCharacterBaseStats", payload).then((success) => {
+      this.store.dispatch("updateCharacterAbilityScores", payload).then((success) => {
         if (success) {
-          alert(`updated base stats, saving throws, skills, initiative, passive perception, and saving DC`)
+          alert(`updated ability scores, saving throws, skills, initiative, passive perception, and saving DC`)
         } else {
-          alert(`couldn't update base stats for some reason`)
+          alert(`couldn't update ability scores for some reason`)
         }
 
-        this.toggleEditForStat(CHARACTER_KEYS.STATS)
+        this.toggleEditForStat(CHARACTER_KEYS.SCORES)
       })
       .catch((error) => {
         console.error(error)
-        alert(`An error occured updating base stats`)
+        alert(`An error occured updating ability scores`)
       })
     },
     onPressUpdateSavingThrows() {
@@ -2337,8 +2305,8 @@ export default {
     },
     toggleCollapseForStat(statRef) {
       switch (statRef) {
-        case CHARACTER_KEYS.STATS:
-          this.isShowingBaseStats = !this.isShowingBaseStats
+        case CHARACTER_KEYS.SCORES:
+          this.isShowingAbilityScores = !this.isShowingAbilityScores
           break
 
         
@@ -2397,8 +2365,8 @@ export default {
     },
     toggleEditForStat(statRef) {
       switch (statRef) {
-        case CHARACTER_KEYS.STATS:
-          this.isEditingBaseStats = !this.isEditingBaseStats
+        case CHARACTER_KEYS.SCORES:
+          this.isEditingAbilityScores = !this.isEditingAbilityScores
           break
 
         case CHARACTER_KEYS.SAVING_THROWS:

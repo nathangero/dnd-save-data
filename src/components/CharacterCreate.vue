@@ -188,13 +188,13 @@
       <br>
       <section id="ability-scores">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingAbilityScores" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingAbilityScores" class="collapse-chevron"/>
         </div>
 
         <collapse-transition dimension="height">
-          <div v-if="isShowingBaseStats">
+          <div v-if="isShowingAbilityScores">
             <ul class="stat-list">
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
                 <div class="stat-group">
@@ -1068,7 +1068,7 @@ export default {
       isModalNewCharacterOpen: false,
       isModalViewCharacterOpen: false,
       isEditingCharInfo: false,
-      isEditingBaseStats: false,
+      isEditingAbilityScores: false,
       isEditingSavingThrows: false,
       isEditingSkills: false,
       isEditingFeaturesTraits: false,
@@ -1080,7 +1080,7 @@ export default {
       isEditingSpellCasting: false,
       isEditingSpellSlots: false,
       isShowingCharacterInfo: true,
-      isShowingBaseStats: true,
+      isShowingAbilityScores: true,
       isShowingSavingThrows: true,
       isShowingSkills: true,
       isShowingFeatures: true,
@@ -1796,8 +1796,8 @@ export default {
     },
     toggleCollapseForStat(statRef) {
       switch (statRef) {
-        case CHARACTER_KEYS.STATS:
-          this.isShowingBaseStats = !this.isShowingBaseStats
+        case CHARACTER_KEYS.SCORES:
+          this.isShowingAbilityScores = !this.isShowingAbilityScores
           break
         
         case CHARACTER_KEYS.SAVING_THROWS:
@@ -1846,8 +1846,8 @@ export default {
     },
     toggleEditForStat(statRef) {
       switch (statRef) {
-        case CHARACTER_KEYS.STATS:
-          this.isEditingBaseStats = !this.isEditingBaseStats
+        case CHARACTER_KEYS.SCORES:
+          this.isEditingAbilityScores = !this.isEditingAbilityScores
           break
 
         case CHARACTER_KEYS.SAVING_THROWS:
