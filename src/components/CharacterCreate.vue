@@ -99,7 +99,7 @@
       <br>
       <div id="character-info">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(characterinfo)">Character Info</h3>
+          <h3 @click="toggleCollapseForStat(characterinfo)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h3>
           <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
           <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
         </div>
@@ -188,7 +188,7 @@
       <br>
       <div id="ability-scores">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">Base Stats</h3>
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
           <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
           <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
         </div>
@@ -214,7 +214,7 @@
       <br>
       <div id="saving-throws">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">Saving Throws</h3>
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h3>
           <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
           <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
         </div>
@@ -244,7 +244,7 @@
       <br>
       <div id="skills">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">Skills</h3>
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h3>
           <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
           <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
         </div>
@@ -280,7 +280,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features & Traits</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
           </div>
@@ -390,7 +390,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">Weapons & Spells</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
           </div>
@@ -559,7 +559,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
           </div>
@@ -638,7 +638,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
           </div>
@@ -714,7 +714,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
           </div>
@@ -779,7 +779,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">Spell Slots</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
           </div>
@@ -863,7 +863,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
           </div>
