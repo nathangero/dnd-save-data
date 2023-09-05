@@ -430,7 +430,7 @@
                     </ul>
 
                     <div class="buttons-delete-update">
-                      <button class="button-update" @click="onPressUpdateBaseStats()">Update</button>
+                      <button class="button-update" @click="onPressUpdateAbilityScores()">Update</button>
                     </div>
                   </div>
                 </div>
@@ -2027,7 +2027,7 @@ export default {
         alert(`An error occured updating character info`)
       })
     },
-    onPressUpdateBaseStats() {
+    onPressUpdateAbilityScores() {
       const stats = {
         [STAT_KEYS.STRENGTH]: this.characterToView.stats[STAT_KEYS.STRENGTH],
         [STAT_KEYS.DEXTERITY]: this.characterToView.stats[STAT_KEYS.DEXTERITY],
