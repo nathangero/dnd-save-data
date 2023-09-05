@@ -16,7 +16,7 @@
                 </li>
 
                 <li>
-                  <a @click="scrollToSection('base-stats')">{{ CHARACTER_SECTIONS.BASE_STATS }}</a>
+                  <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
                 </li>
 
                 <li>
@@ -380,7 +380,7 @@
           </div>
 
           <br>
-          <div id="base-stats">
+          <div id="ability-scores">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingBaseStats">Edit</button>
@@ -388,7 +388,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">Base Stats</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
               </div>
