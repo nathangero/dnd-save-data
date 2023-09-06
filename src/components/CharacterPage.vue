@@ -2044,7 +2044,7 @@ export default {
 
       this.store.dispatch("updateCharacterAbilityScores", payload).then((success) => {
         if (success) {
-          alert(`updated ability scores, saving throws, skills, initiative, passive perception, and saving DC`)
+          alert(`updated ability scores, initiative, passive perception, and saving DC`)
         } else {
           alert(`couldn't update ability scores for some reason`)
         }

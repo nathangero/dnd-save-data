@@ -127,7 +127,7 @@
                 <div class="stat-group">
                   <label for="stats-initiative" class="stat-label">Initiative: </label>
                   <div class="spacer"></div>
-                  <label class="stat-label">{{ getStatBonusSign(stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
+                  <label class="stat-label">{{ getStatBonusSign(scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                 </div>
               </li>
 
@@ -201,8 +201,8 @@
                   <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
                   <div class="spacer"></div>
                   <div style="margin-left: 10px;">
-                    <input type="number" id="stats-label" v-model="stats[stat].value" class="input-stats" inputmode="numeric" required>
-                    <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(stats[stat].calculateMod()) }}</label>
+                    <input type="number" id="stats-label" v-model="scores[stat].value" class="input-stats" inputmode="numeric" required>
+                    <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(scores[stat].calculateMod()) }}</label>
                   </div>
                 </div>
               </li>
@@ -228,10 +228,10 @@
                   <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
                   <label class="stat-value" v-if="savingThrows[stat].proficient">
-                    {{ getStatBonusSign(stats[stat].calculateMod() + getProficiencyBonus()) }}
+                    {{ getStatBonusSign(scores[stat].calculateMod() + getProficiencyBonus()) }}
                   </label>
                   <label class="stat-value" v-if="!savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(stats[stat].calculateMod()) }}
+                    {{ getStatBonusSign(scores[stat].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -258,10 +258,10 @@
                   <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
                   <label class="stat-value" v-if="skills[skill].proficient">
-                    {{ getStatBonusSign(stats[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
+                    {{ getStatBonusSign(scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
                   </label>
                   <label class="stat-value" v-if="!skills[skill].proficient">
-                    {{ getStatBonusSign(stats[SKILL_MODS[skill]].calculateMod()) }}
+                    {{ getStatBonusSign(scores[SKILL_MODS[skill]].calculateMod()) }}
                   </label>
                 </div>
               </li>

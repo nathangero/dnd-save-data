@@ -74,7 +74,7 @@ export default class Character {
 
     )
     
-    let stats = {
+    let scores = {
         [STAT_KEYS.STRENGTH]: new Stat(character.scores[STAT_KEYS.STRENGTH].value),
         [STAT_KEYS.DEXTERITY]: new Stat(character.scores[STAT_KEYS.DEXTERITY].value),
         [STAT_KEYS.CONSTITUTION]: new Stat(character.scores[STAT_KEYS.CONSTITUTION].value),
@@ -133,7 +133,7 @@ export default class Character {
       character.spellCastStat,
       character.spells,
       character.spellSlots,
-      stats,
+      scores,
       character.weapons,
       character.timeCreated,
       character.inspiration,
