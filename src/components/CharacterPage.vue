@@ -16,7 +16,7 @@
                 </li>
 
                 <li>
-                  <a @click="scrollToSection('base-stats')">{{ CHARACTER_SECTIONS.BASE_STATS }}</a>
+                  <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
                 </li>
 
                 <li>
@@ -73,7 +73,7 @@
         <div class="character-to-view" v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
 
           <!-- NOT EDITABLE -->
-          <div id="character-background">
+          <section id="character-background">
             <p class="character-name">{{ characterToView.name }}</p>
             <ul class="stat-list">
               <li>
@@ -92,10 +92,10 @@
                 <label class="character-info">{{ characterToView.alignment }}</label>
               </li>
             </ul>
-          </div>
+          </section>
             
           <br>
-          <div id="character-info">
+          <section id="character-info">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingCharInfo">Edit</button>
@@ -103,7 +103,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(characterinfo)">Character Info</h3>
+                <h3 @click="toggleCollapseForStat(characterinfo)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
               </div>
@@ -136,7 +136,7 @@
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Initiative: </label>
-                          <label class="stat-value">{{ getStatBonusSign(characterToView.stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
+                          <label class="stat-value">{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                         </div>
                       </li>
                       
@@ -213,7 +213,7 @@
                       <li>
                         <div class="stat-group">
                           <label class="stat-label">Spell Saving DC: </label>
-                          <label class="stat-value">{{ calculateSpellSavingDc(characterToView.stats[characterToView.spellCastStat].calculateMod()) }}</label>
+                          <label class="stat-value">{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</label>
                         </div>
                       </li>
                       
@@ -248,7 +248,7 @@
                         <div class="stat-group">
                           <label for="stats-initiative" class="stat-label">Initiative: </label>
                           <div class="spacer"></div>
-                          <label class="stat-value">{{ getStatBonusSign(characterToView.stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
+                          <label class="stat-value">{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                         </div>
                       </li>
                       
@@ -356,7 +356,7 @@
                         <div class="stat-group">
                           <label class="stat-label">Spell Saving DC: </label>
                           <div class="spacer"></div>
-                          <label class="stat-value">{{ calculateSpellSavingDc(characterToView.stats[characterToView.spellCastStat].calculateMod()) }}</label>
+                          <label class="stat-value">{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</label>
                         </div>
                       </li>
 
@@ -377,69 +377,69 @@
               </collapse-transition>
             </div>
 
-          </div>
+          </section>
 
           <br>
-          <div id="base-stats">
+          <section id="ability-scores">
             <div class="edit-buttons">
               <div>
-                <button class="button-edit-spacer" v-if="!isEditingBaseStats">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingBaseStats">Finish</button>
+                <button class="button-edit-spacer" v-if="!isEditingAbilityScores">Edit</button>
+                <button class="button-edit-spacer" v-if="isEditingAbilityScores">Finish</button>
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">Base Stats</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
+                <font-awesome-icon icon="chevron-up" v-if="!isShowingAbilityScores" class="collapse-chevron"/>
+                <font-awesome-icon icon="chevron-down" v-if="isShowingAbilityScores" class="collapse-chevron"/>
               </div>
               
               <div>
-                <button class="button-edit" v-if="!isEditingBaseStats" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Edit</button>
-                <button class="button-edit" v-if="isEditingBaseStats" @click="toggleEditForStat(CHARACTER_KEYS.STATS)">Finish</button>
+                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForStat(CHARACTER_KEYS.SCORES)">Edit</button>
+                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForStat(CHARACTER_KEYS.SCORES)">Finish</button>
               </div>
             </div>
             
             <div id="collapse">
               <collapse-transition dimension="height">
-                <div v-if="isShowingBaseStats">
-                  <div v-if="!isEditingBaseStats">
+                <div v-if="isShowingAbilityScores">
+                  <div v-if="!isEditingAbilityScores">
                     <ul class="stat-list">
                       <li v-for="(stat, key) in STAT_KEYS" :key="key">
                         <div class="stat-group">
                           <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                          <label class="stat-value">{{ characterToView.stats[stat].value }}</label>
-                          <label class="stat-bonus">{{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}</label>
+                          <label class="stat-value">{{ characterToView.scores[stat].value }}</label>
+                          <label class="stat-bonus">{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
                         </div>
                       </li>
                     </ul>
                   </div>
 
                   <!-- Editing -->
-                  <div v-if="isEditingBaseStats" class="isEditing">
+                  <div v-if="isEditingAbilityScores" class="isEditing">
                     <ul class="stat-list">
                       <li v-for="(stat, key) in STAT_KEYS" :key="key">
                         <div class="stat-group">
                           <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
                           <div class="spacer"></div>
                           <div style="margin-left: 10px;">
-                            <input type="number" id="stats-label" v-model="characterToView.stats[stat].value" class="input-stats" inputmode="numeric" required>
-                            <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}</label>
+                            <input type="number" id="stats-label" v-model="characterToView.scores[stat].value" class="input-stats" inputmode="numeric" required>
+                            <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
                           </div>
                         </div>
                       </li>
                     </ul>
 
                     <div class="buttons-delete-update">
-                      <button class="button-update" @click="onPressUpdateBaseStats()">Update</button>
+                      <button class="button-update" @click="onPressUpdateAbilityScores()">Update</button>
                     </div>
                   </div>
                 </div>
               </collapse-transition>
             </div>
-          </div>
+          </section>
 
           <br>
-          <div id="saving-throws">
+          <section id="saving-throws">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingSavingThrows">Edit</button>
@@ -447,7 +447,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">Saving Throws</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
               </div>
@@ -468,10 +468,10 @@
                         <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
                         <label class="stat-value" v-if="characterToView.savingThrows[stat].proficient">
-                          {{ getStatBonusSign(characterToView.stats[stat].calculateMod() + getProficiencyBonus()) }}
+                          {{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}
                         </label>
                         <label class="stat-value" v-if="!characterToView.savingThrows[stat].proficient">
-                          {{ getStatBonusSign(characterToView.stats[stat].calculateMod()) }}
+                          {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}
                         </label>
                       </div>
                     </li>
@@ -485,10 +485,10 @@
                 </div>
               </collapse-transition>
             </div>
-          </div>
+          </section>
           
           <br>
-          <div id="skills">
+          <section id="skills">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingSkills">Edit</button>
@@ -496,7 +496,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">Skills</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
               </div>
@@ -517,10 +517,10 @@
                         <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
                         <label class="stat-value" v-if="characterToView.skills[skill].proficient">
-                          {{ getStatBonusSign(characterToView.stats[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
+                          {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
                         </label>
                         <label class="stat-value" v-if="!characterToView.skills[skill].proficient">
-                          {{ getStatBonusSign(characterToView.stats[SKILL_MODS[skill]].calculateMod()) }}
+                          {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod()) }}
                         </label>
                       </div>
                     </li>
@@ -535,10 +535,10 @@
               </collapse-transition>
             </div>
             
-          </div>
+          </section>
 
           <br>
-          <div id="features-traits">
+          <section id="features-traits">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingFeaturesTraits">Edit</button>
@@ -546,7 +546,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features & Traits</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
               </div>
@@ -655,10 +655,10 @@
               </collapse-transition>
             </div>
             
-          </div>
+          </section>
 
           <br>
-          <div id="weapons">
+          <section id="weapons">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingWeapons">Edit</button>
@@ -666,7 +666,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">Weapons & Spells</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
               </div>
@@ -832,10 +832,10 @@
                 </div>
               </collapse-transition>
             </div>
-          </div>
+          </section>
 
           <br>
-          <div id="equipment">
+          <section id="equipment">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingEquipment">Edit</button>
@@ -843,7 +843,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
               </div>
@@ -922,10 +922,10 @@
                 </div>
               </collapse-transition>
             </div>
-          </div>
+          </section>
 
           <br>
-          <div id="treasure">
+          <section id="treasure">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingTreasure">Edit</button>
@@ -933,7 +933,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.TREASURES)">Treasures</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.TREASURES)">{{ CHARACTER_SECTIONS.TREASURES }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingTreasure" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingTreasure" class="collapse-chevron"/>
               </div>
@@ -1002,10 +1002,10 @@
               </collapse-transition>
             </div>
 
-          </div>
+          </section>
           
           <br>
-          <div id="languages">
+          <section id="languages">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
@@ -1013,7 +1013,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
               </div>
@@ -1082,10 +1082,10 @@
             </div>
 
             
-          </div>      
+          </section>      
 
           <br>
-          <div id="proficiencies">
+          <section id="proficiencies">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
@@ -1093,7 +1093,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
               </div>
@@ -1151,10 +1151,10 @@
               </collapse-transition>
             </div>
             
-          </div>
+          </section>
 
           <br>
-          <div id="spell-slots">
+          <section id="spell-slots">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingSpellSlots">Edit</button>
@@ -1162,7 +1162,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">Spell Slots</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
               </div>
@@ -1241,10 +1241,10 @@
                 </template>
               </div>
             </collapse-transition>
-          </div>
+          </section>
 
           <br>
-          <div id="spell-casting">
+          <section id="spell-casting">
             <div class="edit-buttons">
               <div>
                 <button class="button-edit-spacer" v-if="!isEditingSpellCasting">Edit</button>
@@ -1252,7 +1252,7 @@
               </div>
 
               <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
+                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h3>
                 <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
                 <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
               </div>
@@ -1384,7 +1384,7 @@
                 </div>
               </collapse-transition>
             </div>
-          </div>
+          </section>
         </div>
           
         <br>
@@ -1519,7 +1519,7 @@ const MAX_VALUES = {
   HP: 600,
   HIT_DIE: 10,
   LEVEL: 20,
-  STATS: 20,
+  SCORES: 20,
   STATS_BONUS: 5,
   SAVING_THROWS: 5,
   SKILLS: 15,
@@ -1546,7 +1546,7 @@ export default {
       isDeleteCharacterPopupOpen: false,
       isCharacterBackupsPopupOpen: false,
       isEditingCharInfo: false,
-      isEditingBaseStats: false,
+      isEditingAbilityScores: false,
       isEditingSavingThrows: false,
       isEditingSkills: false,
       isEditingFeaturesTraits: false,
@@ -1558,7 +1558,7 @@ export default {
       isEditingSpellCasting: false,
       isEditingSpellSlots: false,
       isShowingCharacterInfo: true,
-      isShowingBaseStats: true,
+      isShowingAbilityScores: true,
       isShowingSavingThrows: true,
       isShowingSkills: true,
       isShowingFeatures: true,
@@ -2027,65 +2027,33 @@ export default {
         alert(`An error occured updating character info`)
       })
     },
-    onPressUpdateBaseStats() {
-      const stats = {
-        [STAT_KEYS.STRENGTH]: this.characterToView.stats[STAT_KEYS.STRENGTH],
-        [STAT_KEYS.DEXTERITY]: this.characterToView.stats[STAT_KEYS.DEXTERITY],
-        [STAT_KEYS.CONSTITUTION]: this.characterToView.stats[STAT_KEYS.CONSTITUTION],
-        [STAT_KEYS.INTELLIGENCE]: this.characterToView.stats[STAT_KEYS.INTELLIGENCE],
-        [STAT_KEYS.WISDOM]: this.characterToView.stats[STAT_KEYS.WISDOM],
-        [STAT_KEYS.CHARISMA]: this.characterToView.stats[STAT_KEYS.CHARISMA],
-      }
-
-      const savingThrows = {
-        [STAT_KEYS.STRENGTH]: this.characterToView.savingThrows[STAT_KEYS.STRENGTH],
-        [STAT_KEYS.DEXTERITY]: this.characterToView.savingThrows[STAT_KEYS.DEXTERITY],
-        [STAT_KEYS.CONSTITUTION]: this.characterToView.savingThrows[STAT_KEYS.CONSTITUTION],
-        [STAT_KEYS.INTELLIGENCE]: this.characterToView.savingThrows[STAT_KEYS.INTELLIGENCE],
-        [STAT_KEYS.WISDOM]: this.characterToView.savingThrows[STAT_KEYS.WISDOM],
-        [STAT_KEYS.CHARISMA]: this.characterToView.savingThrows[STAT_KEYS.CHARISMA],
-      }
-
-      const skills = {
-        [SKILL_KEYS.ACROBATICS]: this.characterToView.skills[SKILL_KEYS.ACROBATICS],
-        [SKILL_KEYS.ANIMAL_HANDLING]: this.characterToView.skills[SKILL_KEYS.ANIMAL_HANDLING],
-        [SKILL_KEYS.ARCANA]: this.characterToView.skills[SKILL_KEYS.ARCANA],
-        [SKILL_KEYS.ATHLETICS]: this.characterToView.skills[SKILL_KEYS.ATHLETICS],
-        [SKILL_KEYS.DECEPTION]: this.characterToView.skills[SKILL_KEYS.DECEPTION],
-        [SKILL_KEYS.HISTORY]: this.characterToView.skills[SKILL_KEYS.HISTORY],
-        [SKILL_KEYS.INSIGHT]: this.characterToView.skills[SKILL_KEYS.INSIGHT],
-        [SKILL_KEYS.INTIMIDATION]: this.characterToView.skills[SKILL_KEYS.INTIMIDATION],
-        [SKILL_KEYS.INVESTIGATION]: this.characterToView.skills[SKILL_KEYS.INVESTIGATION],
-        [SKILL_KEYS.MEDICINE]: this.characterToView.skills[SKILL_KEYS.MEDICINE],
-        [SKILL_KEYS.NATURE]: this.characterToView.skills[SKILL_KEYS.NATURE],
-        [SKILL_KEYS.PERCEPTION]: this.characterToView.skills[SKILL_KEYS.PERCEPTION],
-        [SKILL_KEYS.PERFORMANCE]: this.characterToView.skills[SKILL_KEYS.PERFORMANCE],
-        [SKILL_KEYS.PERSUASION]: this.characterToView.skills[SKILL_KEYS.PERSUASION],
-        [SKILL_KEYS.RELIGION]: this.characterToView.skills[SKILL_KEYS.RELIGION],
-        [SKILL_KEYS.SLEIGHT_OF_HAND]: this.characterToView.skills[SKILL_KEYS.SLEIGHT_OF_HAND],
-        [SKILL_KEYS.STEALTH]: this.characterToView.skills[SKILL_KEYS.STEALTH],
-        [SKILL_KEYS.SURVIVAL]: this.characterToView.skills[SKILL_KEYS.SURVIVAL],
+    onPressUpdateAbilityScores() {
+      const scores = {
+        [STAT_KEYS.STRENGTH]: this.characterToView.scores[STAT_KEYS.STRENGTH],
+        [STAT_KEYS.DEXTERITY]: this.characterToView.scores[STAT_KEYS.DEXTERITY],
+        [STAT_KEYS.CONSTITUTION]: this.characterToView.scores[STAT_KEYS.CONSTITUTION],
+        [STAT_KEYS.INTELLIGENCE]: this.characterToView.scores[STAT_KEYS.INTELLIGENCE],
+        [STAT_KEYS.WISDOM]: this.characterToView.scores[STAT_KEYS.WISDOM],
+        [STAT_KEYS.CHARISMA]: this.characterToView.scores[STAT_KEYS.CHARISMA],
       }
 
       const payload = {
         charId: this.characterToViewId,
-        stats: stats,
-        savingThrows: savingThrows,
-        skills: skills,
+        scores: scores,
       }
 
-      this.store.dispatch("updateCharacterBaseStats", payload).then((success) => {
+      this.store.dispatch("updateCharacterAbilityScores", payload).then((success) => {
         if (success) {
-          alert(`updated base stats, saving throws, skills, initiative, passive perception, and saving DC`)
+          alert(`updated ability scores, initiative, passive perception, and saving DC`)
         } else {
-          alert(`couldn't update base stats for some reason`)
+          alert(`couldn't update ability scores for some reason`)
         }
 
-        this.toggleEditForStat(CHARACTER_KEYS.STATS)
+        this.toggleEditForStat(CHARACTER_KEYS.SCORES)
       })
       .catch((error) => {
         console.error(error)
-        alert(`An error occured updating base stats`)
+        alert(`An error occured updating ability scores`)
       })
     },
     onPressUpdateSavingThrows() {
@@ -2270,7 +2238,7 @@ export default {
       }
     },
     calculatePassivePerception() {
-      const result = 10 + this.characterToView.stats[STAT_KEYS.WISDOM].calculateMod()
+      const result = 10 + this.characterToView.scores[STAT_KEYS.WISDOM].calculateMod()
       return result
     },
     calculateSpellSavingDc(mod) {
@@ -2288,7 +2256,7 @@ export default {
       if (stat === '') {
         return 0
       } else {
-        return this.characterToView.stats[stat].calculateMod()
+        return this.characterToView.scores[stat].calculateMod()
       }
       
     },
@@ -2337,8 +2305,8 @@ export default {
     },
     toggleCollapseForStat(statRef) {
       switch (statRef) {
-        case CHARACTER_KEYS.STATS:
-          this.isShowingBaseStats = !this.isShowingBaseStats
+        case CHARACTER_KEYS.SCORES:
+          this.isShowingAbilityScores = !this.isShowingAbilityScores
           break
 
         
@@ -2397,8 +2365,8 @@ export default {
     },
     toggleEditForStat(statRef) {
       switch (statRef) {
-        case CHARACTER_KEYS.STATS:
-          this.isEditingBaseStats = !this.isEditingBaseStats
+        case CHARACTER_KEYS.SCORES:
+          this.isEditingAbilityScores = !this.isEditingAbilityScores
           break
 
         case CHARACTER_KEYS.SAVING_THROWS:
@@ -2513,7 +2481,7 @@ export default {
 </script>
 
 <style scoped>
-@import '../syles/character-info-stats.css';
+@import '../syles/character-info-scores.css';
 @import '../syles/popup.css';
 @import '../syles/transitions.css';
 

@@ -1,5 +1,5 @@
 const CHARACTER_SECTIONS = {
-    BASE_STATS: "Base Stats",
+    ABILITY_SCORES: "Ability Scores",
     CHARACTER_BACKGROUND: "Background",
     CHARACTER_INFO: "Character Info",
     FEATURES_TRAITS: "Features & Traits",
