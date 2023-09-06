@@ -1631,7 +1631,7 @@ export default {
       }
       
       if (!this.checkIfStatsValid()) {
-        alert(`Stats cannot be blank or greater than ${MAX_VALUES.SCORES} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
+        alert(`Scores cannot be blank or greater than ${MAX_VALUES.SCORES} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
         return false
       }
 
