@@ -287,6 +287,7 @@
                       <li style="margin-top: 10px;">
                         <div class="stat-group">
                           <label class="stat-label">Hit Die Type: </label>
+                          <div class="spacer"></div>
                           <select class="picker" v-model="characterToView.hp[HP_KEYS.DIE]">
                           <div class="spacer"></div>
                             <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
