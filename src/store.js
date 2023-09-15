@@ -167,10 +167,11 @@ const store = createStore({
             let updatedChar = Character.convertCharacterToObj(this.state.user.characters[charId])
             updatedChar.level = info[CHARACTER_KEYS.LEVEL]
             updatedChar.armor = info[CHARACTER_KEYS.ARMOR]
-            updatedChar.inspiration = info[CHARACTER_KEYS.INSPIRATION]
             updatedChar.speed = info[CHARACTER_KEYS.SPEED]
             updatedChar.hp = info[CHARACTER_KEYS.HP]
+            updatedChar.deathSaves = info[CHARACTER_KEYS.DEATH_SAVES]
             updatedChar.spellCastStat = info[CHARACTER_KEYS.SPELL_CAST_STAT]
+            updatedChar.inspiration = info[CHARACTER_KEYS.INSPIRATION]
 
             this.state.user.characters[charId] = updatedChar
             resolve(true)

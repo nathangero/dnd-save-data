@@ -2003,10 +2003,11 @@ export default {
       const info = {
         [CHARACTER_KEYS.LEVEL]: this.characterToView.level,
         [CHARACTER_KEYS.ARMOR]: this.characterToView.armor,
-        [CHARACTER_KEYS.INSPIRATION]: this.characterToView.inspiration,
         [CHARACTER_KEYS.SPEED]: this.characterToView.speed,
         [CHARACTER_KEYS.HP]: this.characterToView.hp,
+        [CHARACTER_KEYS.DEATH_SAVES]: this.characterToView.deathSaves,
         [CHARACTER_KEYS.SPELL_CAST_STAT]: this.characterToView.spellCastStat,
+        [CHARACTER_KEYS.INSPIRATION]: this.characterToView.inspiration,
       }
 
       const payload = {
