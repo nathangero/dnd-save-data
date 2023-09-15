@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import COOKIE_NAMES from '@/enums/cookie-names'
 import { CHARACTER_KEYS } from './enums/dbKeys/character-keys';
 import DEBUG_CHARACTER_BACKUPS from '@/debug/debugCharacterBackups';
+import Character from './models/character';
 
 const store = createStore({
   state: {
@@ -161,6 +162,18 @@ const store = createStore({
         const userId = this.state.user.id
         rtdbFunctions.updateCharacterInfoByKey(userId, charId, info).then((success) => {
           if (success) {
+            // Update character information locally
+
+            let updatedChar = Character.convertCharacterToObj(this.state.user.characters[charId])
+            updatedChar.level = info[CHARACTER_KEYS.LEVEL]
+            updatedChar.armor = info[CHARACTER_KEYS.ARMOR]
+            updatedChar.speed = info[CHARACTER_KEYS.SPEED]
+            updatedChar.hp = info[CHARACTER_KEYS.HP]
+            updatedChar.deathSaves = info[CHARACTER_KEYS.DEATH_SAVES]
+            updatedChar.spellCastStat = info[CHARACTER_KEYS.SPELL_CAST_STAT]
+            updatedChar.inspiration = info[CHARACTER_KEYS.INSPIRATION]
+
+            this.state.user.characters[charId] = updatedChar
             resolve(true)
           } else {
             reject(false)

@@ -287,6 +287,7 @@
                       <li style="margin-top: 10px;">
                         <div class="stat-group">
                           <label class="stat-label">Hit Die Type: </label>
+                          <div class="spacer"></div>
                           <select class="picker" v-model="characterToView.hp[HP_KEYS.DIE]">
                           <div class="spacer"></div>
                             <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
@@ -309,20 +310,28 @@
                           <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
                         </div>
                       </li>
-                    
-                      <li>
+
+                      <li style="margin-top: 10px;">
                         <div class="stat-group">
-                          <label for="death-saves-successes" class="stat-label">Death saves successes: </label>
+                          <label class="stat-label">Death saves successes: </label>
                           <div class="spacer"></div>
-                          <input type="number" id="death-saves-successes" v-model="characterToView.deathSaves.successes" class="input-stats" inputmode="numeric" required>
+                          <select class="picker" v-model="characterToView.deathSaves.successes">
+                          <div class="spacer"></div>
+                          <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
+                          </select>
+                          <label class="stat-label" style="padding-left: 10px;">/ 3</label>
                         </div>
                       </li>
-                      
-                      <li>
+
+                      <li style="margin-top: 10px;">
                         <div class="stat-group">
-                          <label for="death-saves-failures" class="stat-label">Death saves failures: </label>
+                          <label class="stat-label">Death saves failures: </label>
                           <div class="spacer"></div>
-                          <input type="number" id="death-saves-failures" v-model="characterToView.deathSaves.failures" class="input-stats" inputmode="numeric" required>
+                          <select class="picker" v-model="characterToView.deathSaves.failures">
+                          <div class="spacer"></div>
+                            <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
+                          </select>
+                          <label class="stat-label" style="padding-left: 10px;">/ 3</label>
                         </div>
                       </li>
 
@@ -1580,6 +1589,7 @@ export default {
       CHARACTER_KEYS: CHARACTER_KEYS,
       CLASS_NAMES: CLASS_NAMES,
       DEATH_SAVES_KEYS: DEATH_SAVES_KEYS,
+      DEATH_SAVES_COUNTS: [0, 1, 2, 3],
       DIE_TYPE: DIE_TYPE,
       EQUIPMENT_KEYS: EQUIPMENT_KEYS,
       FEATURES_KEYS: FEATURES_KEYS,
@@ -2002,10 +2012,11 @@ export default {
       const info = {
         [CHARACTER_KEYS.LEVEL]: this.characterToView.level,
         [CHARACTER_KEYS.ARMOR]: this.characterToView.armor,
-        [CHARACTER_KEYS.INSPIRATION]: this.characterToView.inspiration,
         [CHARACTER_KEYS.SPEED]: this.characterToView.speed,
         [CHARACTER_KEYS.HP]: this.characterToView.hp,
+        [CHARACTER_KEYS.DEATH_SAVES]: this.characterToView.deathSaves,
         [CHARACTER_KEYS.SPELL_CAST_STAT]: this.characterToView.spellCastStat,
+        [CHARACTER_KEYS.INSPIRATION]: this.characterToView.inspiration,
       }
 
       const payload = {
