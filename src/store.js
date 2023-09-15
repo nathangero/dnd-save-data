@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import COOKIE_NAMES from '@/enums/cookie-names'
 import { CHARACTER_KEYS } from './enums/dbKeys/character-keys';
 import DEBUG_CHARACTER_BACKUPS from '@/debug/debugCharacterBackups';
+import Character from './models/character';
 
 const store = createStore({
   state: {
@@ -161,6 +162,18 @@ const store = createStore({
         const userId = this.state.user.id
         rtdbFunctions.updateCharacterInfoByKey(userId, charId, info).then((success) => {
           if (success) {
+            // Update character information locally
+
+            let updatedChar = Character.convertCharacterToObj(this.state.user.characters[charId])
+            updatedChar.level = info[CHARACTER_KEYS.LEVEL]
+            updatedChar.armor = info[CHARACTER_KEYS.ARMOR]
+            updatedChar.speed = info[CHARACTER_KEYS.SPEED]
+            updatedChar.hp = info[CHARACTER_KEYS.HP]
+            updatedChar.deathSaves = info[CHARACTER_KEYS.DEATH_SAVES]
+            updatedChar.spellCastStat = info[CHARACTER_KEYS.SPELL_CAST_STAT]
+            updatedChar.inspiration = info[CHARACTER_KEYS.INSPIRATION]
+
+            this.state.user.characters[charId] = updatedChar
             resolve(true)
           } else {
             reject(false)
@@ -169,26 +182,22 @@ const store = createStore({
       })
       
     },
-    updateCharacterBaseStats(state, payload) {
+    updateCharacterAbilityScores(state, payload) {
       // console.info('payload:', payload)
-      const { charId, stats, savingThrows, skills} = payload      
+      const { charId, scores, } = payload      
 
       return new Promise((resolve, reject) => {
-        if (stats === undefined || stats === '' || savingThrows === undefined || savingThrows === '' || skills === undefined || skills === '') {
+        if (scores === undefined || scores === '') {
           console.info('something is undefined')
           reject(false)
           return
         }
 
-        this.state.user.characters[charId][CHARACTER_KEYS.STATS] = stats // Update all the stats
-        this.state.user.characters[charId][CHARACTER_KEYS.SAVING_THROWS] = savingThrows // Update all the saving Throws
-        this.state.user.characters[charId][CHARACTER_KEYS.SKILLS] = skills // Update all the skills
+        this.state.user.characters[charId][CHARACTER_KEYS.SCORES] = scores // Update all the scores
         
-        // Update all the stats with numbers since they're all connected from base stats
+        // Update all the scores with numbers since they're all connected from ability scores
         const userId = this.state.user.id
-        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.STATS, stats)
-        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SAVING_THROWS, savingThrows)
-        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SKILLS, skills)
+        rtdbFunctions.addCharacterStatByKey(userId, charId, CHARACTER_KEYS.SCORES, scores)
         resolve(true)
       })
       

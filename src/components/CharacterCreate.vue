@@ -14,7 +14,7 @@
             </li>
 
             <li>
-              <a @click="scrollToSection('base-stats')">{{ CHARACTER_SECTIONS.BASE_STATS }}</a>
+              <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
             </li>
 
             <li>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="character-to-view">
-      <div id="character-background">
+      <section id="character-background">
         <div class="input-container">
           <h1>New Character</h1>
           <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
@@ -94,12 +94,12 @@
             </ul>
           </div>
         </div>
-      </div>
+      </section>
       
       <br>
-      <div id="character-info">
+      <section id="character-info">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(characterinfo)">Character Info</h3>
+          <h3 @click="toggleCollapseForStat(characterinfo)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h3>
           <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
           <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
         </div>
@@ -127,7 +127,7 @@
                 <div class="stat-group">
                   <label for="stats-initiative" class="stat-label">Initiative: </label>
                   <div class="spacer"></div>
-                  <label class="stat-label">{{ getStatBonusSign(stats[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
+                  <label class="stat-label">{{ getStatBonusSign(scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                 </div>
               </li>
 
@@ -183,38 +183,38 @@
             </ul>
           </div>
         </collapse-transition>
-      </div>
+      </section>
 
       <br>
-      <div id="base-stats">
+      <section id="ability-scores">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.STATS)">Base Stats</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingBaseStats" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingBaseStats" class="collapse-chevron"/>
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
+          <font-awesome-icon icon="chevron-up" v-if="!isShowingAbilityScores" class="collapse-chevron"/>
+          <font-awesome-icon icon="chevron-down" v-if="isShowingAbilityScores" class="collapse-chevron"/>
         </div>
 
         <collapse-transition dimension="height">
-          <div v-if="isShowingBaseStats">
+          <div v-if="isShowingAbilityScores">
             <ul class="stat-list">
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
                 <div class="stat-group">
                   <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
                   <div class="spacer"></div>
                   <div style="margin-left: 10px;">
-                    <input type="number" id="stats-label" v-model="stats[stat].value" class="input-stats" inputmode="numeric" required>
-                    <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(stats[stat].calculateMod()) }}</label>
+                    <input type="number" id="stats-label" v-model="scores[stat].value" class="input-stats" inputmode="numeric" required>
+                    <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(scores[stat].calculateMod()) }}</label>
                   </div>
                 </div>
               </li>
             </ul>
           </div>
         </collapse-transition>
-      </div>
+      </section>
         
       <br>
-      <div id="saving-throws">
+      <section id="saving-throws">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">Saving Throws</h3>
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h3>
           <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
           <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
         </div>
@@ -228,10 +228,10 @@
                   <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
 
                   <label class="stat-value" v-if="savingThrows[stat].proficient">
-                    {{ getStatBonusSign(stats[stat].calculateMod() + getProficiencyBonus()) }}
+                    {{ getStatBonusSign(scores[stat].calculateMod() + getProficiencyBonus()) }}
                   </label>
                   <label class="stat-value" v-if="!savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(stats[stat].calculateMod()) }}
+                    {{ getStatBonusSign(scores[stat].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -239,12 +239,12 @@
           </div>
         </collapse-transition>
 
-      </div>
+      </section>
 
       <br>
-      <div id="skills">
+      <section id="skills">
         <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">Skills</h3>
+          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h3>
           <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
           <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
         </div>
@@ -258,10 +258,10 @@
                   <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
 
                   <label class="stat-value" v-if="skills[skill].proficient">
-                    {{ getStatBonusSign(stats[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
+                    {{ getStatBonusSign(scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
                   </label>
                   <label class="stat-value" v-if="!skills[skill].proficient">
-                    {{ getStatBonusSign(stats[SKILL_MODS[skill]].calculateMod()) }}
+                    {{ getStatBonusSign(scores[SKILL_MODS[skill]].calculateMod()) }}
                   </label>
                 </div>
               </li>
@@ -269,10 +269,10 @@
           </div>
         </collapse-transition>
         
-      </div>
+      </section>
 
       <br>
-      <div id="features-traits">
+      <section id="features-traits">
         <div class="edit-buttons">
           <div>
             <button class="button-edit-spacer" v-if="!isEditingFeaturesTraits">Edit</button>
@@ -280,7 +280,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">Features & Traits</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
           </div>
@@ -379,10 +379,10 @@
           </div>
         </collapse-transition>
         
-      </div>
+      </section>
 
       <br>
-      <div id="weapons">
+      <section id="weapons">
         <div class="edit-buttons">
           <div>
             <button class="button-edit-spacer" v-if="!isEditingWeapons">Edit</button>
@@ -390,7 +390,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">Weapons & Spells</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
           </div>
@@ -548,10 +548,10 @@
             </template>
           </div>
         </collapse-transition>
-      </div>
+      </section>
 
       <br>
-      <div id="equipment">
+      <section id="equipment">
         <div class="edit-buttons">
           <div>
             <button class="button-edit-spacer" v-if="!isEditingEquipment">Edit</button>
@@ -559,7 +559,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">Equipment</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
           </div>
@@ -627,10 +627,10 @@
             </template>
           </div>
         </collapse-transition>
-      </div>
+      </section>
         
       <br>
-      <div id="languages">
+      <section id="languages">
         <div class="edit-buttons">
           <div>
             <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
@@ -638,7 +638,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">Languages</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
           </div>
@@ -703,10 +703,10 @@
           </div>
         </collapse-transition>
         
-      </div>   
+      </section>   
         
       <br>
-      <div id="proficiences">
+      <section id="proficiences">
         <div class="edit-buttons">
           <div>
             <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
@@ -714,7 +714,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">Proficiencies</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
           </div>
@@ -768,10 +768,10 @@
             </template>
           </div>
         </collapse-transition>
-      </div>
+      </section>
 
       <br>
-      <div id="spell-slots">
+      <section id="spell-slots">
         <div class="edit-buttons">
           <div>
             <button class="button-edit-spacer" v-if="!isEditingSpellSlots">Edit</button>
@@ -779,7 +779,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">Spell Slots</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
           </div>
@@ -852,10 +852,10 @@
             </template>
           </div>
         </collapse-transition>
-      </div>
+      </section>
 
       <br>
-      <div id="spell-casting">
+      <section id="spell-casting">
         <div class="edit-buttons">
           <div>
             <button class="button-edit-spacer" v-if="!isEditingSpellCasting">Edit</button>
@@ -863,7 +863,7 @@
           </div>
 
           <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">Spell Casting</h3>
+            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h3>
             <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
             <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
           </div>
@@ -1007,7 +1007,7 @@
             </template>
           </div>
         </collapse-transition>
-      </div>
+      </section>
     </div>
 
     <br>
@@ -1046,7 +1046,7 @@ const MAX_VALUES = {
   LEVEL: 20,
   HP: 600,
   HIT_DIE: 10,
-  STATS: 20,
+  SCORES: 20,
   STATS_BONUS: 5,
   SAVING_THROWS: 5,
   SKILLS: 15,
@@ -1068,7 +1068,7 @@ export default {
       isModalNewCharacterOpen: false,
       isModalViewCharacterOpen: false,
       isEditingCharInfo: false,
-      isEditingBaseStats: false,
+      isEditingAbilityScores: false,
       isEditingSavingThrows: false,
       isEditingSkills: false,
       isEditingFeaturesTraits: false,
@@ -1080,7 +1080,7 @@ export default {
       isEditingSpellCasting: false,
       isEditingSpellSlots: false,
       isShowingCharacterInfo: true,
-      isShowingBaseStats: true,
+      isShowingAbilityScores: true,
       isShowingSavingThrows: true,
       isShowingSkills: true,
       isShowingFeatures: true,
@@ -1145,7 +1145,7 @@ export default {
         [HP_KEYS.MAX]: '',
         [HP_KEYS.TEMP]: 0
       },
-      stats: {
+      scores: {
         [STAT_KEYS.STRENGTH]: new Stat(),
         [STAT_KEYS.DEXTERITY]: new Stat(),
         [STAT_KEYS.CONSTITUTION]: new Stat(),
@@ -1631,7 +1631,7 @@ export default {
       }
       
       if (!this.checkIfStatsValid()) {
-        alert(`Stats cannot be blank or greater than ${MAX_VALUES.STATS} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
+        alert(`Scores cannot be blank or greater than ${MAX_VALUES.SCORES} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
         return false
       }
 
@@ -1655,13 +1655,13 @@ export default {
     checkIfStatsValid() {
       // console.info("@checkIfStatsValid")
       
-      if (this.stats.statsStr === '' || this.stats.statsDex === '' || this.stats.statsCon === '' || this.stats.statsInt === '' || this.stats.statsWis === '' || this.stats.statsCha === '' ||
-          this.stats.statsStrBonus === '' || this.stats.statsDexBonus === '' || this.stats.statsConBonus === '' || this.stats.statsIntBonus === '' || this.stats.statsWisBonus === '' || this.stats.statsChaBonus === '') {
+      if (this.scores.statsStr === '' || this.scores.statsDex === '' || this.scores.statsCon === '' || this.scores.statsInt === '' || this.scores.statsWis === '' || this.scores.statsCha === '' ||
+          this.scores.statsStrBonus === '' || this.scores.statsDexBonus === '' || this.scores.statsConBonus === '' || this.scores.statsIntBonus === '' || this.scores.statsWisBonus === '' || this.scores.statsChaBonus === '') {
             return false
       }
 
-      if (this.stats.statsStr > MAX_VALUES.STATS && this.stats.statsDex > MAX_VALUES.STATS && this.stats.statsCon > MAX_VALUES.STATS && this.stats.statsInt > MAX_VALUES.STATS && this.stats.statsWis > MAX_VALUES.STATS && this.stats.statsCha > MAX_VALUES.STATS &&
-          this.stats.statsStrBonus > MAX_VALUES.STATS_BONUS && this.stats.statsDexBonus > MAX_VALUES.STATS_BONUS && this.stats.statsConBonus > MAX_VALUES.STATS_BONUS && this.stats.statsIntBonus > MAX_VALUES.STATS_BONUS && this.stats.statsWisBonus > MAX_VALUES.STATS_BONUS && this.stats.statsChaBonus > MAX_VALUES.STATS_BONUS) {
+      if (this.scores.statsStr > MAX_VALUES.SCORES && this.scores.statsDex > MAX_VALUES.SCORES && this.scores.statsCon > MAX_VALUES.SCORES && this.scores.statsInt > MAX_VALUES.SCORES && this.scores.statsWis > MAX_VALUES.SCORES && this.scores.statsCha > MAX_VALUES.SCORES &&
+          this.scores.statsStrBonus > MAX_VALUES.STATS_BONUS && this.scores.statsDexBonus > MAX_VALUES.STATS_BONUS && this.scores.statsConBonus > MAX_VALUES.STATS_BONUS && this.scores.statsIntBonus > MAX_VALUES.STATS_BONUS && this.scores.statsWisBonus > MAX_VALUES.STATS_BONUS && this.scores.statsChaBonus > MAX_VALUES.STATS_BONUS) {
         return false
 
       }
@@ -1737,7 +1737,7 @@ export default {
         this.spellCastStat,
         this.spells,
         this.spellSlots,
-        this.stats,
+        this.scores,
         this.weapons,
         new Date().getTime()
       )
@@ -1745,7 +1745,7 @@ export default {
       return newCharacter
     },
     calculatePassivePerception() {
-      const result = 10 + this.stats[STAT_KEYS.WISDOM].calculateMod()
+      const result = 10 + this.scores[STAT_KEYS.WISDOM].calculateMod()
       return result
     },
     calculateBaseStatBonus(stat) {
@@ -1770,7 +1770,7 @@ export default {
       if (stat === '') {
         return 0
       } else {
-        return this.stats[stat].calculateMod()
+        return this.scores[stat].calculateMod()
       }
       
     },
@@ -1796,8 +1796,8 @@ export default {
     },
     toggleCollapseForStat(statRef) {
       switch (statRef) {
-        case CHARACTER_KEYS.STATS:
-          this.isShowingBaseStats = !this.isShowingBaseStats
+        case CHARACTER_KEYS.SCORES:
+          this.isShowingAbilityScores = !this.isShowingAbilityScores
           break
         
         case CHARACTER_KEYS.SAVING_THROWS:
@@ -1846,8 +1846,8 @@ export default {
     },
     toggleEditForStat(statRef) {
       switch (statRef) {
-        case CHARACTER_KEYS.STATS:
-          this.isEditingBaseStats = !this.isEditingBaseStats
+        case CHARACTER_KEYS.SCORES:
+          this.isEditingAbilityScores = !this.isEditingAbilityScores
           break
 
         case CHARACTER_KEYS.SAVING_THROWS:
@@ -1899,5 +1899,5 @@ export default {
 </script>
 
 <style scoped> /* TODO: Need to make this scoped and have separate css files for styles */
-@import '../syles/character-info-stats.css';
+@import '../syles/character-info-scores.css';
 </style>
