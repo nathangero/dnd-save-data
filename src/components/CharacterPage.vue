@@ -4,71 +4,71 @@
     <transition name="slide-up" mode="out-in">
       <div v-if="!isShowingBackup">
         <header>
-          <div class="nav-bar">
+          <nav class="nav-bar">
             <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
             <template v-if="isShowingJumpToMenu">
-              <div class="jump-to-menu" id="jump-to" :class="{ 'show-menu': isShowingJumpToMenu }">
-                <ul class="">
-                  <li>
-                    <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
+              <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
+                <ul>
+                  <li @click="scrollToSection('character-background')">
+                    <p>{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('character-info')">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</a>
+                  <li @click="scrollToSection('character-info')">
+                    <p>{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
+                  <li @click="scrollToSection('ability-scores')">
+                    <p>{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('saving-throws')">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</a>
+                  <li @click="scrollToSection('saving-throws')">
+                    <p>{{ CHARACTER_SECTIONS.SAVING_THROWS }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('skills')">{{ CHARACTER_SECTIONS.SKILLS }}</a>
+                  <li @click="scrollToSection('skills')">
+                    <p>{{ CHARACTER_SECTIONS.SKILLS }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('features-traits')">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</a>
+                  <li @click="scrollToSection('features-traits')">
+                    <p>{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('weapons')">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</a>
+                  <li @click="scrollToSection('weapons')">
+                    <p>{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('equipment')">{{ CHARACTER_SECTIONS.EQUIPMENT }}</a>
+                  <li @click="scrollToSection('equipment')">
+                    <p>{{ CHARACTER_SECTIONS.EQUIPMENT }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('treasure')">{{ CHARACTER_SECTIONS.TREASURES }}</a>
+                  <li @click="scrollToSection('treasure')">
+                    <p>{{ CHARACTER_SECTIONS.TREASURES }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('languages')">{{ CHARACTER_SECTIONS.LANGUAGES }}</a>
+                  <li @click="scrollToSection('languages')">
+                    <p>{{ CHARACTER_SECTIONS.LANGUAGES }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('proficiencies')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
+                  <li @click="scrollToSection('proficiencies')">
+                    <p>{{ CHARACTER_SECTIONS.PROFICIENCIES }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('spell-slots')">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</a>
+                  <li @click="scrollToSection('spell-slots')">
+                    <p>{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('spell-casting')">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</a>
+                  <li @click="scrollToSection('spell-casting')">
+                    <p>{{ CHARACTER_SECTIONS.SPELL_CASTING }}</p>
                   </li>
 
-                  <li>
-                    <a @click="scrollToSection('save-delete-buttons')">Backup Character</a>
+                  <li @click="scrollToSection('save-delete-buttons')">
+                    <p>Backup Character</p>
                   </li>
                 </ul>
               </div>
             </template>
-            <button class="nav-bar-button" id="close" @click="closeModal">Close</button>
-          </div>
+            <button class="nav-bar-button" @click="closeModal">Close</button>
+          </nav>
 
           <section id="character-background">
             <p class="character-name">{{ characterToView.name }}</p>
@@ -2518,6 +2518,42 @@ export default {
     border: none;
     border-radius: 10px;
     background-color: var(--dimgray);
+  }
+
+  .jump-to-menu {
+    position: absolute;
+    top: 100%; /* Position the menu below the button */
+    background-color: var(--white);
+    border-bottom: 3px solid dimgray; /* Add a border to the bottom */
+    border-right: 3px solid dimgray; /* Add a border to the right */
+    border-radius: 4px;
+    max-height: 340px; /* Adjust the height as needed */
+    overflow-y: auto;
+  }
+
+  .jump-to-menu ul {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    font-size: larger;
+  }
+
+  .jump-to-menu li {
+    border-bottom: 1px solid var(--gray); /* Add a border below each link */
+    width: 100%;
+    margin: 0;
+    padding: 8px 16px;
+  }
+
+  .jump-to-menu p {
+    margin: 0;
+  }
+
+  .jump-to-menu li:last-child {
+    border-bottom: none; /* Remove the border on the last link */
   }
 
   #character-background {
