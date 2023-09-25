@@ -2430,7 +2430,7 @@ export default {
     margin: 10px;
     padding: 10px;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     background-color: var(--dimgray);
   }
 
@@ -2440,7 +2440,7 @@ export default {
     background-color: var(--white);
     border-bottom: 3px solid dimgray; /* Add a border to the bottom */
     border-right: 3px solid dimgray; /* Add a border to the right */
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     max-height: 340px; /* Adjust the height as needed */
     overflow-y: auto;
   }
@@ -2519,6 +2519,15 @@ export default {
     font-size: larger;
   }
 
+  section li select {
+    font-size: var(--select-font-size);
+    padding: 10px;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    border-radius: var(--border-radius);
+  }
+
 
   .button-edit {
     /* font-size: 20px; */
@@ -2526,7 +2535,7 @@ export default {
     padding: 5px 10px;
     margin-top: -5px;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     background-color: var(--dimgray);
   }
 
