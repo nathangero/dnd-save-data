@@ -50,7 +50,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .slide-right-enter-active {
 transition: transform 0.3s;
 }
