@@ -939,7 +939,7 @@ export default {
 @import '../styles/reset.css';
 /* @import '../styles/character-info-scores.css'; */
 /* @import '../styles/popup.css'; */
-@import '../styles/transitions.css';
+/* @import '../styles/transitions.css'; */
 
 
 </style>

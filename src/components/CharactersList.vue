@@ -198,6 +198,6 @@ export default {
 @import '../styles/reset.css';
 /* @import '../styles/character-summary.css'; */
 /* @import '../styles/popup.css'; */
-@import '../styles/transitions.css';
+/* @import '../styles/transitions.css'; */
 
 </style>

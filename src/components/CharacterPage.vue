@@ -2498,7 +2498,7 @@ export default {
   @import "../styles/colors.css";
   /* @import '../styles/character-info-scores.css'; */
   /* @import '../styles/popup.css'; */
-  @import '../styles/transitions.css';
+  /* @import '../styles/transitions.css'; */
 
 
   nav {
