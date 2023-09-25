@@ -102,7 +102,7 @@
 
             <collapse-transition dimension="height">
               <div v-if="isShowingCharacterInfo"> 
-                <div class="viewing" v-if="!isEditingCharInfo">
+                <div v-if="!isEditingCharInfo">
                   <ul>
                     <li>
                       <label>Level:</label>
@@ -181,7 +181,7 @@
                   </ul>
                 </div>
 
-                <div class="editing" v-if="isEditingCharInfo">
+                <div v-if="isEditingCharInfo">
                   <ul>
                     <li>
                       <label for="stats-level"> Current Level:</label>
@@ -220,7 +220,7 @@
 
                     <li>
                       <label>Hit Die Type: </label>
-                      <select class="picker" v-model="characterToView.hp[HP_KEYS.DIE]">
+                      <select v-model="characterToView.hp[HP_KEYS.DIE]">
                         <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                       </select>
                     </li>
@@ -239,7 +239,7 @@
                       <label>Death save successes:</label>
                       <!-- Group together so justify-content: space-between; works easily -->
                       <div>
-                        <select class="picker" v-model="characterToView.deathSaves.successes">
+                        <select v-model="characterToView.deathSaves.successes">
                           <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
                         </select>
                         <label> / 3</label>
@@ -249,7 +249,7 @@
                     <li>
                       <label>Death save failures:</label>
                       <div>
-                        <select class="picker" v-model="characterToView.deathSaves.failures">
+                        <select v-model="characterToView.deathSaves.failures">
                           <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
                         </select>
                         <label> / 3</label>
@@ -268,7 +268,7 @@
 
                     <li>
                       <label for="spells-attack-bonus">Casting Ability:</label>
-                      <select class="picker" v-model="characterToView.spellCastStat">
+                      <select v-model="characterToView.spellCastStat">
                         <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
                       </select>
                     </li>
@@ -467,43 +467,43 @@
                 <!-- Add new -->
                 <template v-if="isEditingFeaturesTraits">
                   <div class="editing">
-                    <input class="name" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
-                    <div class="container-inputs">
-                      <ul class="list-inputs">
-                        <li>
-                          <label>Type:</label>
-                          <select class="picker" v-model="featuresTempType">
-                            <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                          </select>
-                        </li>
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
+                      </li>
+                      <li>
+                        <label>Type:</label>
+                        <select v-model="featuresTempType">
+                          <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                        </select>
+                      </li>
 
-                        <li>
-                          <label>Action Type:</label>
-                          <select class="picker" v-model="featuresTempAction">
-                            <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
-                          </select>
-                        </li>
+                      <li>
+                        <label>Action Type:</label>
+                        <select v-model="featuresTempAction">
+                          <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                        </select>
+                      </li>
 
-                        <li>
-                          <label for="features-input"> # of Uses:</label>
-                          <input ßtype="number" inputmode="numeric" v-model="featuresTempUses"> 
-                        </li>
-                      </ul>
-                    </div>
+                      <li>
+                        <label for="features-input"> # of Uses:</label>
+                        <input ßtype="number" inputmode="numeric" v-model="featuresTempUses"> 
+                      </li>
+                    </ul>
                     
                     <br>
                     <textarea class="description" v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                     <br>
-                    <button @click="onPressAddFeatures">Add</button>
+                    <button class="button-add" @click="onPressAddFeatures">Add</button>
 
                     <hr>
                   </div>
                 </template>
 
                 <template v-if="getDictionarySize(characterToView.featuresTraits) > 0">
-                  <ul>
-                    <li v-for="(item, key) in characterToView.featuresTraits" :key="key">
-                      <div class="viewing" v-if="!isEditingFeaturesTraits">
+                  <div class="viewing" v-if="!isEditingFeaturesTraits">
+                    <ul v-for="(item, key) in characterToView.featuresTraits" :key="key">
+                      <li>
                         <div class="name-and-count">
                           <label><strong>{{ key }}</strong></label>
                           <label>x{{ item[FEATURES_KEYS.USES] }}</label>
@@ -511,45 +511,49 @@
                         <p>Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
                         <p>Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
                         <pre>{{ item[FEATURES_KEYS.DESCRIPTION] }}</pre>
+                      </li>
+
+                      <hr class="list-divider">
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingFeaturesTraits">
+                    <ul v-for="(item, key) in characterToView.featuresTraits" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label>Type:</label>
+                        <select v-model="item[FEATURES_KEYS.TYPE]">
+                          <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label>Action Type:</label>
+                        <select v-model="item[FEATURES_KEYS.ACTION]">
+                          <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label> # of Uses:</label>
+                        <input type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
+                      </li>
+
+                      <br>
+                      <textarea  v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+
+                      <div class="buttons-delete-update">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
                       </div>
-
-                      <div class="editing" v-if="isEditingFeaturesTraits">
-                        <label>{{ key }}</label>
-                        <div class="container-inputs">
-                          <ul class="list-inputs">
-                            <li>
-                              <label>Type:</label>
-                              <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
-                                <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                              </select>
-                            </li>
-
-                            <li>
-                              <label>Action Type:</label>
-                              <select class="picker" v-model="item[FEATURES_KEYS.ACTION]">
-                                <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
-                              </select>
-                            </li>
-
-                            <li>
-                              <label for="features-input"> # of Uses:</label>
-                              <input type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div class="container-edit">
-                          <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                          <div class="buttons-delete-update">
-                            <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
-                            <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
-                          </div>
-                        </div>
-                        
-                        <hr class="list-divider">
-                      </div>
-                    </li>
-                  </ul>
+                      <br>
+                      
+                      <hr class="list-divider">
+                    </ul>
+                  </div>
                 </template>
               </div>
             </collapse-transition>
@@ -593,21 +597,21 @@
 
                           <li>
                             <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                            <select class="picker" v-model="weaponsTempAttackModifier">
+                            <select v-model="weaponsTempAttackModifier">
                               <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                             </select>
                           </li>
                           
                           <li>
                             <label for="equipment-input">Die Type:</label>
-                            <select class="picker" v-model="weaponTempDieType">
+                            <select v-model="weaponTempDieType">
                               <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                             </select>
                           </li>
 
                           <li>
                             <label for="equipment-input">Category:</label>
-                            <select class="picker" v-model="weaponTempCategory">
+                            <select v-model="weaponTempCategory">
                               <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                             </select>
                           </li>
@@ -688,21 +692,21 @@
                                 
                                 <li>
                                   <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                                  <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
+                                  <select v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
                                     <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                                   </select>
                                 </li>
                                 
                                 <li>
                                   <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                                  <select class="picker" v-model="item[WEAPON_KEYS.DIE]">
+                                  <select v-model="item[WEAPON_KEYS.DIE]">
                                     <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                                   </select>
                                 </li>
 
                                 <li>
                                   <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                                  <select class="picker" v-model="item[WEAPON_KEYS.CATEGORY]">
+                                  <select v-model="item[WEAPON_KEYS.CATEGORY]">
                                     <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                                   </select>
                                 </li>
@@ -932,7 +936,7 @@
                       <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
                       <div>
                         <label>Proficiency: </label>
-                        <select class="picker" v-model="languagesTempProficiency">
+                        <select v-model="languagesTempProficiency">
                           <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
                         </select>
                       </div>
@@ -959,7 +963,7 @@
                         <div v-if="isEditingLanguages">
                           <div>
                             <label class="item-name">{{ key }}:</label>
-                            <select class="picker" v-model="characterToView.languages[key]">
+                            <select v-model="characterToView.languages[key]">
                               <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
                             </select>
                           </div>
@@ -1080,7 +1084,7 @@
                     <ul class="list-inputs">
                       <li>
                         <label>Level:</label>
-                        <select class="picker" v-model="spellSlotTempLevel">
+                        <select v-model="spellSlotTempLevel">
                           <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
                         </select>
                       </li>
@@ -1173,7 +1177,7 @@
                         <ul class="list-inputs">
                           <li>
                             <label for="spells-level">Level:</label>
-                            <select class="picker" v-model="spellTempLevel">
+                            <select v-model="spellTempLevel">
                               <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
                             </select>
                           </li>
@@ -1187,7 +1191,7 @@
                             <label>Duration:</label>
                             <input type="number" id="spells-casting-duration" v-model="spellTempDuration" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
 
-                            <select class="picker" v-model="spellTempDurationType">
+                            <select v-model="spellTempDurationType">
                               <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
                             </select>
                           </li>
@@ -1253,7 +1257,7 @@
                                       <label>Duration:</label>
                                       <input type="number" id="spells-casting-duration" v-model="spell[SPELL_CASTING_KEYS.DURATION]" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
 
-                                      <select class="picker" v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
+                                      <select v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
                                         <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
                                       </select>
                                     </li>
@@ -2539,31 +2543,55 @@ export default {
     font-size: var(--select-font-size);
   }
 
-  section ul .viewing {
+  section .viewing,
+  section .editing {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    
+    justify-content: space-between;
   }
 
-  section ul .viewing p {
+  section .viewing p {
     font-size: var(--select-font-size);
     margin: 5px 0;
   }
 
+  .viewing ul li {
+    display: inherit;
+    flex-direction: column;
+    padding: 0;
+    width: var(--width-close-to-mobile-screen);
+  }
+
+  .editing ul li {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    width: var(--width-close-to-mobile-screen);
+  }
+
+  .editing ul li:first-child label {
+    margin: 0 auto;
+  }
+
+  .editing strong {
+    margin-bottom: 10px;
+    text-decoration: underline;
+  }
+
   .editing .name {
-    width: 90%;
+    width: var(--width-close-to-mobile-screen);
     border: none; /* Remove the default border */
     border-bottom: 1px solid black; /* Add a bottom border */
     outline: none;
     text-align: center;
-    margin-bottom: 15px;
+    margin: 15px auto;
     font-size: var(--stat-font-size);
   }
 
   .editing textarea {
-    width: 90%;
+    width: var(--width-close-to-mobile-screen);
     padding: 10px;
+    margin: 0 auto;
     font-family: var(--font-family-sans-serif);
     font-size: var(--select-font-size);
     border-radius: var(--border-radius);
@@ -2576,11 +2604,9 @@ export default {
     padding: 10px;
     border: none;
     border-radius: var(--border-radius);
-    background-color: var(--blue);
   }
 
   .button-edit {
-    /* font-size: 20px; */
     color: var(--white);
     padding: 5px 10px;
     margin-top: -5px;
@@ -2589,8 +2615,32 @@ export default {
     background-color: var(--dimgray);
   }
 
+  .button-delete {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: -5px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--red);
+  }
+
+  .button-add,
+  .button-update {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: -5px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--blue);
+  }
+
   .name-and-count label {
     margin-right: 10px;
+  }
+
+  .list-divider {
+    width: var(--width-close-to-mobile-screen);
+    margin-top: -10px;
   }
 
   #character-background {
