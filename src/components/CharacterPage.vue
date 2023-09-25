@@ -314,43 +314,37 @@
               </div>
             </header>
             
-            <div id="collapse">
-              <collapse-transition dimension="height">
-                <div v-if="isShowingAbilityScores">
-                  <div v-if="!isEditingAbilityScores">
-                    <ul class="stat-list">
-                      <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                        <div class="stat-group">
-                          <label>{{ STAT_NAMES[stat] }}:</label>
-                          <label>{{ characterToView.scores[stat].value }}</label>
-                          <label class="stat-bonus">{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingAbilityScores">
+                <div class="viewing" v-if="!isEditingAbilityScores">
+                  <ul>
+                    <li v-for="(score, key) in STAT_KEYS" :key="key">
+                      <label>{{ STAT_NAMES[score] }}:</label>
+                      <div>
+                        <label><strong>{{ characterToView.scores[score].value }}</strong></label>
+                        <label class="mod"><strong>{{ getStatBonusSign(characterToView.scores[score].calculateMod()) }}</strong></label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
 
-                  <!-- Editing -->
-                  <div v-if="isEditingAbilityScores" class="isEditing">
-                    <ul class="stat-list">
-                      <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                        <div class="stat-group">
-                          <label for="stats-label">{{ STAT_NAMES[stat] }}:</label>
-                          <div class="spacer"></div>
-                          <div>
-                            <input type="number" id="stats-label" v-model="characterToView.scores[stat].value" inputmode="numeric" required>
-                            <label>Mod: {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
+                <div class="editing" v-if="isEditingAbilityScores" >
+                  <ul>
+                    <li v-for="(score, key) in STAT_KEYS" :key="key">
+                      <label for="score">{{ STAT_NAMES[score] }}:</label>
+                      <div>
+                        <input type="number" id="score" v-model="characterToView.scores[score].value" inputmode="numeric" required>
+                        <label class="mod">Mod: <strong>{{ getStatBonusSign(characterToView.scores[score].calculateMod()) }}</strong></label>
+                      </div>
+                    </li>
+                  </ul>
 
-                    <div class="buttons-delete-update">
-                      <button class="button-update" @click="onPressUpdateAbilityScores()">Update</button>
-                    </div>
+                  <div class="buttons-delete-update">
+                    <button class="button-update" @click="onPressUpdateAbilityScores()">Update</button>
                   </div>
                 </div>
-              </collapse-transition>
-            </div>
+              </div>
+            </collapse-transition>
           </section>
 
           <br>
@@ -376,7 +370,7 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingSavingThrows">
-                  <ul class="stat-list">
+                  <ul>
                     <li v-for="(stat, key) in STAT_KEYS" :key="key">
                       <div class="stat-group">
                         <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
@@ -425,7 +419,7 @@
             <div id="collapse">
               <collapse-transition dimension="height">
                 <div v-if="isShowingSkills">
-                  <ul class="stat-list">
+                  <ul>
                     <li v-for="(skill, key) in SKILL_KEYS" :key="key">
                       <div class="stat-group">
                         <input type="checkbox" class="checkbox" v-model="characterToView.skills[skill].proficient" :disabled="!isEditingSkills">
@@ -2528,6 +2522,9 @@ export default {
     border-radius: var(--border-radius);
   }
 
+  section li .mod {
+    margin-left: 10px;
+  }
 
   .button-edit {
     /* font-size: 20px; */
