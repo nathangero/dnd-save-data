@@ -4,11 +4,11 @@
     <transition name="slide-up" mode="out-in">
       <div v-if="!isShowingBackup">
         <header>
-          <div class="navigation-bar">
-            <button class="button-jump-to" @click="openJumpToMenu">Jump to</button>
+          <div class="nav-bar">
+            <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
             <template v-if="isShowingJumpToMenu">
-              <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
-                <ul class="list-inputs">
+              <div class="jump-to-menu" id="jump-to" :class="{ 'show-menu': isShowingJumpToMenu }">
+                <ul class="">
                   <li>
                     <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
                   </li>
@@ -65,11 +65,9 @@
                     <a @click="scrollToSection('save-delete-buttons')">Backup Character</a>
                   </li>
                 </ul>
-
-                <!-- Add more links for other sections -->
               </div>
             </template>
-            <button class="button-close" @click="closeModal">Close</button>
+            <button class="nav-bar-button" id="close" @click="closeModal">Close</button>
           </div>
 
           <section id="character-background">
@@ -2496,13 +2494,33 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
-@import "../styles/colors.css";
-/* @import '../styles/character-info-scores.css'; */
-/* @import '../styles/popup.css'; */
-@import '../styles/transitions.css';
+  @import '../styles/reset.css';
+  @import "../styles/colors.css";
+  /* @import '../styles/character-info-scores.css'; */
+  /* @import '../styles/popup.css'; */
+  @import '../styles/transitions.css';
 
-div {
-  background-color: var(--gray);
-}
+
+  .nav-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .nav-bar-button {
+    font-size: 20px;
+    color: var(--white);
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--dimgray);
+  }
+
+  #character-background {
+    margin-top: 80px;
+  }
 </style>
