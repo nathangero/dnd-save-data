@@ -369,24 +369,24 @@
 
             <div id="collapse">
               <collapse-transition dimension="height">
-                <div v-if="isShowingSavingThrows">
+                <div class="viewing" v-if="isShowingSavingThrows">
                   <ul>
                     <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                      <div class="stat-group">
+                      <div>
                         <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
                         <label>{{ STAT_NAMES[stat] }}:</label>
-
-                        <label v-if="characterToView.savingThrows[stat].proficient">
-                          {{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}
-                        </label>
-                        <label v-if="!characterToView.savingThrows[stat].proficient">
-                          {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}
-                        </label>
                       </div>
+
+                      <label v-if="characterToView.savingThrows[stat].proficient">
+                        <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}</strong>
+                      </label>
+                      <label v-if="!characterToView.savingThrows[stat].proficient">
+                        <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</strong>
+                      </label>
                     </li>
                   </ul>
 
-                  <div v-if="isEditingSavingThrows">
+                  <div class="editing" v-if="isEditingSavingThrows">
                     <div class="buttons-delete-update">
                       <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
                     </div>
@@ -2520,6 +2520,20 @@ export default {
     border: 1px solid black;
     color: black;
     border-radius: var(--border-radius);
+  }
+
+  section li .checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    padding: 0;
+  }
+
+  section li .checkbox:checked + label::after {
+    content: " (proficient)";
+    opacity: 0.5;
+    font-style: italic;
+    font-size: var(--select-font-size);
   }
 
   section li .mod {
