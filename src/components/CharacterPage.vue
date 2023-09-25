@@ -4,7 +4,7 @@
     <transition name="slide-up" mode="out-in">
       <div v-if="!isShowingBackup">
         <header>
-          <nav class="nav-bar">
+          <nav>
             <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
             <template v-if="isShowingJumpToMenu">
               <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
@@ -2501,7 +2501,7 @@ export default {
   @import '../styles/transitions.css';
 
 
-  .nav-bar {
+  nav {
     position: fixed;
     top: 0;
     width: 100%;
@@ -2510,7 +2510,7 @@ export default {
     justify-content: space-between;
   }
 
-  .nav-bar-button {
+  nav .nav-bar-button {
     font-size: 20px;
     color: var(--white);
     margin: 10px;
@@ -2520,7 +2520,7 @@ export default {
     background-color: var(--dimgray);
   }
 
-  .jump-to-menu {
+  nav .jump-to-menu {
     position: absolute;
     top: 100%; /* Position the menu below the button */
     background-color: var(--white);
@@ -2531,7 +2531,7 @@ export default {
     overflow-y: auto;
   }
 
-  .jump-to-menu ul {
+  nav .jump-to-menu ul {
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -2541,18 +2541,18 @@ export default {
     font-size: larger;
   }
 
-  .jump-to-menu li {
+  nav .jump-to-menu li {
     border-bottom: 1px solid var(--gray); /* Add a border below each link */
     width: 100%;
     margin: 0;
     padding: 8px 16px;
   }
 
-  .jump-to-menu p {
+  nav .jump-to-menu p {
     margin: 0;
   }
 
-  .jump-to-menu li:last-child {
+  nav .jump-to-menu li:last-child {
     border-bottom: none; /* Remove the border on the last link */
   }
 
