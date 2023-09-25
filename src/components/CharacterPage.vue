@@ -1,78 +1,77 @@
 <template>
   <div class="body">
+    <!-- Character Page -->
     <transition name="slide-up" mode="out-in">
       <div v-if="!isShowingBackup">
-        <div class="navigation-bar">
-          <button class="button-jump-to" @click="openJumpToMenu">Jump to</button>
-          <template v-if="isShowingJumpToMenu">
-            <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
-              <ul class="list-inputs">
-                <li>
-                  <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
-                </li>
+        <header>
+          <div class="navigation-bar">
+            <button class="button-jump-to" @click="openJumpToMenu">Jump to</button>
+            <template v-if="isShowingJumpToMenu">
+              <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
+                <ul class="list-inputs">
+                  <li>
+                    <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('character-info')">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('character-info')">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('saving-throws')">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('saving-throws')">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('skills')">{{ CHARACTER_SECTIONS.SKILLS }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('skills')">{{ CHARACTER_SECTIONS.SKILLS }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('features-traits')">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('features-traits')">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('weapons')">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('weapons')">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('equipment')">{{ CHARACTER_SECTIONS.EQUIPMENT }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('equipment')">{{ CHARACTER_SECTIONS.EQUIPMENT }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('treasure')">{{ CHARACTER_SECTIONS.TREASURES }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('treasure')">{{ CHARACTER_SECTIONS.TREASURES }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('languages')">{{ CHARACTER_SECTIONS.LANGUAGES }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('languages')">{{ CHARACTER_SECTIONS.LANGUAGES }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('proficiencies')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('proficiencies')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('spell-slots')">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('spell-slots')">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('spell-casting')">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</a>
-                </li>
+                  <li>
+                    <a @click="scrollToSection('spell-casting')">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</a>
+                  </li>
 
-                <li>
-                  <a @click="scrollToSection('save-delete-buttons')">Backup Character</a>
-                </li>
-              </ul>
+                  <li>
+                    <a @click="scrollToSection('save-delete-buttons')">Backup Character</a>
+                  </li>
+                </ul>
 
-              <!-- Add more links for other sections -->
-            </div>
-          </template>
-          <button class="button-close" @click="closeModal">Close</button>
-        </div>
+                <!-- Add more links for other sections -->
+              </div>
+            </template>
+            <button class="button-close" @click="closeModal">Close</button>
+          </div>
 
-        <div class="character-to-view" v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
-
-          <!-- NOT EDITABLE -->
           <section id="character-background">
             <p class="character-name">{{ characterToView.name }}</p>
             <ul class="stat-list">
@@ -93,8 +92,9 @@
               </li>
             </ul>
           </section>
-            
-          <br>
+        </header>
+
+        <main v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
           <section id="character-info">
             <div class="edit-buttons">
               <div>
@@ -1394,91 +1394,91 @@
               </collapse-transition>
             </div>
           </section>
-        </div>
-          
-        <br>
-        <div id="save-delete-buttons" :class="{ 'disabled-page': isPopupOpen() }">
-          <ul class="buttons-at-bottom">
-            <li>
-              <button class="button-view-backups" @click="getCharacterBackups">View Backups</button>
-              <!-- <button class="button-view-backups" @click="toggleCharacterBackupPopup">View Backups</button> -->
-              <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
-            </li>
 
-            <li>
-              <button class="button-delete" @click="toggleDeleteCharacterPopup">Delete Character</button>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- Save Character Data Popup -->
-        <div id="save-character">
-          <transition name="fade" appear>
-            <div class="overlay" v-if="isSaveCharacterPopupOpen">
-              <div class="popup">
-                <div class="form">
-                  <h1>Create backup for {{ characterToView.name }}?</h1>
-                  <div class="buttons-delete-character">
-                    <button class="button-cancel-delete" @click="toggleSaveCharacterPopup">Cancel</button>
-                    <button class="button-save" @click="onPressSaveBackup">Save</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </transition>
-        </div>
+          <br>
+          <section id="save-delete-buttons" :class="{ 'disabled-page': isPopupOpen() }">
+            <ul class="buttons-at-bottom">
+              <li>
+                <button class="button-view-backups" @click="getCharacterBackups">View Backups</button>
+                <!-- <button class="button-view-backups" @click="toggleCharacterBackupPopup">View Backups</button> -->
+                <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
+              </li>
 
-        <!-- Delete Character Popup -->
-        <div id="delete-character">
-          <transition name="fade" appear>
-            <div class="overlay" v-if="isDeleteCharacterPopupOpen">
-              <div class="popup">
-                <div class="form">
-                  <h1>Delete {{ characterToView.name }}?</h1>
-                  <p class="popup-message">This action can't be undone</p>
-                  <div class="buttons-delete-character">
-                    <button class="button-cancel-delete" @click="toggleDeleteCharacterPopup">Cancel</button>
-                    <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </transition>
-        </div>
-      </div>
-    </transition>
-    
-    <div v-show="isShowingLoader">
-      <loading-spinner :loadingText="LOADING_TEXT.GETING_BACKUPS"></loading-spinner>
-    </div>
-    
-    <!-- Character Backups Popup -->
-    <transition name="fade" appear>
-      <div class="overlay" v-if="isCharacterBackupsPopupOpen">
-        <div class="popup-backup">
-          <h1>Select a backup to view</h1>
-          <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
-
-          <div class="popup-content">
-            <ul class="reverse-list">
-              <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
-              @click="selectBackup(timestamp, backup)">
-                <p>{{ convertTimestampToString(timestamp) }}</p>
-                <hr>
-                <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
+              <li>
+                <button class="button-delete" @click="toggleDeleteCharacterPopup">Delete Character</button>
               </li>
             </ul>
+          </section>
+
+          <!-- Save Character Data Popup -->
+          <div id="save-character">
+            <transition name="fade" appear>
+              <div class="overlay" v-if="isSaveCharacterPopupOpen">
+                <div class="popup">
+                  <div class="form">
+                    <h1>Create backup for {{ characterToView.name }}?</h1>
+                    <div class="buttons-delete-character">
+                      <button class="button-cancel-delete" @click="toggleSaveCharacterPopup">Cancel</button>
+                      <button class="button-save" @click="onPressSaveBackup">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </transition>
           </div>
 
-          <div class="buttons-delete-character">
-            <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
-            <button class="button-save" @click="toggleViewBackup" :class="{ 'disabled-button': selectedBackupTimestamp === '' }" >View Backup</button>
+          <!-- Delete Character Popup -->
+          <div id="delete-character">
+            <transition name="fade" appear>
+              <div class="overlay" v-if="isDeleteCharacterPopupOpen">
+                <div class="popup">
+                  <div class="form">
+                    <h1>Delete {{ characterToView.name }}?</h1>
+                    <p class="popup-message">This action can't be undone</p>
+                    <div class="buttons-delete-character">
+                      <button class="button-cancel-delete" @click="toggleDeleteCharacterPopup">Cancel</button>
+                      <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </transition>
           </div>
-        </div>
+
+          <!-- Character Backups Popup -->
+          <transition name="fade" appear>
+            <div class="overlay" v-if="isCharacterBackupsPopupOpen">
+              <div class="popup-backup">
+                <h1>Select a backup to view</h1>
+                <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
+
+                <div class="popup-content">
+                  <ul class="reverse-list">
+                    <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
+                    @click="selectBackup(timestamp, backup)">
+                      <p>{{ convertTimestampToString(timestamp) }}</p>
+                      <hr>
+                      <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="buttons-delete-character">
+                  <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
+                  <button class="button-save" @click="toggleViewBackup" :class="{ 'disabled-button': selectedBackupTimestamp === '' }" >View Backup</button>
+                </div>
+              </div>
+            </div>
+          </transition>
+        </main>
+
+        <footer>
+
+        </footer>
       </div>
     </transition>
-
     
+    <!-- Backup Page -->
     <transition name="slide-up" mode="in-out">
       <template v-if="isShowingBackup">
         <character-backup 
@@ -1488,7 +1488,11 @@
         ></character-backup>
       </template>
     </transition>
-    
+  
+    <!-- Loading Spinner -->
+    <div v-show="isShowingLoader">
+      <loading-spinner :loadingText="LOADING_TEXT.GETING_BACKUPS"></loading-spinner>
+    </div>
   </div>
 </template>
 
