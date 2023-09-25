@@ -466,8 +466,8 @@
               <div v-if="isShowingFeatures">
                 <!-- Add new -->
                 <template v-if="isEditingFeaturesTraits">
-                  <div>
-                    <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
+                  <div class="editing">
+                    <input class="name" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
                     <div class="container-inputs">
                       <ul class="list-inputs">
                         <li>
@@ -492,14 +492,11 @@
                     </div>
                     
                     <br>
-                    <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+                    <textarea class="description" v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
                     <br>
-                    <button class="button-add" @click="onPressAddFeatures">Add</button>
+                    <button @click="onPressAddFeatures">Add</button>
 
-                    <ul class="list">
-                      <hr class="list-divider">
-                    </ul>
-                    
+                    <hr>
                   </div>
                 </template>
 
@@ -517,7 +514,7 @@
                       </div>
 
                       <div class="editing" v-if="isEditingFeaturesTraits">
-                        <label class="item-name">{{ key }}</label>
+                        <label>{{ key }}</label>
                         <div class="container-inputs">
                           <ul class="list-inputs">
                             <li>
@@ -2513,7 +2510,7 @@ export default {
     outline: none;
     text-align: center;
     padding-bottom: 5px;
-    font-size: larger;
+    font-size: var(--stat-font-size);
   }
 
   section li select {
@@ -2552,6 +2549,34 @@ export default {
   section ul .viewing p {
     font-size: var(--select-font-size);
     margin: 5px 0;
+  }
+
+  .editing .name {
+    width: 90%;
+    border: none; /* Remove the default border */
+    border-bottom: 1px solid black; /* Add a bottom border */
+    outline: none;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: var(--stat-font-size);
+  }
+
+  .editing textarea {
+    width: 90%;
+    padding: 10px;
+    font-family: var(--font-family-sans-serif);
+    font-size: var(--select-font-size);
+    border-radius: var(--border-radius);
+  }
+
+  .editing button {
+    font-size: 20px;
+    color: var(--white);
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--blue);
   }
 
   .button-edit {
