@@ -100,277 +100,246 @@
               </div>
             </header>
 
-            <div id="collapse">
-              <collapse-transition dimension="height">
-                <div v-if="isShowingCharacterInfo">
-                  <div v-if="!isEditingCharInfo">
-                    <ul class="stat-list">
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Level:</label>
-                          <label class="stat-value">{{ characterToView.level }}</label>
-                        </div>
-                      </li>
+            <collapse-transition dimension="height">
+              <!-- Need separate div to have collapse transition work -->
+              <div v-if="isShowingCharacterInfo"> 
+                <div v-if="!isEditingCharInfo">
+                  <ul>
+                    <li>
+                      <label>Level:</label>
+                      <label><strong>{{ characterToView.level }}</strong></label>
+                    </li>
 
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Armor Class: </label>
-                          <label class="stat-value">{{ characterToView.armor }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Initiative: </label>
-                          <label class="stat-value">{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Speed (ft): </label>
-                          <label class="stat-value">{{ characterToView.speed }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Current HP: </label>
-                          <label class="stat-value">{{ characterToView.hp[HP_KEYS.CURRENT] }}/{{ characterToView.hp[HP_KEYS.MAX] }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Temp HP: </label>
-                          <label class="stat-value">{{ characterToView.hp[HP_KEYS.TEMP] }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Hit die: </label>
-                          <label class="stat-value">1{{ characterToView.hp[HP_KEYS.DIE] }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Hit die count: </label>
-                          <label class="stat-value">{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX] }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Death saves successes: </label>
-                          <label class="stat-value">{{ characterToView.deathSaves.successes }}/3</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Death saves failures: </label>
-                          <label class="stat-value">{{ characterToView.deathSaves.failures }}/3</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Proficiency Bonus: </label>
-                          <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Passive Perception: </label>
-                          <label class="stat-value">{{ calculatePassivePerception() }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Spell Casting Stat: </label>
-                          <label class="stat-value">{{ STAT_NAMES[characterToView.spellCastStat] }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Spell Saving DC: </label>
-                          <label class="stat-value">{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Inspiration: </label>
-                          <label class="stat-value">{{ characterToView.inspiration }}</label>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div v-if="isEditingCharInfo">
-                    <ul class="stat-list">
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-level" class="stat-label"> Current Level:</label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-level" v-model="characterToView.level" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-armor-class" class="stat-label">Armor Class: </label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-armor-class" v-model="characterToView.armor" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-initiative" class="stat-label">Initiative: </label>
-                          <div class="spacer"></div>
-                          <label class="stat-value">{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
-                        </div>
-                      </li>
-                      
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-speed" class="stat-label">Speed (ft): </label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-speed" v-model="characterToView.speed" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-hp" class="stat-label">Hit Points - Current:</label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-hp" class="stat-label">Hit Points - Max:</label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-hp" class="stat-label">Hit Points - Temp:</label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Hit Die Type: </label>
-                          <div class="spacer"></div>
-                          <select class="picker" v-model="characterToView.hp[HP_KEYS.DIE]">
-                          <div class="spacer"></div>
-                            <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                          </select>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-hit-die" class="stat-label">Current # of Hit Die: </label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-hit-die" class="stat-label">Max # of Hit Die: </label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Death saves successes: </label>
-                          <div class="spacer"></div>
-                          <select class="picker" v-model="characterToView.deathSaves.successes">
-                          <div class="spacer"></div>
-                          <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
-                          </select>
-                          <label class="stat-label">/ 3</label>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Death saves failures: </label>
-                          <div class="spacer"></div>
-                          <select class="picker" v-model="characterToView.deathSaves.failures">
-                          <div class="spacer"></div>
-                            <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
-                          </select>
-                          <label class="stat-label">/ 3</label>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
-                          <div class="spacer"></div>
-                          <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-proficiency-bonus" class="stat-label">Passive Perception: </label>
-                          <div class="spacer"></div>
-                          <label class="stat-label">{{ getStatBonusSign(calculatePassivePerception()) }}</label>
-                        </div>
-                      </li>
-
-                      <li>
-                        <div class="stat-group">
-                          <label for="spells-attack-bonus" class="stat-label">Casting Ability:</label>
-                          <div class="spacer"></div>
-                          <select class="picker" v-model="characterToView.spellCastStat">
-                            <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
-                          </select>
-                        </div>
-                      </li>
+                    <li>
+                      <label>Armor Class: </label>
+                      <label><strong>{{ characterToView.armor }}</strong></label>
+                    </li>
                     
-                      <li>
-                        <div class="stat-group">
-                          <label class="stat-label">Spell Saving DC: </label>
-                          <div class="spacer"></div>
-                          <label class="stat-value">{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</label>
-                        </div>
-                      </li>
+                    <li>
+                      <label>Initiative: </label>
+                      <label><strong>{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Speed (ft): </label>
+                      <label><strong>{{ characterToView.speed }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Current HP: </label>
+                      <label>{{ characterToView.hp[HP_KEYS.CURRENT] }}/<strong>{{ characterToView.hp[HP_KEYS.MAX] }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Temp HP: </label>
+                      <label><strong>{{ characterToView.hp[HP_KEYS.TEMP] }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Hit die: </label>
+                      <label><strong>{{ characterToView.hp[HP_KEYS.DIE] }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Hit die count: </label>
+                      <label>{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR] }}/<strong>{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX] }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Death save successes: </label>
+                      <label>{{ characterToView.deathSaves.successes }}/<strong>3</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Death save failures: </label>
+                      <label>{{ characterToView.deathSaves.failures }}/<strong>3</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Proficiency Bonus: </label>
+                      <label><strong>{{ getStatBonusSign(getProficiencyBonus()) }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Passive Perception: </label>
+                      <label><strong>{{ calculatePassivePerception() }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Spell Casting Stat: </label>
+                      <label><strong>{{ STAT_NAMES[characterToView.spellCastStat] }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Spell Saving DC: </label>
+                      <label><strong>{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</strong></label>
+                    </li>
+                    
+                    <li>
+                      <label>Inspiration: </label>
+                      <label><strong>{{ characterToView.inspiration }}</strong></label>
+                    </li>
+                  </ul>
+                </div>
 
-                      <li>
-                        <div class="stat-group">
-                          <label for="stats-proficiency-bonus" class="stat-label">Inspriation: </label>
-                          <div class="spacer"></div>
-                          <input type="number" id="stats-inspiration" v-model="characterToView.inspiration" class="input-stats" inputmode="numeric" required>
-                        </div>
-                      </li>
-                    </ul>
+                <div v-if="isEditingCharInfo">
+                  <ul class="stat-list">
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-level"> Current Level:</label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-level" v-model="characterToView.level" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
 
-                    <div class="buttons-delete-update">
-                      <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
-                    </div>
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-armor-class">Armor Class: </label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-armor-class" v-model="characterToView.armor" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-initiative">Initiative: </label>
+                        <div class="spacer"></div>
+                        <label>{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
+                      </div>
+                    </li>
+                    
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-speed">Speed (ft): </label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-speed" v-model="characterToView.speed" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-hp">Hit Points - Current:</label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.CURRENT]" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-hp">Hit Points - Max:</label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-hp">Hit Points - Temp:</label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-hp" v-model="characterToView.hp[HP_KEYS.TEMP]" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label>Hit Die Type: </label>
+                        <div class="spacer"></div>
+                        <select class="picker" v-model="characterToView.hp[HP_KEYS.DIE]">
+                        <div class="spacer"></div>
+                          <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                        </select>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-hit-die">Current # of Hit Die: </label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR]" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-hit-die">Max # of Hit Die: </label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-hit-die" v-model="characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label>Death saves successes: </label>
+                        <div class="spacer"></div>
+                        <select class="picker" v-model="characterToView.deathSaves.successes">
+                        <div class="spacer"></div>
+                        <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
+                        </select>
+                        <label>/ 3</label>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label>Death saves failures: </label>
+                        <div class="spacer"></div>
+                        <select class="picker" v-model="characterToView.deathSaves.failures">
+                        <div class="spacer"></div>
+                          <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
+                        </select>
+                        <label>/ 3</label>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
+                        <div class="spacer"></div>
+                        <label>{{ getStatBonusSign(getProficiencyBonus()) }}</label>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-proficiency-bonus">Passive Perception: </label>
+                        <div class="spacer"></div>
+                        <label>{{ getStatBonusSign(calculatePassivePerception()) }}</label>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="spells-attack-bonus">Casting Ability:</label>
+                        <div class="spacer"></div>
+                        <select class="picker" v-model="characterToView.spellCastStat">
+                          <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
+                        </select>
+                      </div>
+                    </li>
+                  
+                    <li>
+                      <div class="stat-group">
+                        <label>Spell Saving DC: </label>
+                        <div class="spacer"></div>
+                        <label>{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</label>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="stat-group">
+                        <label for="stats-proficiency-bonus">Inspriation: </label>
+                        <div class="spacer"></div>
+                        <input type="number" id="stats-inspiration" v-model="characterToView.inspiration" class="input-stats" inputmode="numeric" required>
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div class="buttons-delete-update">
+                    <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
                   </div>
                 </div>
-              </collapse-transition>
-            </div>
+              </div>
+            </collapse-transition>
 
           </section>
 
@@ -401,8 +370,8 @@
                     <ul class="stat-list">
                       <li v-for="(stat, key) in STAT_KEYS" :key="key">
                         <div class="stat-group">
-                          <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                          <label class="stat-value">{{ characterToView.scores[stat].value }}</label>
+                          <label>{{ STAT_NAMES[stat] }}:</label>
+                          <label>{{ characterToView.scores[stat].value }}</label>
                           <label class="stat-bonus">{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
                         </div>
                       </li>
@@ -414,11 +383,11 @@
                     <ul class="stat-list">
                       <li v-for="(stat, key) in STAT_KEYS" :key="key">
                         <div class="stat-group">
-                          <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                          <label for="stats-label">{{ STAT_NAMES[stat] }}:</label>
                           <div class="spacer"></div>
                           <div>
                             <input type="number" id="stats-label" v-model="characterToView.scores[stat].value" class="input-stats" inputmode="numeric" required>
-                            <label class="stat-label">Mod: {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
+                            <label>Mod: {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
                           </div>
                         </div>
                       </li>
@@ -460,12 +429,12 @@
                     <li v-for="(stat, key) in STAT_KEYS" :key="key">
                       <div class="stat-group">
                         <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
-                        <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
+                        <label>{{ STAT_NAMES[stat] }}:</label>
 
-                        <label class="stat-value" v-if="characterToView.savingThrows[stat].proficient">
+                        <label v-if="characterToView.savingThrows[stat].proficient">
                           {{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}
                         </label>
-                        <label class="stat-value" v-if="!characterToView.savingThrows[stat].proficient">
+                        <label v-if="!characterToView.savingThrows[stat].proficient">
                           {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}
                         </label>
                       </div>
@@ -509,12 +478,12 @@
                     <li v-for="(skill, key) in SKILL_KEYS" :key="key">
                       <div class="stat-group">
                         <input type="checkbox" class="checkbox" v-model="characterToView.skills[skill].proficient" :disabled="!isEditingSkills">
-                        <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
+                        <label>{{ SKILL_NAMES[skill] }}:</label>
 
-                        <label class="stat-value" v-if="characterToView.skills[skill].proficient">
+                        <label v-if="characterToView.skills[skill].proficient">
                           {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
                         </label>
-                        <label class="stat-value" v-if="!characterToView.skills[skill].proficient">
+                        <label v-if="!characterToView.skills[skill].proficient">
                           {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod()) }}
                         </label>
                       </div>
@@ -562,21 +531,21 @@
                       <div class="container-inputs">
                         <ul class="list-inputs">
                           <li>
-                            <label class="stat-label">Type:</label>
+                            <label>Type:</label>
                             <select class="picker" v-model="featuresTempType">
                               <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                             </select>
                           </li>
 
                           <li>
-                            <label class="stat-label">Action Type:</label>
+                            <label>Action Type:</label>
                             <select class="picker" v-model="featuresTempAction">
                               <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
                             </select>
                           </li>
 
                           <li>
-                            <label for="features-input" class="stat-label"> # of Uses:</label>
+                            <label for="features-input"> # of Uses:</label>
                             <input class="input-stats" ßtype="number" inputmode="numeric" v-model="featuresTempUses"> 
                           </li>
                         </ul>
@@ -612,21 +581,21 @@
                             <div class="container-inputs">
                               <ul class="list-inputs">
                                 <li>
-                                  <label class="stat-label">Type:</label>
+                                  <label>Type:</label>
                                   <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
                                     <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                                   </select>
                                 </li>
 
                                 <li>
-                                  <label class="stat-label">Action Type:</label>
+                                  <label>Action Type:</label>
                                   <select class="picker" v-model="item[FEATURES_KEYS.ACTION]">
                                     <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
                                   </select>
                                 </li>
 
                                 <li>
-                                  <label class="stat-label" for="features-input"> # of Uses:</label>
+                                  <label for="features-input"> # of Uses:</label>
                                   <input class="input-stats" type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
                                 </li>
                               </ul>
@@ -683,33 +652,33 @@
                       <div class="container-inputs">
                         <ul class="list-inputs">
                           <li>
-                            <label class="stat-label" for="equipment-input">Amount:</label>
+                            <label for="equipment-input">Amount:</label>
                             <input class="input-stats" type="number" inputmode="numeric" v-model="weaponTempAmount"> 
                           </li>
 
                           <li>
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                            <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
                             <select class="picker" v-model="weaponsTempAttackModifier">
                               <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                             </select>
                           </li>
                           
                           <li>
-                            <label class="stat-label" for="equipment-input">Die Type:</label>
+                            <label for="equipment-input">Die Type:</label>
                             <select class="picker" v-model="weaponTempDieType">
                               <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                             </select>
                           </li>
 
                           <li>
-                            <label class="stat-label" for="equipment-input">Category:</label>
+                            <label for="equipment-input">Category:</label>
                             <select class="picker" v-model="weaponTempCategory">
                               <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                             </select>
                           </li>
 
                           <li>
-                            <label class="stat-label" for="equipment-input">Proficient:</label>
+                            <label for="equipment-input">Proficient:</label>
                             <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
                           </li>
                         </ul>
@@ -778,33 +747,33 @@
                             <div class="container-inputs">
                               <ul class="list-inputs">
                                 <li>
-                                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
+                                  <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
                                   <input class="input-stats" type="number" inputmode="numeric" v-model="item[WEAPON_KEYS.AMOUNT]"> 
                                 </li>
                                 
                                 <li>
-                                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                                  <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
                                   <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
                                     <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
                                   </select>
                                 </li>
                                 
                                 <li>
-                                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                                  <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
                                   <select class="picker" v-model="item[WEAPON_KEYS.DIE]">
                                     <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                                   </select>
                                 </li>
 
                                 <li>
-                                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                                  <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
                                   <select class="picker" v-model="item[WEAPON_KEYS.CATEGORY]">
                                     <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
                                   </select>
                                 </li>
 
                                 <li>
-                                  <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                                  <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
                                   <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
                                 </li>
 
@@ -857,7 +826,7 @@
                     <div>
                       <input class="item-input" type="text" v-model="equipmentTempName" placeholder="New item name"> 
                       <div>
-                        <label class="stat-label" for="equipment-input">Amount:</label>
+                        <label for="equipment-input">Amount:</label>
                         <input class="input-stats" v-model="equipmentTempAmount" type="number" inputmode="numeric"> 
                       </div>
                       <br>
@@ -898,7 +867,7 @@
                           <label class="item-name">{{ key }}:</label>
                           <div class="container-edit">
                             <div>
-                              <label class="stat-label" for="equipment-input">Amount:</label>
+                              <label for="equipment-input">Amount:</label>
                               <input class="input-stats" v-model="item[EQUIPMENT_KEYS.AMOUNT]" type="number" inputmode="numeric"> 
                             </div>
                             <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
@@ -947,7 +916,7 @@
                     <div>
                       <input class="item-input" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
                       <div>
-                        <label class="stat-label" for="equipment-input">Amount:</label>
+                        <label for="equipment-input">Amount:</label>
                         <input class="input-stats" type="number" inputmode="numeric" v-model="treasureTempAmount"> 
                       </div>
                       <br>
@@ -976,7 +945,7 @@
                             <label class="item-name">{{ key }}:</label>
                             <div class="container-edit">
                               <div>
-                                <label class="stat-label" for="equipment-input">Amount:</label>
+                                <label for="equipment-input">Amount:</label>
                                 <input class="input-stats" type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
                               </div>
                               <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
@@ -1027,7 +996,7 @@
                     <div class="language-container">
                       <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
                       <div>
-                        <label class="stat-label">Proficiency: </label>
+                        <label>Proficiency: </label>
                         <select class="picker" v-model="languagesTempProficiency">
                           <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
                         </select>
@@ -1175,14 +1144,14 @@
                   <div class="container-inputs">
                     <ul class="list-inputs">
                       <li>
-                        <label class="stat-label">Level:</label>
+                        <label>Level:</label>
                         <select class="picker" v-model="spellSlotTempLevel">
                           <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
                         </select>
                       </li>
 
                       <li>
-                        <label class="stat-label" for="equipment-input"># of slots:</label>
+                        <label for="equipment-input"># of slots:</label>
                         <input class="input-stats" type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
                       </li>
                     </ul>
@@ -1212,12 +1181,12 @@
                           <div class="container-inputs">
                             <ul class="list-inputs">
                               <li>
-                                <label class="stat-label" for="equipment-input">Available # of slots:</label>
+                                <label for="equipment-input">Available # of slots:</label>
                                 <input class="input-stats" type="number" inputmode="numeric" v-model="item[SPELL_SLOT_KEYS.CURRENT]"> 
                               </li>
                               
                               <li>
-                                <label class="stat-label" for="equipment-input">Max # of slots:</label>
+                                <label for="equipment-input">Max # of slots:</label>
                                 <input class="input-stats" type="number" inputmode="numeric" v-model="item[SPELL_SLOT_KEYS.MAX]"> 
                               </li>
                             </ul>
@@ -1268,19 +1237,19 @@
                       <div class="container-inputs">
                         <ul class="list-inputs">
                           <li>
-                            <label class="stat-label" for="spells-level">Level:</label>
+                            <label for="spells-level">Level:</label>
                             <select class="picker" v-model="spellTempLevel">
                               <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
                             </select>
                           </li>
                           
                           <li>
-                            <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
+                            <label for="spells-casting-time">Casting Time (# of actions):</label>
                             <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
                           </li>
 
                           <li>
-                            <label class="stat-label">Duration:</label>
+                            <label>Duration:</label>
                             <input type="number" id="spells-casting-duration" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
 
                             <select class="picker" v-model="spellTempDurationType">
@@ -1289,7 +1258,7 @@
                           </li>
 
                           <li>
-                            <label class="stat-label" for="spells-range">Range (in feet):</label>
+                            <label for="spells-range">Range (in feet):</label>
                             <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
                           </li>
                         </ul>
@@ -1341,12 +1310,12 @@
                                 <div class="container-inputs">
                                   <ul class="list-inputs">
                                     <li>
-                                      <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
+                                      <label for="spells-casting-time">Casting Time (# of actions):</label>
                                       <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
                                     </li>
 
                                     <li>
-                                      <label class="stat-label">Duration:</label>
+                                      <label>Duration:</label>
                                       <input type="number" id="spells-casting-duration" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
 
                                       <select class="picker" v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
@@ -1355,7 +1324,7 @@
                                     </li>
                                     
                                     <li>
-                                      <label for="spells-range" class="stat-label">Range (in feet):</label>
+                                      <label for="spells-range">Range (in feet):</label>
                                       <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
                                     </li>
                                   </ul>
@@ -2484,6 +2453,7 @@ export default {
 <style scoped>
   @import '../styles/reset.css';
   @import "../styles/colors.css";
+  @import "../styles/global-constants.css";
   /* @import '../styles/character-info-scores.css'; */
   /* @import '../styles/popup.css'; */
   /* @import '../styles/transitions.css'; */
@@ -2531,7 +2501,7 @@ export default {
     margin: 0;
     padding: 0;
     font-weight: bold;
-    font-size: larger;
+    font-size: var(--stat-font-size);
   }
 
   nav .jump-to-menu li {
@@ -2556,6 +2526,10 @@ export default {
     justify-content: space-around;
   }
 
+  section header .spacer {
+    visibility: hidden;
+  }
+
   section header .collapse-chevron {
     margin: 5px;
   }
@@ -2564,8 +2538,23 @@ export default {
     display: flex;
   }
 
-  .spacer {
-    visibility: hidden;
+  section ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  section li {
+    display: inherit;
+    justify-content: space-between;
+    width: 85%;
+    margin: 5px 0;
+  }
+
+  section li label {
+    font-size: var(--stat-font-size);
   }
 
   #character-background {
@@ -2573,7 +2562,7 @@ export default {
   }
 
   #character-background p {
-    font-size: 25px;
+    font-size: var(--stat-font-size);
     margin: 0;
   }
 </style>
