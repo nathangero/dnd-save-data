@@ -285,6 +285,7 @@
                   </ul>
 
                   <div class="buttons-delete-update">
+                    <br>
                     <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
                   </div>
                 </div>
@@ -293,7 +294,8 @@
 
           </section>
           <hr>
-          <!-- <br>
+
+          <br>
           <section id="ability-scores">
             <header>
               <div class="spacer">
@@ -315,7 +317,7 @@
             
             <collapse-transition dimension="height">
               <div v-if="isShowingAbilityScores">
-                <div class="viewing" v-if="!isEditingAbilityScores">
+                <div v-if="!isEditingAbilityScores">
                   <ul>
                     <li v-for="(score, key) in STAT_KEYS" :key="key">
                       <label>{{ STAT_NAMES[score] }}:</label>
@@ -327,7 +329,7 @@
                   </ul>
                 </div>
 
-                <div class="editing" v-if="isEditingAbilityScores" >
+                <div v-if="isEditingAbilityScores" >
                   <ul>
                     <li v-for="(score, key) in STAT_KEYS" :key="key">
                       <label for="score">{{ STAT_NAMES[score] }}:</label>
@@ -339,12 +341,14 @@
                   </ul>
 
                   <div class="buttons-delete-update">
+                    <br>
                     <button class="button-update" @click="onPressUpdateAbilityScores()">Update</button>
                   </div>
                 </div>
               </div>
             </collapse-transition>
           </section>
+          <hr>
 
           <br>
           <section id="saving-throws">
@@ -385,13 +389,13 @@
                 </ul>
 
                 <div v-if="isEditingSavingThrows">
-                  <div class="buttons-delete-update">
-                    <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
-                  </div>
+                  <br>
+                  <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
                 </div>
               </div>
             </collapse-transition>
           </section>
+          <hr>
           
           <br>
           <section id="skills">
@@ -433,14 +437,14 @@
                 </ul>
 
                 <div v-if="isEditingSkills">
-                  <div class="buttons-delete-update">
-                    <button class="button-update" @click="onPressUpdateSkills()">Update</button>
-                  </div>
+                  <br>
+                  <button class="button-update" @click="onPressUpdateSkills()">Update</button>
                 </div>
               </div>
             </collapse-transition>
             
-          </section> -->
+          </section>
+          <hr>
 
           <br>
           <section id="features-traits">
@@ -510,7 +514,7 @@
                         </div>
                         <p>Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
                         <p>Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
-                        <pre>{{ item[FEATURES_KEYS.DESCRIPTION] }}</pre>
+                        <p class="description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                       </li>
 
                       <hr class="list-divider">
@@ -559,6 +563,7 @@
             </collapse-transition>
             
           </section>
+          <hr>
 
           <br>
           <section id="weapons">
@@ -2403,12 +2408,6 @@ export default {
     font-size: 2.5em;
   }
 
-  pre {
-    text-wrap: wrap;
-    text-align: start;
-    font-family: sans-serif;
-    font-size: var(--select-font-size);
-  }
 
   /* Navigation Bar */
   nav {
@@ -2532,8 +2531,6 @@ export default {
     margin-right: 10px;
     padding: 0;
   }
-
-
   section li .mod {
     margin-left: 10px;
   }
@@ -2560,6 +2557,10 @@ export default {
     flex-direction: column;
     padding: 0;
     width: var(--width-close-to-mobile-screen);
+  }
+
+  .viewing .description {
+    white-space: pre-wrap;
   }
 
   .editing ul li {
@@ -2592,7 +2593,7 @@ export default {
     width: var(--width-close-to-mobile-screen);
     padding: 10px;
     margin: 0 auto;
-    font-family: var(--font-family-sans-serif);
+    /* font-family: var(--font-family-sans-serif); */
     font-size: var(--select-font-size);
     border-radius: var(--border-radius);
   }
@@ -2632,6 +2633,7 @@ export default {
     border: none;
     border-radius: var(--border-radius);
     background-color: var(--blue);
+    font-size: var(--stat-font-size);
   }
 
   .name-and-count label {
