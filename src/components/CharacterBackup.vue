@@ -936,10 +936,10 @@ export default {
 </script>
 
 <style scoped>
-@import '../syles/reset.css';
-/* @import '../syles/character-info-scores.css'; */
-/* @import '../syles/popup.css'; */
-@import '../syles/transitions.css';
+@import '../styles/reset.css';
+/* @import '../styles/character-info-scores.css'; */
+/* @import '../styles/popup.css'; */
+@import '../styles/transitions.css';
 
 
 </style>

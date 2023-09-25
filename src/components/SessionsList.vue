@@ -75,5 +75,5 @@ export default {
 </script>
 
 <style scoped>
-@import '../syles/reset.css';
+@import '../styles/reset.css';
 </style>
