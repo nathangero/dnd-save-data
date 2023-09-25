@@ -34,7 +34,7 @@
                   </li>
 
                   <li @click="scrollToSection('weapons')">
-                    <p>{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</p>
+                    <p>{{ CHARACTER_SECTIONS.WEAPONS }}</p>
                   </li>
 
                   <li @click="scrollToSection('equipment')">
@@ -80,24 +80,25 @@
         </header>
 
         <main v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
+          <br>
           <section id="character-info">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingCharInfo">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingCharInfo">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Edit</button>
+                <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(characterinfo)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingCharacterInfo"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingCharacterInfo"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForStat(characterinfo)">Edit</button>
-                <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForStat(characterinfo)">Finish</button>
+                <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Edit</button>
+                <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -375,23 +376,23 @@
 
           <br>
           <section id="ability-scores">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingAbilityScores">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingAbilityScores">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Edit</button>
+                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingAbilityScores" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingAbilityScores" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingAbilityScores"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingAbilityScores"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForStat(CHARACTER_KEYS.SCORES)">Edit</button>
-                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForStat(CHARACTER_KEYS.SCORES)">Finish</button>
+                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Edit</button>
+                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Finish</button>
               </div>
-            </div>
+            </header>
             
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -434,23 +435,23 @@
 
           <br>
           <section id="saving-throws">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingSavingThrows">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingSavingThrows">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSavingThrows"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSavingThrows"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)">Edit</button>
-                <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)">Finish</button>
+                <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -483,23 +484,23 @@
           
           <br>
           <section id="skills">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingSkills">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingSkills">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSkills"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSkills"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForStat(CHARACTER_KEYS.SKILLS)">Edit</button>
-                <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForStat(CHARACTER_KEYS.SKILLS)">Finish</button>
+                <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -533,23 +534,23 @@
 
           <br>
           <section id="features-traits">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingFeaturesTraits">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingFeaturesTraits">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Edit</button>
+                <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingFeatures"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingFeatures"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Edit</button>
-                <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Finish</button>
+                <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Edit</button>
+                <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -653,23 +654,23 @@
 
           <br>
           <section id="weapons">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingWeapons">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingWeapons">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Edit</button>
+                <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingWeapons"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingWeapons"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Edit</button>
-                <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Finish</button>
+                <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Edit</button>
+                <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -830,23 +831,23 @@
 
           <br>
           <section id="equipment">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingEquipment">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingEquipment">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForSection(CHARACTER_SECTIONS.EQUIPMENT)">Edit</button>
+                <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForSection(CHARACTER_SECTIONS.EQUIPMENT)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingEquipment"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingEquipment"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Edit</button>
-                <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Finish</button>
+                <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForSection(CHARACTER_SECTIONS.EQUIPMENT)">Edit</button>
+                <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForSection(CHARACTER_SECTIONS.EQUIPMENT)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -920,23 +921,23 @@
 
           <br>
           <section id="treasure">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingTreasure">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingTreasure">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Edit</button>
+                <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.TREASURES)">{{ CHARACTER_SECTIONS.TREASURES }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingTreasure" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingTreasure" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.TREASURES)">{{ CHARACTER_SECTIONS.TREASURES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingTreasure"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingTreasure"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForStat(CHARACTER_KEYS.TREASURES)">Edit</button>
-                <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForStat(CHARACTER_KEYS.TREASURES)">Finish</button>
+                <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Edit</button>
+                <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -1000,23 +1001,23 @@
           
           <br>
           <section id="languages">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingLanguages">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Edit</button>
+                <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingLanguages"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingLanguages"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
-                <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
+                <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Edit</button>
+                <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -1080,23 +1081,23 @@
 
           <br>
           <section id="proficiencies">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingProficiencies">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Edit</button>
+                <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingProficiencies"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingProficiencies"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Edit</button>
-                <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Finish</button>
+                <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Edit</button>
+                <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -1149,23 +1150,23 @@
 
           <br>
           <section id="spell-slots">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingSpellSlots">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingSpellSlots">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSpellSlots"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSpellSlots"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Edit</button>
-                <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Finish</button>
+                <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <collapse-transition dimension="height">
               <div v-if="isShowingSpellSlots">
@@ -1239,23 +1240,23 @@
 
           <br>
           <section id="spell-casting">
-            <div class="edit-buttons">
-              <div>
-                <button class="button-edit-spacer" v-if="!isEditingSpellCasting">Edit</button>
-                <button class="button-edit-spacer" v-if="isEditingSpellCasting">Finish</button>
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_CASTING)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_CASTING)">Finish</button>
               </div>
 
-              <div class="h3-bar">
-                <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h3>
-                <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
-                <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SPELL_CASTING)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSpells"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSpells"/>
               </div>
-              
+
               <div>
-                <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Edit</button>
-                <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Finish</button>
+                <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_CASTING)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_CASTING)">Finish</button>
               </div>
-            </div>
+            </header>
 
             <div id="collapse">
               <collapse-transition dimension="height">
@@ -2020,7 +2021,7 @@ export default {
           alert(`couldn't update character info for some reason`)
         }
 
-        this.toggleEditForStat("character info")
+        this.toggleEditForSection("character info")
       })
       .catch((error) => {
         console.error(error)
@@ -2049,7 +2050,7 @@ export default {
           alert(`couldn't update ability scores for some reason`)
         }
 
-        this.toggleEditForStat(CHARACTER_KEYS.SCORES)
+        this.toggleEditForSection(CHARACTER_KEYS.SCORES)
       })
       .catch((error) => {
         console.error(error)
@@ -2082,7 +2083,7 @@ export default {
           alert(`couldn't update saving throws info for some reason`)
         }
 
-        this.toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)
+        this.toggleEditForSection(CHARACTER_KEYS.SAVING_THROWS)
       })
       .catch((error) => {
         console.error(error)
@@ -2127,7 +2128,7 @@ export default {
           alert(`couldn't update skills info for some reason`)
         }
 
-        this.toggleEditForStat(CHARACTER_KEYS.SKILLS).then((success) => {
+        this.toggleEditForSection(CHARACTER_KEYS.SKILLS).then((success) => {
           if (success) {
             alert(`Updated skills`)
           } else {
@@ -2177,7 +2178,7 @@ export default {
           alert(`couldn't update gold amount for some reason`)
         }
 
-        this.toggleEditForStat(CHARACTER_KEYS.SAVING_THROWS)
+        this.toggleEditForSection(CHARACTER_KEYS.SAVING_THROWS)
       })
       .catch((error) => {
         console.error(error)
@@ -2303,115 +2304,115 @@ export default {
         alert("Couldn't get character backups for some reason")
       })
     },
-    toggleCollapseForStat(statRef) {
-      switch (statRef) {
-        case CHARACTER_KEYS.SCORES:
+    toggleCollapseForSection(section) {
+      switch (section) {
+        case CHARACTER_SECTIONS.CHARACTER_INFO:
+          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+          break
+
+        case CHARACTER_SECTIONS.ABILITY_SCORES:
           this.isShowingAbilityScores = !this.isShowingAbilityScores
           break
 
         
-        case CHARACTER_KEYS.SAVING_THROWS:
+        case CHARACTER_SECTIONS.SAVING_THROWS:
           this.isShowingSavingThrows = !this.isShowingSavingThrows
           break
 
         
-        case CHARACTER_KEYS.SKILLS:
+        case CHARACTER_SECTIONS.SKILLS:
           this.isShowingSkills = !this.isShowingSkills
           break
 
         
-        case CHARACTER_KEYS.FEATURES:
+        case CHARACTER_SECTIONS.FEATURES_TRAITS:
           this.isShowingFeatures = !this.isShowingFeatures
           break
 
         
-        case CHARACTER_KEYS.WEAPONS:
+        case CHARACTER_SECTIONS.WEAPONS:
           this.isShowingWeapons = !this.isShowingWeapons
           break
 
         
-        case CHARACTER_KEYS.EQUIPMENT:
+        case CHARACTER_SECTIONS.EQUIPMENT:
           this.isShowingEquipment = !this.isShowingEquipment
           break
 
         
-        case CHARACTER_KEYS.TREASURES:
+        case CHARACTER_SECTIONS.TREASURES:
           this.isShowingTreasure = !this.isShowingTreasure
           break
 
         
-        case CHARACTER_KEYS.LANGUAGES:
+        case CHARACTER_SECTIONS.LANGUAGES:
           this.isShowingLanguages = !this.isShowingLanguages
           break
 
         
-        case CHARACTER_KEYS.PROFICIENCIES:
+        case CHARACTER_SECTIONS.PROFICIENCIES:
           this.isShowingProficiencies = !this.isShowingProficiencies
           break
 
         
-        case CHARACTER_KEYS.SPELLS:
+        case CHARACTER_SECTIONS.SPELL_CASTING:
           this.isShowingSpells = !this.isShowingSpells
           break
 
-        case CHARACTER_KEYS.SPELL_SLOTS:
+        case CHARACTER_SECTIONS.SPELL_SLOTS:
           this.isShowingSpellSlots = !this.isShowingSpellSlots
-          break
-
-        
-        default:
-          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+          break          
       }
     },
-    toggleEditForStat(statRef) {
-      switch (statRef) {
-        case CHARACTER_KEYS.SCORES:
+    toggleEditForSection(section) {
+      switch (section) {
+        case CHARACTER_SECTIONS.CHARACTER_INFO:
+          this.isEditingCharInfo = !this.isEditingCharInfo
+          break
+
+        case CHARACTER_SECTIONS.ABILITY_SCORES:
           this.isEditingAbilityScores = !this.isEditingAbilityScores
           break
 
-        case CHARACTER_KEYS.SAVING_THROWS:
+        case CHARACTER_SECTIONS.SAVING_THROWS:
           this.isEditingSavingThrows = !this.isEditingSavingThrows
           break
 
-        case CHARACTER_KEYS.SKILLS:
+        case CHARACTER_SECTIONS.SKILLS:
           this.isEditingSkills = !this.isEditingSkills
           break
         
-        case CHARACTER_KEYS.FEATURES:
+        case CHARACTER_SECTIONS.FEATURES:
           this.isEditingFeaturesTraits = !this.isEditingFeaturesTraits
           break
         
-        case CHARACTER_KEYS.WEAPONS:
+        case CHARACTER_SECTIONS.WEAPONS:
           this.isEditingWeapons = !this.isEditingWeapons
           break
 
-        case CHARACTER_KEYS.EQUIPMENT:
+        case CHARACTER_SECTIONS.EQUIPMENT:
           this.isEditingEquipment = !this.isEditingEquipment
           break
         
-        case CHARACTER_KEYS.TREASURES:
+        case CHARACTER_SECTIONS.TREASURES:
           this.isEditingTreasure = !this.isEditingTreasure
           break
 
-        case CHARACTER_KEYS.LANGUAGES:
+        case CHARACTER_SECTIONS.LANGUAGES:
           this.isEditingLanguages = !this.isEditingLanguages
           break
 
-        case CHARACTER_KEYS.PROFICIENCIES:
+        case CHARACTER_SECTIONS.PROFICIENCIES:
           this.isEditingProficiencies = !this.isEditingProficiencies
           break
 
-        case CHARACTER_KEYS.SPELLS:
+        case CHARACTER_SECTIONS.SPELLS:
           this.isEditingSpellCasting = !this.isEditingSpellCasting
           break
 
-        case CHARACTER_KEYS.SPELL_SLOTS:
+        case CHARACTER_SECTIONS.SPELL_SLOTS:
           this.isEditingSpellSlots = !this.isEditingSpellSlots
           break
-
-        
-        default:
-          this.isEditingCharInfo = !this.isEditingCharInfo
       }
     },
     toggleSaveCharacterPopup() {
@@ -2488,6 +2489,11 @@ export default {
   /* @import '../styles/transitions.css'; */
 
 
+  h1 {
+    font-size: 2.5em;
+  }
+
+  /* Navigation Bar */
   nav {
     position: fixed;
     top: 0;
@@ -2543,8 +2549,23 @@ export default {
     border-bottom: none; /* Remove the border on the last link */
   }
 
-  h1 {
-    font-size: 2.5em;
+
+  /* Sections */
+  section header {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  section header .collapse-chevron {
+    margin: 5px;
+  }
+
+  section .section-title {
+    display: flex;
+  }
+
+  .spacer {
+    visibility: hidden;
   }
 
   #character-background {

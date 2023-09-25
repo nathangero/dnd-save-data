@@ -11,7 +11,7 @@ const CHARACTER_SECTIONS = {
     SPELL_CASTING: "Spell Casting",
     SPELL_SLOTS: "Spell Slots",
     TREASURES: "Treasures",
-    WEAPONS_SPELLS: "Weapons & Spells",
+    WEAPONS: "Weapons & Spells",
 }
 
 export { CHARACTER_SECTIONS }
