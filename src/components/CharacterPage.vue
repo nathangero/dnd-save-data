@@ -2519,6 +2519,17 @@ export default {
     font-size: larger;
   }
 
+
+  .button-edit {
+    /* font-size: 20px; */
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: -5px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--dimgray);
+  }
+
   #character-background {
     margin-top: 80px;
   }
