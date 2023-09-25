@@ -936,8 +936,9 @@ export default {
 </script>
 
 <style scoped>
-@import '../syles/character-info-scores.css';
-@import '../syles/popup.css';
+@import '../syles/reset.css';
+/* @import '../syles/character-info-scores.css'; */
+/* @import '../syles/popup.css'; */
 @import '../syles/transitions.css';
 
 

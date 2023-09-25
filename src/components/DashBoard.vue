@@ -95,52 +95,6 @@ export default {
 </script>
 
 <style scoped>
+@import '../syles/reset.css';
 
-.content {
-  height: 100dvh
-}
-
-.bottom-navigation {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #f1f1f1;
-  border-top: 1px solid #ccc;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px 0;
-}
-
-.bottom-navigation ul {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0;
-  margin: 20;
-}
-
-.bottom-navigation li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 15px;
-  color: #777;
-  cursor: pointer;
-  margin-right: 40px;
-}
-
-.bottom-navigation li:last-child {
-  margin-right: 0; /* Remove margin from the last element */
-}
-
-.bottom-navigation li i {
-  margin-bottom: 10px;
-}
-
-.bottom-navigation li.active {
-  color: #333;
-}
 </style>

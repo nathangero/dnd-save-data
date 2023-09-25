@@ -1898,6 +1898,7 @@ export default {
 }
 </script>
 
-<style scoped> /* TODO: Need to make this scoped and have separate css files for styles */
-@import '../syles/character-info-scores.css';
+<style scoped>
+@import '../syles/reset.css';
+/* @import '../syles/character-info-scores.css'; */
 </style>

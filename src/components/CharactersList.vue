@@ -195,40 +195,9 @@ export default {
 </script>
 
 <style scoped>
-@import '../syles/character-summary.css';
-@import '../syles/popup.css';
+@import '../syles/reset.css';
+/* @import '../syles/character-summary.css'; */
+/* @import '../syles/popup.css'; */
 @import '../syles/transitions.css';
 
-
-
-/* .body { */
-  /* height: 100dvh; */
-/* } */
-
-.content {
-  height: 100%;
-}
-
-/* BUTTON STYLES */
-
-.button-open-modal {
-  margin: 0 auto;
-  padding: 5px 10px;
-  background-color: dimgray;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: larger;
-}
-
-.button-create-character {
-  padding: 10px;
-  background-color: #42B6E8;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: x-large;
-  margin-top: 10%;
-  margin-bottom: 10%;
-}
 </style>
