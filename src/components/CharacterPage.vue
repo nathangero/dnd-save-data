@@ -71,24 +71,11 @@
           </nav>
 
           <section id="character-background">
-            <p class="character-name">{{ characterToView.name }}</p>
-            <ul class="stat-list">
-              <li>
-                <label class="character-info">{{ characterToView.class }}</label>
-              </li>
-
-              <li>
-                <label class="character-info">{{ characterToView.background }}</label>
-              </li>
-
-              <li>
-                <label class="character-info">{{ characterToView.race }}</label>
-              </li>
-
-              <li>
-                <label class="character-info">{{ characterToView.alignment }}</label>
-              </li>
-            </ul>
+            <h1>{{ characterToView.name }}</h1>
+            <p>{{ characterToView.class }}</p>
+            <p>{{ characterToView.background }}</p>
+            <p>{{ characterToView.race }}</p>
+            <p>{{ characterToView.alignment }}</p>
           </section>
         </header>
 
@@ -2556,7 +2543,16 @@ export default {
     border-bottom: none; /* Remove the border on the last link */
   }
 
+  h1 {
+    font-size: 2.5em;
+  }
+
   #character-background {
     margin-top: 80px;
+  }
+
+  #character-background p {
+    font-size: 25px;
+    margin: 0;
   }
 </style>
