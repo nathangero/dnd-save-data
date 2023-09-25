@@ -23,23 +23,44 @@ const SKILL_KEYS = {
 
 const SKILL_NAMES = {
     [SKILL_KEYS.ACROBATICS]: 'Acrobatics',
-    [SKILL_KEYS.ANIMAL_HANDLING]: 'AnimalHandling',
+    [SKILL_KEYS.ANIMAL_HANDLING]: 'Animal Handling',
     [SKILL_KEYS.ARCANA]: 'Arcana',
     [SKILL_KEYS.ATHLETICS]: 'Athletics',
     [SKILL_KEYS.DECEPTION]: 'Deception',
     [SKILL_KEYS.HISTORY]: 'History',
     [SKILL_KEYS.INSIGHT]: 'Insight',
     [SKILL_KEYS.INTIMIDATION]: 'Intimidation',
-    [SKILL_KEYS.INVESTIGATION]: 'Investigation',    
+    [SKILL_KEYS.INVESTIGATION]: 'Investigation',
     [SKILL_KEYS.MEDICINE]: 'Medicine',
     [SKILL_KEYS.NATURE]: 'Nature',
     [SKILL_KEYS.PERCEPTION]: 'Perception',
     [SKILL_KEYS.PERFORMANCE]: 'Performance',
     [SKILL_KEYS.PERSUASION]: 'Persuasion',
     [SKILL_KEYS.RELIGION]: 'Religion',
-    [SKILL_KEYS.SLEIGHT_OF_HAND]: 'SleightOfHand',
+    [SKILL_KEYS.SLEIGHT_OF_HAND]: 'Sleight of Hand',
     [SKILL_KEYS.STEALTH]: 'Stealth',
     [SKILL_KEYS.SURVIVAL]: 'Survival',
+}
+
+const SKILL_NAME_SCORES = {
+    [SKILL_KEYS.ACROBATICS]: '(dex)',
+    [SKILL_KEYS.ANIMAL_HANDLING]: '(wis)',
+    [SKILL_KEYS.ARCANA]: '(int)',
+    [SKILL_KEYS.ATHLETICS]: '(str)',
+    [SKILL_KEYS.DECEPTION]: '(cha)',
+    [SKILL_KEYS.HISTORY]: '(int)',
+    [SKILL_KEYS.INSIGHT]: '(wis)',
+    [SKILL_KEYS.INTIMIDATION]: '(cha)',
+    [SKILL_KEYS.INVESTIGATION]: '(int)',
+    [SKILL_KEYS.MEDICINE]: '(wis)',
+    [SKILL_KEYS.NATURE]: '(int)',
+    [SKILL_KEYS.PERCEPTION]: '(wis)',
+    [SKILL_KEYS.PERFORMANCE]: '(cha)',
+    [SKILL_KEYS.PERSUASION]: '(cha)',
+    [SKILL_KEYS.RELIGION]: '(int)',
+    [SKILL_KEYS.SLEIGHT_OF_HAND]: '(dex)',
+    [SKILL_KEYS.STEALTH]: '(dex)',
+    [SKILL_KEYS.SURVIVAL]: '(wis)',
 }
 
 
@@ -64,4 +85,4 @@ const SKILL_MODS = {
     [SKILL_KEYS.SURVIVAL]: STAT_KEYS.WISDOM,
 }
 
-export { SKILL_KEYS, SKILL_NAMES, SKILL_MODS }
+export { SKILL_KEYS, SKILL_NAMES, SKILL_NAME_SCORES, SKILL_MODS }

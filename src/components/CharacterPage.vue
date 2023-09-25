@@ -367,33 +367,31 @@
               </div>
             </header>
 
-            <div id="collapse">
-              <collapse-transition dimension="height">
-                <div class="viewing" v-if="isShowingSavingThrows">
-                  <ul>
-                    <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                      <div>
-                        <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
-                        <label>{{ STAT_NAMES[stat] }}:</label>
-                      </div>
-
-                      <label v-if="characterToView.savingThrows[stat].proficient">
-                        <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}</strong>
-                      </label>
-                      <label v-if="!characterToView.savingThrows[stat].proficient">
-                        <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</strong>
-                      </label>
-                    </li>
-                  </ul>
-
-                  <div class="editing" v-if="isEditingSavingThrows">
-                    <div class="buttons-delete-update">
-                      <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSavingThrows">
+                <ul>
+                  <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                    <div>
+                      <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
+                      <label>{{ STAT_NAMES[stat] }}:</label>
                     </div>
+
+                    <label v-if="characterToView.savingThrows[stat].proficient">
+                      <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}</strong>
+                    </label>
+                    <label v-if="!characterToView.savingThrows[stat].proficient">
+                      <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</strong>
+                    </label>
+                  </li>
+                </ul>
+
+                <div v-if="isEditingSavingThrows">
+                  <div class="buttons-delete-update">
+                    <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
                   </div>
                 </div>
-              </collapse-transition>
-            </div>
+              </div>
+            </collapse-transition>
           </section>
           
           <br>
@@ -416,33 +414,32 @@
               </div>
             </header>
 
-            <div id="collapse">
-              <collapse-transition dimension="height">
-                <div v-if="isShowingSkills">
-                  <ul>
-                    <li v-for="(skill, key) in SKILL_KEYS" :key="key">
-                      <div class="stat-group">
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSkills">
+                <ul>
+                  <li v-for="(skill, key) in SKILL_KEYS" :key="key">
+                      <div>
                         <input type="checkbox" class="checkbox" v-model="characterToView.skills[skill].proficient" :disabled="!isEditingSkills">
                         <label>{{ SKILL_NAMES[skill] }}:</label>
-
-                        <label v-if="characterToView.skills[skill].proficient">
-                          {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
-                        </label>
-                        <label v-if="!characterToView.skills[skill].proficient">
-                          {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod()) }}
-                        </label>
+                        <label class="skill-score">&nbsp;{{ SKILL_NAME_SCORES[skill] }}</label>
                       </div>
-                    </li>
-                  </ul>
 
-                  <div v-if="isEditingSkills">
-                    <div class="buttons-delete-update">
-                      <button class="button-update" @click="onPressUpdateSkills()">Update</button>
-                    </div>
+                      <label class="mod" v-if="characterToView.skills[skill].proficient">
+                        <strong>{{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}</strong>
+                      </label>
+                      <label class="mod" v-if="!characterToView.skills[skill].proficient">
+                        <strong>{{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod()) }}</strong>
+                      </label>
+                  </li>
+                </ul>
+
+                <div v-if="isEditingSkills">
+                  <div class="buttons-delete-update">
+                    <button class="button-update" @click="onPressUpdateSkills()">Update</button>
                   </div>
                 </div>
-              </collapse-transition>
-            </div>
+              </div>
+            </collapse-transition>
             
           </section>
 
@@ -1417,7 +1414,7 @@ import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
-import { SKILL_KEYS, SKILL_NAMES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
+import { SKILL_KEYS, SKILL_NAMES, SKILL_NAME_SCORES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER, SPELL_CASTING_DURATION_TYPES } from '@/enums/dbKeys/spell-casting-keys'
 import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
@@ -1504,6 +1501,7 @@ export default {
       STAT_KEYS: STAT_KEYS,
       STAT_VALUES_KEYS: STAT_VALUES_KEYS,
       STAT_NAMES: STAT_NAMES,
+      SKILL_NAME_SCORES: SKILL_NAME_SCORES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
       SKILL_MODS: SKILL_MODS,
@@ -2416,6 +2414,7 @@ export default {
     background-color: var(--light-gray);
     display: flex;
     justify-content: space-between;
+    z-index: 9999; /* Ensure this is always on top */
   }
 
   nav .nav-bar-button {
@@ -2496,6 +2495,7 @@ export default {
     justify-content: space-between;
     width: 85%;
     margin: 5px 0;
+    text-wrap: warp;
   }
 
   section li label {
@@ -2529,15 +2529,14 @@ export default {
     padding: 0;
   }
 
-  section li .checkbox:checked + label::after {
-    content: " (proficient)";
-    opacity: 0.5;
-    font-style: italic;
-    font-size: var(--select-font-size);
-  }
 
   section li .mod {
     margin-left: 10px;
+  }
+
+  section li .skill-score {
+    font-style: italic;
+    font-size: var(--select-font-size);
   }
 
   .button-edit {
