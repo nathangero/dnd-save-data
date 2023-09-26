@@ -1219,7 +1219,7 @@
 
                       <li>
                         <label>Duration:</label>
-                        
+
                         <div>
                           <input type="number" v-model="spellTempDuration" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
                           
@@ -1245,33 +1245,61 @@
                 </template>
 
                 <template v-if="getDictionarySize(characterToView.spells) > 0">
+                  <div class="viewing-spells" v-if="!isEditingSpellCasting">
+                    <ul v-for="(levelDict, level) in characterToView.spells" :key="level">
+                      <template v-if="getDictionarySize(levelDict) > 0">
+                        <li class="spell-level">
+                          <label><strong>{{ SPELL_CASTING_NAMES[level] }}</strong></label>
+                        </li>
+
+                        <ul v-for="(spell, spellName) in levelDict" :key="spellName">
+                          <li class="spell-name">
+                            <label><strong>{{ spellName }}</strong></label>
+                          </li>
+
+                          <li>
+                            <label>Casting Time:</label>
+                            <label>{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                          </li>
+
+                          <li>
+                            <label>Duration:</label>
+                            <label>{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
+                          </li>
+
+                          <li>
+                            <label>Range:</label>
+                            <label>{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                          </li>
+
+                          <li>
+                            <p class="description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</p>
+                          </li>
+
+                          <li>
+                            <hr class="list-divider">
+                          </li>
+                        </ul>
+                        
+                      </template>
+                    </ul>
+                  </div>
+                  
+                  <div class="editing" v-if="isEditingSpellCasting">
+                    <ul v-for="(levelDict, level) in characterToView.spells" :key="level">
+                      <li>
+                        
+                      </li>
+                    </ul>
+                  </div>
+
                   <ul class="list">
                     <li v-for="(levelDict, level) in characterToView.spells" :key="level">
                       <template v-if="getDictionarySize(levelDict) > 0">
                         <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
                         <ul>
                           <li v-for="(spell, spellName) in levelDict" :key="spellName">
-                            <div v-if="!isEditingSpellCasting">
-                              <label class="item-name">{{ spellName }}</label>
-                              <br>
-                              <div class="spell-list">
-                                <div class="spell-group">
-                                  <label class="spell-label">Casting Time:</label>
-                                  <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
-                                </div>
-
-                                <div class="spell-group">
-                                  <label class="spell-label">Duration:</label>
-                                  <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
-                                </div>
-
-                                <div class="spell-group">
-                                  <label class="spell-label">Range:</label>
-                                  <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
-                                </div>
-                              </div>
-                              <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
-                            </div>
+                           
 
                             <!-- Edit and Delete -->
                             <div v-if="isEditingSpellCasting">
@@ -2610,6 +2638,25 @@ export default {
 
   .viewing p {
     align-items: center;
+  }
+
+  .viewing-spells ul {
+    width: 100%;
+  }
+
+  .viewing-spells li {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .viewing-spells .spell-level {
+    text-decoration: underline;
+    justify-content: center;
+  }
+
+  .viewing-spells .description {
+    text-align: left;
+    white-space: pre-wrap;
   }
 
   .editing ul li {
