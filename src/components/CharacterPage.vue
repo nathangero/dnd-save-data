@@ -497,6 +497,7 @@
                     
                     <br>
                     <textarea class="description" v-model="featuresTempDescription" rows="6" placeholder="Description"></textarea>
+                    
                     <br>
                     <button class="button-add" @click="onPressAddFeatures">Add</button>
 
@@ -734,6 +735,7 @@
               </div>
             </collapse-transition>
           </section>
+          <hr>
 
           <br>
           <section id="equipment">
@@ -755,74 +757,77 @@
               </div>
             </header>
 
-            <div id="collapse">
-              <collapse-transition dimension="height">
-                <div v-if="isShowingEquipment">
-                  <!-- Add new -->
-                  <template v-if="isEditingEquipment">
-                    <div>
-                      <input class="item-input" type="text" v-model="equipmentTempName" placeholder="New item name"> 
-                      <div>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingEquipment">
+                <!-- Add new -->
+                <template v-if="isEditingEquipment">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="equipmentTempName" placeholder="New item name"> 
+                      </li>
+
+                      <li>
                         <label for="equipment-input">Amount:</label>
                         <input v-model="equipmentTempAmount" type="number" inputmode="numeric"> 
-                      </div>
-                      <br>
-                      <textarea v-model="equipmentTempDescription" rows="6" placeholder="Description"></textarea>
-                      <br>
-                      <button class="button-add" @click="onPressAddEquipment">Add</button>
+                      </li>
+                    </ul>
 
-                      <ul class="list">
-                        <hr class="list-divider">
-                      </ul>
+                  <br>
+                  <textarea v-model="equipmentTempDescription" rows="6" placeholder="Description"></textarea>
+
+                  <br>
+                  <button class="button-add" @click="onPressAddEquipment">Add</button>
+
+                  <hr>
+                  </div>
+                </template>
+
+                <ul class="list">
+                  <li>
+                    <div v-if="!isEditingEquipment">
+                      <label class="item-name">Gold:</label>
+                      <label class="item-amount">x{{ characterToView.gold }}</label>
                     </div>
-                  </template>
-
-                  <ul class="list">
-                    <li>
+                    <div v-if="isEditingEquipment">
+                      <label class="item-name">Gold:</label>
+                      <input type="number" id="spells-casting-duration" v-model="characterToView.gold" inputmode="numeric" required>
+                      <button class="button-update" @click="onPressUpdateGold()">Update</button>
+                    </div>
+                  </li>
+                </ul>
+                <template v-if="getDictionarySize(characterToView.equipment) > 0">
+                  <ul class="list">                      
+                    <li v-for="(item, key) in characterToView.equipment" :key="key">
                       <div v-if="!isEditingEquipment">
-                        <label class="item-name">Gold:</label>
-                        <label class="item-amount">x{{ characterToView.gold }}</label>
+                        <label class="item-name">{{ key }}</label>
+                        <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                        <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
                       </div>
+
+                      <!-- Edit and Delete -->
                       <div v-if="isEditingEquipment">
-                        <label class="item-name">Gold:</label>
-                        <input type="number" id="spells-casting-duration" v-model="characterToView.gold" inputmode="numeric" required>
-                        <button class="button-update" @click="onPressUpdateGold()">Update</button>
+                        <label class="item-name">{{ key }}:</label>
+                        <div class="container-edit">
+                          <div>
+                            <label for="equipment-input">Amount:</label>
+                            <input v-model="item[EQUIPMENT_KEYS.AMOUNT]" type="number" inputmode="numeric"> 
+                          </div>
+                          <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+                        </div>
+
+                        <div class="buttons-delete-update">
+                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.EQUIPMENT)">Update</button>
+                        </div>
+                        
+                        <hr class="list-divider">
                       </div>
                     </li>
                   </ul>
-                  <template v-if="getDictionarySize(characterToView.equipment) > 0">
-                    <ul class="list">                      
-                      <li v-for="(item, key) in characterToView.equipment" :key="key">
-                        <div v-if="!isEditingEquipment">
-                          <label class="item-name">{{ key }}</label>
-                          <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                          <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
-                        </div>
-
-                        <!-- Edit and Delete -->
-                        <div v-if="isEditingEquipment">
-                          <label class="item-name">{{ key }}:</label>
-                          <div class="container-edit">
-                            <div>
-                              <label for="equipment-input">Amount:</label>
-                              <input v-model="item[EQUIPMENT_KEYS.AMOUNT]" type="number" inputmode="numeric"> 
-                            </div>
-                            <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
-                          </div>
-
-                          <div class="buttons-delete-update">
-                            <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
-                            <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.EQUIPMENT)">Update</button>
-                          </div>
-                          
-                          <hr class="list-divider">
-                        </div>
-                      </li>
-                    </ul>
-                  </template>
-                </div>
-              </collapse-transition>
-            </div>
+                </template>
+              </div>
+            </collapse-transition>
           </section>
 
           <br>
