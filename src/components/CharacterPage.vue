@@ -1086,6 +1086,7 @@
             </collapse-transition>
             
           </section>
+          <hr>
 
           <br>
           <section id="spell-slots">
@@ -1111,28 +1112,26 @@
               <div v-if="isShowingSpellSlots">
                 <!-- Add new -->
                 <template v-if="isEditingSpellSlots">
-                  <div class="container-inputs">
-                    <ul class="list-inputs">
+                  <div class="editing">
+                    <ul>
                       <li>
-                        <label>Level:</label>
+                        <p>Level:</p>
                         <select v-model="spellSlotTempLevel">
                           <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
                         </select>
                       </li>
 
                       <li>
-                        <label for="equipment-input"># of slots:</label>
+                        <label># of slots:</label>
                         <input type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
                       </li>
                     </ul>
+
+                    <br>
+                    <button class="button-add" @click="onPressAddSpellSlot">Add</button>
+
+                    <hr>
                   </div>
-
-                  <br>
-                  <button class="button-add" @click="onPressAddSpellSlot">Add</button>
-
-                  <ul class="list">
-                    <hr class="list-divider">
-                  </ul>
                 </template>
 
                 <template v-if="getDictionarySize(characterToView.spellSlots) > 0">
