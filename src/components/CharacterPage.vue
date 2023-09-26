@@ -1236,11 +1236,12 @@
 
                       <br>
                       <textarea v-model="spellTempDescription" rows="6" placeholder="Description"></textarea>
-                      <br>
-                      <button class="button-add" @click="onPressAddSpell">Add</button>
-
-                      <hr>
                     </ul>
+
+                    <br>
+                    <button class="button-add" @click="onPressAddSpell">Add</button>
+
+                    <hr>
                   </div>
                 </template>
 
@@ -1275,72 +1276,66 @@
                           <li>
                             <p class="description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</p>
                           </li>
-
-                          <li>
-                            <hr class="list-divider">
-                          </li>
                         </ul>
-                        
                       </template>
-                    </ul>
-                  </div>
-                  
-                  <div class="editing" v-if="isEditingSpellCasting">
-                    <ul v-for="(levelDict, level) in characterToView.spells" :key="level">
+                      
+                      <!-- Show the divider after every spell level -->
                       <li>
-                        
+                        <hr class="list-divider">
                       </li>
                     </ul>
                   </div>
-
-                  <ul class="list">
-                    <li v-for="(levelDict, level) in characterToView.spells" :key="level">
+                  
+                  <div class="editing-spells" v-if="isEditingSpellCasting">
+                    <ul v-for="(levelDict, level) in characterToView.spells" :key="level">
                       <template v-if="getDictionarySize(levelDict) > 0">
-                        <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
-                        <ul>
-                          <li v-for="(spell, spellName) in levelDict" :key="spellName">
-                           
+                        <li class="spell-level">
+                          <label><strong>{{ SPELL_CASTING_NAMES[level] }}</strong></label>
+                        </li>
 
-                            <!-- Edit and Delete -->
-                            <div v-if="isEditingSpellCasting">
-                              <label class="item-name">{{ spellName }}</label>
-                              <div class="container-inputs">
-                                <ul class="list-inputs">
-                                  <li>
-                                    <label for="spells-casting-time">Casting Time (# of actions):</label>
-                                    <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" inputmode="numeric" required>
-                                  </li>
+                        <ul v-for="(spell, spellName) in levelDict" :key="spellName">
+                          <li class="spell-name">
+                            <label><strong>{{ spellName }}</strong></label>
+                          </li>
 
-                                  <li>
-                                    <label>Duration:</label>
-                                    <input type="number" id="spells-casting-duration" v-model="spell[SPELL_CASTING_KEYS.DURATION]" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+                          <li>
+                            <label for="spells-casting-time">Casting Time (# of actions):</label>
+                            <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" inputmode="numeric" required>
+                          </li>
 
-                                    <select v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
-                                      <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
-                                    </select>
-                                  </li>
-                                  
-                                  <li>
-                                    <label for="spells-range">Range (in feet):</label>
-                                    <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" inputmode="numeric" required>
-                                  </li>
-                                </ul>
-                              </div>
-                              
-                              <br>
-                              <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
-                              <div class="container-update-delete">
-                                <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                                <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
-                              </div>
-                        
-                              <hr class="list-divider">
+                          <li>
+                            <label>Duration:</label>
+                            
+                            <div>
+                              <input type="number" id="spells-casting-duration" v-model="spell[SPELL_CASTING_KEYS.DURATION]" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+
+                              <select v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
+                                <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                              </select>
                             </div>
+                          </li>
+                          
+                          <li>
+                            <label for="spells-range">Range (in feet):</label>
+                            <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" inputmode="numeric" required>
+                          </li>
+                              
+                          <br>
+                          <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                          <li class="container-update-delete">
+                            <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
+                            <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
                           </li>
                         </ul>
                       </template>
-                    </li>
-                  </ul>
+                      
+                      <!-- Show the divider after every spell level -->
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
                 </template>
               </div>
             </collapse-transition>
@@ -2640,20 +2635,6 @@ export default {
     align-items: center;
   }
 
-  .viewing-spells ul {
-    width: 100%;
-  }
-
-  .viewing-spells li {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .viewing-spells .spell-level {
-    text-decoration: underline;
-    justify-content: center;
-  }
-
   .viewing-spells .description {
     text-align: left;
     white-space: pre-wrap;
@@ -2685,7 +2666,8 @@ export default {
     font-size: var(--stat-font-size);
   }
 
-  .editing textarea {
+  .editing textarea,
+  .editing-spells textarea {
     width: var(--width-close-to-mobile-screen);
     padding: 10px;
     margin: 0 auto;
@@ -2711,6 +2693,29 @@ export default {
 
   .editing .language strong {
     text-decoration: none;
+  }
+
+  .viewing-spells ul,
+  .editing-spells ul {
+    width: 100%;
+  }
+
+  .viewing-spells li,
+  .editing-spells li {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .viewing-spells .spell-level,
+  .editing-spells .spell-level {
+    text-decoration: underline;
+    justify-content: center;
+  }
+
+  .editing-spells .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px auto;
   }
 
   .button-edit {
