@@ -1339,14 +1339,13 @@
               </div>
             </collapse-transition>
           </section>
+          <hr>
 
-          <br>
           <section id="save-delete-buttons" :class="{ 'disabled-page': isPopupOpen() }">
-            <ul class="buttons-at-bottom">
+            <ul class="container-backup-delete">
               <li>
                 <button class="button-view-backups" @click="getCharacterBackups">View Backups</button>
-                <!-- <button class="button-view-backups" @click="toggleCharacterBackupPopup">View Backups</button> -->
-                <button class="button-save" @click="toggleSaveCharacterPopup">Backup Character</button>
+                <button class="button-backup" @click="toggleSaveCharacterPopup">Backup Character</button>
               </li>
 
               <li>
@@ -2760,8 +2759,38 @@ export default {
   }
 
   .button-add,
-  .button-update {
+  .button-update,
+  .button-backup {
     background-color: var(--blue);
+  }
+
+  .button-view-backups {
+    background-color: var(--dimgray);
+  }
+
+  .container-backup-delete {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container-backup-delete button {
+    color: var(--white);
+    padding: 5px 10px;
+    margin: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--stat-font-size);
+    width: 70%;
+  }
+
+  .container-backup-delete li {
+    display: flex;
+    flex-direction: column; /* Change to row for bigger screens */
+    align-items: center;
+  }
+
+  .container-backup-delete li:last-child {
+    margin-bottom: 50px; /* Have extra space at bottom */
   }
 
   .name-and-count {
