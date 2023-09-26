@@ -835,6 +835,7 @@
               </div>
             </collapse-transition>
           </section>
+          <hr>
 
           <br>
           <section id="treasure">
@@ -856,63 +857,66 @@
               </div>
             </header>
 
-            <div id="collapse">
-              <collapse-transition dimension="height">
-                <div v-if="isShowingTreasure">
-                  <!-- Add new -->
-                  <template v-if="isEditingTreasure">
-                    <div>
-                      <input class="item-input" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
-                      <div>
-                        <label for="equipment-input">Amount:</label>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingTreasure">
+                <!-- Add new -->
+                <template v-if="isEditingTreasure">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
+                      </li>
+
+                      <li>
+                        <label>Amount:</label>
                         <input type="number" inputmode="numeric" v-model="treasureTempAmount"> 
-                      </div>
+                      </li>
+
                       <br>
                       <textarea v-model="treasureTempDescription" rows="6" placeholder="Description"></textarea>
+
                       <br>
                       <button class="button-add" @click="onPressAddTreasure">Add</button>
 
-                      <ul class="list">
-                        <hr class="list-divider">
-                      </ul>
-                    </div>
-                  </template>
+                      <hr>
+                    </ul>
+                  </div>
+                </template>
 
-                  <template v-if="getDictionarySize(characterToView.treasures) > 0">
-                    <div>
-                      <ul class="list">
-                        <li v-for="(item, key) in characterToView.treasures" :key="key">
-                          <div v-if="!isEditingTreasure">
-                            <label class="item-name">{{ key }}</label>
-                            <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                            <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                <template v-if="getDictionarySize(characterToView.treasures) > 0">
+                  <div>
+                    <ul class="list">
+                      <li v-for="(item, key) in characterToView.treasures" :key="key">
+                        <div v-if="!isEditingTreasure">
+                          <label class="item-name">{{ key }}</label>
+                          <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                          <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                        </div>
+
+                        <!-- Edit and Delete -->
+                        <div v-if="isEditingTreasure">
+                          <label class="item-name">{{ key }}:</label>
+                          <div class="container-edit">
+                            <div>
+                              <label for="equipment-input">Amount:</label>
+                              <input type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
+                            </div>
+                            <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
                           </div>
 
-                          <!-- Edit and Delete -->
-                          <div v-if="isEditingTreasure">
-                            <label class="item-name">{{ key }}:</label>
-                            <div class="container-edit">
-                              <div>
-                                <label for="equipment-input">Amount:</label>
-                                <input type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
-                              </div>
-                              <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
-                            </div>
-
-                            <div class="buttons-delete-update">
-                              <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
-                              <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.TREASURES)">Update</button>
-                            </div>
-                            
-                            <hr class="list-divider">
+                          <div class="buttons-delete-update">
+                            <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
+                            <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.TREASURES)">Update</button>
                           </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </template>
-                </div>
-              </collapse-transition>
-            </div>
+                          
+                          <hr class="list-divider">
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
 
           </section>
           
