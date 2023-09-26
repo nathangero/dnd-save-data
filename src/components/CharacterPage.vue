@@ -1008,7 +1008,8 @@
             </div>
 
             
-          </section>      
+          </section> 
+          <hr>     
 
           <br>
           <section id="proficiencies">
@@ -1030,52 +1031,54 @@
               </div>
             </header>
 
-            <div id="collapse">
-              <collapse-transition dimension="height">
-                <div v-if="isShowingProficiencies">
-                  <!-- Add new -->
-                  <template v-if="isEditingProficiencies">
-                    <div class="proficiency-container">
-                      <input class="item-input" v-model="proficiencyTempName" placeholder="New proficiency name"> 
-                      <br>
-                      <textarea v-model="proficiencyTempDescription" rows="6" placeholder="Description"></textarea>
-                      <br>
-                      <button class="button-add" @click="onPressAddProficiency">Add</button>
-
-                      <ul class="list">
-                        <hr class="list-divider">
-                      </ul>
-                    </div>
-                  </template>
-
-                  <template v-if="getDictionarySize(characterToView.proficiencies) > 0">
-                    <ul class="list">
-                      <li v-for="(item, key) in characterToView.proficiencies" :key="key">
-                        <div v-if="!isEditingProficiencies">
-                          <label class="item-name">{{ key }}</label>
-                          <p class="item-description">{{ item }}</p>
-                        </div>
-
-                        <!-- Edit and Delete -->
-                        <div v-if="isEditingProficiencies">
-                          <label class="item-name">{{ key }}:</label>
-                          <div class="container-edit">
-                            <textarea v-model="characterToView.proficiencies[key]" rows="6" placeholder="Description"></textarea>
-                          </div>
-
-                          <div class="container-update-delete">
-                            <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                            <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
-                          </div>
-                          
-                          <hr class="list-divider">
-                        </div>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingProficiencies">
+                <!-- Add new -->
+                <template v-if="isEditingProficiencies">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" v-model="proficiencyTempName" placeholder="New proficiency name"> 
                       </li>
                     </ul>
-                  </template>
-                </div>
-              </collapse-transition>
-            </div>
+                    
+                    <br>
+                    <textarea v-model="proficiencyTempDescription" rows="6" placeholder="Description"></textarea>
+                    
+                    <br>
+                    <button class="button-add" @click="onPressAddProficiency">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(characterToView.proficiencies) > 0">
+                  <ul class="list">
+                    <li v-for="(item, key) in characterToView.proficiencies" :key="key">
+                      <div v-if="!isEditingProficiencies">
+                        <label class="item-name">{{ key }}</label>
+                        <p class="item-description">{{ item }}</p>
+                      </div>
+
+                      <!-- Edit and Delete -->
+                      <div v-if="isEditingProficiencies">
+                        <label class="item-name">{{ key }}:</label>
+                        <div class="container-edit">
+                          <textarea v-model="characterToView.proficiencies[key]" rows="6" placeholder="Description"></textarea>
+                        </div>
+
+                        <div class="container-update-delete">
+                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                        </div>
+                        
+                        <hr class="list-divider">
+                      </div>
+                    </li>
+                  </ul>
+                </template>
+              </div>
+            </collapse-transition>
             
           </section>
 
