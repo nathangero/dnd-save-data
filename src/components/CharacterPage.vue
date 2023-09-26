@@ -1123,7 +1123,9 @@
 
                       <li>
                         <label># of slots:</label>
-                        <input type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
+                        <select v-model="spellSlotTempSlots">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
                       </li>
                     </ul>
 
@@ -1138,7 +1140,7 @@
                   <div class="viewing" v-if="!isEditingSpellSlots">
                     <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
                       <li class="inline">
-                        <p><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</p>
+                        <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</label>
                         <label>{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
                       </li>
                     </ul>
@@ -1147,44 +1149,23 @@
                   <div class="editing" v-if="isEditingSpellSlots">
                     <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
                       <li>
-                        
+                        <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong></label>
                       </li>
-                    </ul>
-                  </div>
 
-                  <div>
-                    <ul class="list">
-                      <li v-for="(item, key) in characterToView.spellSlots" :key="key">
-                        <div v-if="!isEditingSpellSlots">
-                          <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
-                          <label class="item-amount">{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
-                        </div>
+                      <li>
+                        <label>Available # of slots:</label>
+                        <select v-model="item[SPELL_SLOT_KEYS.CURRENT]">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
+                      </li>
 
-                        <!-- Edit and Delete -->
-                        <div v-if="isEditingSpellSlots">
-                          <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
-                          
-                          <div class="container-inputs">
-                            <ul class="list-inputs">
-                              <li>
-                                <label for="equipment-input">Available # of slots:</label>
-                                <input type="number" inputmode="numeric" v-model="item[SPELL_SLOT_KEYS.CURRENT]"> 
-                              </li>
-                              
-                              <li>
-                                <label for="equipment-input">Max # of slots:</label>
-                                <input type="number" inputmode="numeric" v-model="item[SPELL_SLOT_KEYS.MAX]"> 
-                              </li>
-                            </ul>
-                          </div>
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.SPELL_SLOTS)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.SPELL_SLOTS)">Update</button>
+                      </li>
 
-                          <div class="container-update-delete">
-                            <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.SPELL_SLOTS)">Delete</button>
-                            <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.SPELL_SLOTS)">Update</button>
-                          </div>
-                          
-                          <hr class="list-divider">
-                        </div>
+                      <li>
+                        <hr class="list-divider">
                       </li>
                     </ul>
                   </div>
@@ -2451,7 +2432,9 @@ export default {
   }
 
   p {
-    font-size: var(--stat-font-size)
+    display: inherit;
+    align-items: center;
+    font-size: var(--stat-font-size);
   }
 
 
@@ -2621,6 +2604,11 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+  }
+
+  .viewing p {
+    align-items: center;
   }
 
   .editing ul li {
