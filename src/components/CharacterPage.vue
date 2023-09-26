@@ -184,7 +184,7 @@
                 <div v-if="isEditingCharInfo">
                   <ul>
                     <li>
-                      <label for="stats-level"> Current Level:</label>
+                      <label for="stats-level">Level:</label>
                       <input type="number" v-model="characterToView.level" inputmode="numeric" required>
                     </li>
 
@@ -282,12 +282,12 @@
                       <label for="stats-proficiency-bonus">Inspriation: </label>
                       <input type="number" id="stats-inspiration" v-model="characterToView.inspiration" inputmode="numeric" required>
                     </li>
-                  </ul>
 
-                  <div class="buttons-delete-update">
-                    <br>
-                    <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
-                  </div>
+                    <li class="container-update-delete">
+                      <br>
+                      <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </collapse-transition>
@@ -340,7 +340,7 @@
                     </li>
                   </ul>
 
-                  <div class="buttons-delete-update">
+                  <div class="container-update-delete">
                     <br>
                     <button class="button-update" @click="onPressUpdateAbilityScores()">Update</button>
                   </div>
@@ -386,12 +386,12 @@
                       <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</strong>
                     </label>
                   </li>
-                </ul>
 
-                <div v-if="isEditingSavingThrows">
-                  <br>
-                  <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
-                </div>
+                  <li class="container-update-delete" v-if="isEditingSavingThrows">
+                    <br>
+                    <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
+                  </li>
+                </ul>
               </div>
             </collapse-transition>
           </section>
@@ -434,12 +434,12 @@
                         <strong>{{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod()) }}</strong>
                       </label>
                   </li>
-                </ul>
 
-                <div v-if="isEditingSkills">
-                  <br>
-                  <button class="button-update" @click="onPressUpdateSkills()">Update</button>
-                </div>
+                  <li class="container-update-delete" v-if="isEditingSkills">
+                    <br>
+                    <button class="button-update" @click="onPressUpdateSkills()">Update</button>
+                  </li>
+                </ul>
               </div>
             </collapse-transition>
             
@@ -951,53 +951,57 @@
                 <div v-if="isShowingLanguages">
                   <!-- Add new -->
                   <template v-if="isEditingLanguages">
-                    <div class="language-container">
-                      <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
-                      <div>
-                        <label>Proficiency: </label>
-                        <select v-model="languagesTempProficiency">
-                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                        </select>
-                      </div>
+                    <div class="editing">
+                      <ul>
+                        <li>
+                          <input class="name" type="text" v-model="languagesTempName" placeholder="New language name"> 
+                        </li>
+
+                        <li>
+                          <label>Proficiency: </label>
+                          <select v-model="languagesTempProficiency">
+                            <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                          </select>
+                        </li>
+                      </ul>
+                        
                       <br>
                       <button class="button-add" @click="onPressAddLanguage">Add</button>
 
-                      <ul class="list">
-                        <hr class="list-divider">
-                      </ul>
+                      <hr>
                     </div>
                   </template>
 
                   <template v-if="getDictionarySize(characterToView.languages) > 0">
-                    <ul>
-                      <li v-for="(item, key) in characterToView.languages" :key="key">
-                        <div v-if="!isEditingLanguages">
-                          <div class="language-group">
-                            <p class="language-label">{{ key }}:</p>
-                            <p class="language-value">{{ item }}</p>
-                          </div>
-                        </div>
+                    <div class="viewing" v-if="!isEditingLanguages">
+                      <ul v-for="(item, key) in characterToView.languages" :key="key">
+                        <li class="language">
+                          <p><strong>{{ key }}</strong>:</p>
+                          <p>{{ item }}</p>
+                        </li>
+                      </ul>
+                    </div>
 
-                        <!-- Edit and Delete -->
-                        <div v-if="isEditingLanguages">
-                          <div>
-                            <label class="item-name">{{ key }}:</label>
-                            <select v-model="characterToView.languages[key]">
-                              <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                            </select>
-                          </div>
+                    <div class="editing" v-if="isEditingLanguages">
+                      <ul v-for="(item, key) in characterToView.languages" :key="key">
+                        <li class="language">
+                          <p><strong>{{ key }}</strong>:</p>
+                          <select v-model="characterToView.languages[key]">
+                            <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                          </select>
+                        </li>
 
-                          <div class="buttons-delete-update">
-                            <br>
-                            <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
-                            <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
-                          </div>
-                          
+                        <li class="container-update-delete">
+                          <br>
+                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
+                        </li>
+
+                        <li>
                           <hr class="list-divider">
-                        </div>
-                        
-                      </li>
-                    </ul>
+                        </li>
+                      </ul>
+                    </div>
                   </template>
                 </div>
               </collapse-transition>
@@ -1059,7 +1063,7 @@
                             <textarea v-model="characterToView.proficiencies[key]" rows="6" placeholder="Description"></textarea>
                           </div>
 
-                          <div class="buttons-delete-update">
+                          <div class="container-update-delete">
                             <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
                             <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
                           </div>
@@ -1150,7 +1154,7 @@
                             </ul>
                           </div>
 
-                          <div class="buttons-delete-update">
+                          <div class="container-update-delete">
                             <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.SPELL_SLOTS)">Delete</button>
                             <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.SPELL_SLOTS)">Update</button>
                           </div>
@@ -1290,7 +1294,7 @@
                                 
                                 <br>
                                 <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
-                                <div class="buttons-delete-update">
+                                <div class="container-update-delete">
                                   <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
                                   <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
                                 </div>
@@ -2422,6 +2426,10 @@ export default {
     font-size: 2.5em;
   }
 
+  p {
+    font-size: var(--stat-font-size)
+  }
+
 
   /* Navigation Bar */
   nav {
@@ -2562,7 +2570,7 @@ export default {
   }
 
   section .viewing p {
-    font-size: var(--select-font-size);
+    font-size: var(--stat-font-size);
     margin: 5px 0;
   }
 
@@ -2583,6 +2591,12 @@ export default {
   .viewing .description {
     white-space: pre-wrap;
     text-align: left;
+  }
+
+  .viewing .language {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .editing ul li {
@@ -2629,6 +2643,16 @@ export default {
     border-radius: var(--border-radius);
   }
 
+  .editing .container-update-delete {
+    display: flex;
+    justify-content: center;
+    margin: 10px auto;
+  }
+
+  .editing .language strong {
+    text-decoration: none;
+  }
+
   .button-edit {
     color: var(--white);
     padding: 5px 10px;
@@ -2638,30 +2662,27 @@ export default {
     background-color: var(--dimgray);
   }
 
-  .editing .container-update-delete {
+  .container-update-delete {
     display: flex;
-    justify-content: space-evenly;
-    margin: 10px;
+    justify-content: center;
+  }
+
+  .container-update-delete button {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--stat-font-size);
   }
 
   .button-delete {
-    color: var(--white);
-    padding: 5px 10px;
-    margin-top: -5px;
-    border: none;
-    border-radius: var(--border-radius);
     background-color: var(--red);
   }
 
   .button-add,
   .button-update {
-    color: var(--white);
-    padding: 5px 10px;
-    margin-top: -5px;
-    border: none;
-    border-radius: var(--border-radius);
     background-color: var(--blue);
-    font-size: var(--stat-font-size);
   }
 
   .name-and-count {
