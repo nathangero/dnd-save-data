@@ -1053,11 +1053,18 @@
                 </template>
 
                 <template v-if="getDictionarySize(characterToView.proficiencies) > 0">
+                  <div class="viewing" v-if="!isEditingProficiencies">
+                    <ul v-for="(item, key) in characterToView.proficiencies" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong></label>
+                        <p class="description">{{ item }}</p>
+                      </li>
+                    </ul>
+                  </div>
+
                   <ul class="list">
                     <li v-for="(item, key) in characterToView.proficiencies" :key="key">
                       <div v-if="!isEditingProficiencies">
-                        <label class="item-name">{{ key }}</label>
-                        <p class="item-description">{{ item }}</p>
                       </div>
 
                       <!-- Edit and Delete -->
