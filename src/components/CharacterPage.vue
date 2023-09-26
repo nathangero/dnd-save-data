@@ -496,7 +496,7 @@
                     </ul>
                     
                     <br>
-                    <textarea class="description" v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
+                    <textarea class="description" v-model="featuresTempDescription" rows="6" placeholder="Description"></textarea>
                     <br>
                     <button class="button-add" @click="onPressAddFeatures">Add</button>
 
@@ -544,15 +544,16 @@
                       </li>
 
                       <br>
-                      <textarea  v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                      <textarea  v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
 
-                      <div class="buttons-delete-update">
+                      <li class="container-update-delete">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
                         <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
-                      </div>
-                      <br>
+                      </li>
                       
-                      <hr class="list-divider">
+                      <li>
+                        <hr class="list-divider">
+                      </li>
                     </ul>
                   </div>
                 </template>
@@ -625,7 +626,7 @@
                     </ul>
 
                     <br>
-                    <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
+                    <textarea v-model="weaponTempDescription" rows="6" placeholder="Description"></textarea>
                     <br>
                     <button class="button-add" @click="onPressAddWeapon">Add</button>
                     
@@ -678,6 +679,57 @@
                       <hr class="list-divider">
                     </ul>
                   </div>
+
+                  <div class="editing" v-if="isEditingWeapons">
+                    <ul v-for="(item, key) in characterToView.weapons" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
+                        <input type="number" inputmode="numeric" v-model="item[WEAPON_KEYS.AMOUNT]"> 
+                      </li>
+                        
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                        </select>
+                      </li>
+                      
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.DIE]">
+                          <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.CATEGORY]">
+                          <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                        <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
+                      </li>
+
+                      <br>
+                      <textarea v-model="item[WEAPON_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.WEAPONS)">Update</button>
+                      </li>
+                      
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
                 </template>
               </div>
             </collapse-transition>
@@ -715,7 +767,7 @@
                         <input v-model="equipmentTempAmount" type="number" inputmode="numeric"> 
                       </div>
                       <br>
-                      <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
+                      <textarea v-model="equipmentTempDescription" rows="6" placeholder="Description"></textarea>
                       <br>
                       <button class="button-add" @click="onPressAddEquipment">Add</button>
 
@@ -755,7 +807,7 @@
                               <label for="equipment-input">Amount:</label>
                               <input v-model="item[EQUIPMENT_KEYS.AMOUNT]" type="number" inputmode="numeric"> 
                             </div>
-                            <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                            <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
                           </div>
 
                           <div class="buttons-delete-update">
@@ -805,7 +857,7 @@
                         <input type="number" inputmode="numeric" v-model="treasureTempAmount"> 
                       </div>
                       <br>
-                      <textarea v-model="treasureTempDescription" rows="4" placeholder="Description"></textarea>
+                      <textarea v-model="treasureTempDescription" rows="6" placeholder="Description"></textarea>
                       <br>
                       <button class="button-add" @click="onPressAddTreasure">Add</button>
 
@@ -833,7 +885,7 @@
                                 <label for="equipment-input">Amount:</label>
                                 <input type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
                               </div>
-                              <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                              <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
                             </div>
 
                             <div class="buttons-delete-update">
@@ -961,7 +1013,7 @@
                     <div class="proficiency-container">
                       <input class="item-input" v-model="proficiencyTempName" placeholder="New proficiency name"> 
                       <br>
-                      <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
+                      <textarea v-model="proficiencyTempDescription" rows="6" placeholder="Description"></textarea>
                       <br>
                       <button class="button-add" @click="onPressAddProficiency">Add</button>
 
@@ -983,7 +1035,7 @@
                         <div v-if="isEditingProficiencies">
                           <label class="item-name">{{ key }}:</label>
                           <div class="container-edit">
-                            <textarea v-model="characterToView.proficiencies[key]" rows="4" placeholder="Description"></textarea>
+                            <textarea v-model="characterToView.proficiencies[key]" rows="6" placeholder="Description"></textarea>
                           </div>
 
                           <div class="buttons-delete-update">
@@ -1150,7 +1202,7 @@
                       </div>
 
                       <br>
-                      <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
+                      <textarea v-model="spellTempDescription" rows="6" placeholder="Description"></textarea>
                       <br>
                       <button class="button-add" @click="onPressAddSpell">Add</button>
 
@@ -1216,7 +1268,7 @@
                                 </div>
                                 
                                 <br>
-                                <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
+                                <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
                                 <div class="buttons-delete-update">
                                   <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
                                   <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
@@ -2563,6 +2615,12 @@ export default {
     border: none;
     border-radius: var(--border-radius);
     background-color: var(--dimgray);
+  }
+
+  .editing .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px;
   }
 
   .button-delete {
