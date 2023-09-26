@@ -283,7 +283,7 @@
                       <input type="number" id="stats-inspiration" v-model="characterToView.inspiration" inputmode="numeric" required>
                     </li>
 
-                    <li class="container-update-delete">
+                    <li class="container-update">
                       <br>
                       <button class="button-update" @click="onPressUpdateCharacterInfo()">Update</button>
                     </li>
@@ -340,7 +340,7 @@
                     </li>
                   </ul>
 
-                  <div class="container-update-delete">
+                  <div class="container-update">
                     <br>
                     <button class="button-update" @click="onPressUpdateAbilityScores()">Update</button>
                   </div>
@@ -387,7 +387,7 @@
                     </label>
                   </li>
 
-                  <li class="container-update-delete" v-if="isEditingSavingThrows">
+                  <li class="container-update" v-if="isEditingSavingThrows">
                     <br>
                     <button class="button-update" @click="onPressUpdateSavingThrows()">Update</button>
                   </li>
@@ -435,7 +435,7 @@
                       </label>
                   </li>
 
-                  <li class="container-update-delete" v-if="isEditingSkills">
+                  <li class="container-update" v-if="isEditingSkills">
                     <br>
                     <button class="button-update" @click="onPressUpdateSkills()">Update</button>
                   </li>
@@ -976,23 +976,22 @@
                     <div class="viewing" v-if="!isEditingLanguages">
                       <ul v-for="(item, key) in characterToView.languages" :key="key">
                         <li class="inline">
-                          <p><strong>{{ key }}</strong>:</p>
+                          <label><strong>{{ key }}</strong>:</label>
                           <p>{{ item }}</p>
                         </li>
                       </ul>
                     </div>
 
-                    <div class="editing" v-if="isEditingLanguages">
+                    <div class="editing-languages" v-if="isEditingLanguages">
                       <ul v-for="(item, key) in characterToView.languages" :key="key">
                         <li class="inline">
-                          <p><strong>{{ key }}</strong>:</p>
+                          <label><strong>{{ key }}</strong>:</label>
                           <select v-model="characterToView.languages[key]">
                             <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
                           </select>
                         </li>
 
                         <li class="container-update-delete">
-                          <br>
                           <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
                           <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
                         </li>
@@ -1213,7 +1212,7 @@
                       </li>
                         
                       <li>
-                        <label for="spells-casting-time">Casting Time (# of actions):</label>
+                        <label for="spells-casting-time">Cast Time (# of actions):</label>
                         <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" inputmode="numeric" required>
                       </li>
 
@@ -1259,7 +1258,7 @@
                           </li>
 
                           <li>
-                            <label>Casting Time:</label>
+                            <label>Cast Time:</label>
                             <label>{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
                           </li>
 
@@ -1299,7 +1298,7 @@
                           </li>
 
                           <li>
-                            <label for="spells-casting-time">Casting Time (# of actions):</label>
+                            <label for="spells-casting-time">Cast Time (# of actions):</label>
                             <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" inputmode="numeric" required>
                           </li>
 
@@ -2687,23 +2686,31 @@ export default {
 
   .editing .container-update-delete {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     margin: 10px auto;
   }
 
-  .editing .language strong {
+  .editing .languages strong {
     text-decoration: none;
   }
 
   .viewing-spells ul,
-  .editing-spells ul {
+  .editing-spells ul,
+  .editing-languages ul {
     width: 100%;
   }
 
   .viewing-spells li,
-  .editing-spells li {
+  .editing-spells li,
+  .editing-languages li {
     display: flex;
     justify-content: space-between;
+  }
+
+  .editing-spells li label,
+  .editing-languages li label {
+    display: flex;
+    align-items: center;
   }
 
   .viewing-spells .spell-level,
@@ -2712,7 +2719,8 @@ export default {
     justify-content: center;
   }
 
-  .editing-spells .container-update-delete {
+  .editing-spells .container-update-delete,
+  .editing-languages .container-update-delete {
     display: flex;
     justify-content: space-evenly;
     margin: 10px auto;
@@ -2727,11 +2735,17 @@ export default {
     background-color: var(--dimgray);
   }
 
-  .container-update-delete {
+  .container-update {
     display: flex;
     justify-content: center;
   }
 
+  .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .container-update button,
   .container-update-delete button {
     color: var(--white);
     padding: 5px 10px;
