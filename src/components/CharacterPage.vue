@@ -1173,6 +1173,7 @@
               </div>
             </collapse-transition>
           </section>
+          <hr>
 
           <br>
           <section id="spell-casting">
@@ -1194,127 +1195,127 @@
               </div>
             </header>
 
-            <div id="collapse">
-              <collapse-transition dimension="height">
-                <div v-if="isShowingSpells">
-                  <!-- Add new -->
-                  <template v-if="isEditingSpellCasting">
-                    <div>
-                      <input class="item-input" type="text" v-model="spellTempName" placeholder="New spell name"> 
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li>
-                            <label for="spells-level">Level:</label>
-                            <select v-model="spellTempLevel">
-                              <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
-                            </select>
-                          </li>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSpells">
+                <!-- Add new -->
+                <template v-if="isEditingSpellCasting">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="spellTempName" placeholder="New spell name"> 
+                      </li>
+
+                      <li>
+                        <label for="spells-level">Level:</label>
+                        <select v-model="spellTempLevel">
+                          <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
+                        </select>
+                      </li>
+                        
+                      <li>
+                        <label for="spells-casting-time">Casting Time (# of actions):</label>
+                        <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" inputmode="numeric" required>
+                      </li>
+
+                      <li>
+                        <label>Duration:</label>
+                        
+                        <div>
+                          <input type="number" v-model="spellTempDuration" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
                           
-                          <li>
-                            <label for="spells-casting-time">Casting Time (# of actions):</label>
-                            <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" inputmode="numeric" required>
-                          </li>
+                          <select v-model="spellTempDurationType">
+                            <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                          </select>
+                        </div>
+                      </li>
 
-                          <li>
-                            <label>Duration:</label>
-                            <input type="number" id="spells-casting-duration" v-model="spellTempDuration" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
-
-                            <select v-model="spellTempDurationType">
-                              <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
-                            </select>
-                          </li>
-
-                          <li>
-                            <label for="spells-range">Range (in feet):</label>
-                            <input type="number" id="spells-range" v-model="spellTempRange" inputmode="numeric" required>
-                          </li>
-                        </ul>
-                      </div>
+                      <li>
+                        <label for="spells-range">Range (in feet):</label>
+                        <input type="number" id="spells-range" v-model="spellTempRange" inputmode="numeric" required>
+                      </li>
 
                       <br>
                       <textarea v-model="spellTempDescription" rows="6" placeholder="Description"></textarea>
                       <br>
                       <button class="button-add" @click="onPressAddSpell">Add</button>
 
-                      <ul class="list">
-                        <hr class="list-divider">
-                      </ul>
-                    </div>
-                  </template>
-
-                  <template v-if="getDictionarySize(characterToView.spells) > 0">
-                    <ul class="list">
-                      <li v-for="(levelDict, level) in characterToView.spells" :key="level">
-                        <template v-if="getDictionarySize(levelDict) > 0">
-                          <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
-                          <ul>
-                            <li v-for="(spell, spellName) in levelDict" :key="spellName">
-                              <div v-if="!isEditingSpellCasting">
-                                <label class="item-name">{{ spellName }}</label>
-                                <br>
-                                <div class="spell-list">
-                                  <div class="spell-group">
-                                    <label class="spell-label">Casting Time:</label>
-                                    <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
-                                  </div>
-
-                                  <div class="spell-group">
-                                    <label class="spell-label">Duration:</label>
-                                    <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
-                                  </div>
-
-                                  <div class="spell-group">
-                                    <label class="spell-label">Range:</label>
-                                    <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
-                                  </div>
-                                </div>
-                                <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
-                              </div>
-
-                              <!-- Edit and Delete -->
-                              <div v-if="isEditingSpellCasting">
-                                <label class="item-name">{{ spellName }}</label>
-                                <div class="container-inputs">
-                                  <ul class="list-inputs">
-                                    <li>
-                                      <label for="spells-casting-time">Casting Time (# of actions):</label>
-                                      <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" inputmode="numeric" required>
-                                    </li>
-
-                                    <li>
-                                      <label>Duration:</label>
-                                      <input type="number" id="spells-casting-duration" v-model="spell[SPELL_CASTING_KEYS.DURATION]" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
-
-                                      <select v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
-                                        <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
-                                      </select>
-                                    </li>
-                                    
-                                    <li>
-                                      <label for="spells-range">Range (in feet):</label>
-                                      <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" inputmode="numeric" required>
-                                    </li>
-                                  </ul>
-                                </div>
-                                
-                                <br>
-                                <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
-                                <div class="container-update-delete">
-                                  <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                                  <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
-                                </div>
-                          
-                                <hr class="list-divider">
-                              </div>
-                            </li>
-                          </ul>
-                        </template>
-                      </li>
+                      <hr>
                     </ul>
-                  </template>
-                </div>
-              </collapse-transition>
-            </div>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(characterToView.spells) > 0">
+                  <ul class="list">
+                    <li v-for="(levelDict, level) in characterToView.spells" :key="level">
+                      <template v-if="getDictionarySize(levelDict) > 0">
+                        <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
+                        <ul>
+                          <li v-for="(spell, spellName) in levelDict" :key="spellName">
+                            <div v-if="!isEditingSpellCasting">
+                              <label class="item-name">{{ spellName }}</label>
+                              <br>
+                              <div class="spell-list">
+                                <div class="spell-group">
+                                  <label class="spell-label">Casting Time:</label>
+                                  <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                                </div>
+
+                                <div class="spell-group">
+                                  <label class="spell-label">Duration:</label>
+                                  <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
+                                </div>
+
+                                <div class="spell-group">
+                                  <label class="spell-label">Range:</label>
+                                  <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                                </div>
+                              </div>
+                              <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
+                            </div>
+
+                            <!-- Edit and Delete -->
+                            <div v-if="isEditingSpellCasting">
+                              <label class="item-name">{{ spellName }}</label>
+                              <div class="container-inputs">
+                                <ul class="list-inputs">
+                                  <li>
+                                    <label for="spells-casting-time">Casting Time (# of actions):</label>
+                                    <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" inputmode="numeric" required>
+                                  </li>
+
+                                  <li>
+                                    <label>Duration:</label>
+                                    <input type="number" id="spells-casting-duration" v-model="spell[SPELL_CASTING_KEYS.DURATION]" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+
+                                    <select v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
+                                      <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                                    </select>
+                                  </li>
+                                  
+                                  <li>
+                                    <label for="spells-range">Range (in feet):</label>
+                                    <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" inputmode="numeric" required>
+                                  </li>
+                                </ul>
+                              </div>
+                              
+                              <br>
+                              <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+                              <div class="container-update-delete">
+                                <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
+                                <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
+                              </div>
+                        
+                              <hr class="list-divider">
+                            </div>
+                          </li>
+                        </ul>
+                      </template>
+                    </li>
+                  </ul>
+                </template>
+              </div>
+            </collapse-transition>
           </section>
 
           <br>
@@ -2343,7 +2344,7 @@ export default {
           this.isEditingProficiencies = !this.isEditingProficiencies
           break
 
-        case CHARACTER_SECTIONS.SPELLS:
+        case CHARACTER_SECTIONS.SPELL_CASTING:
           this.isEditingSpellCasting = !this.isEditingSpellCasting
           break
 
