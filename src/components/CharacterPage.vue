@@ -1062,27 +1062,25 @@
                     </ul>
                   </div>
 
-                  <ul class="list">
-                    <li v-for="(item, key) in characterToView.proficiencies" :key="key">
-                      <div v-if="!isEditingProficiencies">
-                      </div>
+                  <div class="editing" v-if="isEditingProficiencies">
+                    <ul v-for="(item, key) in characterToView.proficiencies" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
 
-                      <!-- Edit and Delete -->
-                      <div v-if="isEditingProficiencies">
-                        <label class="item-name">{{ key }}:</label>
-                        <div class="container-edit">
-                          <textarea v-model="characterToView.proficiencies[key]" rows="6" placeholder="Description"></textarea>
-                        </div>
+                      <br>
+                      <textarea v-model="characterToView.proficiencies[key]" rows="6" placeholder="Description"></textarea>
 
-                        <div class="container-update-delete">
-                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
-                        </div>
-                        
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                      </li>
+
+                      <li>
                         <hr class="list-divider">
-                      </div>
-                    </li>
-                  </ul>
+                      </li>
+                    </ul>
+                  </div>
                 </template>
               </div>
             </collapse-transition>
