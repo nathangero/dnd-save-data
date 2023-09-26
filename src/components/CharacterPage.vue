@@ -975,7 +975,7 @@
                   <template v-if="getDictionarySize(characterToView.languages) > 0">
                     <div class="viewing" v-if="!isEditingLanguages">
                       <ul v-for="(item, key) in characterToView.languages" :key="key">
-                        <li class="language">
+                        <li class="inline">
                           <p><strong>{{ key }}</strong>:</p>
                           <p>{{ item }}</p>
                         </li>
@@ -984,7 +984,7 @@
 
                     <div class="editing" v-if="isEditingLanguages">
                       <ul v-for="(item, key) in characterToView.languages" :key="key">
-                        <li class="language">
+                        <li class="inline">
                           <p><strong>{{ key }}</strong>:</p>
                           <select v-model="characterToView.languages[key]">
                             <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
@@ -1135,6 +1135,23 @@
                 </template>
 
                 <template v-if="getDictionarySize(characterToView.spellSlots) > 0">
+                  <div class="viewing" v-if="!isEditingSpellSlots">
+                    <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
+                      <li class="inline">
+                        <p><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</p>
+                        <label>{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingSpellSlots">
+                    <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
+                      <li>
+                        
+                      </li>
+                    </ul>
+                  </div>
+
                   <div>
                     <ul class="list">
                       <li v-for="(item, key) in characterToView.spellSlots" :key="key">
@@ -2600,7 +2617,7 @@ export default {
     text-align: left;
   }
 
-  .viewing .language {
+  .viewing .inline {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
