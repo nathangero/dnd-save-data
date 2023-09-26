@@ -1355,37 +1355,29 @@
           </section>
 
           <!-- Save Character Data Popup -->
-          <div id="save-character">
+          <div class="popup-overlay" v-if="isSaveCharacterPopupOpen">
             <transition name="fade" appear>
-              <div class="overlay" v-if="isSaveCharacterPopupOpen">
-                <div class="popup">
-                  <div class="form">
-                    <h1>Create backup for {{ characterToView.name }}?</h1>
-                    <div class="buttons-delete-character">
-                      <button class="button-cancel-delete" @click="toggleSaveCharacterPopup">Cancel</button>
-                      <button class="button-save" @click="onPressSaveBackup">Save</button>
-                    </div>
-                  </div>
+              <div class="popup-character-action" v-if="isSaveCharacterPopupOpen">
+                <h1>Create backup for <br><strong>{{ characterToView.name }}</strong>?</h1>
+                <div class="popup-buttons">
+                  <button class="button-cancel" @click="toggleSaveCharacterPopup">Cancel</button>
+                  <button class="button-backup" @click="onPressSaveBackup">Save</button>
                 </div>
               </div>
             </transition>
           </div>
 
           <!-- Delete Character Popup -->
-          <div id="delete-character">
+          <div class="popup-overlay" v-if="isDeleteCharacterPopupOpen">
             <transition name="fade" appear>
-              <div class="overlay" v-if="isDeleteCharacterPopupOpen">
-                <div class="popup">
-                  <div class="form">
-                    <h1>Delete {{ characterToView.name }}?</h1>
-                    <p class="popup-message">This action can't be undone</p>
-                    <div class="buttons-delete-character">
-                      <button class="button-cancel-delete" @click="toggleDeleteCharacterPopup">Cancel</button>
-                      <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
-                    </div>
+                <div class="popup-character-action">
+                  <h1>Delete <strong>{{ characterToView.name }}</strong>?</h1>
+                  <p>This action can't be undone</p>
+                  <div class="popup-buttons">
+                    <button class="button-cancel" @click="toggleDeleteCharacterPopup">Cancel</button>
+                    <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
                   </div>
                 </div>
-              </div>
             </transition>
           </div>
 
@@ -2445,7 +2437,7 @@ export default {
   @import "../styles/colors.css";
   @import "../styles/global-constants.css";
   /* @import '../styles/character-info-scores.css'; */
-  /* @import '../styles/popup.css'; */
+  @import '../styles/popup.css';
   /* @import '../styles/transitions.css'; */
 
 
@@ -2773,7 +2765,8 @@ export default {
     flex-direction: column;
   }
 
-  .container-backup-delete button {
+  .container-backup-delete button,
+  .popup-buttons button {
     color: var(--white);
     padding: 5px 10px;
     margin: 10px;
@@ -2781,6 +2774,10 @@ export default {
     border-radius: var(--border-radius);
     font-size: var(--stat-font-size);
     width: 70%;
+  }
+
+  .button-cancel {
+    background-color: var(--dimgray);
   }
 
   .container-backup-delete li {
@@ -2803,6 +2800,29 @@ export default {
     width: var(--width-close-to-mobile-screen);
     margin: 5px auto;
     margin-top: -5px;
+  }
+
+  .popup-overlay h1 {
+    font-size: 2.1em;
+  }
+
+  .popup-character-action {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    width: var(--width-popup);
+  }
+
+  .popup-character-action p {
+    justify-content: center;
+  }
+
+  .popup-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
   }
 
   #character-background {
