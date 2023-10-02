@@ -876,153 +876,88 @@
 
             
           </section> 
-          <hr>   
+          <hr>
+
+          <br>
+          <section id="proficiencies">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Edit</button>
+                <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingProficiencies"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingProficiencies"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Edit</button>
+                <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingProficiencies">
+                <template v-if="isEditingProficiencies">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" v-model="proficiencyTempName" placeholder="New proficiency name"> 
+                      </li>
+                    </ul>
+                    
+                    <br>
+                    <textarea v-model="proficiencyTempDescription" rows="6" placeholder="Description"></textarea>
+                    
+                    <br>
+                    <button class="button-add" @click="onPressAddProficiency">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.proficiencies) > 0">
+                  <div class="viewing" v-if="!isEditingProficiencies">
+                    <ul v-for="(item, key) in newCharacter.proficiencies" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong></label>
+                        <p class="description">{{ item }}</p>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingProficiencies">
+                    <ul v-for="(item, key) in newCharacter.proficiencies" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <br>
+                      <textarea v-model="newCharacter.proficiencies[key]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
+                      </li>
+
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+            
+          </section>
+          <hr>
         </main>
       </div>
     </transition>
 
     <div class="character-to-view">
-      <br>
-      <section id="languages">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingLanguages">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
-            <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingLanguages">
-            <!-- Add new -->
-            <div class="language-container">
-              <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
-              <div style="margin-top: 10px;">
-                <label style="margin-right: 10px;">Proficiency: </label>
-                <select class="picker" v-model="languagesTempProficiency">
-                  <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                </select>
-              </div>
-              <br>
-              <button class="button-add" @click="onPressAddLanguage">Add</button>
-
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(languages) > 0">
-              <div>
-                <ul>
-                  <li v-for="(item, key) in languages" :key="key">
-                    <div v-if="!isEditingLanguages">
-                      <div class="language-group">
-                        <p class="language-label">{{ key }}:</p>
-                        <p class="language-value">{{ item }}</p>
-                      </div>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingLanguages">
-                      <div style="margin-top: 10px; text-align: left;">
-                        <label class="item-name">{{ key }}:</label>
-                        <select class="picker" v-model="languages[key]">
-                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                        </select>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <br>
-                        <button class="button-delete" @click="onPressDeleteLanguage(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                    
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
-        
-      </section>   
-        
-      <br>
-      <section id="proficiences">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingProficiencies">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Edit</button>
-            <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Finish</button>
-          </div>
-        </div>
-        
-        <collapse-transition dimension="height">
-          <div v-if="isShowingProficiencies">
-            <!-- Add new -->
-            <div class="proficiency-container">
-              <input class="item-input" style="margin-bottom: 20px" v-model="proficiencyTempName" placeholder="New proficiency name"> 
-              <br>
-              <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddProficiency">Add</button>
-
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(proficiencies) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in proficiencies" :key="key">
-                    <div v-if="!isEditingProficiencies">
-                      <label class="item-name">{{ key }}</label>
-                      <p class="item-description">{{ item }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingProficiencies">
-                      <label class="item-name">{{ key }}:</label>
-                      <div class="container-edit">
-                        <textarea v-model="proficiencies[key]" rows="4" placeholder="Description"></textarea>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteProficiency(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
-
       <br>
       <section id="spell-slots">
         <div class="edit-buttons">
@@ -1672,7 +1607,7 @@ export default {
         return
       }
 
-      this.proficiencies[this.proficiencyTempName] = this.proficiencyTempDescription
+      this.newCharacter.proficiencies[this.proficiencyTempName] = this.proficiencyTempDescription
       
       this.proficiencyTempName = ''
       this.proficiencyTempDescription = ''
