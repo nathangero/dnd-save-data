@@ -312,122 +312,128 @@
             
           </section>
           <hr>
+
+          <br>
+          <section id="features-traits">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Edit</button>
+                <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingFeatures"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingFeatures"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Edit</button>
+                <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingFeatures">
+                <template v-if="isEditingFeaturesTraits">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
+                      </li>
+                      <li>
+                        <label>Type:</label>
+                        <select v-model="featuresTempType">
+                          <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label>Action Type:</label>
+                        <select v-model="featuresTempAction">
+                          <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="features-input"> # of Uses:</label>
+                        <input ßtype="number" inputmode="numeric" v-model="featuresTempUses"> 
+                      </li>
+                    </ul>
+                    
+                    <br>
+                    <textarea class="description" v-model="featuresTempDescription" rows="6" placeholder="Description"></textarea>
+
+                    <br>
+                    <button class="button-add" @click="onPressAddFeatures">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.featuresTraits) > 0">
+                  <div class="viewing" v-if="!isEditingFeaturesTraits">
+                    <ul v-for="(item, key) in newCharacter.featuresTraits" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[FEATURES_KEYS.USES] }}</label>
+                        <p>Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                        <p>Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
+                        <p class="description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
+                      </li>
+
+                      <hr class="list-divider">
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingFeaturesTraits">
+                    <ul v-for="(item, key) in newCharacter.featuresTraits" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label>Type:</label>
+                        <select v-model="item[FEATURES_KEYS.TYPE]">
+                          <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label>Action Type:</label>
+                        <select v-model="item[FEATURES_KEYS.ACTION]">
+                          <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label> # of Uses:</label>
+                        <input type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
+                      </li>
+
+                      <br>
+                      <textarea  v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
+                      </li>
+                      
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+            
+          </section>
+          <hr>
         </main>
       </div>
     </transition>
 
     <div class="character-to-view">
-        
-      <br>
-      <section id="features-traits">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingFeaturesTraits">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingFeaturesTraits">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Edit</button>
-            <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingFeatures">
-            <!-- Add new -->
-            <div>
-              <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li style="margin-top: 10px;">
-                    <label>Type:</label>
-                    <select class="picker" v-model="featuresTempType">
-                      <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                    </select>
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label>Action Type:</label>
-                    <select class="picker" v-model="featuresTempAction">
-                      <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
-                    </select>
-                  </li>
-
-                  <li>
-                    <label for="features-input"> # of Uses:</label>
-                    <input  style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
-                  </li>
-                </ul>
-              </div>
-              
-              <br>
-              <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddFeatures">Add</button>
-
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(featuresTraits) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in featuresTraits" :key="key">
-                    <div v-if="!isEditingFeaturesTraits">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
-                      <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
-                      <p class="item-description" style="margin-bottom: 5px;">Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
-                      <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingFeaturesTraits">
-                      <label class="item-name">{{ key }}</label>
-                      <div class="container-edit">
-                        <div>
-                          <label>Type:</label>
-                          <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
-                            <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                          </select>
-                        </div>
-
-                        <div style="margin-top: 10px;">
-                          <label>Action Type:</label>
-                          <select class="picker" v-model="item[FEATURES_KEYS.ACTION]">
-                            <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label for="features-input"> # of Uses:</label>
-                          <input  style="width=70%;" type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
-                        </div>
-                        <br>
-                        <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                        <div class="buttons-delete-update">
-                          <button class="button-delete" @click="onPressDeleteFeatures(key)">Delete</button>
-                        </div>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>   
-          </div>
-        </collapse-transition>
-        
-      </section>
-
       <br>
       <section id="weapons">
         <div class="edit-buttons">
@@ -1112,19 +1118,14 @@ export default {
   data() {
     return {
       store: useStore(),
-      isModalNewCharacterOpen: false,
-      isModalViewCharacterOpen: false,
-      isEditingAbilityScores: false,
-      isEditingSavingThrows: false,
-      isEditingSkills: false,
-      isEditingFeaturesTraits: false,
-      isEditingWeapons: false,
-      isEditingEquipment: false,
-      isEditingTreasure: false,
-      isEditingLanguages: false,
-      isEditingProficiencies: false,
-      isEditingSpellCasting: false,
-      isEditingSpellSlots: false,
+      isEditingFeaturesTraits: true,
+      isEditingWeapons: true,
+      isEditingEquipment: true,
+      isEditingTreasure: true,
+      isEditingLanguages: true,
+      isEditingProficiencies: true,
+      isEditingSpellCasting: true,
+      isEditingSpellSlots: true,
       isShowingCharacterInfo: true,
       isShowingAbilityScores: true,
       isShowingSavingThrows: true,
