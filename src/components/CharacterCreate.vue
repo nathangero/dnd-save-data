@@ -2440,38 +2440,15 @@ export default {
     background-color: var(--blue);
   }
 
-  .button-cancel {
-    background-color: var(--dimgray);
-  }
-
-  .button-view-backups {
-    background-color: var(--dimgray);
-  }
-
-  .container-backup-delete {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .container-backup-delete button,
-  .popup-buttons button {
+  .button-create-character {
     color: var(--white);
     padding: 5px 10px;
-    margin: 10px;
+    margin-top: 10px;
+    margin-bottom: 50px;
     border: none;
     border-radius: var(--border-radius);
-    font-size: var(--stat-font-size);
-    width: 70%;
-  }
-
-  .container-backup-delete li {
-    display: flex;
-    flex-direction: column; /* Change to row for bigger screens */
-    align-items: center;
-  }
-
-  .container-backup-delete li:last-child {
-    margin-bottom: 50px; /* Have extra space at bottom */
+    font-size: 2em;
+    background-color: var(--blue);
   }
 
   .name-and-count {
@@ -2484,59 +2461,6 @@ export default {
     width: var(--width-close-to-mobile-screen);
     margin: 5px auto;
     margin-top: -5px;
-  }
-
-  .popup-overlay h1 {
-    font-size: 2.1em;
-  }
-
-  .popup-character-action {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--white);
-    border-radius: var(--border-radius);
-    padding: 20px;
-    width: var(--width-popup);
-  }
-
-  .popup-character-action ul {
-    display: flex;
-    flex-direction: column-reverse;
-    width: 100%;
-    padding: 10px;
-  }
-
-  .popup-character-action ul li {
-    border: 2px solid var(--black);
-    border-radius: var(--border-radius);
-    padding: 10px;
-  }
-
-  .popup-character-action p {
-    justify-content: center;
-  }
-
-  .popup-buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-  }
-
-  .disabled-button {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  .disabled-page {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none; 
-    visibility: hidden;
-  }
-
-  .selected {
-    background-color: var(--yellow);
   }
 
   #character-background {
