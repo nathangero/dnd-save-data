@@ -706,90 +706,99 @@
             </collapse-transition>
           </section>
           <hr>
+
+          <br>
+          <section id="treasure">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Edit</button>
+                <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.TREASURES)">{{ CHARACTER_SECTIONS.TREASURES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingTreasure"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingTreasure"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Edit</button>
+                <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingTreasure">
+                <template v-if="isEditingTreasure">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
+                      </li>
+
+                      <li>
+                        <label>Amount:</label>
+                        <input type="number" inputmode="numeric" v-model="treasureTempAmount"> 
+                      </li>
+                    </ul>
+
+                    <br>
+                    <textarea v-model="treasureTempDescription" rows="6" placeholder="Description"></textarea>
+
+                    <br>
+                    <button class="button-add" @click="onPressAddTreasure">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.treasures) > 0">
+                  <div class="viewing" v-if="!isEditingTreasure">
+                    <ul  v-for="(item, key) in newCharacter.treasures" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                        <p class="description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                      </li>
+
+                      <hr class="list-divider">
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingTreasure">
+                    <ul  v-for="(item, key) in newCharacter.treasures" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label>Amount:</label>
+                        <input type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
+                      </li>
+
+                      <br>
+                      <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.TREASURES)">Update</button>
+                      </li>
+
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+
+          </section>
+          <hr>
         </main>
       </div>
     </transition>
 
     <div class="character-to-view">
-      <br>
-      <section id="equipment">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingEquipment">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingEquipment">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Edit</button>
-            <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingEquipment">
-            <ul class="list" style="text-align: center; margin-bottom: 20px">
-              <label class="item-name">Gold:</label>
-              <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="gold"  inputmode="numeric" required>
-            </ul>
-
-            <!-- Add new -->
-            <div>
-              <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
-              <div>
-                <label for="equipment-input">Amount:</label>
-                <input  style="width=70%;" type="number" inputmode="numeric" v-model="equipmentTempAmount"> 
-              </div>
-              <br>
-              <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddEquipment">Add</button>
-
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(equipment) > 0">
-              <div>
-                <ul class="list">                
-                  <li v-for="(item, key) in equipment" :key="key">
-                    <div v-if="!isEditingEquipment">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                      <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingEquipment">
-                      <label class="item-name">{{ key }}:</label>
-                      <div class="container-edit">
-                        <div>
-                          <label for="equipment-input">Amount:</label>
-                          <input  style="width=70%; margin-bottom: 10px;" type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
-                        </div>
-                        <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteEquipment(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
-        
       <br>
       <section id="languages">
         <div class="edit-buttons">
@@ -1371,6 +1380,9 @@ export default {
       spellTempLevel: '',
       spellSlotTempLevel: '',
       spellSlotTempSlots: '',
+      treasureTempName: '',
+      treasureTempAmount: '',
+      treasureTempDescription: '',
       weaponTempName: '',
       weaponTempCategory: '', // e.g. finesse
       weaponTempAmount: '',
@@ -1527,6 +1539,28 @@ export default {
       this.equipmentTempName = ''
       this.equipmentTempAmount = ''
       this.equipmentTempDescription = ''
+    },
+    onPressAddTreasure() {
+      if (this.treasureTempName === '') {
+        alert("Please enter an treasure name")
+        return
+      }
+
+      if (this.treasureTempAmount === '') {
+        alert("Please enter an treasure amount")
+        return
+      }
+
+      const newItem = {
+        [EQUIPMENT_KEYS.AMOUNT]: this.treasureTempAmount,
+        [EQUIPMENT_KEYS.DESCRIPTION]: this.treasureTempDescription
+      }
+
+      this.newCharacter.treasures[this.treasureTempName] = newItem
+      
+      this.treasureTempName = ''
+      this.treasureTempAmount = ''
+      this.treasureTempDescription = ''
     },
     onPressAddLanguage() {
       if (this.languagesTempName === '') {
