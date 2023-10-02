@@ -1397,9 +1397,9 @@
                   </li>
                 </ul>
 
-              <div class="buttons-delete-character">
-                <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
-                <button class="button-save" @click="toggleViewBackup" :class="{ 'disabled-button': selectedBackupTimestamp === '' }" >View Backup</button>
+              <div class="popup-buttons">
+                <button class="button-cancel" @click="toggleCharacterBackupPopup">Cancel</button>
+                <button class="button-backup" @click="toggleViewBackup" :class="{ 'disabled-button': selectedBackupTimestamp === '' }" >View Backup</button>
               </div>
             </div>
           </transition>
@@ -2758,6 +2758,10 @@ export default {
     background-color: var(--blue);
   }
 
+  .button-cancel {
+    background-color: var(--dimgray);
+  }
+
   .button-view-backups {
     background-color: var(--dimgray);
   }
@@ -2776,10 +2780,6 @@ export default {
     border-radius: var(--border-radius);
     font-size: var(--stat-font-size);
     width: 70%;
-  }
-
-  .button-cancel {
-    background-color: var(--dimgray);
   }
 
   .container-backup-delete li {
