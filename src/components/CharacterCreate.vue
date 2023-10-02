@@ -429,6 +429,178 @@
             
           </section>
           <hr>
+
+          <br>
+          <section id="weapons">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Edit</button>
+                <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingWeapons"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingWeapons"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Edit</button>
+                <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingWeapons">
+                <template v-if="isEditingWeapons">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">Amount:</label>
+                        <input type="number" inputmode="numeric" v-model="weaponTempAmount"> 
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                        <select v-model="weaponsTempAttackModifier">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                        </select>
+                      </li>
+                      
+                      <li>
+                        <label for="equipment-input">Die Type:</label>
+                        <select v-model="weaponTempDieType">
+                          <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">Category:</label>
+                        <select v-model="weaponTempCategory">
+                          <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">Proficient:</label>
+                        <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                      </li>
+                    </ul>
+
+                    <br>
+                    <textarea v-model="weaponTempDescription" rows="6" placeholder="Description"></textarea>
+                    <br>
+                    <button class="button-add" @click="onPressAddWeapon">Add</button>
+                    
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.weapons) > 0">
+                  <div class="viewing" v-if="!isEditingWeapons">
+                    <ul v-for="(item, key) in newCharacter.weapons" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+
+                          <label v-if="!item[WEAPON_KEYS.PROFICIENT]">
+                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                          </label>
+                          <label v-if="item[WEAPON_KEYS.PROFICIENT]">
+                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + getProficiencyBonus()) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                          </label>
+                        </div>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES.DAMAGE_MOD }}:</label>
+                          <label>
+                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                          </label>
+                        </div>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                          <label>{{ item[WEAPON_KEYS.DIE] }}</label>
+                        </div>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                          <label>{{ item[WEAPON_KEYS.CATEGORY] }}</label>
+                        </div>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                          <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
+                        </div>
+
+                        <p class="description">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
+                      </li>
+
+                      <hr class="list-divider">
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingWeapons">
+                    <ul v-for="(item, key) in newCharacter.weapons" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
+                        <input type="number" inputmode="numeric" v-model="item[WEAPON_KEYS.AMOUNT]"> 
+                      </li>
+                        
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                        </select>
+                      </li>
+                      
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.DIE]">
+                          <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.CATEGORY]">
+                          <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                        <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
+                      </li>
+
+                      <br>
+                      <textarea v-model="item[WEAPON_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.WEAPONS)">Update</button>
+                      </li>
+                      
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr>
         </main>
       </div>
     </transition>
@@ -1005,7 +1177,7 @@ export default {
       WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
 
       equipment: {},
-      featuresTraits: {},
+      // featuresTraits: {},
       languages: {},
       proficiencies: {},
       spells: {},
@@ -1212,7 +1384,7 @@ export default {
         // [WEAPON_KEYS.PROPERTIES]: this.weaponTempProperties,
       }      
 
-      this.weapons[this.weaponTempName] = newItem
+      this.newCharacter.weapons[this.weaponTempName] = newItem
       
       this.weaponTempName = ''
       this.weaponTempAmount = ''
@@ -1467,7 +1639,7 @@ export default {
 
       return true
     },
-    checkIfAllValid() {
+    checkIfAllValid() { // TODO: Change with this.newCharacter
       // console.info("@checkIfAllValid")
       if (this.characterName === '') {
         alert("Please enter a character name")
@@ -1582,16 +1754,16 @@ export default {
     createCharacter() {
       // console.info("@createCharacter")
       if (this.checkIfAllValid()) {
-        const newCharacter = this.createCharacterDictionary()
-        console.info('character:', newCharacter)
-        this.store.dispatch("addCharacterToDb", newCharacter).then((success => {
-          if (success) {
-            alert(`Created new character, ${this.characterName}!`)
-            this.$emit('close'); // Tell parent to close this modal
-          } else {
-            alert("An error occurred creating your character. Please try again")
-          }
-        }))
+        // const newCharacter = this.createCharacterDictionary()
+        // console.info('character:', newCharacter)
+        // this.store.dispatch("addCharacterToDb", newCharacter).then((success => {
+        //   if (success) {
+        //     alert(`Created new character, ${this.characterName}!`)
+        //     this.$emit('close'); // Tell parent to close this modal
+        //   } else {
+        //     alert("An error occurred creating your character. Please try again")
+        //   }
+        // }))
       }
     },
     createCharacterDictionary() {
