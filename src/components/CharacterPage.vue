@@ -1354,59 +1354,6 @@
             </ul>
           </section>
         </main>
-        
-
-
-          <!-- Save Character Data Popup -->
-          <div class="popup-overlay" v-if="isSaveCharacterPopupOpen">
-            <transition name="fade" appear>
-              <div class="popup-character-action" v-if="isSaveCharacterPopupOpen">
-                <h1>Create backup for <br><strong>{{ characterToView.name }}</strong>?</h1>
-                <div class="popup-buttons">
-                  <button class="button-cancel" @click="toggleSaveCharacterPopup">Cancel</button>
-                  <button class="button-backup" @click="onPressSaveBackup">Save</button>
-                </div>
-              </div>
-            </transition>
-          </div>
-
-          <!-- Delete Character Popup -->
-          <div class="popup-overlay" v-if="isDeleteCharacterPopupOpen">
-            <transition name="fade" appear>
-                <div class="popup-character-action">
-                  <h1>Delete <strong>{{ characterToView.name }}</strong>?</h1>
-                  <p>This action can't be undone</p>
-                  <div class="popup-buttons">
-                    <button class="button-cancel" @click="toggleDeleteCharacterPopup">Cancel</button>
-                    <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
-                  </div>
-                </div>
-            </transition>
-          </div>
-
-          <!-- Character Backups Popup -->
-          <div class="popup-overlay" v-if="isCharacterBackupsPopupOpen">
-            <transition name="fade" appear>
-              <div class="popup-character-action">
-                <h1>Select a backup to view</h1>
-                <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
-
-                  <ul>
-                    <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
-                    @click="selectBackup(timestamp, backup)">
-                      <p>{{ convertTimestampToString(timestamp) }}</p>
-                      <hr>
-                      <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
-                    </li>
-                  </ul>
-
-                <div class="buttons-delete-character">
-                  <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
-                  <button class="button-save" @click="toggleViewBackup" :class="{ 'disabled-button': selectedBackupTimestamp === '' }" >View Backup</button>
-                </div>
-              </div>
-            </transition>
-          </div>
 
         <!-- Save Character Data Popup -->
         <div class="popup-overlay" v-if="isSaveCharacterPopupOpen">
@@ -1442,9 +1389,8 @@
               <h1>Select a backup to view</h1>
               <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
-                <ul v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
-                  @click="selectBackup(timestamp, backup)">
-                  <li>
+                <ul v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" @click="selectBackup(timestamp, backup)">
+                  <li :class="{ 'selected': selectedBackupTimestamp === timestamp }">
                     <p>{{ convertTimestampToString(timestamp) }}</p>
                     <hr>
                     <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
@@ -2875,6 +2821,12 @@ export default {
     display: flex;
     flex-direction: column-reverse;
     width: 100%;
+    padding: 10px;
+  }
+
+  .popup-character-action ul li {
+    border: 2px solid var(--black);
+    border-radius: var(--border-radius);
     padding: 10px;
   }
 
