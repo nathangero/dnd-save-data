@@ -794,6 +794,89 @@
 
           </section>
           <hr>
+
+          <br>
+          <section id="languages">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Edit</button>
+                <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingLanguages"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingLanguages"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Edit</button>
+                <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Finish</button>
+              </div>
+            </header>
+
+            <div id="collapse">
+              <collapse-transition dimension="height">
+                <div v-if="isShowingLanguages">
+                  <template v-if="isEditingLanguages">
+                    <div class="editing">
+                      <ul>
+                        <li>
+                          <input class="name" type="text" v-model="languagesTempName" placeholder="New language name"> 
+                        </li>
+
+                        <li>
+                          <label>Proficiency: </label>
+                          <select v-model="languagesTempProficiency">
+                            <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                          </select>
+                        </li>
+                      </ul>
+                        
+                      <br>
+                      <button class="button-add" @click="onPressAddLanguage">Add</button>
+
+                      <hr>
+                    </div>
+                  </template>
+
+                  <template v-if="getDictionarySize(newCharacter.languages) > 0">
+                    <div class="viewing" v-if="!isEditingLanguages">
+                      <ul v-for="(item, key) in newCharacter.languages" :key="key">
+                        <li class="inline">
+                          <label><strong>{{ key }}</strong>:</label>
+                          <p>{{ item }}</p>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="editing-languages" v-if="isEditingLanguages">
+                      <ul v-for="(item, key) in newCharacter.languages" :key="key">
+                        <li class="inline">
+                          <label><strong>{{ key }}</strong>:</label>
+                          <select v-model="newCharacter.languages[key]">
+                            <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                          </select>
+                        </li>
+
+                        <li class="container-update-delete">
+                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
+                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
+                        </li>
+
+                        <li>
+                          <hr class="list-divider">
+                        </li>
+                      </ul>
+                    </div>
+                  </template>
+                </div>
+              </collapse-transition>
+            </div>
+
+            
+          </section> 
+          <hr>   
         </main>
       </div>
     </transition>
@@ -1573,7 +1656,7 @@ export default {
         return
       }
 
-      this.languages[this.languagesTempName] = this.languagesTempProficiency
+      this.newCharacter.languages[this.languagesTempName] = this.languagesTempProficiency
       
       this.languagesTempName = ''
       this.languagesTempProficiency = ''
