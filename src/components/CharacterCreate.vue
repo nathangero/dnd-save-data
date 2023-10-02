@@ -953,95 +953,97 @@
             
           </section>
           <hr>
+
+          <br>
+          <section id="spell-slots">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSpellSlots"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSpellSlots"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSpellSlots">
+                <template v-if="isEditingSpellSlots">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <p>Level:</p>
+                        <select v-model="spellSlotTempLevel">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label># of slots:</label>
+                        <select v-model="spellSlotTempSlots">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
+                      </li>
+                    </ul>
+
+                    <br>
+                    <button class="button-add" @click="onPressAddSpellSlot">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.spellSlots) > 0">
+                  <div class="viewing" v-if="!isEditingSpellSlots">
+                    <ul v-for="(item, key) in newCharacter.spellSlots" :key="key">
+                      <li class="inline">
+                        <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</label>
+                        <label>{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingSpellSlots">
+                    <ul v-for="(item, key) in newCharacter.spellSlots" :key="key">
+                      <li>
+                        <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label>Available # of slots:</label>
+                        <select v-model="item[SPELL_SLOT_KEYS.CURRENT]">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
+                      </li>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.SPELL_SLOTS)">Delete</button>
+                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.SPELL_SLOTS)">Update</button>
+                      </li>
+
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr>
         </main>
       </div>
     </transition>
 
     <div class="character-to-view">
-      <br>
-      <section id="spell-slots">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingSpellSlots">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingSpellSlots">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Edit</button>
-            <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSpellSlots">
-            <!-- Add new -->
-            <div>
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li style="margin-top: 10px;">
-                    <label>Level:</label>
-                    <select class="picker" v-model="spellSlotTempLevel">
-                      <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
-                    </select>
-                  </li>
-
-                  <li>
-                    <label for="equipment-input"># of slots:</label>
-                    <input  style="width=70%;" type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
-                  </li>
-                </ul>
-              </div>
-
-              <br>
-              <button class="button-add" @click="onPressAddSpellSlot">Add</button>
-
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(spellSlots) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in spellSlots" :key="key">
-                    <div v-if="!isEditingSpellSlots">
-                      <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
-                      <label class="item-amount">{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingSpellSlots">
-                      <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
-                      
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li style="margin-top: 10px;">
-                            <label for="equipment-input"># of slots:</label>
-                            <input  style="width=70%;" type="number" inputmode="numeric" v-model="item[SPELL_SLOT_KEYS.MAX]"> 
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteSpellSlot(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
-
       <br>
       <section id="spell-casting">
         <div class="edit-buttons">
@@ -1696,7 +1698,7 @@ export default {
         [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
       }
 
-      this.spellSlots[this.spellSlotTempLevel] = slot
+      this.newCharacter.spellSlots[this.spellSlotTempLevel] = slot
       
       this.spellSlotTempLevel = ''
       this.spellSlotTempSlots = ''
