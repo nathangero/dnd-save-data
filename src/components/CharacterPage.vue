@@ -1017,7 +1017,7 @@
 
             
           </section> 
-          <hr>     
+          <hr>
 
           <br>
           <section id="proficiencies">
@@ -1780,7 +1780,7 @@ export default {
       this.equipmentTempDescription = ''
     },
     onPressAddTreasure() {
-      if (this.treasureTempAmount === '') {
+      if (this.treasureTempName === '') {
         alert("Please enter an treasure name")
         return
       }
