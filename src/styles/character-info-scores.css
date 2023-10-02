@@ -529,15 +529,3 @@ input[type="number"] {
   margin: 5px;
 }
 
-.disabled-button {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.disabled-page {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none; 
-  visibility: hidden;
-}

@@ -74,6 +74,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+@import '../styles/reset.css';
 
 </style>

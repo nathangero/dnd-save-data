@@ -1,321 +1,298 @@
 <template>
   <div class="body">
-    <div class="navigation-bar">
-      <button class="button-jump-to" @click="openJumpToMenu">Jump to</button>
-      <template v-if="isShowingJumpToMenu">
-        <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
-          <ul class="list-inputs">
-            <li>
-              <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
-            </li>
+    <transition name="slide-up" mode="out-in">
+      <header :class="{ 'disabled-page': isPopupOpen() }">
+        <nav>
+          <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
+          <template v-if="isShowingJumpToMenu">
+            <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
+              <ul>
+                <li @click="scrollToSection('character-background')">
+                  <p>{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('character-info')">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</a>
-            </li>
+                <li @click="scrollToSection('character-info')">
+                  <p>{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
-            </li>
+                <li @click="scrollToSection('ability-scores')">
+                  <p>{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('saving-throws')">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</a>
-            </li>
+                <li @click="scrollToSection('saving-throws')">
+                  <p>{{ CHARACTER_SECTIONS.SAVING_THROWS }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('skills')">{{ CHARACTER_SECTIONS.SKILLS }}</a>
-            </li>
+                <li @click="scrollToSection('skills')">
+                  <p>{{ CHARACTER_SECTIONS.SKILLS }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('features-traits')">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</a>
-            </li>
+                <li @click="scrollToSection('features-traits')">
+                  <p>{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('weapons')">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</a>
-            </li>
+                <li @click="scrollToSection('weapons')">
+                  <p>{{ CHARACTER_SECTIONS.WEAPONS }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('equipment')">{{ CHARACTER_SECTIONS.EQUIPMENT }}</a>
-            </li>
+                <li @click="scrollToSection('equipment')">
+                  <p>{{ CHARACTER_SECTIONS.EQUIPMENT }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('treasure')">{{ CHARACTER_SECTIONS.TREASURES }}</a>
-            </li>
+                <li @click="scrollToSection('treasure')">
+                  <p>{{ CHARACTER_SECTIONS.TREASURES }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('languages')">{{ CHARACTER_SECTIONS.LANGUAGES }}</a>
-            </li>
+                <li @click="scrollToSection('languages')">
+                  <p>{{ CHARACTER_SECTIONS.LANGUAGES }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('proficiencies')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
-            </li>
+                <li @click="scrollToSection('proficiencies')">
+                  <p>{{ CHARACTER_SECTIONS.PROFICIENCIES }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('spell-slots')">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</a>
-            </li>
+                <li @click="scrollToSection('spell-slots')">
+                  <p>{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('spell-casting')">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</a>
-            </li>
+                <li @click="scrollToSection('spell-casting')">
+                  <p>{{ CHARACTER_SECTIONS.SPELL_CASTING }}</p>
+                </li>
 
-            <li>
-              <a @click="scrollToSection('save-delete-buttons')">Delete/Use Backup</a>
-            </li>
-          </ul>
+                <li @click="scrollToSection('save-delete-buttons')">
+                  <p>Backup Character</p>
+                </li>
+              </ul>
+            </div>
+          </template>
+          <p class="nav-bar-text">Backup</p>
+          <button class="nav-bar-button" @click="closeModal">Close</button>
+        </nav>
 
-          <!-- Add more links for other sections -->
-        </div>
-      </template>
-      <button class="button-close" @click="closeModal">Close Backup</button>
-    </div>
+        <section id="character-background">
+          <h1>Backup from:</h1>
+          <h1>{{ convertTimestampToString(timeOfBackup) }}</h1>
+          <hr>
 
-    <div class="character-to-view" v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
-      <section id="character-background">
-        <h1>Backup from:</h1>
-        <h1>{{ convertTimestampToString(timeOfBackup) }}</h1>
-        <hr>
-        <p class="character-name">{{ characterToView.name }}</p>
+          <h1>{{ characterToView.name }}</h1>
+          <p>{{ characterToView.class }}</p>
+          <p>{{ characterToView.background }}</p>
+          <p>{{ characterToView.race }}</p>
+          <p>{{ characterToView.alignment }}</p>
+        </section>
+      </header>
+    </transition>
 
-        <ul class="stat-list">
-          <li>
-            <label class="character-info">{{ characterToView.class }}</label>
-          </li>
-
-          <li>
-            <label class="character-info">{{ characterToView.background }}</label>
-          </li>
-
-          <li>
-            <label class="character-info">{{ characterToView.race }}</label>
-          </li>
-
-          <li>
-            <label class="character-info">{{ characterToView.alignment }}</label>
-          </li>
-        </ul>
-      </section>
-        
+    <main v-if="characterToView.name !== ''" :class="{ 'disabled-page': isPopupOpen() }">
       <br>
       <section id="character-info">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(characterinfo)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingCharacterInfo"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingCharacterInfo"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
-          <div v-if="isShowingCharacterInfo">
-            <ul class="stat-list">
+          <div v-if="isShowingCharacterInfo"> 
+            <ul>
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Level:</label>
-                  <label class="stat-value">{{ characterToView.level }}</label>
-                </div>
+                <label>Level:</label>
+                <label><strong>{{ characterToView.level }}</strong></label>
               </li>
 
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Armor Class: </label>
-                  <label class="stat-value">{{ characterToView.armor }}</label>
-                </div>
+                <label>Armor Class: </label>
+                <label><strong>{{ characterToView.armor }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Initiative: </label>
-                  <label class="stat-value">{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
-                </div>
+                <label>Initiative: </label>
+                <label><strong>{{ getStatBonusSign(characterToView.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Speed (ft): </label>
-                  <label class="stat-value">{{ characterToView.speed }}</label>
-                </div>
+                <label>Speed (ft): </label>
+                <label><strong>{{ characterToView.speed }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label" style="margin-right: 20px;">Current HP: </label>
-                  <label class="stat-value">{{ characterToView.hp[HP_KEYS.CURRENT] }}/{{ characterToView.hp[HP_KEYS.MAX] }}</label>
-                </div>
+                <label>Current HP: </label>
+                <label>{{ characterToView.hp[HP_KEYS.CURRENT] }}/<strong>{{ characterToView.hp[HP_KEYS.MAX] }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label" style="margin-right: 20px;">Temp HP: </label>
-                  <label class="stat-value">{{ characterToView.hp[HP_KEYS.TEMP] }}</label>
-                </div>
+                <label>Temp HP: </label>
+                <label><strong>{{ characterToView.hp[HP_KEYS.TEMP] }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label" style="margin-right: 20px;">Hit die: </label>
-                  <label class="stat-value">1{{ characterToView.hp[HP_KEYS.DIE] }}</label>
-                </div>
+                <label>Hit die: </label>
+                <label><strong>{{ characterToView.hp[HP_KEYS.DIE] }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label" style="margin-right: 20px;">Hit die count: </label>
-                  <label class="stat-value">{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR] }}/{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX] }}</label>
-                </div>
+                <label>Hit die count: </label>
+                <label>{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_CURR] }}/<strong>{{ characterToView.hp[HP_KEYS.DIE_AMOUNT_MAX] }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label" style="margin-right: 20px;">Death saves successes: </label>
-                  <label class="stat-value">{{ characterToView.deathSaves.successes }}/3</label>
-                </div>
+                <label>Death save successes: </label>
+                <label>{{ characterToView.deathSaves.successes }}/<strong>3</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label" style="margin-right: 20px;">Death saves failures: </label>
-                  <label class="stat-value">{{ characterToView.deathSaves.failures }}/3</label>
-                </div>
+                <label>Death save failures: </label>
+                <label>{{ characterToView.deathSaves.failures }}/<strong>3</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Proficiency Bonus: </label>
-                  <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
-                </div>
+                <label>Proficiency Bonus: </label>
+                <label><strong>{{ getStatBonusSign(getProficiencyBonus()) }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Passive Perception: </label>
-                  <label class="stat-value">{{ calculatePassivePerception() }}</label>
-                </div>
+                <label>Passive Perception: </label>
+                <label><strong>{{ calculatePassivePerception() }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Spell Casting Stat: </label>
-                  <label class="stat-value">{{ STAT_NAMES[characterToView.spellCastStat] }}</label>
-                </div>
+                <label>Spell Casting Stat: </label>
+                <label><strong>{{ STAT_NAMES[characterToView.spellCastStat] }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Spell Saving DC: </label>
-                  <label class="stat-value">{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</label>
-                </div>
+                <label>Spell Saving DC: </label>
+                <label><strong>{{ calculateSpellSavingDc(characterToView.scores[characterToView.spellCastStat].calculateMod()) }}</strong></label>
               </li>
               
               <li>
-                <div class="stat-group">
-                  <label class="stat-label">Inspiration: </label>
-                  <label class="stat-value">{{ characterToView.inspiration }}</label>
-                </div>
+                <label>Inspiration: </label>
+                <label><strong>{{ characterToView.inspiration }}</strong></label>
               </li>
             </ul>
           </div>
         </collapse-transition>
+
       </section>
+      <hr>
 
       <br>
       <section id="ability-scores">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingAbilityScores" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingAbilityScores" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingAbilityScores"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingAbilityScores"/>
+          </div>
+        </header>
         
         <collapse-transition dimension="height">
           <div v-if="isShowingAbilityScores">
-            <ul class="stat-list">
-              <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                <div class="stat-group">
-                  <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                  <label class="stat-value">{{ characterToView.scores[stat].value }}</label>
-                  <label class="stat-bonus">{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</label>
+            <ul>
+              <li v-for="(score, key) in STAT_KEYS" :key="key">
+                <label>{{ STAT_NAMES[score] }}:</label>
+                <div>
+                  <label><strong>{{ characterToView.scores[score].value }}</strong></label>
+                  <label class="mod"><strong>{{ getStatBonusSign(characterToView.scores[score].calculateMod()) }}</strong></label>
                 </div>
               </li>
             </ul>
           </div>
         </collapse-transition>
       </section>
+      <hr>
 
       <br>
       <section id="saving-throws">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSavingThrows"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSavingThrows"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
           <div v-if="isShowingSavingThrows">
-            <ul class="stat-list">
+            <ul>
               <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
-                  <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-
-                  <label class="stat-value" v-if="characterToView.savingThrows[stat].proficient">
-                    {{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}
-                  </label>
-                  <label class="stat-value" v-if="!characterToView.savingThrows[stat].proficient">
-                    {{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}
-                  </label>
+                <div>
+                  <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" disabled>
+                  <label>{{ STAT_NAMES[stat] }}:</label>
                 </div>
+
+                <label v-if="characterToView.savingThrows[stat].proficient">
+                  <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod() + getProficiencyBonus()) }}</strong>
+                </label>
+                <label v-if="!characterToView.savingThrows[stat].proficient">
+                  <strong>{{ getStatBonusSign(characterToView.scores[stat].calculateMod()) }}</strong>
+                </label>
               </li>
             </ul>
           </div>
         </collapse-transition>
       </section>
+      <hr>
       
       <br>
       <section id="skills">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSkills"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSkills"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
           <div v-if="isShowingSkills">
-            <ul class="stat-list">
+            <ul>
               <li v-for="(skill, key) in SKILL_KEYS" :key="key">
-                <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="characterToView.skills[skill].proficient" :disabled="!isEditingSkills">
-                  <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
+                  <div>
+                    <input type="checkbox" class="checkbox" v-model="characterToView.skills[skill].proficient" disabled>
+                    <label>{{ SKILL_NAMES[skill] }}:</label>
+                    <label class="skill-score">&nbsp;{{ SKILL_NAME_SCORES[skill] }}</label>
+                  </div>
 
-                  <label class="stat-value" v-if="characterToView.skills[skill].proficient">
-                    {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
+                  <label class="mod" v-if="characterToView.skills[skill].proficient">
+                    <strong>{{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}</strong>
                   </label>
-                  <label class="stat-value" v-if="!characterToView.skills[skill].proficient">
-                    {{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod()) }}
+                  <label class="mod" v-if="!characterToView.skills[skill].proficient">
+                    <strong>{{ getStatBonusSign(characterToView.scores[SKILL_MODS[skill]].calculateMod()) }}</strong>
                   </label>
-                </div>
               </li>
             </ul>
           </div>
         </collapse-transition>
         
       </section>
+      <hr>
 
       <br>
       <section id="features-traits">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingFeatures"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingFeatures"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
           <div v-if="isShowingFeatures">
             <template v-if="getDictionarySize(characterToView.featuresTraits) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in characterToView.featuresTraits" :key="key">
-                    <label class="item-name">{{ key }}</label>
-                    <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
-                    <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
-                    <p class="item-description" style="margin-bottom: 5px;">Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
-                    <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
+              <div class="viewing" v-if="!isEditingFeaturesTraits">
+                <ul v-for="(item, key) in characterToView.featuresTraits" :key="key">
+                  <li>
+                    <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[FEATURES_KEYS.USES] }}</label>
+                    <p>Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                    <p>Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
+                    <p class="description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                   </li>
+
+                  <hr class="list-divider">
                 </ul>
               </div>
             </template>
@@ -323,187 +300,210 @@
         </collapse-transition>
         
       </section>
+      <hr>
 
       <br>
       <section id="weapons">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingWeapons"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingWeapons"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
           <div v-if="isShowingWeapons">
             <template v-if="getDictionarySize(characterToView.weapons) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in characterToView.weapons" :key="key">
-                    <label class="item-name">{{ key }}</label>
-                    <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
+              <div class="viewing" v-if="!isEditingWeapons">
+                <ul v-for="(item, key) in characterToView.weapons" :key="key">
+                  <li>
+                    <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
 
-                    <div class="spell-list">
-                      <div class="spell-group">
-                        <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                        <label class="spell-value" v-if="!item[WEAPON_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                        </label>
-                        <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
-                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + getProficiencyBonus()) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                        </label>
-                      </div>
+                    <div>
+                      <label>{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
 
-                      <div class="spell-group">
-                        <label class="spell-label">{{ WEAPON_NAMES.DAMAGE_MOD }}:</label>
-                        <label class="spell-value">
-                          {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                        </label>
-                      </div>
-
-                      <div class="spell-group">
-                        <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                        <label class="spell-value">{{ item[WEAPON_KEYS.DIE] }}</label>
-                      </div>
-
-                      <div class="spell-group">
-                        <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                        <label class="spell-value">{{ item[WEAPON_KEYS.CATEGORY] }}</label>
-                      </div>
-
-                      <div class="spell-group">
-                        <label class="spell-label" style="flex-grow: 1;">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                        <input type="checkbox" class="checkbox" style="margin-right: 0px;" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
-                      </div>
+                      <label v-if="!item[WEAPON_KEYS.PROFICIENT]">
+                        {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                      </label>
+                      <label v-if="item[WEAPON_KEYS.PROFICIENT]">
+                        {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + getProficiencyBonus()) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                      </label>
                     </div>
-                    
-                    <p class="spell-label">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
+
+                    <div>
+                      <label>{{ WEAPON_NAMES.DAMAGE_MOD }}:</label>
+                      <label>
+                        {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                      </label>
+                    </div>
+
+                    <div>
+                      <label>{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                      <label>{{ item[WEAPON_KEYS.DIE] }}</label>
+                    </div>
+
+                    <div>
+                      <label>{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                      <label>{{ item[WEAPON_KEYS.CATEGORY] }}</label>
+                    </div>
+
+                    <div>
+                      <label>{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                      <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
+                    </div>
+
+                    <p class="description">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
                   </li>
+
+                  <hr class="list-divider">
                 </ul>
               </div>
             </template>
           </div>
         </collapse-transition>
       </section>
+      <hr>
 
       <br>
       <section id="equipment">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingEquipment"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingEquipment"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
           <div v-if="isShowingEquipment">
             <template v-if="getDictionarySize(characterToView.equipment) > 0">
-              <div>
-                <ul class="list">
-                  <li style="text-align: left; margin-bottom: 20px">
-                    <label class="item-name">Gold:</label>
-                    <label class="item-amount">x{{ characterToView.gold }}</label>
+              <div class="viewing" v-if="!isEditingEquipment">
+                <ul>
+                  <li><label class="name-and-count"><strong>Gold</strong>&emsp;x{{ characterToView.gold }}</label></li>
+                </ul>
+                <ul v-for="(item, key) in characterToView.equipment" :key="key">
+                  <li>
+                    <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                    <p class="description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
                   </li>
-                  
-                  <li v-for="(item, key) in characterToView.equipment" :key="key">
-                    <label class="item-name">{{ key }}</label>
-                    <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                    <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
-                  </li>
+
+                  <hr class="list-divider">
                 </ul>
               </div>
             </template>
           </div>
         </collapse-transition>
       </section>
+      <hr>
 
       <br>
       <section id="treasure">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.TREASURES)">{{ CHARACTER_SECTIONS.TREASURES }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingTreasure" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingTreasure" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.TREASURES)">{{ CHARACTER_SECTIONS.TREASURES }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingTreasure"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingTreasure"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
           <div v-if="isShowingTreasure">
             <template v-if="getDictionarySize(characterToView.treasures) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in characterToView.treasures" :key="key">
-                    <label class="item-name">{{ key }}</label>
-                    <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                    <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+              <div class="viewing" v-if="!isEditingTreasure">
+                <ul  v-for="(item, key) in characterToView.treasures" :key="key">
+                  <li>
+                    <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                    <p class="description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                  </li>
+
+                  <hr class="list-divider">
+                </ul>
+              </div>
+            </template>
+          </div>
+        </collapse-transition>
+
+      </section>
+      <hr>
+      
+      <br>
+      <section id="languages">
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingLanguages"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingLanguages"/>
+          </div>
+        </header>
+
+        <div id="collapse">
+          <collapse-transition dimension="height">
+            <div v-if="isShowingLanguages">
+              <template v-if="getDictionarySize(characterToView.languages) > 0">
+                <div class="viewing" v-if="!isEditingLanguages">
+                  <ul v-for="(item, key) in characterToView.languages" :key="key">
+                    <li class="inline">
+                      <label><strong>{{ key }}</strong>:</label>
+                      <p>{{ item }}</p>
+                    </li>
+                  </ul>
+                </div>
+              </template>
+            </div>
+          </collapse-transition>
+        </div>
+
+        
+      </section> 
+      <hr>
+
+      <br>
+      <section id="proficiencies">
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingProficiencies"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingProficiencies"/>
+          </div>
+        </header>
+
+        <collapse-transition dimension="height">
+          <div v-if="isShowingProficiencies">
+            <template v-if="getDictionarySize(characterToView.proficiencies) > 0">
+              <div class="viewing" v-if="!isEditingProficiencies">
+                <ul v-for="(item, key) in characterToView.proficiencies" :key="key">
+                  <li>
+                    <label class="name-and-count"><strong>{{ key }}</strong></label>
+                    <p class="description">{{ item }}</p>
                   </li>
                 </ul>
               </div>
             </template>
           </div>
         </collapse-transition>
-      </section>
-      
-      <br>
-      <section id="languages">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingLanguages">
-            <template v-if="getDictionarySize(characterToView.languages) > 0">
-              <ul>
-                <li v-for="(item, key) in characterToView.languages" :key="key">
-                  <div class="language-group">
-                    <p class="language-label">{{ key }}:</p>
-                    <p class="language-value">{{ item }}</p>
-                  </div>                    
-                </li>
-              </ul>
-            </template>
-          </div>
-        </collapse-transition>
         
-      </section>      
-
-      <br>
-      <section id="proficiencies">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
-        </div>
-        
-        <collapse-transition dimension="height">
-          <div v-if="isShowingProficiencies">
-            <template v-if="getDictionarySize(characterToView.proficiencies) > 0">
-              <ul class="list">
-                <li v-for="(item, key) in characterToView.proficiencies" :key="key">
-                  <label class="item-name">{{ key }}</label>
-                  <p class="item-description">{{ item }}</p>
-                </li>
-              </ul>
-            </template>
-          </div>
-        </collapse-transition>
       </section>
+      <hr>
 
       <br>
       <section id="spell-slots">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSpellSlots"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSpellSlots"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
           <div v-if="isShowingSpellSlots">
             <template v-if="getDictionarySize(characterToView.spellSlots) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in characterToView.spellSlots" :key="key">
-                    <div v-if="!isEditingSpellSlots">
-                      <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
-                      <label class="item-amount">{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
-                    </div>
+              <div class="viewing" v-if="!isEditingSpellSlots">
+                <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
+                  <li class="inline">
+                    <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</label>
+                    <label>{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
                   </li>
                 </ul>
               </div>
@@ -511,95 +511,102 @@
           </div>
         </collapse-transition>
       </section>
+      <hr>
 
       <br>
       <section id="spell-casting">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
-        </div>
+        <header>
+          <div class="section-title">
+            <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SPELL_CASTING)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h2>
+            <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSpells"/>
+            <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSpells"/>
+          </div>
+        </header>
 
         <collapse-transition dimension="height">
           <div v-if="isShowingSpells">
             <template v-if="getDictionarySize(characterToView.spells) > 0">
-              <ul class="list">
-                <li v-for="(levelDict, level) in characterToView.spells" :key="level">
+              <div class="viewing-spells" v-if="!isEditingSpellCasting">
+                <ul v-for="(levelDict, level) in characterToView.spells" :key="level">
                   <template v-if="getDictionarySize(levelDict) > 0">
-                    <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
-                    <ul>
-                      <li v-for="(spell, spellName) in levelDict" :key="spellName">
-                        <label class="item-name">{{ spellName }}</label>
-                        <br>
-                        <div class="spell-list">
-                          <div class="spell-group">
-                            <label class="spell-label">Casting Time:</label>
-                            <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
-                          </div>
-                          <div class="spell-group">
-                            <label class="spell-label">Duration:</label>
-                            <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} sec</label>
-                          </div>
-                          <div class="spell-group">
-                            <label class="spell-label">Range:</label>
-                            <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
-                          </div>
-                        </div>
-                        <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
+                    <li class="spell-level">
+                      <label><strong>{{ SPELL_CASTING_NAMES[level] }}</strong></label>
+                    </li>
+
+                    <ul v-for="(spell, spellName) in levelDict" :key="spellName">
+                      <li class="spell-name">
+                        <label><strong>{{ spellName }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label>Cast Time:</label>
+                        <label>{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                      </li>
+
+                      <li>
+                        <label>Duration:</label>
+                        <label>{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
+                      </li>
+
+                      <li>
+                        <label>Range:</label>
+                        <label>{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                      </li>
+
+                      <li>
+                        <p class="description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</p>
                       </li>
                     </ul>
                   </template>
-                </li>
-              </ul>
+                  
+                  <li>
+                    <hr class="list-divider">
+                  </li>
+                </ul>
+              </div>
             </template>
           </div>
         </collapse-transition>
       </section>
-    </div>
+      <hr>
 
-    <div id="save-delete-buttons" :class="{ 'disabled-page': isPopupOpen() }">
-      <ul class="buttons-at-bottom">
-        <li style="margin-bottom: 30px;">
-          <!-- <button class="button-view-backups" @click="getcharacterToViews">View Backups</button> -->
-          <button class="button-delete" @click="toggleDeleteBackupPopup">Delete Backup</button>
-          <button class="button-save" @click="toggleOverwritePopup">Use this Backup</button>
-        </li>
-      </ul>
-    </div>
+      <section id="save-delete-buttons" :class="{ 'disabled-page': isPopupOpen() }">
+        <ul class="popup-buttons">
+          <li>
+            <button class="button-delete" @click="toggleDeleteBackupPopup">Delete Backup</button>
+            <button class="button-backup" @click="toggleOverwritePopup">Use this Backup</button>
+          </li>
+        </ul>
+      </section>
+    </main>
 
     <!-- Overwrite Data Popup -->
-    <div id="overwrite-character">
+    <div class="popup-overlay"  v-if="isShowingOverwritePopup">
       <transition name="fade" appear>
-        <div class="overlay" v-if="isShowingOverwritePopup">
-          <div class="popup">
-            <h1>Overwrite existing data for {{ characterToView.name }}?</h1>
-            <p class="popup-message">This action can't be undone</p>
-            <div class="buttons-delete-character">
-              <button class="button-cancel-delete" @click="toggleOverwritePopup">Cancel</button>
-              <button class="button-save" @click="onPressOverwriteSave">Yes</button>
-            </div>
+        <div class="popup-character-action">
+          <h1>Overwrite existing data for <strong>{{ characterToView.name }}</strong>?</h1>
+          <p>This action can't be undone</p>
+          <div class="popup-buttons">
+            <button class="button-delete" @click="toggleOverwritePopup">Cancel</button>
+            <button class="button-backup" @click="onPressOverwriteSave">Yes</button>
           </div>
         </div>
       </transition>
     </div>
 
     <!-- Delete Backup Popup -->
-    <div id="delete-character">
-        <transition name="fade" appear>
-          <div class="overlay" v-if="isShowingDeleteBackupPopup">
-            <div class="popup">
-              <div class="form">
-                <h1>Delete backup for {{ characterToView.name }}?</h1>
-                <p class="popup-message">This action can't be undone</p>
-                <div class="buttons-delete-character">
-                  <button class="button-cancel-delete" @click="toggleDeleteBackupPopup">Cancel</button>
-                  <button class="button-delete" @click="onPressDeleteBackup">Delete</button>
-                </div>
-              </div>
-            </div>
+    <div class="popup-overlay"  v-if="isShowingDeleteBackupPopup">
+      <transition name="fade" appear>
+        <div class="popup-character-action">
+          <h1>Delete backup for <strong>{{ characterToView.name }}</strong>?</h1>
+          <p>This action can't be undone</p>
+          <div class="popup-buttons">
+            <button class="button-delete" @click="toggleDeleteBackupPopup">Cancel</button>
+            <button class="button-backup" @click="onPressDeleteBackup">Yes</button>
           </div>
-        </transition>
-      </div>
+        </div>
+      </transition>
+    </div>
 
     <div v-if="isShowingLoader">
       <loading-spinner :loading-text="loadingText"></loading-spinner>
@@ -623,9 +630,10 @@ import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
-import { SKILL_KEYS, SKILL_NAMES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
+import { SKILL_KEYS, SKILL_NAMES, SKILL_NAME_SCORES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER } from '@/enums/dbKeys/spell-casting-keys'
+import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
 import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/enums/dbKeys/weapons-keys' 
 import { LOADING_TEXT } from '@/enums/loading-text';
 
@@ -681,6 +689,7 @@ export default {
       STAT_KEYS: STAT_KEYS,
       STAT_VALUES_KEYS: STAT_VALUES_KEYS,
       STAT_NAMES: STAT_NAMES,
+      SKILL_NAME_SCORES: SKILL_NAME_SCORES,
       SKILL_KEYS: SKILL_KEYS,
       SKILL_NAMES: SKILL_NAMES,
       SKILL_MODS: SKILL_MODS,
@@ -688,6 +697,7 @@ export default {
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
       SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
+      SPELL_SLOT_KEYS: SPELL_SLOT_KEYS,
       WEAPON_KEYS: WEAPON_KEYS,
       WEAPON_CATEGORY: WEAPON_CATEGORY,
       WEAPON_PROPERTY: WEAPON_PROPERTY,
@@ -698,7 +708,9 @@ export default {
     }
   },
   mounted() {
+    window.scrollTo(0,0);
     this.characterToView = Character.convertCharacterToObj(this.backups[this.timeOfBackup])
+    // console.log("this.characterToView:", this.characterToView)
   },
   methods: {
     closeModal() {
@@ -845,63 +857,64 @@ export default {
         return 6
       }
     },
-    toggleCollapseForStat(statRef) {
-      switch (statRef) {
-        case CHARACTER_KEYS.SCORES:
+    toggleCollapseForSection(section) {
+      switch (section) {
+        case CHARACTER_SECTIONS.CHARACTER_INFO:
+          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+          break
+
+        case CHARACTER_SECTIONS.ABILITY_SCORES:
           this.isShowingAbilityScores = !this.isShowingAbilityScores
           break
 
         
-        case CHARACTER_KEYS.SAVING_THROWS:
+        case CHARACTER_SECTIONS.SAVING_THROWS:
           this.isShowingSavingThrows = !this.isShowingSavingThrows
           break
 
         
-        case CHARACTER_KEYS.SKILLS:
+        case CHARACTER_SECTIONS.SKILLS:
           this.isShowingSkills = !this.isShowingSkills
           break
 
         
-        case CHARACTER_KEYS.FEATURES:
+        case CHARACTER_SECTIONS.FEATURES_TRAITS:
           this.isShowingFeatures = !this.isShowingFeatures
           break
 
         
-        case CHARACTER_KEYS.WEAPONS:
+        case CHARACTER_SECTIONS.WEAPONS:
           this.isShowingWeapons = !this.isShowingWeapons
           break
 
         
-        case CHARACTER_KEYS.EQUIPMENT:
+        case CHARACTER_SECTIONS.EQUIPMENT:
           this.isShowingEquipment = !this.isShowingEquipment
           break
 
         
-        case CHARACTER_KEYS.TREASURES:
+        case CHARACTER_SECTIONS.TREASURES:
           this.isShowingTreasure = !this.isShowingTreasure
           break
 
         
-        case CHARACTER_KEYS.LANGUAGES:
+        case CHARACTER_SECTIONS.LANGUAGES:
           this.isShowingLanguages = !this.isShowingLanguages
           break
 
         
-        case CHARACTER_KEYS.PROFICIENCIES:
+        case CHARACTER_SECTIONS.PROFICIENCIES:
           this.isShowingProficiencies = !this.isShowingProficiencies
           break
 
-        case CHARACTER_KEYS.SPELL_SLOTS:
-          this.isShowingSpellSlots = !this.isShowingSpellSlots
-          break
         
-        case CHARACTER_KEYS.SPELLS:
+        case CHARACTER_SECTIONS.SPELL_CASTING:
           this.isShowingSpells = !this.isShowingSpells
           break
 
-        
-        default:
-          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+        case CHARACTER_SECTIONS.SPELL_SLOTS:
+          this.isShowingSpellSlots = !this.isShowingSpellSlots
+          break          
       }
     },
     toggleOverwritePopup() {
@@ -936,9 +949,356 @@ export default {
 </script>
 
 <style scoped>
-@import '../syles/character-info-scores.css';
-@import '../syles/popup.css';
-@import '../syles/transitions.css';
+  @import '../styles/reset.css';
+  @import "../styles/colors.css";
+  @import "../styles/global-constants.css";
+  /* @import '../styles/character-info-scores.css'; */
+  @import '../styles/popup.css';
+  /* @import '../styles/transitions.css'; */
 
 
+  h1 {
+    font-size: 2.5em;
+  }
+
+  p {
+    display: inherit;
+    align-items: center;
+    font-size: var(--stat-font-size);
+  }
+
+
+  /* Navigation Bar */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    z-index: 9999; /* Ensure this is always on top */
+  }
+
+  nav button:disabled {
+    opacity: 0.3;
+  }
+
+  nav .nav-bar-button {
+    font-size: 20px;
+    color: var(--white);
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--dimgray);
+  }
+
+  nav .nav-bar-text {
+    margin: 0;
+    justify-content: baseline;
+  }
+
+  nav .jump-to-menu {
+    position: absolute;
+    top: 100%; /* Position the menu below the button */
+    background-color: var(--white);
+    border-bottom: 3px solid dimgray; /* Add a border to the bottom */
+    border-right: 3px solid dimgray; /* Add a border to the right */
+    border-radius: var(--border-radius);
+    max-height: 340px; /* Adjust the height as needed */
+    overflow-y: auto;
+  }
+
+  nav .jump-to-menu ul {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    font-size: var(--stat-font-size);
+  }
+
+  nav .jump-to-menu li {
+    border-bottom: 1px solid var(--gray); /* Add a border below each link */
+    width: 100%;
+    margin: 0;
+    padding: 8px 16px;
+  }
+
+  nav .jump-to-menu p {
+    margin: 0;
+  }
+
+  nav .jump-to-menu li:last-child {
+    border-bottom: none; /* Remove the border on the last link */
+  }
+
+
+  /* Sections */
+  section header {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  section header .spacer {
+    visibility: hidden;
+  }
+
+  section header .collapse-chevron {
+    margin: 5px;
+  }
+
+  section .section-title {
+    display: flex;
+  }
+
+  section ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  section li {
+    display: inherit;
+    justify-content: space-between;
+    width: 85%;
+    margin: 5px 0;
+    text-wrap: warp;
+  }
+
+  section li label {
+    font-size: var(--stat-font-size);
+  }
+
+  section li input {
+    width: 65px; /* Adjust the width as needed */
+    margin-left: 5px; /* Adjust the spacing between the label and input */
+    border: none; /* Remove the default border */
+    border-bottom: 1px solid black; /* Add a bottom border */
+    outline: none;
+    text-align: center;
+    padding-bottom: 5px;
+    font-size: var(--stat-font-size);
+  }
+
+  section li select {
+    font-size: var(--select-font-size);
+    padding: 10px;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    border-radius: var(--border-radius);
+  }
+
+  section li .checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    padding: 0;
+  }
+  section li .mod {
+    margin-left: 10px;
+  }
+
+  section li .skill-score {
+    font-style: italic;
+    font-size: var(--select-font-size);
+  }
+
+  section .viewing {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  section .viewing p {
+    font-size: var(--stat-font-size);
+    margin: 5px 0;
+  }
+
+  .viewing ul li {
+    display: inherit;
+    flex-direction: column;
+    padding: 0;
+    width: var(--width-close-to-mobile-screen);
+  }
+
+  .viewing ul li div {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    margin: 5px 0;
+  }
+
+  .viewing .description {
+    white-space: pre-wrap;
+    text-align: left;
+  }
+
+  .viewing .inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .viewing p {
+    align-items: center;
+  }
+
+  .viewing-spells .description {
+    text-align: left;
+    white-space: pre-wrap;
+  }
+
+  .viewing-spells ul {
+    width: 100%;
+  }
+
+  .viewing-spells li {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .viewing-spells .spell-level {
+    text-decoration: underline;
+    justify-content: center;
+  }
+
+  .button-edit {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: -5px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--dimgray);
+  }
+
+  .container-update {
+    display: flex;
+    justify-content: center;
+  }
+
+  .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .container-update button,
+  .container-update-delete button {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--stat-font-size);
+  }
+
+  .button-delete {
+    background-color: var(--red);
+  }
+
+  .button-add,
+  .button-update,
+  .button-backup {
+    background-color: var(--blue);
+  }
+
+  .button-cancel {
+    background-color: var(--dimgray);
+  }
+  
+  .popup-buttons button {
+    color: var(--white);
+    padding: 5px 10px;
+    margin: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--stat-font-size);
+    width: 70%;
+  }
+
+  .name-and-count {
+    text-align: left;
+    margin-right: 10px;
+    word-wrap: normal;
+  }
+
+  .list-divider {
+    width: var(--width-close-to-mobile-screen);
+    margin: 5px auto;
+    margin-top: -5px;
+  }
+
+  .popup-overlay h1 {
+    font-size: 2.1em;
+  }
+
+  .popup-character-action {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    width: var(--width-popup);
+  }
+
+  .popup-character-action ul {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .popup-character-action ul li {
+    border: 2px solid var(--black);
+    border-radius: var(--border-radius);
+    padding: 10px;
+  }
+
+  .popup-character-action p {
+    justify-content: center;
+  }
+
+  .popup-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .disabled-page {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none; 
+    visibility: hidden;
+  }
+
+  .selected {
+    background-color: var(--yellow);
+  }
+
+  #character-background {
+    margin-top: 80px;
+  }
+
+  #character-background p {
+    font-size: var(--stat-font-size);
+    margin: 0;
+  }
+
+  #features-traits .viewing {
+    text-align: start;
+    width: 100%;
+    margin: 0 auto;
+    text-wrap: warp;
+  }
 </style>
