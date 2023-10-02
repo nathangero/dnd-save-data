@@ -1164,7 +1164,7 @@ export default {
       }
       
 
-      this.featuresTraits[this.featuresTempName] = newFeat
+      this.newCharacter.featuresTraits[this.featuresTempName] = newFeat
 
       this.featuresTempName = ''
       this.featuresTempAction = ''
@@ -1372,9 +1372,9 @@ export default {
       this.spellSlotTempLevel = ''
       this.spellSlotTempSlots = ''
     },
-    onPressDeleteFeatures(key) {
-      if (key in this.featuresTraits) {
-        delete this.featuresTraits[key]
+    onPressDeleteStat(key, statRef) {
+      if (key in this.newCharacter[statRef]) {
+        delete this.newCharacter[statRef][key]
       }
     },
     onPressDeleteWeapon(key) {
@@ -1638,9 +1638,6 @@ export default {
       return result
     },
     getDictionarySize(dict) {
-      console.log("@getDictionarySize")
-      console.log("newCharacter:", this.newCharacter)
-      console.log("dict size:", Object.keys(dict).length)
       if (dict) {
         const count = Object.keys(dict).length;
         return count
