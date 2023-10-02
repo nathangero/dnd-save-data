@@ -2369,7 +2369,8 @@ export default {
     toggleCharacterBackupPopup() {
       this.isCharacterBackupsPopupOpen = !this.isCharacterBackupsPopupOpen
 
-      if (!this.isCharacterBackupsPopupOpen) {
+      // Don't carry over the previously selected backup
+      if (this.isCharacterBackupsPopupOpen) {
         this.selectedBackupTimestamp = ''
       }
     },
@@ -2390,7 +2391,7 @@ export default {
       // console.info('@closeViewBackup')
 
       if (characterBackup) {
-        console.info('overwrote with backup:', characterBackup)
+        // console.info('overwrote with backup:', characterBackup)
         this.characterToView = characterBackup
       }
 
@@ -2401,7 +2402,7 @@ export default {
       this.selectedBackupCharacter = new Character()
     },
     selectBackup(timestamp, backup) {
-      console.info('timestamp:', timestamp, "type?", typeof timestamp)
+      // console.info('timestamp:', timestamp, "type?", typeof timestamp)
       this.selectedBackupTimestamp = timestamp
       this.selectedBackupCharacter = backup
     },
