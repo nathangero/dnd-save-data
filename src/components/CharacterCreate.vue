@@ -253,7 +253,7 @@
                 <div class="stat-group">
                   <label for="stats-level" class="stat-label">Starting level:</label>
                   <div class="spacer"></div>
-                  <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="stats-level" v-model="newCharacter.level" class="input-stats" inputmode="numeric" required>
                 </div>
               </li>
 
@@ -261,7 +261,7 @@
                 <div class="stat-group">
                   <label for="stats-armor-class" class="stat-label">Armor Class: </label>
                   <div class="spacer"></div>
-                  <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="stats-armor-class" v-model="newCharacter.armor" class="input-stats" inputmode="numeric" required>
                 </div>
               </li>
 
@@ -269,7 +269,7 @@
                 <div class="stat-group">
                   <label for="stats-initiative" class="stat-label">Initiative: </label>
                   <div class="spacer"></div>
-                  <label class="stat-label">{{ getStatBonusSign(scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
+                  <label class="stat-label">{{ getStatBonusSign(newCharacter.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                 </div>
               </li>
 
@@ -277,7 +277,7 @@
                 <div class="stat-group">
                   <label for="stats-speed" class="stat-label">Speed (ft): </label>
                   <div class="spacer"></div>
-                  <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="stats-speed" v-model="newCharacter.speed" class="input-stats" inputmode="numeric" required>
                 </div>
               </li>
 
@@ -285,7 +285,7 @@
                 <div class="stat-group">
                   <label for="stats-hp" class="stat-label">Hit Points (HP):</label>
                   <div class="spacer"></div>
-                  <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="stats-hp" v-model="newCharacter.hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
                 </div>
               </li>
 
@@ -293,7 +293,7 @@
                 <div class="stat-group">
                   <label class="stat-label">Hit Die Type: </label>
                   <div class="spacer"></div>
-                  <select class="picker" v-model="hp[HP_KEYS.DIE]">
+                  <select class="picker" v-model="newCharacter.hp[HP_KEYS.DIE]">
                     <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                   </select>
                 </div>
@@ -303,7 +303,7 @@
                 <div class="stat-group">
                   <label for="stats-hit-die" class="stat-label"># of Hit Die: </label>
                   <div class="spacer"></div>
-                  <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
+                  <input type="number" id="stats-hit-die" v-model="newCharacter.hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
                 </div>
               </li>
 
