@@ -1937,104 +1937,115 @@ export default {
         return 6
       }
     },
-    toggleCollapseForStat(statRef) {
-      switch (statRef) {
-        case CHARACTER_KEYS.SCORES:
+    toggleCollapseForSection(section) {
+      switch (section) {
+        case CHARACTER_SECTIONS.CHARACTER_INFO:
+          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+          break
+
+        case CHARACTER_SECTIONS.ABILITY_SCORES:
           this.isShowingAbilityScores = !this.isShowingAbilityScores
           break
+
         
-        case CHARACTER_KEYS.SAVING_THROWS:
+        case CHARACTER_SECTIONS.SAVING_THROWS:
           this.isShowingSavingThrows = !this.isShowingSavingThrows
           break
+
         
-        case CHARACTER_KEYS.SKILLS:
+        case CHARACTER_SECTIONS.SKILLS:
           this.isShowingSkills = !this.isShowingSkills
           break
+
         
-        case CHARACTER_KEYS.FEATURES:
+        case CHARACTER_SECTIONS.FEATURES_TRAITS:
           this.isShowingFeatures = !this.isShowingFeatures
           break
+
         
-        case CHARACTER_KEYS.WEAPONS:
+        case CHARACTER_SECTIONS.WEAPONS:
           this.isShowingWeapons = !this.isShowingWeapons
           break
 
-        case CHARACTER_KEYS.EQUIPMENT:
+        
+        case CHARACTER_SECTIONS.EQUIPMENT:
           this.isShowingEquipment = !this.isShowingEquipment
           break
 
-        case CHARACTER_KEYS.TREASURES:
+        
+        case CHARACTER_SECTIONS.TREASURES:
           this.isShowingTreasure = !this.isShowingTreasure
           break
+
         
-        case CHARACTER_KEYS.LANGUAGES:
+        case CHARACTER_SECTIONS.LANGUAGES:
           this.isShowingLanguages = !this.isShowingLanguages
           break
+
         
-        case CHARACTER_KEYS.PROFICIENCIES:
+        case CHARACTER_SECTIONS.PROFICIENCIES:
           this.isShowingProficiencies = !this.isShowingProficiencies
           break
 
-        case CHARACTER_KEYS.SPELLS:
+        
+        case CHARACTER_SECTIONS.SPELL_CASTING:
           this.isShowingSpells = !this.isShowingSpells
           break
 
-        case CHARACTER_KEYS.SPELL_SLOTS:
+        case CHARACTER_SECTIONS.SPELL_SLOTS:
           this.isShowingSpellSlots = !this.isShowingSpellSlots
-          break
-
-        default:
-          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+          break          
       }
     },
-    toggleEditForStat(statRef) {
-      switch (statRef) {
-        case CHARACTER_KEYS.SCORES:
+    toggleEditForSection(section) {
+      switch (section) {
+        case CHARACTER_SECTIONS.CHARACTER_INFO:
+          this.isEditingCharInfo = !this.isEditingCharInfo
+          break
+
+        case CHARACTER_SECTIONS.ABILITY_SCORES:
           this.isEditingAbilityScores = !this.isEditingAbilityScores
           break
 
-        case CHARACTER_KEYS.SAVING_THROWS:
+        case CHARACTER_SECTIONS.SAVING_THROWS:
           this.isEditingSavingThrows = !this.isEditingSavingThrows
           break
-        
-        case CHARACTER_KEYS.SKILLS:
+
+        case CHARACTER_SECTIONS.SKILLS:
           this.isEditingSkills = !this.isEditingSkills
           break
         
-        case CHARACTER_KEYS.FEATURES:
+        case CHARACTER_SECTIONS.FEATURES_TRAITS:
           this.isEditingFeaturesTraits = !this.isEditingFeaturesTraits
           break
         
-        case CHARACTER_KEYS.WEAPONS:
+        case CHARACTER_SECTIONS.WEAPONS:
           this.isEditingWeapons = !this.isEditingWeapons
           break
-        
-        case CHARACTER_KEYS.EQUIPMENT:
+
+        case CHARACTER_SECTIONS.EQUIPMENT:
           this.isEditingEquipment = !this.isEditingEquipment
           break
-
-        case CHARACTER_KEYS.TREASURES:
+        
+        case CHARACTER_SECTIONS.TREASURES:
           this.isEditingTreasure = !this.isEditingTreasure
           break
 
-        case CHARACTER_KEYS.LANGUAGES:
+        case CHARACTER_SECTIONS.LANGUAGES:
           this.isEditingLanguages = !this.isEditingLanguages
           break
-        
-        case CHARACTER_KEYS.PROFICIENCIES:
+
+        case CHARACTER_SECTIONS.PROFICIENCIES:
           this.isEditingProficiencies = !this.isEditingProficiencies
           break
-        
-        case CHARACTER_KEYS.SPELLS:
+
+        case CHARACTER_SECTIONS.SPELL_CASTING:
           this.isEditingSpellCasting = !this.isEditingSpellCasting
           break
 
-        case CHARACTER_KEYS.SPELL_SLOTS:
+        case CHARACTER_SECTIONS.SPELL_SLOTS:
           this.isEditingSpellSlots = !this.isEditingSpellSlots
           break
-        
-        default:
-          this.isEditingCharInfo = !this.isEditingCharInfo
       }
     },
   }
