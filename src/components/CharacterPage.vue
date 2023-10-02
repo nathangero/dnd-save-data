@@ -2873,15 +2873,9 @@ export default {
 
   .popup-character-action ul {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: column-reverse;
     width: 100%;
-  }
-
-  .popup-character-action ul li {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    width: 100%;
+    padding: 10px;
   }
 
   .popup-character-action p {
