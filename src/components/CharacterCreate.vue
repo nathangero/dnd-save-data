@@ -1,101 +1,243 @@
 <template>
   <div id="body">
-    <div class="navigation-bar">
-      <button class="button-jump-to" @click="openJumpToMenu">Jump to</button>
-      <template v-if="isShowingJumpToMenu">
-        <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
-          <ul class="list-inputs">
-            <li>
-              <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
-            </li>
+    <transition name="slide-up" mode="out-in">
+      <div>
+        <header>
+          <nav>
+            <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
+            <template v-if="isShowingJumpToMenu">
+              <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
+                <ul>
+                  <li @click="scrollToSection('character-background')">
+                    <p>{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('character-info')">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</a>
-            </li>
+                  <li @click="scrollToSection('character-info')">
+                    <p>{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
-            </li>
+                  <li @click="scrollToSection('ability-scores')">
+                    <p>{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('saving-throws')">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</a>
-            </li>
+                  <li @click="scrollToSection('saving-throws')">
+                    <p>{{ CHARACTER_SECTIONS.SAVING_THROWS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('skills')">{{ CHARACTER_SECTIONS.SKILLS }}</a>
-            </li>
+                  <li @click="scrollToSection('skills')">
+                    <p>{{ CHARACTER_SECTIONS.SKILLS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('features-traits')">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</a>
-            </li>
+                  <li @click="scrollToSection('features-traits')">
+                    <p>{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('weapons')">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</a>
-            </li>
+                  <li @click="scrollToSection('weapons')">
+                    <p>{{ CHARACTER_SECTIONS.WEAPONS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('equipment')">{{ CHARACTER_SECTIONS.EQUIPMENT }}</a>
-            </li>
+                  <li @click="scrollToSection('equipment')">
+                    <p>{{ CHARACTER_SECTIONS.EQUIPMENT }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('treasure')">{{ CHARACTER_SECTIONS.TREASURES }}</a>
-            </li>
+                  <li @click="scrollToSection('treasure')">
+                    <p>{{ CHARACTER_SECTIONS.TREASURES }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('languages')">{{ CHARACTER_SECTIONS.LANGUAGES }}</a>
-            </li>
+                  <li @click="scrollToSection('languages')">
+                    <p>{{ CHARACTER_SECTIONS.LANGUAGES }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('proficiences')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
-            </li>
+                  <li @click="scrollToSection('proficiencies')">
+                    <p>{{ CHARACTER_SECTIONS.PROFICIENCIES }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('spell-slots')">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</a>
-            </li>
+                  <li @click="scrollToSection('spell-slots')">
+                    <p>{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('spell-casting')">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</a>
-            </li>
+                  <li @click="scrollToSection('spell-casting')">
+                    <p>{{ CHARACTER_SECTIONS.SPELL_CASTING }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('create-character')">Create Character</a>
-            </li>
-          </ul>
+                  <li @click="scrollToSection('save-delete-buttons')">
+                    <p>Backup Character</p>
+                  </li>
+                </ul>
+              </div>
+            </template>
+            <button class="nav-bar-button" @click="closeModal">Close</button>
+          </nav>
 
-          <!-- Add more links for other sections -->
-        </div>
-      </template>
-      <button class="button-close" @click="closeModal">Close</button>
-    </div>
+          <section id="character-background">
+            <h1>New Character</h1>
+          </section>
+        </header>
 
-    <div class="character-to-view">
-      <section id="character-background">
-        <div class="input-container">
-          <h1>New Character</h1>
-          <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
-          <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
-          <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
-
-          <div class="container-inputs">
-            <ul class="list-inputs">
-              <li style="padding-top: 10px">
-                <label for="character-alignment" class="stat-label" style="margin-right: 10px;">Alignment:</label>
+        <main>
+          <br>
+          <section class="new-character">
+            <ul>
+              <li>
+                <input class="name" type="text" v-model="characterName" placeholder="Name" required>
+              </li>
+              
+              <li>
+                <input class="name" type="text" v-model="characterBackground" placeholder="Background" required>
+              </li>
+              
+              <li>
+                <input class="name" type="text" v-model="characterRace" placeholder="Race" required>
+              </li>
+              
+              <li>
+                <label for="character-alignment" style="margin-right: 10px;">Alignment:</label>
                 <select class="picker" v-model="characterAlignment">
                   <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
                 </select>
               </li>
-
-              <li style="margin-top: 20px;">
-                <label for="character-class" class="stat-label">Class:</label>
+              
+              <li>
+                <label for="character-class">Class:</label>
                 <select class="picker" v-model="characterClass">
                   <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
                 </select>
               </li>
             </ul>
-          </div>
-        </div>
-      </section>
-      
+          </section>
+          <hr>
+
+          <!-- <br>
+          <section id="character-info">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Edit</button>
+                <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingCharacterInfo"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingCharacterInfo"/>
+              </div>
+
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Edit</button>
+                <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingCharacterInfo">
+                <ul>
+                  <li>
+                    <label for="stats-level">Level:</label>
+                    <input type="number" v-model="newCharacter.level" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label for="stats-armor-class">Armor Class: </label>
+                    <input type="number" id="stats-armor-class" v-model="newCharacter.armor" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label for="stats-initiative">Initiative: </label>
+                    <label>{{ getStatBonusSign(newCharacter.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
+                  </li>
+                  
+                  <li>
+                    <label for="stats-speed">Speed (ft): </label>
+                    <input type="number" id="stats-speed" v-model="newCharacter.speed" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label for="stats-hp">Hit Points - Current:</label>
+                    <input type="number" id="stats-hp" v-model="newCharacter.hp[HP_KEYS.CURRENT]" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label for="stats-hp">Hit Points - Max:</label>
+                    <input type="number" id="stats-hp" v-model="newCharacter.hp[HP_KEYS.MAX]" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label for="stats-hp">Hit Points - Temp:</label>
+                    <input type="number" id="stats-hp" v-model="newCharacter.hp[HP_KEYS.TEMP]" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label>Hit Die Type: </label>
+                    <select v-model="newCharacter.hp[HP_KEYS.DIE]">
+                      <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                    </select>
+                  </li>
+
+                  <li>
+                    <label for="stats-hit-die">Current # of Hit Die: </label>
+                    <input type="number" id="stats-hit-die" v-model="newCharacter.hp[HP_KEYS.DIE_AMOUNT_CURR]" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label for="stats-hit-die">Max # of Hit Die: </label>
+                    <input type="number" id="stats-hit-die" v-model="newCharacter.hp[HP_KEYS.DIE_AMOUNT_MAX]" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label>Death save successes:</label>
+                    <div>
+                      <select v-model="newCharacter.deathSaves.successes">
+                        <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
+                      </select>
+                      <label> / 3</label>
+                    </div>
+                  </li>
+
+                  <li>
+                    <label>Death save failures:</label>
+                    <div>
+                      <select v-model="newCharacter.deathSaves.failures">
+                        <option v-for="count in DEATH_SAVES_COUNTS" :key="count" :value="count">{{ count }}</option>
+                      </select>
+                      <label> / 3</label>
+                    </div>
+                  </li>
+
+                  <li>
+                    <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
+                    <label>{{ getStatBonusSign(getProficiencyBonus()) }}</label>
+                  </li>
+
+                  <li>
+                    <label for="stats-proficiency-bonus">Passive Perception: </label>
+                    <label>{{ getStatBonusSign(calculatePassivePerception()) }}</label>
+                  </li>
+
+                  <li>
+                    <label for="spells-attack-bonus">Casting Ability:</label>
+                    <select v-model="newCharacter.spellCastStat">
+                      <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
+                    </select>
+                  </li>
+                
+                  <li>
+                    <label>Spell Saving DC: </label>
+                    <label>{{ calculateSpellSavingDc(newCharacter.scores[newCharacter.spellCastStat].calculateMod()) }}</label>
+                  </li>
+
+                  <li>
+                    <label for="stats-proficiency-bonus">Inspriation: </label>
+                    <input type="number" id="stats-inspiration" v-model="newCharacter.inspiration" inputmode="numeric" required>
+                  </li>
+                </ul>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr> -->
+        </main>
+      </div>
+    </transition>
+
+    <div class="character-to-view">
       <br>
       <section id="character-info">
         <div class="h3-bar">
@@ -1181,6 +1323,7 @@ export default {
         [SKILL_KEYS.STEALTH]: new Skill(),
         [SKILL_KEYS.SURVIVAL]: new Skill(),
       },
+      newCharacter: new Character(),
       characterName: '',
       characterAlignment: '',
       characterBackground: '',
@@ -1899,6 +2042,455 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
-/* @import '../styles/character-info-scores.css'; */
+  @import '../styles/reset.css';
+  @import "../styles/colors.css";
+  @import "../styles/global-constants.css";
+  /* @import '../styles/character-info-scores.css'; */
+  @import '../styles/popup.css';
+  /* @import '../styles/transitions.css'; */
+
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  p {
+    display: inherit;
+    align-items: center;
+    font-size: var(--stat-font-size);
+  }
+
+
+  /* Navigation Bar */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    z-index: 9999; /* Ensure this is always on top */
+  }
+
+  nav button:disabled {
+    opacity: 0.3;
+  }
+
+  nav .nav-bar-button {
+    font-size: 20px;
+    color: var(--white);
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--dimgray);
+  }
+
+  nav .jump-to-menu {
+    position: absolute;
+    top: 100%; /* Position the menu below the button */
+    background-color: var(--white);
+    border-bottom: 3px solid dimgray; /* Add a border to the bottom */
+    border-right: 3px solid dimgray; /* Add a border to the right */
+    border-radius: var(--border-radius);
+    max-height: 340px; /* Adjust the height as needed */
+    overflow-y: auto;
+  }
+
+  nav .jump-to-menu ul {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    font-size: var(--stat-font-size);
+  }
+
+  nav .jump-to-menu li {
+    border-bottom: 1px solid var(--gray); /* Add a border below each link */
+    width: 100%;
+    margin: 0;
+    padding: 8px 16px;
+  }
+
+  nav .jump-to-menu p {
+    margin: 0;
+  }
+
+  nav .jump-to-menu li:last-child {
+    border-bottom: none; /* Remove the border on the last link */
+  }
+
+
+  /* Sections */
+  section header {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  section header .spacer {
+    visibility: hidden;
+  }
+
+  section header .collapse-chevron {
+    margin: 5px;
+  }
+
+  section .section-title {
+    display: flex;
+  }
+
+  section ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  section li {
+    display: inherit;
+    justify-content: space-between;
+    width: 85%;
+    margin: 5px 0;
+    text-wrap: warp;
+  }
+
+  section li label {
+    font-size: var(--stat-font-size);
+  }
+
+  section li input {
+    width: 65px; /* Adjust the width as needed */
+    margin-left: 5px; /* Adjust the spacing between the label and input */
+    border: none; /* Remove the default border */
+    border-bottom: 1px solid black; /* Add a bottom border */
+    outline: none;
+    text-align: center;
+    padding-bottom: 5px;
+    font-size: var(--stat-font-size);
+  }
+
+  section li select {
+    font-size: var(--select-font-size);
+    padding: 10px;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    border-radius: var(--border-radius);
+  }
+
+  section li .checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    padding: 0;
+  }
+  section li .mod {
+    margin-left: 10px;
+  }
+
+  section li .skill-score {
+    font-style: italic;
+    font-size: var(--select-font-size);
+  }
+
+  section .viewing,
+  section .editing {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  section .viewing p {
+    font-size: var(--stat-font-size);
+    margin: 5px 0;
+  }
+
+  .new-character .name {
+    width: var(--width-close-to-mobile-screen);
+    border: none; /* Remove the default border */
+    border-bottom: 1px solid black; /* Add a bottom border */
+    outline: none;
+    text-align: center;
+    margin: 10px auto;
+    font-size: var(--stat-font-size);
+  }
+
+  .viewing ul li {
+    display: inherit;
+    flex-direction: column;
+    padding: 0;
+    width: var(--width-close-to-mobile-screen);
+  }
+
+  .viewing ul li div {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    margin: 5px 0;
+  }
+
+  .viewing .description {
+    white-space: pre-wrap;
+    text-align: left;
+  }
+
+  .viewing .inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .viewing p {
+    align-items: center;
+  }
+
+  .viewing-spells .description {
+    text-align: left;
+    white-space: pre-wrap;
+  }
+
+  .editing ul li {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    width: var(--width-close-to-mobile-screen);
+  }
+
+  .editing ul li:first-child label {
+    margin: 0 auto;
+  }
+
+  .editing strong {
+    margin-bottom: 10px;
+    text-decoration: underline;
+  }
+
+  .editing .name {
+    width: var(--width-close-to-mobile-screen);
+    border: none; /* Remove the default border */
+    border-bottom: 1px solid black; /* Add a bottom border */
+    outline: none;
+    text-align: center;
+    margin: 15px auto;
+    font-size: var(--stat-font-size);
+  }
+
+  .editing textarea,
+  .editing-spells textarea {
+    width: var(--width-close-to-mobile-screen);
+    padding: 10px;
+    margin: 0 auto;
+    /* font-family: var(--font-family-sans-serif); */
+    font-size: var(--select-font-size);
+    border-radius: var(--border-radius);
+  }
+
+  .editing button {
+    font-size: 20px;
+    color: var(--white);
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+  }
+
+  .editing .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px auto;
+  }
+
+  .editing .languages strong {
+    text-decoration: none;
+  }
+
+  .viewing-spells ul,
+  .editing-spells ul,
+  .editing-languages ul {
+    width: 100%;
+  }
+
+  .viewing-spells li,
+  .editing-spells li,
+  .editing-languages li {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .editing-spells li label,
+  .editing-languages li label {
+    display: flex;
+    align-items: center;
+  }
+
+  .viewing-spells .spell-level,
+  .editing-spells .spell-level {
+    text-decoration: underline;
+    justify-content: center;
+  }
+
+  .editing-spells .container-update-delete,
+  .editing-languages .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px auto;
+  }
+
+  .button-edit {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: -5px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--dimgray);
+  }
+
+  .container-update {
+    display: flex;
+    justify-content: center;
+  }
+
+  .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .container-update button,
+  .container-update-delete button {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--stat-font-size);
+  }
+
+  .button-delete {
+    background-color: var(--red);
+  }
+
+  .button-add,
+  .button-update,
+  .button-backup {
+    background-color: var(--blue);
+  }
+
+  .button-cancel {
+    background-color: var(--dimgray);
+  }
+
+  .button-view-backups {
+    background-color: var(--dimgray);
+  }
+
+  .container-backup-delete {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container-backup-delete button,
+  .popup-buttons button {
+    color: var(--white);
+    padding: 5px 10px;
+    margin: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--stat-font-size);
+    width: 70%;
+  }
+
+  .container-backup-delete li {
+    display: flex;
+    flex-direction: column; /* Change to row for bigger screens */
+    align-items: center;
+  }
+
+  .container-backup-delete li:last-child {
+    margin-bottom: 50px; /* Have extra space at bottom */
+  }
+
+  .name-and-count {
+    text-align: left;
+    margin-right: 10px;
+    word-wrap: normal;
+  }
+
+  .list-divider {
+    width: var(--width-close-to-mobile-screen);
+    margin: 5px auto;
+    margin-top: -5px;
+  }
+
+  .popup-overlay h1 {
+    font-size: 2.1em;
+  }
+
+  .popup-character-action {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    width: var(--width-popup);
+  }
+
+  .popup-character-action ul {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .popup-character-action ul li {
+    border: 2px solid var(--black);
+    border-radius: var(--border-radius);
+    padding: 10px;
+  }
+
+  .popup-character-action p {
+    justify-content: center;
+  }
+
+  .popup-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .disabled-page {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none; 
+    visibility: hidden;
+  }
+
+  .selected {
+    background-color: var(--yellow);
+  }
+
+  #character-background {
+    margin-top: 80px;
+  }
+
+  #character-background p {
+    font-size: var(--stat-font-size);
+    margin: 0;
+  }
+
+  #features-traits .viewing {
+    text-align: start;
+    width: 100%;
+    margin: 0 auto;
+    text-wrap: warp;
+  }
 </style>
