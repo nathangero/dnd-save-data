@@ -193,7 +193,37 @@
 
           <br>
           <section id="ability-scores">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Edit</button>
+                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Finish</button>
+              </div>
 
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingAbilityScores"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingAbilityScores"/>
+              </div>
+
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Edit</button>
+                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingAbilityScores">
+                <ul>
+                  <li v-for="(score, key) in STAT_KEYS" :key="key">
+                    <label for="score">{{ STAT_NAMES[score] }}:</label>
+                    <div>
+                      <input type="number" id="score" v-model="newCharacter.scores[score].value" inputmode="numeric" required>
+                      <label class="mod">Mod: <strong>{{ getStatBonusSign(newCharacter.scores[score].calculateMod()) }}</strong></label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </collapse-transition>
           </section>
           <hr>
 
