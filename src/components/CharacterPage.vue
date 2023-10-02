@@ -1391,8 +1391,7 @@
                 <h1>Select a backup to view</h1>
                 <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
-                <div class="popup-content">
-                  <ul class="reverse-list">
+                  <ul>
                     <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
                     @click="selectBackup(timestamp, backup)">
                       <p>{{ convertTimestampToString(timestamp) }}</p>
@@ -1400,7 +1399,6 @@
                       <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
                     </li>
                   </ul>
-                </div>
 
                 <div class="buttons-delete-character">
                   <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
@@ -1444,16 +1442,14 @@
               <h1>Select a backup to view</h1>
               <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
-              <div class="popup-content">
-                <ul class="reverse-list">
-                  <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
+                <ul v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
                   @click="selectBackup(timestamp, backup)">
+                  <li>
                     <p>{{ convertTimestampToString(timestamp) }}</p>
                     <hr>
                     <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
                   </li>
                 </ul>
-              </div>
 
               <div class="buttons-delete-character">
                 <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
@@ -2426,6 +2422,10 @@ export default {
     },
     toggleCharacterBackupPopup() {
       this.isCharacterBackupsPopupOpen = !this.isCharacterBackupsPopupOpen
+
+      if (!this.isCharacterBackupsPopupOpen) {
+        this.selectedBackupTimestamp = ''
+      }
     },
     toggleCharacterBackupModal() {
       this.isShowingBackup = !this.isShowingBackup
@@ -2871,6 +2871,19 @@ export default {
     width: var(--width-popup);
   }
 
+  .popup-character-action ul {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+  }
+
+  .popup-character-action ul li {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   .popup-character-action p {
     justify-content: center;
   }
@@ -2892,6 +2905,10 @@ export default {
     cursor: not-allowed;
     pointer-events: none; 
     visibility: hidden;
+  }
+
+  .selected {
+    background-color: var(--yellow);
   }
 
   #character-background {
