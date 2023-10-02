@@ -3,7 +3,7 @@
     <!-- Character Page -->
     <transition name="slide-up" mode="out-in">
       <div v-if="!isShowingBackup">
-        <header>
+        <header :class="{ 'disabled-page': isPopupOpen() }">
           <nav>
             <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
             <template v-if="isShowingJumpToMenu">
@@ -1353,6 +1353,9 @@
               </li>
             </ul>
           </section>
+        </main>
+        
+
 
           <!-- Save Character Data Popup -->
           <div class="popup-overlay" v-if="isSaveCharacterPopupOpen">
@@ -1382,9 +1385,9 @@
           </div>
 
           <!-- Character Backups Popup -->
-          <transition name="fade" appear>
-            <div class="overlay" v-if="isCharacterBackupsPopupOpen">
-              <div class="popup-backup">
+          <div class="popup-overlay" v-if="isCharacterBackupsPopupOpen">
+            <transition name="fade" appear>
+              <div class="popup-character-action">
                 <h1>Select a backup to view</h1>
                 <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
@@ -1404,13 +1407,61 @@
                   <button class="button-save" @click="toggleViewBackup" :class="{ 'disabled-button': selectedBackupTimestamp === '' }" >View Backup</button>
                 </div>
               </div>
+            </transition>
+          </div>
+
+        <!-- Save Character Data Popup -->
+        <div class="popup-overlay" v-if="isSaveCharacterPopupOpen">
+          <transition name="fade" appear>
+            <div class="popup-character-action" v-if="isSaveCharacterPopupOpen">
+              <h1>Create backup for <br><strong>{{ characterToView.name }}</strong>?</h1>
+              <div class="popup-buttons">
+                <button class="button-cancel" @click="toggleSaveCharacterPopup">Cancel</button>
+                <button class="button-backup" @click="onPressSaveBackup">Save</button>
+              </div>
             </div>
           </transition>
-        </main>
+        </div>
 
-        <footer>
+        <!-- Delete Character Popup -->
+        <div class="popup-overlay" v-if="isDeleteCharacterPopupOpen">
+          <transition name="fade" appear>
+              <div class="popup-character-action">
+                <h1>Delete <strong>{{ characterToView.name }}</strong>?</h1>
+                <p>This action can't be undone</p>
+                <div class="popup-buttons">
+                  <button class="button-cancel" @click="toggleDeleteCharacterPopup">Cancel</button>
+                  <button class="button-delete" @click="onPressDeleteCharacter">Delete</button>
+                </div>
+              </div>
+          </transition>
+        </div>
 
-        </footer>
+        <!-- Character Backups Popup -->
+        <div class="popup-overlay" v-if="isCharacterBackupsPopupOpen">
+          <transition name="fade" appear>
+            <div class="popup-character-action">
+              <h1>Select a backup to view</h1>
+              <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
+
+              <div class="popup-content">
+                <ul class="reverse-list">
+                  <li v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" :class="{ 'selected': selectedBackupTimestamp === timestamp }"
+                  @click="selectBackup(timestamp, backup)">
+                    <p>{{ convertTimestampToString(timestamp) }}</p>
+                    <hr>
+                    <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="buttons-delete-character">
+                <button class="button-cancel-delete" @click="toggleCharacterBackupPopup">Cancel</button>
+                <button class="button-save" @click="toggleViewBackup" :class="{ 'disabled-button': selectedBackupTimestamp === '' }" >View Backup</button>
+              </div>
+            </div>
+          </transition>
+        </div>
       </div>
     </transition>
     
@@ -2239,6 +2290,7 @@ export default {
       this.isShowingLoader = true
       this.store.dispatch("dbGetCharacterBackups", this.characterToViewId).then((success) => {
         if (success) {
+          // console.log("loading backup:")
           setTimeout(() => {
             this.isShowingLoader = false
             this.toggleCharacterBackupPopup()
@@ -2461,6 +2513,10 @@ export default {
     display: flex;
     justify-content: space-between;
     z-index: 9999; /* Ensure this is always on top */
+  }
+
+  nav button:disabled {
+    opacity: 0.3;
   }
 
   nav .nav-bar-button {
@@ -2823,6 +2879,19 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+  }
+
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .disabled-page {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none; 
+    visibility: hidden;
   }
 
   #character-background {
