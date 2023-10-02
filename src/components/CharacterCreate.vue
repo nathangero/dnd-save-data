@@ -227,98 +227,97 @@
           </section>
           <hr>
 
+          <br>
+          <section id="saving-throws">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSavingThrows"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSavingThrows"/>
+              </div>
+
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSavingThrows">
+                <ul>
+                  <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                    <div>
+                      <input type="checkbox" class="checkbox" v-model="newCharacter.savingThrows[stat].proficient">
+                      <label>{{ STAT_NAMES[stat] }}:</label>
+                    </div>
+
+                    <label v-if="newCharacter.savingThrows[stat].proficient">
+                      <strong>{{ getStatBonusSign(newCharacter.scores[stat].calculateMod() + getProficiencyBonus()) }}</strong>
+                    </label>
+                    <label v-if="!newCharacter.savingThrows[stat].proficient">
+                      <strong>{{ getStatBonusSign(newCharacter.scores[stat].calculateMod()) }}</strong>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr>
+
+          <br>
+          <section id="skills">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSkills"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSkills"/>
+              </div>
+
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSkills">
+                <ul>
+                  <li v-for="(skill, key) in SKILL_KEYS" :key="key">
+                      <div>
+                        <input type="checkbox" class="checkbox" v-model="newCharacter.skills[skill].proficient">
+                        <label>{{ SKILL_NAMES[skill] }}:</label>
+                        <label class="skill-score">&nbsp;{{ SKILL_NAME_SCORES[skill] }}</label>
+                      </div>
+
+                      <label class="mod" v-if="newCharacter.skills[skill].proficient">
+                        <strong>{{ getStatBonusSign(newCharacter.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}</strong>
+                      </label>
+                      <label class="mod" v-if="!newCharacter.skills[skill].proficient">
+                        <strong>{{ getStatBonusSign(newCharacter.scores[SKILL_MODS[skill]].calculateMod()) }}</strong>
+                      </label>
+                  </li>
+                </ul>
+              </div>
+            </collapse-transition>
+            
+          </section>
+          <hr>
         </main>
       </div>
     </transition>
 
     <div class="character-to-view">
-
-      <br>
-      <section id="ability-scores">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingAbilityScores" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingAbilityScores" class="collapse-chevron"/>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingAbilityScores">
-            <ul class="stat-list">
-              <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                <div class="stat-group">
-                  <label for="stats-label">{{ STAT_NAMES[stat] }}:</label>
-                  <div class="spacer"></div>
-                  <div style="margin-left: 10px;">
-                    <input type="number" id="stats-label" v-model="scores[stat].value"  inputmode="numeric" required>
-                    <label style="margin-left: 20px;">Mod: {{ getStatBonusSign(scores[stat].calculateMod()) }}</label>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </collapse-transition>
-      </section>
         
-      <br>
-      <section id="saving-throws">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSavingThrows">
-            <ul class="stat-list">
-              <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="savingThrows[stat].proficient">
-                  <label>{{ STAT_NAMES[stat] }}:</label>
-
-                  <label v-if="savingThrows[stat].proficient">
-                    {{ getStatBonusSign(scores[stat].calculateMod() + getProficiencyBonus()) }}
-                  </label>
-                  <label v-if="!savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(scores[stat].calculateMod()) }}
-                  </label>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </collapse-transition>
-
-      </section>
-
-      <br>
-      <section id="skills">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSkills">
-            <ul class="stat-list">
-              <li v-for="(skill, key) in SKILL_KEYS" :key="key">
-                <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="skills[skill].proficient">
-                  <label>{{ SKILL_NAMES[skill] }}:</label>
-
-                  <label v-if="skills[skill].proficient">
-                    {{ getStatBonusSign(scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
-                  </label>
-                  <label v-if="!skills[skill].proficient">
-                    {{ getStatBonusSign(scores[SKILL_MODS[skill]].calculateMod()) }}
-                  </label>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </collapse-transition>
-        
-      </section>
-
       <br>
       <section id="features-traits">
         <div class="edit-buttons">
@@ -1083,7 +1082,7 @@ import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
-import { SKILL_KEYS, SKILL_NAMES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
+import { SKILL_KEYS, SKILL_NAMES, SKILL_NAME_SCORES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER, SPELL_CASTING_DURATION_TYPES } from '@/enums/dbKeys/spell-casting-keys'
 import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
@@ -1138,8 +1137,6 @@ export default {
       isShowingProficiencies: true,
       isShowingSpells: true,
       isShowingSpellSlots: true,
-      isMenuOpen: false,
-      isNavBarOpen: true, // show by default
       isShowingJumpToMenu: false,
       usersCharacters: {},
       CHARACTER_SECTIONS: CHARACTER_SECTIONS,
@@ -1165,6 +1162,7 @@ export default {
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
       SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
+      SKILL_NAME_SCORES: SKILL_NAME_SCORES,
       SPELL_SLOT_KEYS: SPELL_SLOT_KEYS,
       SPELL_SLOT_NAMES_PICKER: SPELL_SLOT_NAMES_PICKER,
       SPELL_CASTING_DURATION_TYPES: SPELL_CASTING_DURATION_TYPES,
