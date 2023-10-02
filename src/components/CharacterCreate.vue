@@ -435,175 +435,6 @@
 
     <div class="character-to-view">
       <br>
-      <section id="weapons">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingWeapons">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingWeapons">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Edit</button>
-            <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingWeapons">
-            <!-- Add new -->
-            <div>
-              <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
-
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li>
-                    <label for="equipment-input">Amount:</label>
-                    <input  style="width=70%;" type="number" inputmode="numeric" v-model="weaponTempAmount"> 
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label style="margin-right: 10px;">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                    <select class="picker" v-model="weaponsTempAttackModifier">
-                      <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                    </select>
-                  </li>
-                  
-                  <li style="margin-top: 10px;">
-                    <label for="equipment-input">Die Type:</label>
-                    <select class="picker" v-model="weaponTempDieType">
-                      <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                    </select>
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label for="equipment-input">Category:</label>
-                    <select class="picker" v-model="weaponTempCategory">
-                      <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
-                    </select>
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label for="equipment-input">Proficient:</label>
-                    <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
-                  </li>
-                </ul>
-              </div>
-
-              <br>
-              <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddWeapon">Add</button>
-
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(weapons) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in weapons" :key="key">
-                    <div v-if="!isEditingWeapons">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
-
-                      <div class="spell-list">
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                          <label class="spell-value" v-if="!item[WEAPON_KEYS.PROFICIENT]">
-                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                          </label>
-                          <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
-                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + proficiencyBonus) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                          </label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES.DAMAGE_MOD }}:</label>
-                          <label class="spell-value">
-                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                          </label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                          <label class="spell-value">{{ item[WEAPON_KEYS.DIE] }}</label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                          <label class="spell-value">{{ item[WEAPON_KEYS.CATEGORY] }}</label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label" style="flex-grow: 1;">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                          <input type="checkbox" class="checkbox" style="margin-right: 0px;" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
-                        </div>
-                      </div>
-                      
-                      <p class="spell-label">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingWeapons">
-                      <label class="item-name">{{ key }}:</label>
-                      
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li style="margin-top: 10px;">
-                            <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
-                            <input  style="width=70%;" type="number" inputmode="numeric" v-model="item[WEAPON_KEYS.AMOUNT]"> 
-                          </li>
-                          
-                          <li style="margin-top: 10px;">
-                            <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
-                              <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                            </select>
-                          </li>
-                          
-                          <li style="margin-top: 10px;">
-                            <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.DIE]">
-                              <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                            </select>
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.CATEGORY]">
-                              <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
-                            </select>
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                            <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteWeapon(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
-
-      <br>
       <section id="equipment">
         <div class="edit-buttons">
           <div>
@@ -1172,6 +1003,7 @@ export default {
       WEAPON_PROPERTY: WEAPON_PROPERTY,
       WEAPON_NAMES: WEAPON_NAMES,
       WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
+
       equipment: {},
       featuresTraits: {},
       languages: {},
@@ -1792,7 +1624,7 @@ export default {
       return newCharacter
     },
     calculatePassivePerception() {
-      const result = 10 + this.scores[STAT_KEYS.WISDOM].calculateMod()
+      const result = 10 + this.newCharacter.scores[STAT_KEYS.WISDOM].calculateMod()
       return result
     },
     calculateBaseStatBonus(stat) {
@@ -1806,6 +1638,9 @@ export default {
       return result
     },
     getDictionarySize(dict) {
+      console.log("@getDictionarySize")
+      console.log("newCharacter:", this.newCharacter)
+      console.log("dict size:", Object.keys(dict).length)
       if (dict) {
         const count = Object.keys(dict).length;
         return count

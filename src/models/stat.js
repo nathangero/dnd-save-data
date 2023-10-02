@@ -1,6 +1,6 @@
 export default class Stat {
 
-    constructor(value = '') {
+    constructor(value = 0) {
         this.value = value
     }
 
