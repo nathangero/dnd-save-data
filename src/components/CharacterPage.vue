@@ -783,11 +783,28 @@
                   </div>
                 </template>
 
-                <template v-if="getDictionarySize(characterToView.equipment) > 0">
+                <div id="gold">
                   <div class="viewing" v-if="!isEditingEquipment">
                     <ul>
                       <li><label class="name-and-count"><strong>Gold</strong>&emsp;x{{ characterToView.gold }}</label></li>
                     </ul>
+                  </div>
+
+                  <div class="editing-languages" v-if="isEditingEquipment">
+                    <ul>
+                      <li>
+                        <label>Gold:</label>
+                        <div>
+                          <input type="number" v-model="characterToView.gold" inputmode="numeric" required>
+                          <button class="button-update" @click="onPressUpdateGold()">Update</button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <template v-if="getDictionarySize(characterToView.equipment) > 0">
+                  <div class="viewing" v-if="!isEditingEquipment">
                     <ul v-for="(item, key) in characterToView.equipment" :key="key">
                       <li>
                         <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
@@ -799,14 +816,6 @@
                   </div>
                   
                   <div class="editing" v-if="isEditingEquipment">
-                    <ul>
-                      <li>
-                        <label>Gold:</label>
-                        <input type="number" v-model="characterToView.gold" inputmode="numeric" required>
-                        <button class="button-update" @click="onPressUpdateGold()">Update</button>
-                      </li>
-                    </ul>
-
                     <ul v-for="(item, key) in characterToView.equipment" :key="key">
                       <li>
                         <label><strong>{{ key }}</strong></label>
@@ -2740,7 +2749,8 @@ export default {
   }
 
   .container-update button,
-  .container-update-delete button {
+  .container-update-delete button,
+  .editing-languages button {
     color: var(--white);
     padding: 5px 10px;
     margin-top: 10px;
