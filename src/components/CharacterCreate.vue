@@ -1006,7 +1006,7 @@
                       <li>
                         <label># of slots:</label>
                         <select v-model="spellSlotTempSlots">
-                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="SPELL_SLOT_NAMES_PICKER[level]">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
                         </select>
                       </li>
                     </ul>
@@ -1023,7 +1023,7 @@
                     <ul v-for="(item, key) in newCharacter.spellSlots" :key="key">
                       <li class="inline">
                         <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</label>
-                        <label>{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
+                        <label>{{ item[SPELL_SLOT_KEYS.MAX] }} slot(s)</label>
                       </li>
                     </ul>
                   </div>
@@ -1035,9 +1035,9 @@
                       </li>
 
                       <li>
-                        <label>Available # of slots:</label>
-                        <select v-model="item[SPELL_SLOT_KEYS.CURRENT]">
-                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        <label># of slots:</label>
+                        <select v-model="item[SPELL_SLOT_KEYS.MAX]">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="SPELL_SLOT_NAMES_PICKER[level]">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
                         </select>
                       </li>
 
@@ -1806,8 +1806,7 @@ export default {
     createCharacter() {
       // console.info("@createCharacter")
       if (this.canCreateCharacter()) {
-        // const newCharacter = this.createCharacterDictionary()
-        // console.info('character:', newCharacter)
+        console.info('character:', this.newCharacter)
         // this.store.dispatch("addCharacterToDb", newCharacter).then((success => {
         //   if (success) {
         //     alert(`Created new character, ${this.characterName}!`)

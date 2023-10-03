@@ -1153,7 +1153,7 @@
                       </li>
                     </ul>
                   </div>
-
+<!-- TODO: ADD OPTION TO ADJUST CURRENT AND MAX SPELL SLOTS -->
                   <div class="editing" v-if="isEditingSpellSlots">
                     <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
                       <li>
@@ -1860,6 +1860,34 @@ export default {
       this.proficiencyTempName = ''
       this.proficiencyTempDescription = ''
     },
+    onPressAddSpellSlot() {
+      if (this.spellSlotTempLevel === '') {
+        alert("Selected a spell level")
+        return
+      }
+
+      if (this.spellSlotTempSlots === '') {
+        alert("Enter slot amount")
+        return
+      }
+
+      const slot = {
+        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
+        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        key: this.spellSlotTempLevel,
+        value: slot,
+        statRef: CHARACTER_KEYS.SPELL_SLOTS
+      }
+      
+      this.store.dispatch("addCharacterStat", payload)
+      
+      this.spellSlotTempLevel = ''
+      this.spellSlotTempSlots = ''
+    },
     onPressAddSpell() {
       if (this.spellTempName === '') {
         alert("Please enter a Spell Name")
@@ -1922,34 +1950,6 @@ export default {
       this.spellTempDuration = ''
       this.spellTempDurationType = ''
       this.spellTempRange = ''
-    },
-    onPressAddSpellSlot() {
-      if (this.spellSlotTempLevel === '') {
-        alert("Selected a spell level")
-        return
-      }
-
-      if (this.spellSlotTempSlots === '') {
-        alert("Enter slot amount")
-        return
-      }
-
-      const slot = {
-        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
-        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
-      }
-
-      const payload = {
-        charId: this.characterToViewId,
-        key: this.spellSlotTempLevel,
-        value: slot,
-        statRef: CHARACTER_KEYS.SPELL_SLOTS
-      }
-      
-      this.store.dispatch("addCharacterStat", payload)
-      
-      this.spellSlotTempLevel = ''
-      this.spellSlotTempSlots = ''
     },
     onPressUpdateCharacterInfo() {
       const info = {
