@@ -60,8 +60,8 @@
                     <p>{{ CHARACTER_SECTIONS.SPELL_CASTING }}</p>
                   </li>
 
-                  <li @click="scrollToSection('save-delete-buttons')">
-                    <p>Backup Character</p>
+                  <li @click="scrollToSection('create-character')">
+                    <p>Create Character</p>
                   </li>
                 </ul>
               </div>
@@ -79,27 +79,27 @@
           <section class="new-character">
             <ul>
               <li>
-                <input class="name" type="text" v-model="characterName" placeholder="Name" required>
+                <input class="name" type="text" v-model="newCharacter.name" placeholder="Name" required>
               </li>
               
               <li>
-                <input class="name" type="text" v-model="characterBackground" placeholder="Background" required>
+                <input class="name" type="text" v-model="newCharacter.background" placeholder="Background" required>
               </li>
               
               <li>
-                <input class="name" type="text" v-model="characterRace" placeholder="Race" required>
+                <input class="name" type="text" v-model="newCharacter.race" placeholder="Race" required>
               </li>
               
               <li>
                 <label for="character-alignment" style="margin-right: 10px;">Alignment:</label>
-                <select class="picker" v-model="characterAlignment">
+                <select class="picker" v-model="newCharacter.alignment">
                   <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
                 </select>
               </li>
               
               <li>
                 <label for="character-class">Class:</label>
-                <select class="picker" v-model="characterClass">
+                <select class="picker" v-model="newCharacter.class">
                   <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
                 </select>
               </li>
@@ -184,6 +184,23 @@
                     <label>Passive Perception: </label>
                     <div class="spacer"></div>
                     <label>{{ calculatePassivePerception() }}</label>
+                  </li>
+
+                  <li>
+                    <label for="spells-attack-bonus">Casting Ability:</label>
+                    <select v-model="newCharacter.spellCastStat">
+                      <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
+                    </select>
+                  </li>
+
+                  <li>
+                    <label>Spell Saving DC: </label>
+                    <label>{{ calculateSpellSavingDc(newCharacter.scores[newCharacter.spellCastStat]) }}</label>
+                  </li>
+
+                  <li>
+                    <label for="stats-proficiency-bonus">Inspriation: </label>
+                    <input type="number" id="stats-inspiration" v-model="newCharacter.inspiration" inputmode="numeric" required>
                   </li>
                 </ul>
               </div>
@@ -1209,7 +1226,7 @@
     </transition>
 
     <br>
-    <button id="create-character" class="button-create-character" @click="createCharacter" :class="{ 'disabled-button': !checkIfCreateCharacterButtonIsDisabled() }">Create Character</button>
+    <button id="create-character" class="button-create-character" @click="createCharacter" :class="{ 'disabled-button': !canCreateCharacter() }">Create Character</button>
 
   </div>
 </template>
@@ -1242,19 +1259,14 @@ import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/e
 // TODO: Will be replaced by Firebase Remote Config
 const MAX_VALUES = {
   LEVEL: 20,
-  HP: 600,
-  HIT_DIE: 10,
   SCORES: 20,
-  STATS_BONUS: 5,
-  SAVING_THROWS: 5,
-  SKILLS: 15,
 }
 
-const MIN_VALUES = {
-  LEVEL: 1,
-  HP: 10,
-  HIT_DIE: 1,
-}
+// const MIN_VALUES = {
+//   LEVEL: 1,
+//   HP: 10,
+//   HIT_DIE: 1,
+// }
 
 export default {
   components: {
@@ -1422,9 +1434,9 @@ export default {
     }
   },
   mounted() {
-    
+
   },
-  watch: {
+  watch: { // TODO: Fix these with newCharacter
     'hp.max': function(newValue) {
       this.hp[HP_KEYS.CURRENT] = newValue
     },
@@ -1514,11 +1526,6 @@ export default {
         this.weaponTempIsProficient = false
       }
 
-      // if (this.weaponTempProperties === '') {
-      //   alert("Please enter a weapon properties")
-      //   return
-      // }
-
       const newItem = {
         [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
         [WEAPON_KEYS.ATTACK_DAMAGE_STAT]: this.weaponsTempAttackModifier,
@@ -1551,11 +1558,6 @@ export default {
         alert("Please enter an equipment amount")
         return
       }
-
-      // if (this.equipmentTempDescription === '') {
-      //   alert("Please enter an equipment description")
-      //   return
-      // }
 
       const newItem = {
         [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
@@ -1622,6 +1624,27 @@ export default {
       this.proficiencyTempName = ''
       this.proficiencyTempDescription = ''
     },
+    onPressAddSpellSlot() {
+      if (this.spellSlotTempLevel === '') {
+        alert("Selected a spell level")
+        return
+      }
+
+      if (this.spellSlotTempSlots === '') {
+        alert("Enter slot amount")
+        return
+      }
+
+      const slot = {
+        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
+        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
+      }
+
+      this.newCharacter.spellSlots[this.spellSlotTempLevel] = slot
+      
+      this.spellSlotTempLevel = ''
+      this.spellSlotTempSlots = ''
+    },
     onPressAddSpell() {
       if (this.spellTempName === '') {
         alert("Please enter a Spell Name")
@@ -1652,11 +1675,6 @@ export default {
         alert("Please enter a Casting Range")
         return
       }
-
-      // if (this.spellTempDescription === '') {
-      //   alert("Please enter a Casting Description")
-      //   return
-      // }
 
 
       const newSpell = {
@@ -1690,27 +1708,6 @@ export default {
       this.spellTempDurationType = ''
       this.spellTempRange = ''
     },
-    onPressAddSpellSlot() {
-      if (this.spellSlotTempLevel === '') {
-        alert("Selected a spell level")
-        return
-      }
-
-      if (this.spellSlotTempSlots === '') {
-        alert("Enter slot amount")
-        return
-      }
-
-      const slot = {
-        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
-        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
-      }
-
-      this.newCharacter.spellSlots[this.spellSlotTempLevel] = slot
-      
-      this.spellSlotTempLevel = ''
-      this.spellSlotTempSlots = ''
-    },
     onPressDeleteStat(key, statRef) {
       if (key in this.newCharacter[statRef]) {
         delete this.newCharacter[statRef][key]
@@ -1729,165 +1726,78 @@ export default {
         }
       }
     },
-    checkIfCreateCharacterButtonIsDisabled() {
-      // console.info("@checkIfAllValid")
-      if (this.characterName === '') {
+    canCreateCharacter() {
+      return this.isValidCharacterInfo() && this.isValidAbilityScores()
+    },
+    isValidCharacterInfo() {
+      if (this.newCharacter.name == '') {
         return false
       }
 
-      if (this.characterAlignment === '') {
+      if (this.newCharacter.background == '') {
         return false
       }
 
-      if (this.characterBackground === '') {
+      if (this.newCharacter.race == '') {
         return false
       }
 
-      if (this.characterRace === '') {
+      if (this.newCharacter.alignment == '') {
         return false
       }
 
-      if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
+      if (this.newCharacter.class == '') {
+        return false
+      }
+
+      if (this.newCharacter.armor == '') {
+        return false
+      }
+
+      if (this.newCharacter.speed == '') {
+        return false
+      }
+
+      if (this.newCharacter.hp[HP_KEYS.MAX] == '') {
+        return false
+      }
+
+      if (this.newCharacter.hp[HP_KEYS.DIE] == '') {
+        return false
+      }
+
+      if (this.newCharacter.hp[HP_KEYS.DIE_AMOUNT_MAX] == '') {
         return false
       }
       
-      if (this.hp.max < MIN_VALUES.HP || this.hp.max.MAX_VALUES) {
-        return false
-      } 
-      
-      if (this.hp.dieAmount < MIN_VALUES.HIT_DIE || this.hp.dieAmount > MAX_VALUES.HIT_DIE) {
-        return false
-      }
-
-      if (this.hp.die == '') {
-        return false
-      }
-      
-      if (!this.checkIfStatsValid()) {
-        return false
-      }
-
-      if (!this.checkIfThrowsValid()) {
-        return false
-      }
-
-      if (!this.checkIfSkillsValid()) {
-        return false
-      }
-
-      if (this.spellCastStat === '') {
+      if (this.newCharacter.spellCastStat == '') {
         return false
       }
 
       return true
     },
-    checkIfAllValid() { // TODO: Change with this.newCharacter
-      // console.info("@checkIfAllValid")
-      if (this.characterName === '') {
-        alert("Please enter a character name")
+    isValidAbilityScores() {
+      if (this.newCharacter.scores[STAT_KEYS.STRENGTH].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.characterAlignment === '') {
-        alert("Please enter an alignment")
+      if (this.newCharacter.scores[STAT_KEYS.DEXTERITY].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.characterBackground === '') {
-        alert("Please enter a background")
+      if (this.newCharacter.scores[STAT_KEYS.CONSTITUTION].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.characterRace === '') {
-        alert("Please enter a race")
+      if (this.newCharacter.scores[STAT_KEYS.INTELLIGENCE].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
-        alert(`Starting level must be between ${MIN_VALUES.LEVEL} - ${MAX_VALUES.LEVEL}`)
-        return false
-      }
-      
-      if (this.hp.max < MIN_VALUES.HP || this.hp.max.MAX_VALUES) {
-        alert(`Starting HP must be between ${MIN_VALUES.HP} - ${MAX_VALUES.HP}`)
-        return false
-      } 
-      
-      if (this.hp.dieAmount < MIN_VALUES.HIT_DIE || this.hp.dieAmount > MAX_VALUES.HIT_DIE) {
-        alert(`Starting Hit Die amount must be between ${MIN_VALUES.HIT_DIE} - ${MAX_VALUES.HIT_DIE}`)
+      if (this.newCharacter.scores[STAT_KEYS.WISDOM].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.hp.die == '') {
-        alert(`Please pick a Hit Die type`)
-        return false
-      }
-      
-      if (!this.checkIfStatsValid()) {
-        alert(`Scores cannot be blank or greater than ${MAX_VALUES.SCORES} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
-        return false
-      }
-
-      if (!this.checkIfThrowsValid()) {
-        alert(`Saving Throws cannot be blank or greater than ${MAX_VALUES.SAVING_THROWS}`)
-        return false
-      }
-
-      if (!this.checkIfSkillsValid()) {
-        alert(`Skills cannot be blank or greater than ${MAX_VALUES.SKILLS}`)
-        return false
-      }
-
-      if (this.spellCastStat === '') {
-        alert("Please select a stat your spell casting will be based off of")
-        return false
-      }
-
-      return true
-    },
-    checkIfStatsValid() {
-      // console.info("@checkIfStatsValid")
-      
-      if (this.scores.statsStr === '' || this.scores.statsDex === '' || this.scores.statsCon === '' || this.scores.statsInt === '' || this.scores.statsWis === '' || this.scores.statsCha === '' ||
-          this.scores.statsStrBonus === '' || this.scores.statsDexBonus === '' || this.scores.statsConBonus === '' || this.scores.statsIntBonus === '' || this.scores.statsWisBonus === '' || this.scores.statsChaBonus === '') {
-            return false
-      }
-
-      if (this.scores.statsStr > MAX_VALUES.SCORES && this.scores.statsDex > MAX_VALUES.SCORES && this.scores.statsCon > MAX_VALUES.SCORES && this.scores.statsInt > MAX_VALUES.SCORES && this.scores.statsWis > MAX_VALUES.SCORES && this.scores.statsCha > MAX_VALUES.SCORES &&
-          this.scores.statsStrBonus > MAX_VALUES.STATS_BONUS && this.scores.statsDexBonus > MAX_VALUES.STATS_BONUS && this.scores.statsConBonus > MAX_VALUES.STATS_BONUS && this.scores.statsIntBonus > MAX_VALUES.STATS_BONUS && this.scores.statsWisBonus > MAX_VALUES.STATS_BONUS && this.scores.statsChaBonus > MAX_VALUES.STATS_BONUS) {
-        return false
-
-      }
-      
-      return true
-
-    },
-    checkIfThrowsValid() {
-      // console.info("@checkIfThrowsValid")
-      if (this.savingThrows.savingStr === '' || this.savingThrows.savingDex === '' || this.savingThrows.savingCon === '' || this.savingThrows.savingInt === '' || this.savingThrows.savingWis === '' || this.savingThrows.savingCha === '') {
-        return false
-      }
-      
-      if (this.savingThrows.savingStr > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingDex > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingCon > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingInt > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingWis > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingCha > MAX_VALUES.SAVING_THROWS) {
-        return false
-      }
-
-      return true
-    },
-    checkIfSkillsValid() {
-      if (this.skills.skillsAcrobatics === '' || this.skills.skillsAnimalHandling === '' || this.skills.skillsArcana === '' || this.skills.skillsAthletics === '' || 
-          this.skills.skillsDeception === '' || this.skills.skillsHistory === '' || this.skills.skillsInsight === '' || this.skills.skillsIntimidation === '' || 
-          this.skills.skillsInvestigation === '' || this.skills.skillsMedicine === '' || this.skills.skillsNature === '' || this.skills.skillsPerception === '' || 
-          this.skills.skillsPerformance === '' || this.skills.skillsPersuasion === '' || this.skills.skillsReligion === '' || this.skills.skillsSleightOfHand === '' || 
-          this.skills.skillsStealth === '' || this.skills.skillsSurvival === '') {
-        return false
-      }
-
-      if (this.skills.skillsAcrobatics > MAX_VALUES.SKILLS || this.skills.skillsAnimalHandling > MAX_VALUES.SKILLS || this.skills.skillsArcana > MAX_VALUES.SKILLS || this.skills.skillsAthletics > MAX_VALUES.SKILLS || 
-          this.skills.skillsDeception > MAX_VALUES.SKILLS || this.skills.skillsHistory > MAX_VALUES.SKILLS || this.skills.skillsInsight > MAX_VALUES.SKILLS || this.skills.skillsIntimidation > MAX_VALUES.SKILLS || 
-          this.skills.skillsInvestigation > MAX_VALUES.SKILLS || this.skills.skillsMedicine > MAX_VALUES.SKILLS || this.skills.skillsNature > MAX_VALUES.SKILLS || this.skills.skillsPerception > MAX_VALUES.SKILLS || 
-          this.skills.skillsPerformance > MAX_VALUES.SKILLS || this.skills.skillsPersuasion > MAX_VALUES.SKILLS || this.skills.skillsReligion > MAX_VALUES.SKILLS || this.skills.skillsSleightOfHand > MAX_VALUES.SKILLS || 
-          this.skills.skillsStealth > MAX_VALUES.SKILLS || this.skills.skillsSurvival > MAX_VALUES.SKILLS) {
+      if (this.newCharacter.scores[STAT_KEYS.CHARISMA].value > MAX_VALUES.SCORES) {
         return false
       }
 
@@ -1895,7 +1805,7 @@ export default {
     },
     createCharacter() {
       // console.info("@createCharacter")
-      if (this.checkIfAllValid()) {
+      if (this.canCreateCharacter()) {
         // const newCharacter = this.createCharacterDictionary()
         // console.info('character:', newCharacter)
         // this.store.dispatch("addCharacterToDb", newCharacter).then((success => {
@@ -1944,12 +1854,14 @@ export default {
     calculateBaseStatBonus(stat) {
       return (stat - 10) / 2
     },
-    calculateSpellSavingDc(profBonus, mod) {
-      if (profBonus === '') {
-        return 8 + mod
+    calculateSpellSavingDc(abilityScore) {
+      let profBonus = this.getProficiencyBonus()
+
+      if (abilityScore === undefined) {
+        return 8 + profBonus
       }
-      const result = 8 + profBonus + mod
-      return result
+      
+      return 8 + profBonus + abilityScore.calculateMod()
     },
     getDictionarySize(dict) {
       if (dict) {
@@ -2461,6 +2373,12 @@ export default {
     width: var(--width-close-to-mobile-screen);
     margin: 5px auto;
     margin-top: -5px;
+  }
+
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   #character-background {
