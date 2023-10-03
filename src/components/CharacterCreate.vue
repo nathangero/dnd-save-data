@@ -1436,12 +1436,12 @@ export default {
   mounted() {
 
   },
-  watch: { // TODO: Fix these with newCharacter
-    'hp.max': function(newValue) {
-      this.hp[HP_KEYS.CURRENT] = newValue
+  watch: {
+    'newCharacter.hp.max': function(newValue) {
+      this.newCharacter.hp[HP_KEYS.CURRENT] = newValue
     },
-    'hp.dieAmountMax': function(newValue) {
-      this.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
+    'newCharacter.hp.dieAmountMax': function(newValue) {
+      this.newCharacter.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
     },
     'spellTempDurationType': function(newValue) {
       if (newValue === SPELL_CASTING_DURATION_TYPES.INSTANT) {
