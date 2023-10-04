@@ -8,7 +8,7 @@
     <!-- Bottom Navigation Bar -->
     <nav>
       <ul class="nav justify-content-between fixed-bottom text-capitalize fs-5 custom-navbar">
-        <li class="nav-item" @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)">
+        <li class="nav-item custom-active" @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)">
           <a class="nav-link text-dark text-lg-center p-3">{{ ROUTER_NAMES.CAMPAIGNS }}</a>
         </li>
         
@@ -151,9 +151,6 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
 
-.custom-navbar {
-  background-color: var(--nav-bg);
-}
+
 </style>

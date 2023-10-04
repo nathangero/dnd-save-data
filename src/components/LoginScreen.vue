@@ -260,7 +260,6 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
 @import '../styles/popup.css';
 
 

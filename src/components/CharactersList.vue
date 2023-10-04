@@ -19,7 +19,7 @@
               <a class="nav-link text-dark text-lg-center p-3">{{ ROUTER_NAMES.CAMPAIGNS }}</a>
             </li>
             
-            <li class="nav-item" @click="navigateTo(ROUTER_NAMES.CHARACTERS)">
+            <li class="nav-item custom-active" @click="navigateTo(ROUTER_NAMES.CHARACTERS)">
               <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.CHARACTERS }}</a>
             </li>
 
@@ -181,8 +181,6 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
-@import "../styles/colors.css";
 /* @import '../styles/character-summary.css'; */
 /* @import '../styles/popup.css'; */
 /* @import '../styles/transitions.css'; */
@@ -197,8 +195,6 @@ button {
   background-color: var(--dimgray);
 }
 
-.custom-navbar {
-  background-color: var(--nav-bg);
-}
+
 
 </style>

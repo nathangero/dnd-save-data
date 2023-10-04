@@ -54,7 +54,6 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
 
 .hamburger-menu {
   margin: 20px 20px;

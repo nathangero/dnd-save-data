@@ -10,6 +10,7 @@ https://dnd-save-data.web.app
 
 ## My Stack:
 - **Vue.js**
+    - Bootstrap
 - **Firebase**
     - Authentication
     - Realtime Database
@@ -56,3 +57,4 @@ My friends and I are brand new D&D players as of the creation of this project, a
 * [Site favicon](https://icons8.com/icon/104704/dungeons-and-dragons)
 * [Font Awesome](https://fontawesome.com/docs/web/use-with/vue/)
 * [Bootstrap side menu](https://getbootstrap.com/docs/5.3/components/offcanvas/#responsive)
+* [Bootstrap nav bar](https://getbootstrap.com/docs/5.3/components/navbar/#nav)
