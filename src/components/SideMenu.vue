@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a class="btn d-flex" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
+    <a class="btn d-flex justify-content-start" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
       <div class="hamburger-menu m-3">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>

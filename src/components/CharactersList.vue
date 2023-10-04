@@ -1,13 +1,11 @@
 <template>
-  <div class="body" ref="bodyRef">
+  <div class="body">
     <transition name="slide-up" mode="out-in">
-      <div class="content" ref="contentRef" v-if="isShowingCharacterList">
+      <div v-if="isShowingCharacterList">
         <side-menu @click="toggleMenu"></side-menu>
         
         <h1>{{ getUserInfo.name }}'s characters</h1>
-        <div class="top-buttons">
-          <button class="button-open-modal" @click="toggleModalForCreateCharacter">Create Character</button>
-        </div>
+        <button class="button-open-modal" @click="toggleModalForCreateCharacter">Create Character</button>
 
         <hr v-if="!isMenuOpen">
         <hr v-if="isMenuOpen" style="visibility: hidden ;" >
@@ -34,7 +32,7 @@
     </transition>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="bottom-navigation" v-if="isNavBarOpen">
+    <!-- <nav class="bottom-navigation" v-if="isNavBarOpen">
       <ul>
         <li @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
           <i class="fas fa-campaigns"></i>
@@ -48,7 +46,7 @@
           {{ ROUTER_NAMES.SESSIONS.charAt(0).toUpperCase() + ROUTER_NAMES.SESSIONS.slice(1) }}
         </li>
       </ul>
-    </nav>
+    </nav> -->
     
   </div>
 </template>
@@ -181,15 +179,6 @@ export default {
         }, TIMEOUT_TRANSITION);
       }
     },
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen
-      this.isNavBarOpen = !this.isNavBarOpen
-      if (this.isMenuOpen) {
-        this.$refs.contentRef.style.backgroundColor = 'gray';        
-      } else {
-        this.$refs.contentRef.style.backgroundColor = ''
-      }
-    },
   }
 }
 </script>
@@ -200,4 +189,7 @@ export default {
 /* @import '../styles/popup.css'; */
 /* @import '../styles/transitions.css'; */
 
+body {
+  background-color: purple;
+}
 </style>
