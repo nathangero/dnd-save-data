@@ -1254,11 +1254,6 @@ const MAX_VALUES = {
   SCORES: 20,
 }
 
-// const MIN_VALUES = {
-//   LEVEL: 1,
-//   HP: 10,
-//   HIT_DIE: 1,
-// }
 
 export default {
   components: {
@@ -1481,7 +1476,7 @@ export default {
         [FEATURES_KEYS.ACTION]: this.featuresTempAction,
         [FEATURES_KEYS.DESCRIPTION]: this.featuresTempDescription,
         [FEATURES_KEYS.TYPE]: this.featuresTempType,
-        [FEATURES_KEYS.USES]: this.featuresTempUses
+        [FEATURES_KEYS.USES]: parseInt(this.featuresTempUses)
       }
       
 
@@ -1519,13 +1514,12 @@ export default {
       }
 
       const newItem = {
-        [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
+        [WEAPON_KEYS.AMOUNT]: parseInt(this.weaponTempAmount),
         [WEAPON_KEYS.ATTACK_DAMAGE_STAT]: this.weaponsTempAttackModifier,
         [WEAPON_KEYS.CATEGORY]: this.weaponTempCategory,
         [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
         [WEAPON_KEYS.DIE]: this.weaponTempDieType,
         [WEAPON_KEYS.PROFICIENT]: this.weaponTempIsProficient,
-        // [WEAPON_KEYS.PROPERTIES]: this.weaponTempProperties,
       }      
 
       this.newCharacter.weapons[this.weaponTempName] = newItem
@@ -1552,7 +1546,7 @@ export default {
       }
 
       const newItem = {
-        [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
+        [EQUIPMENT_KEYS.AMOUNT]: parseInt(this.equipmentTempAmount),
         [EQUIPMENT_KEYS.DESCRIPTION]: this.equipmentTempDescription
       }
 
@@ -1574,7 +1568,7 @@ export default {
       }
 
       const newItem = {
-        [EQUIPMENT_KEYS.AMOUNT]: this.treasureTempAmount,
+        [EQUIPMENT_KEYS.AMOUNT]: parseInt(this.treasureTempAmount),
         [EQUIPMENT_KEYS.DESCRIPTION]: this.treasureTempDescription
       }
 
@@ -1628,10 +1622,10 @@ export default {
       }
 
       const slot = {
-        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
-        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
+        [SPELL_SLOT_KEYS.CURRENT]: parseInt(this.spellSlotTempSlots),
+        [SPELL_SLOT_KEYS.MAX]: parseInt(this.spellSlotTempSlots),
       }
-
+      console.log("slot:", slot)
       this.newCharacter.spellSlots[this.spellSlotTempLevel] = slot
       
       this.spellSlotTempLevel = ''
@@ -1670,11 +1664,11 @@ export default {
 
 
       const newSpell = {
-        [SPELL_CASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
+        [SPELL_CASTING_KEYS.CASTING_TIME]: parseInt(this.spellTempCastingTime),
         [SPELL_CASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
-        [SPELL_CASTING_KEYS.DURATION]: this.spellTempDuration,
+        [SPELL_CASTING_KEYS.DURATION]: parseInt(this.spellTempDuration),
         [SPELL_CASTING_KEYS.DURATION_TYPE]: this.spellTempDurationType,
-        [SPELL_CASTING_KEYS.RANGE]: this.spellTempRange
+        [SPELL_CASTING_KEYS.RANGE]: parseInt(this.spellTempRange)
       }
       
       if (this.spellTempLevel in this.newCharacter.spells) {
@@ -1799,14 +1793,14 @@ export default {
       // console.info("@createCharacter")
       if (this.canCreateCharacter()) {
         console.info('character:', this.newCharacter)
-        // this.store.dispatch("addCharacterToDb", newCharacter).then((success => {
-        //   if (success) {
-        //     alert(`Created new character, ${this.characterName}!`)
-        //     this.$emit('close'); // Tell parent to close this modal
-        //   } else {
-        //     alert("An error occurred creating your character. Please try again")
-        //   }
-        // }))
+        this.store.dispatch("addCharacterToDb", this.newCharacter).then((success => {
+          if (success) {
+            alert(`Created new character, ${this.newCharacter.name}!`)
+            this.$emit('close'); // Tell parent to close this modal
+          } else {
+            alert("An error occurred creating your character. Please try again")
+          }
+        }))
       }
     },
     createCharacterDictionary() {
