@@ -6,9 +6,7 @@
         
         <h1>{{ getUserInfo.name }}'s characters</h1>
         <button @click="toggleModalForCreateCharacter">Create Character</button>
-
-        <hr v-if="!isMenuOpen">
-        <hr v-if="isMenuOpen" style="visibility: hidden ;" >
+        <hr>
         
         <!-- Character summary -->
         <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
@@ -200,7 +198,7 @@ button {
 }
 
 .custom-navbar {
-  background-color: var(--light-gray);
+  background-color: var(--nav-bg);
 }
 
 </style>
