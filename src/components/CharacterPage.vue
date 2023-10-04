@@ -783,11 +783,28 @@
                   </div>
                 </template>
 
-                <template v-if="getDictionarySize(characterToView.equipment) > 0">
+                <div id="gold">
                   <div class="viewing" v-if="!isEditingEquipment">
                     <ul>
                       <li><label class="name-and-count"><strong>Gold</strong>&emsp;x{{ characterToView.gold }}</label></li>
                     </ul>
+                  </div>
+
+                  <div class="editing-languages" v-if="isEditingEquipment">
+                    <ul>
+                      <li>
+                        <label>Gold:</label>
+                        <div>
+                          <input type="number" v-model="characterToView.gold" inputmode="numeric" required>
+                          <button class="button-update" @click="onPressUpdateGold()">Update</button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <template v-if="getDictionarySize(characterToView.equipment) > 0">
+                  <div class="viewing" v-if="!isEditingEquipment">
                     <ul v-for="(item, key) in characterToView.equipment" :key="key">
                       <li>
                         <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
@@ -799,14 +816,6 @@
                   </div>
                   
                   <div class="editing" v-if="isEditingEquipment">
-                    <ul>
-                      <li>
-                        <label>Gold:</label>
-                        <input type="number" v-model="characterToView.gold" inputmode="numeric" required>
-                        <button class="button-update" @click="onPressUpdateGold()">Update</button>
-                      </li>
-                    </ul>
-
                     <ul v-for="(item, key) in characterToView.equipment" :key="key">
                       <li>
                         <label><strong>{{ key }}</strong></label>
@@ -1008,7 +1017,7 @@
 
             
           </section> 
-          <hr>     
+          <hr>
 
           <br>
           <section id="proficiencies">
@@ -1144,7 +1153,7 @@
                       </li>
                     </ul>
                   </div>
-
+<!-- TODO: ADD OPTION TO ADJUST CURRENT AND MAX SPELL SLOTS -->
                   <div class="editing" v-if="isEditingSpellSlots">
                     <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
                       <li>
@@ -1771,7 +1780,7 @@ export default {
       this.equipmentTempDescription = ''
     },
     onPressAddTreasure() {
-      if (this.treasureTempAmount === '') {
+      if (this.treasureTempName === '') {
         alert("Please enter an treasure name")
         return
       }
@@ -1851,6 +1860,34 @@ export default {
       this.proficiencyTempName = ''
       this.proficiencyTempDescription = ''
     },
+    onPressAddSpellSlot() {
+      if (this.spellSlotTempLevel === '') {
+        alert("Selected a spell level")
+        return
+      }
+
+      if (this.spellSlotTempSlots === '') {
+        alert("Enter slot amount")
+        return
+      }
+
+      const slot = {
+        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
+        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
+      }
+
+      const payload = {
+        charId: this.characterToViewId,
+        key: this.spellSlotTempLevel,
+        value: slot,
+        statRef: CHARACTER_KEYS.SPELL_SLOTS
+      }
+      
+      this.store.dispatch("addCharacterStat", payload)
+      
+      this.spellSlotTempLevel = ''
+      this.spellSlotTempSlots = ''
+    },
     onPressAddSpell() {
       if (this.spellTempName === '') {
         alert("Please enter a Spell Name")
@@ -1913,34 +1950,6 @@ export default {
       this.spellTempDuration = ''
       this.spellTempDurationType = ''
       this.spellTempRange = ''
-    },
-    onPressAddSpellSlot() {
-      if (this.spellSlotTempLevel === '') {
-        alert("Selected a spell level")
-        return
-      }
-
-      if (this.spellSlotTempSlots === '') {
-        alert("Enter slot amount")
-        return
-      }
-
-      const slot = {
-        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
-        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
-      }
-
-      const payload = {
-        charId: this.characterToViewId,
-        key: this.spellSlotTempLevel,
-        value: slot,
-        statRef: CHARACTER_KEYS.SPELL_SLOTS
-      }
-      
-      this.store.dispatch("addCharacterStat", payload)
-      
-      this.spellSlotTempLevel = ''
-      this.spellSlotTempSlots = ''
     },
     onPressUpdateCharacterInfo() {
       const info = {
@@ -2740,7 +2749,8 @@ export default {
   }
 
   .container-update button,
-  .container-update-delete button {
+  .container-update-delete button,
+  .editing-languages button {
     color: var(--white);
     padding: 5px 10px;
     margin-top: 10px;
