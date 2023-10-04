@@ -432,7 +432,6 @@
 
                       <li class="container-update-delete">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.FEATURES)">Update</button>
                       </li>
                       
                       <li>
@@ -605,7 +604,6 @@
 
                       <li class="container-update-delete">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.WEAPONS)">Update</button>
                       </li>
                       
                       <li>
@@ -709,7 +707,6 @@
 
                       <li class="container-update-delete">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.EQUIPMENT)">Update</button>
                       </li>
                       
                       <li>
@@ -797,7 +794,6 @@
 
                       <li class="container-update-delete">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.TREASURES)">Update</button>
                       </li>
 
                       <li>
@@ -878,7 +874,6 @@
 
                         <li class="container-update-delete">
                           <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
-                          <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.LANGUAGES)">Update</button>
                         </li>
 
                         <li>
@@ -956,7 +951,6 @@
 
                       <li class="container-update-delete">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.PROFICIENCIES)">Update</button>
                       </li>
 
                       <li>
@@ -1043,7 +1037,6 @@
 
                       <li class="container-update-delete">
                         <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.SPELL_SLOTS)">Delete</button>
-                        <button class="button-update" @click="onPressUpdateStat(key, item, CHARACTER_KEYS.SPELL_SLOTS)">Update</button>
                       </li>
 
                       <li>
@@ -1206,7 +1199,6 @@
 
                           <li class="container-update-delete">
                             <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
-                            <button class="button-update" @click="onPressUpdateSpell(level, spellName, spell, CHARACTER_KEYS.SPELLS)">Update</button>
                           </li>
                         </ul>
                       </template>
