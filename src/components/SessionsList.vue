@@ -16,7 +16,7 @@
           <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.CHARACTERS }}</a>
         </li>
 
-        <li class="nav-item" @click="navigateTo(ROUTER_NAMES.SESSIONS)">
+        <li class="nav-item custom-active" @click="navigateTo(ROUTER_NAMES.SESSIONS)">
           <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.SESSIONS }}</a>
         </li>
       </ul>
@@ -151,9 +151,5 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
 
-.custom-navbar {
-  background-color: var(--nav-bg);
-}
 </style>

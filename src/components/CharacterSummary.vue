@@ -78,6 +78,5 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
 @import '../styles/character-summary.css';
 </style>
