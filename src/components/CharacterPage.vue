@@ -2506,7 +2506,7 @@ export default {
     background-color: var(--white);
     border-bottom: 3px solid dimgray; /* Add a border to the bottom */
     border-right: 3px solid dimgray; /* Add a border to the right */
-    border-radius: var(--border-radius);
+    border-radius: 0 0 var(--border-radius) 0;
     max-height: 340px; /* Adjust the height as needed */
     overflow-y: auto;
   }
@@ -2903,14 +2903,17 @@ export default {
     text-wrap: warp;
   }
 
-  /* @media (prefers-color-scheme: dark) {
-    * {
-      background-color: black;
-      color: white;
-    }
-
+  @media (prefers-color-scheme: dark) {
     nav {
       background-color: rgb(49, 49, 49);
     }
-  } */
+
+    nav .jump-to-menu {
+      background-color: var(--black);
+    }
+    .body {
+      background-color: black;
+      color: white;
+    }
+  }
 </style>
