@@ -2912,7 +2912,48 @@ export default {
       background-color: var(--black);
       border-radius: 0 0 var(--border-radius) 0;
     }
-    
+
+    section li input {
+      background-color: var(--black);
+      color: var(--white);
+      border: none;
+      border-bottom: 1px solid var(--white);
+    }
+
+    section li select {
+      font-size: var(--select-font-size);
+      padding: 10px;
+      background-color: var(--black);
+      border: 1px solid var(--white);
+      color: var(--white);
+      border-radius: var(--border-radius);
+    }
+
+    .new-character .name,
+    .editing .name {
+      width: var(--width-close-to-mobile-screen);
+      border: none; /* Remove the default border */
+      border-bottom: 1px solid var(--white); /* Add a bottom border */
+      color: var(--white);
+      outline: none;
+      text-align: center;
+      margin: 10px auto;
+      font-size: var(--stat-font-size);
+    }
+
+
+    .editing textarea,
+    .editing-spells textarea {
+      width: var(--width-close-to-mobile-screen);
+      padding: 10px;
+      margin: 0 auto;
+      font-size: var(--select-font-size);
+      border-color: var(--white);
+      border-radius: var(--border-radius);
+      background-color: var(--black);
+      color: var(--white);
+    }
+
     .body {
       background-color: black;
       color: white;
