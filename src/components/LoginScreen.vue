@@ -260,8 +260,6 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/popup.css';
-
 
 .center-container {
   display: flex;

@@ -1227,9 +1227,6 @@
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import Character from '@/models/character'
-import SavingThrows from '@/models/saving-throws'
-import Skill from '@/models/skill'
-import Stat from '@/models/stat'
 import { CHARACTER_SECTIONS } from "@/enums/character-sections"
 import { DIE_TYPE } from '@/enums/die-type'
 import { EQUIPMENT_KEYS } from '@/enums/dbKeys/equipment-keys.js'
@@ -1316,73 +1313,7 @@ export default {
       WEAPON_PROPERTY: WEAPON_PROPERTY,
       WEAPON_NAMES: WEAPON_NAMES,
       WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
-
-      equipment: {},
-      // featuresTraits: {},
-      languages: {},
-      proficiencies: {},
-      spells: {},
-      spellSlots: {},
-      weapons: {},
-      deathSaves: {
-        [DEATH_SAVES_KEYS.SUCCESSES]: 0, 
-        [DEATH_SAVES_KEYS.FAILURES]: 0
-      },
-      hp: {
-        [HP_KEYS.CURRENT]: '',
-        [HP_KEYS.DIE]: '',
-        [HP_KEYS.DIE_AMOUNT_MAX]: '',
-        [HP_KEYS.DIE_AMOUNT_CURR]: '',
-        [HP_KEYS.MAX]: '',
-        [HP_KEYS.TEMP]: 0
-      },
-      scores: {
-        [STAT_KEYS.STRENGTH]: new Stat(),
-        [STAT_KEYS.DEXTERITY]: new Stat(),
-        [STAT_KEYS.CONSTITUTION]: new Stat(),
-        [STAT_KEYS.INTELLIGENCE]: new Stat(),
-        [STAT_KEYS.WISDOM]: new Stat(),
-        [STAT_KEYS.CHARISMA]: new Stat(),
-      },
-      savingThrows: {
-        [STAT_KEYS.STRENGTH]: new SavingThrows(),
-        [STAT_KEYS.DEXTERITY]: new SavingThrows(),
-        [STAT_KEYS.CONSTITUTION]: new SavingThrows(),
-        [STAT_KEYS.INTELLIGENCE]: new SavingThrows(),
-        [STAT_KEYS.WISDOM]: new SavingThrows(),
-        [STAT_KEYS.CHARISMA]: new SavingThrows(),
-      },
-      skills: {
-        [SKILL_KEYS.ACROBATICS]: new Skill(),
-        [SKILL_KEYS.ANIMAL_HANDLING]: new Skill(),
-        [SKILL_KEYS.ARCANA]: new Skill(),
-        [SKILL_KEYS.ATHLETICS]: new Skill(),
-        [SKILL_KEYS.DECEPTION]: new Skill(),
-        [SKILL_KEYS.HISTORY]: new Skill(),
-        [SKILL_KEYS.INSIGHT]: new Skill(),
-        [SKILL_KEYS.INTIMIDATION]: new Skill(),
-        [SKILL_KEYS.INVESTIGATION]: new Skill(),
-        [SKILL_KEYS.MEDICINE]: new Skill(),
-        [SKILL_KEYS.NATURE]: new Skill(),
-        [SKILL_KEYS.PERCEPTION]: new Skill(),
-        [SKILL_KEYS.PERFORMANCE]: new Skill(),
-        [SKILL_KEYS.PERSUASION]: new Skill(),
-        [SKILL_KEYS.RELIGION]: new Skill(),
-        [SKILL_KEYS.SLEIGHT_OF_HAND]: new Skill(),
-        [SKILL_KEYS.STEALTH]: new Skill(),
-        [SKILL_KEYS.SURVIVAL]: new Skill(),
-      },
       newCharacter: new Character(),
-      characterName: '',
-      characterAlignment: '',
-      characterBackground: '',
-      characterClass: '',
-      characterRace: '',
-      level: '',
-      characterArmor: '',
-      characterSpeed: '',
-      hitDieType: '', // d10
-      hitDieAmount: '', // 3
       equipmentTempName: '',
       equipmentTempAmount: '',
       equipmentTempDescription: '',
@@ -1392,12 +1323,10 @@ export default {
       featuresTempAction: '', // Action, Bonus, Reaction, None
       featuresTempUseable: true,
       featuresTempUses: '',
-      gold: '', 
       languagesTempName: '',
       languagesTempProficiency: '',
       proficiencyTempName: '',
       proficiencyTempDescription: '',
-      spellCastStat: '', // e.g. intelligence
       spellTempName: '',
       spellTempCastingTime: '',
       spellTempDescription: '',
@@ -2000,11 +1929,6 @@ export default {
 </script>
 
 <style scoped>
-  @import "../styles/global-constants.css";
-  /* @import '../styles/character-info-scores.css'; */
-  @import '../styles/popup.css';
-  /* @import '../styles/transitions.css'; */
-
 
   h1 {
     font-size: 2.5em;

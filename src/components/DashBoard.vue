@@ -96,7 +96,9 @@ export default {
 
 <style scoped>
 /* @import '../styles/reset.css'; */
+@import "../styles/global-constants.css";
 @import "../styles/colors.css";
 @import "../styles/nav-bar.css";
+@import '../styles/popup.css';
 
 </style>
