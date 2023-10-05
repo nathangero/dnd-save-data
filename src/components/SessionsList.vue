@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main vh-100">
     <side-menu @click="toggleMenu"></side-menu>
     <h1>{{ getUserInfo.name }}'s sessions</h1>
     <hr>
@@ -139,4 +139,11 @@ export default {
 
 <style scoped>
 
+@media (prefers-color-scheme: dark) {
+
+  .main {
+    background-color: black;
+    color: white;
+  }
+}
 </style>
