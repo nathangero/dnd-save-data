@@ -1,12 +1,12 @@
 <template>
   <div>
-    <a class="btn d-flex justify-content-start" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
+    <button class="btn d-flex justify-content-start" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
       <div class="hamburger-menu m-3">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
       </div>
-    </a>
+    </button>
 
     <div class="offcanvas offcanvas-start w-75" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
       <div class="offcanvas-header">
@@ -68,6 +68,19 @@ export default {
 .hamburger-line {
   width: 100%;
   height: 3px;
-  background-color: #000;
+  background-color: var(--black);
+}
+
+@media (prefers-color-scheme: dark) {
+
+  #offcanvas {
+    background-color: var(--black);
+    color: var(--white);
+    border-right: 1px solid var(--dimgray);
+  }
+
+  .hamburger-line {
+    background-color: var(--white);
+  }
 }
 </style>
