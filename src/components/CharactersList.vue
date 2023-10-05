@@ -181,9 +181,6 @@ export default {
 </script>
 
 <style scoped>
-/* @import '../styles/character-summary.css'; */
-/* @import '../styles/popup.css'; */
-/* @import '../styles/transitions.css'; */
 
 button {
   color: var(--white);

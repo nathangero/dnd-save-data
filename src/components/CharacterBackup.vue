@@ -949,11 +949,6 @@ export default {
 </script>
 
 <style scoped>
-  @import "../styles/global-constants.css";
-  /* @import '../styles/character-info-scores.css'; */
-  @import '../styles/popup.css';
-  /* @import '../styles/transitions.css'; */
-
 
   h1 {
     font-size: 2.5em;
