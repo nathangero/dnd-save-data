@@ -1,21 +1,33 @@
 <template>
-  <div class="body" ref="bodyRef">
+  <div>
     <transition name="slide-up" mode="out-in">
-      <div class="content" ref="contentRef" v-if="isShowingCharacterList">
+      <div v-if="isShowingCharacterList">
         <side-menu @click="toggleMenu"></side-menu>
         
         <h1>{{ getUserInfo.name }}'s characters</h1>
-        <div class="top-buttons">
-          <button class="button-open-modal" @click="toggleModalForCreateCharacter">Create Character</button>
-        </div>
-
-        <hr v-if="!isMenuOpen">
-        <hr v-if="isMenuOpen" style="visibility: hidden ;" >
+        <button @click="toggleModalForCreateCharacter">Create Character</button>
+        <hr>
         
         <!-- Character summary -->
         <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
           <character-summary :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
         </template>
+
+        <nav>
+          <ul class="nav justify-content-between fixed-bottom text-capitalize fs-5 custom-navbar">
+            <li class="nav-item" @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)">
+              <a class="nav-link text-dark text-lg-center p-3">{{ ROUTER_NAMES.CAMPAIGNS }}</a>
+            </li>
+            
+            <li class="nav-item custom-active" @click="navigateTo(ROUTER_NAMES.CHARACTERS)">
+              <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.CHARACTERS }}</a>
+            </li>
+
+            <li class="nav-item" @click="navigateTo(ROUTER_NAMES.SESSIONS)">
+              <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.SESSIONS }}</a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </transition>
 
@@ -32,23 +44,6 @@
         <character-create v-if="isModalNewCharacterOpen" @close="toggleModalForCreateCharacter" @created-character="toggleModalForCreateCharacter"></character-create>
       </template>
     </transition>
-
-    <!-- Bottom Navigation Bar -->
-    <nav class="bottom-navigation" v-if="isNavBarOpen">
-      <ul>
-        <li @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)" :class="{ active: currentRoute === ROUTER_NAMES.CAMPAIGNS }">
-          <i class="fas fa-campaigns"></i>
-          {{ ROUTER_NAMES.CAMPAIGNS.charAt(0).toUpperCase() + ROUTER_NAMES.CAMPAIGNS.slice(1) }}
-        </li>
-        <li @click="navigateTo(ROUTER_NAMES.CHARACTERS)" :class="{ active: currentRoute === ROUTER_NAMES.CHARACTERS }">
-          <i class="fas fa-characters"></i>
-          {{ ROUTER_NAMES.CHARACTERS.charAt(0).toUpperCase() + ROUTER_NAMES.CHARACTERS.slice(1) }}
-        </li><li @click="navigateTo(ROUTER_NAMES.SESSIONS)" :class="{ active: currentRoute === ROUTER_NAMES.SESSIONS }">
-          <i class="fas fa-sessions"></i>
-          {{ ROUTER_NAMES.SESSIONS.charAt(0).toUpperCase() + ROUTER_NAMES.SESSIONS.slice(1) }}
-        </li>
-      </ul>
-    </nav>
     
   </div>
 </template>
@@ -181,54 +176,25 @@ export default {
         }, TIMEOUT_TRANSITION);
       }
     },
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen
-      this.isNavBarOpen = !this.isNavBarOpen
-      if (this.isMenuOpen) {
-        this.$refs.contentRef.style.backgroundColor = 'gray';        
-      } else {
-        this.$refs.contentRef.style.backgroundColor = ''
-      }
-    },
   }
 }
 </script>
 
 <style scoped>
-@import '../syles/character-summary.css';
-@import '../syles/popup.css';
-@import '../syles/transitions.css';
+/* @import '../styles/character-summary.css'; */
+/* @import '../styles/popup.css'; */
+/* @import '../styles/transitions.css'; */
 
-
-
-/* .body { */
-  /* height: 100dvh; */
-/* } */
-
-.content {
-  height: 100%;
-}
-
-/* BUTTON STYLES */
-
-.button-open-modal {
-  margin: 0 auto;
+button {
+  color: var(--white);
   padding: 5px 10px;
-  background-color: dimgray;
+  margin-top: 10px;
   border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: larger;
+  border-radius: var(--border-radius);
+  font-size: var(--stat-font-size);
+  background-color: var(--dimgray);
 }
 
-.button-create-character {
-  padding: 10px;
-  background-color: #42B6E8;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-size: x-large;
-  margin-top: 10%;
-  margin-bottom: 10%;
-}
+
+
 </style>
