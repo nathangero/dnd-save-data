@@ -1,25 +1,12 @@
 <template>
   <div class="d-flex justify-content-center body">
-    <template v-if="listOfCharacters">
+
+    <template v-if="character">
+    </template>
+    <template v-else>
       <div id="card-container" class="d-flex flex-column w-75 justify-content-center p-0 m-auto">
         <!-- <ul id="character-list" class="p-0">
         </ul> -->
-      </div>
-    </template>
-
-    <template v-if="character">
-      <div id="character-card" class="card w-100 border border-4 custom-card">
-        <div class="card-header pb-0 border-0">
-          <div class="d-flex justify-content-between text-dark mb-0 border-0">
-            <p class="fs-1 mb-1 border-0"><strong>{{ character.name }}</strong></p>
-            <p class="fs-2 mt-1 mb-0 border-0">Level: {{ character.level }}</p>
-          </div>
-        </div>
-        <div class="card-body d-flex flex-column text-start py-0">
-          <p class="fs-3 p-0 mb-2">{{ character.class }}</p>
-          <p class="fs-3 p-0 mb-2">{{ character.race }}</p>
-          <p class="fs-3 p-0 mb-0 border-0">HP: {{ character.hp[HP_KEYS.CURRENT] }}/{{ character.hp[HP_KEYS.MAX] }}</p>
-        </div>
       </div>
     </template>
   </div>
@@ -40,6 +27,9 @@ export default {
     },
     character: {
       type: Character
+    },
+    characterBackupId: {
+      type: String
     }
   },
   data() {
@@ -52,29 +42,44 @@ export default {
       THEME_DARK: THEME_DARK
     }
   },
+  created() {
+
+  },
   mounted: function() {
-    this.handleThemeChange(this.listOfCharacters)
+    this.isDarkMode = this.darkModeMediaQuery.matches;
+    if (this.character) {
+      // Make into an object
+      let charObject = { [this.characterBackupId]: Character.convertCharacterToObj(this.character) }
+      this.setupCharacters(charObject)
+
+    } else if (this.listOfCharacters) {
+      this.setupCharacters(this.listOfCharacters)
+    }   
+    this.setThemeListener()
   },
   watch: {
 
   },
   methods: {
-    handleThemeChange(characters) {
-      this.setupCharacters(characters)    
-      this.isDarkMode = this.darkModeMediaQuery.matches;
-
+    setThemeListener() {
       // Watch for changes
       this.darkModeMediaQuery.addEventListener("change", () => {
         // Remove the existing cards
         if (document.getElementById("card-container")) {
           document.getElementById("card-container").children[0].remove()
-          this.setupCharacters(characters)   
+          if (this.character) {
+            let charObject = { [this.characterBackupId]: Character.convertCharacterToObj(this.character) }
+            this.setupCharacters(charObject)
+
+          } else if (this.listOfCharacters) {
+            this.setupCharacters(this.listOfCharacters)
+          }          
         }
       })
     },
     setupCharacters(characters) {
       let isDarkMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? true : false
-      // console.log("dark mode?", isDarkMode)
+      // console.log("@Character Summary dark mode?", isDarkMode)
 
       let cardContainer = document.getElementById("card-container")
       let cards = document.createElement("ul")
@@ -101,7 +106,7 @@ export default {
         event.preventDefault()
         this.onPressCharacterSummary(id)
       })
-
+      
       return card
     },
     setupCardHeader(character) {

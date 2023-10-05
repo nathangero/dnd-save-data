@@ -1,11 +1,9 @@
 <template>
   <div>
     <div class="v-spinner">
-      <div class="spinner-background">
-        <div class="v-clip" v-bind:style="spinnerStyle">
-        </div>
-        <p class="logging-in-text">{{ loadingText }}</p>
+      <div class="v-clip" v-bind:style="spinnerStyle">
       </div>
+      <p class="fs-2 mt-4 logging-in-text">{{ loadingText }}</p>
     </div>
   </div>
 </template>
@@ -37,17 +35,6 @@ export default {
 </script>
 
 <style scoped>
-.spinner-background {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 200px;
-  height: 200px;
-  background-color: #fff;
-  border-radius: 10px;
-}
 
 .v-spinner {
   position: fixed;
@@ -55,13 +42,13 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--white);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  color: black;
+  color: var(--black);
 }
 
 .v-spinner .v-clip {
@@ -98,6 +85,17 @@ export default {
   {
     -webkit-transform: rotate(360deg) scale(1);
             transform: rotate(360deg) scale(1);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .v-spinner {
+    background-color: var(--black);
+    color: var(--white);
+  }
+
+  .logging-in-text {
+    color: white;
   }
 }
 </style>

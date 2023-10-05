@@ -198,4 +198,10 @@ button {
   }
 }
 
+@media only screen and (min-width: 768px) and (prefers-color-scheme: dark) {
+  #character-list {
+    height: 100vh;
+  }
+}
+
 </style>

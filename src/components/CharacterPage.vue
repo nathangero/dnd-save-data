@@ -1409,8 +1409,8 @@
               <h1>Select a backup to view</h1>
               <p>(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
-                <ul v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" @click="selectBackup(timestamp, backup)">
-                  <li :class="{ 'selected': selectedBackupTimestamp === timestamp }">
+                <ul class="overflow-auto" v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" @click="selectBackup(timestamp, backup)">
+                  <li id="card-container" :class="{ 'selected': selectedBackupTimestamp === timestamp }">
                     <p>{{ convertTimestampToString(timestamp) }}</p>
                     <hr>
                     <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
@@ -2885,6 +2885,7 @@ export default {
 
   .selected {
     background-color: var(--yellow);
+    color: var(--black);
   }
 
   #character-background {
@@ -2957,6 +2958,15 @@ export default {
     .body {
       background-color: black;
       color: white;
+    }
+
+    .popup-character-action {
+      background-color: var(--black);
+      border: 2px solid var(--white)
+    }
+
+    #card-container {
+      border: 2px solid var(--white);
     }
   }
 </style>
