@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <transition name="slide-up" mode="out-in">
       <div class="overflow-auto" v-if="isShowingCharacterList">
         <side-menu @click="toggleMenu"></side-menu>
@@ -13,22 +13,7 @@
           <character-summary id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
         </template>
 
-        <nav-bar></nav-bar>
-        <!-- <nav>
-          <ul class="nav justify-content-between fixed-bottom text-capitalize fs-5 custom-navbar">
-            <li class="nav-item" @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)">
-              <a class="nav-link text-dark text-lg-center p-3">{{ ROUTER_NAMES.CAMPAIGNS }}</a>
-            </li>
-            
-            <li class="nav-item custom-active" @click="navigateTo(ROUTER_NAMES.CHARACTERS)">
-              <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.CHARACTERS }}</a>
-            </li>
-
-            <li class="nav-item" @click="navigateTo(ROUTER_NAMES.SESSIONS)">
-              <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.SESSIONS }}</a>
-            </li>
-          </ul>
-        </nav> -->
+        <nav-bar :activeTab="ROUTER_NAMES.CHARACTERS"></nav-bar>
       </div>
     </transition>
 
@@ -94,7 +79,7 @@ export default {
     }
   },
   mounted: function() {
-    this.handleThemeChange()
+    // this.handleThemeChange()
 
     if (this.store.getters.getUser.id === '') {
       try {
@@ -217,7 +202,7 @@ button {
 }
 
 @media (prefers-color-scheme: dark) {
-  * {
+  .body {
     background-color: black;
     color: white;
   }

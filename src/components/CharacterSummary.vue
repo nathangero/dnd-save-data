@@ -66,8 +66,10 @@ export default {
       // Watch for changes
       this.darkModeMediaQuery.addEventListener("change", () => {
         // Remove the existing cards
-        document.getElementById("card-container").children[0].remove()
-        this.setupCharacters(characters)   
+        if (document.getElementById("card-container")) {
+          document.getElementById("card-container").children[0].remove()
+          this.setupCharacters(characters)   
+        }
       })
     },
     setupCharacters(characters) {
@@ -75,7 +77,7 @@ export default {
       // console.log("dark mode?", isDarkMode)
 
       let cardContainer = document.getElementById("card-container")
-      let cards = document.createElement("div")
+      let cards = document.createElement("ul")
       cards.setAttribute("id", "character-list")
       cards.setAttribute("class", "p-0")
 
@@ -161,7 +163,7 @@ li {
   border-radius: var(--border-radius);
 }
 
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .body {
     background-color: black;
   }

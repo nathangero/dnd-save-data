@@ -5,27 +5,13 @@
     <hr>
 
 
-    <!-- Bottom Navigation Bar -->
-    <nav>
-      <ul class="nav justify-content-between fixed-bottom text-capitalize fs-5 custom-navbar">
-        <li class="nav-item" @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)">
-          <a class="nav-link text-dark text-lg-center p-3">{{ ROUTER_NAMES.CAMPAIGNS }}</a>
-        </li>
-        
-        <li class="nav-item" @click="navigateTo(ROUTER_NAMES.CHARACTERS)">
-          <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.CHARACTERS }}</a>
-        </li>
-
-        <li class="nav-item custom-active" @click="navigateTo(ROUTER_NAMES.SESSIONS)">
-          <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.SESSIONS }}</a>
-        </li>
-      </ul>
-    </nav>
+    <nav-bar :activeTab="ROUTER_NAMES.SESSIONS"></nav-bar>
   </div>
 </template>
 
 <script>
 import { useStore } from 'vuex'
+import NavBar from './NavBar.vue';
 import SideMenu from '@/components/SideMenu.vue'
 import Character from '@/models/character'
 import Cookies from 'js-cookie'
@@ -39,6 +25,7 @@ const TIMEOUT_TRANSITION = 200
 
 export default {
   components: {
+    NavBar,
     SideMenu,
   },
   data() {
