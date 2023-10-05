@@ -1149,11 +1149,13 @@
                     <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
                       <li class="inline">
                         <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</label>
-                        <label>{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
+                        <div class="spell-slot-row">
+                          <label>{{ item[SPELL_SLOT_KEYS.CURRENT] }} / {{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
+                        </div>
                       </li>
                     </ul>
                   </div>
-<!-- TODO: ADD OPTION TO ADJUST CURRENT AND MAX SPELL SLOTS -->
+
                   <div class="editing" v-if="isEditingSpellSlots">
                     <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
                       <li>
@@ -1161,10 +1163,19 @@
                       </li>
 
                       <li>
-                        <label>Available # of slots:</label>
-                        <select v-model="item[SPELL_SLOT_KEYS.CURRENT]">
-                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
-                        </select>
+                        <label># of slots:</label>
+
+                        <div class="spell-slot-row">
+                          <select v-model="item[SPELL_SLOT_KEYS.CURRENT]">
+                            <option v-for="level in getSpellSlotCountFromMax(key)" :key="level" :value="level">{{ level }}</option>
+                          </select>
+
+                          <h2 class="fs-1 m-2">/</h2>
+                          
+                          <select v-model="item[SPELL_SLOT_KEYS.MAX]">
+                            <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="parseInt(SPELL_SLOT_NAMES_PICKER[level])">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                          </select>
+                        </div>
                       </li>
 
                       <li class="container-update-delete">
@@ -1561,11 +1572,6 @@ export default {
       characterToView: new Character(),
       selectedBackupTimestamp: '',
       selectedBackupCharacter: new Character(),
-      level: '',
-      characterArmor: '',
-      characterSpeed: '',
-      hitDieType: '', // d10
-      hitDieAmount: '', // 3
       equipmentTempName: '',
       equipmentTempAmount: '',
       equipmentTempDescription: '',
@@ -1575,7 +1581,6 @@ export default {
       featuresTempAction: '', // Action, Bonus, Reaction
       featuresTempUseable: true,
       featuresTempUses: '',
-      gold: '',
       languagesTempName: '',
       languagesTempProficiency: '',
       proficiencyTempName: '',
@@ -2198,6 +2203,22 @@ export default {
     calculateSpellSavingDc(mod) {
       return 8 + this.getProficiencyBonus() + mod
     },
+    getSpellSlotCountFromMax(level) {
+      let currentSlots = []
+      let maxSlots = this.characterToView.spellSlots[level][SPELL_SLOT_KEYS.MAX]
+
+      for(let i = 0; i < maxSlots; i++) {
+        currentSlots.push(i + 1)
+      }
+
+      // Adjust the current slot count to match maxSlots if maxSlots is less than the current slot count
+      let currSlotCount = this.characterToView.spellSlots[level][SPELL_SLOT_KEYS.CURRENT]
+      if (currSlotCount > maxSlots) {
+        this.characterToView.spellSlots[level][SPELL_SLOT_KEYS.CURRENT] = maxSlots
+      }
+
+      return currentSlots
+    },
     getDictionarySize(dict) {
       if (dict) {
         const count = Object.keys(dict).length;
@@ -2760,6 +2781,10 @@ export default {
     font-size: var(--stat-font-size);
   }
 
+  .spell-slot-row {
+    display: flex;
+    margin-left: 10px;
+  }
   .button-delete {
     background-color: var(--red);
   }
