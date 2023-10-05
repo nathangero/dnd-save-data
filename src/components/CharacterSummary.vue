@@ -52,14 +52,14 @@ export default {
       THEME_DARK: THEME_DARK
     }
   },
-  mounted: function mounted() {
-    this.handleTheme(this.listOfCharacters)
+  mounted: function() {
+    this.handleThemeChange(this.listOfCharacters)
   },
   watch: {
 
   },
   methods: {
-    handleTheme(characters) {
+    handleThemeChange(characters) {
       this.setupCharacters(characters)    
       this.isDarkMode = this.darkModeMediaQuery.matches;
 

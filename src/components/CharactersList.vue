@@ -13,7 +13,8 @@
           <character-summary id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
         </template>
 
-        <nav>
+        <nav-bar></nav-bar>
+        <!-- <nav>
           <ul class="nav justify-content-between fixed-bottom text-capitalize fs-5 custom-navbar">
             <li class="nav-item" @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)">
               <a class="nav-link text-dark text-lg-center p-3">{{ ROUTER_NAMES.CAMPAIGNS }}</a>
@@ -27,7 +28,7 @@
               <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.SESSIONS }}</a>
             </li>
           </ul>
-        </nav>
+        </nav> -->
       </div>
     </transition>
 
@@ -53,6 +54,7 @@ import { useStore } from 'vuex'
 import CharacterCreate from './CharacterCreate.vue';
 import CharacterSummary from './CharacterSummary.vue';
 import CharacterPage from '@/components/CharacterPage.vue'
+import NavBar from './NavBar.vue';
 import SideMenu from '@/components/SideMenu.vue'
 import Character from '@/models/character'
 import Cookies from 'js-cookie'
@@ -69,10 +71,13 @@ export default {
     CharacterCreate,
     CharacterSummary,
     CharacterPage,
+    NavBar,
     SideMenu,
   },
   data() {
     return {
+      darkModeMediaQuery: window.matchMedia('(prefers-color-scheme: dark)'),
+      isDarkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
       store: useStore(),
       isShowingCharacterList: true,
       isShowingModal: false,
@@ -88,8 +93,8 @@ export default {
       HP_KEYS: HP_KEYS,
     }
   },
-  mounted() {
-    this.setDarkLightMode();
+  mounted: function() {
+    this.handleThemeChange()
 
     if (this.store.getters.getUser.id === '') {
       try {
@@ -113,8 +118,13 @@ export default {
     },
   },
   methods: {
-    setDarkLightMode() {
-      
+    handleThemeChange() {
+      this.isDarkMode = this.darkModeMediaQuery.matches;
+
+      // Watch for changes
+      this.darkModeMediaQuery.addEventListener("change", () => {
+        console.log("@CharacterList theme changed")
+      })
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName })
@@ -204,6 +214,13 @@ button {
 
 #character-summary {
   margin-bottom: 70px;
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    background-color: black;
+    color: white;
+  }
 }
 
 </style>
