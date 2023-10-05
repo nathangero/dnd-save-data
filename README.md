@@ -53,8 +53,15 @@ My friends and I are brand new D&D players as of the creation of this project, a
 - Maybe integrate some API to get descriptions for Equipment, Feats, Traits, etc.?
 
 ## Additional Resources
-* [collapsible vue component](https://github.com/ivanvermeyen/vue-collapse-transition)
-* [Site favicon](https://icons8.com/icon/104704/dungeons-and-dragons)
-* [Font Awesome](https://fontawesome.com/docs/web/use-with/vue/)
-* [Bootstrap side menu](https://getbootstrap.com/docs/5.3/components/offcanvas/#responsive)
-* [Bootstrap nav bar](https://getbootstrap.com/docs/5.3/components/navbar/#nav)
+[Collapsible vue component](https://github.com/ivanvermeyen/vue-collapse-transition)
+
+[Site favicon](https://icons8.com/icon/104704/dungeons-and-dragons)
+
+[Font Awesome](https://fontawesome.com/docs/web/use-with/vue/)
+
+[Bootstrap Sidebar](https://getbootstrap.com/docs/5.3/components/offcanvas/#responsive)
+
+[Bootstrap Navbar](https://getbootstrap.com/docs/5.3/components/navbar/#nav)
+
+[Bootstrap Card](https://getbootstrap.com/docs/5.3/components/card/#header-and-footer)
+
