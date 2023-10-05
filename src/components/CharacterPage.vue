@@ -1585,8 +1585,6 @@ export default {
       languagesTempProficiency: '',
       proficiencyTempName: '',
       proficiencyTempDescription: '',
-      spellAttackBonus: '',
-      spellCastingStat: '', // e.g. intelligence
       spellTempName: '',
       spellTempCastingTime: '',
       spellTempDescription: '',
