@@ -1396,7 +1396,7 @@
           <transition name="fade" appear>
             <div class="popup-character-action">
               <h1>Select a backup to view</h1>
-              <p class="spell-description">(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
+              <p>(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
                 <ul v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" @click="selectBackup(timestamp, backup)">
                   <li :class="{ 'selected': selectedBackupTimestamp === timestamp }">
@@ -2457,6 +2457,9 @@ export default {
     font-size: var(--stat-font-size);
   }
 
+  ul {
+    list-style: none;
+  }
 
   /* Navigation Bar */
   nav {
