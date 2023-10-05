@@ -89,6 +89,8 @@ export default {
     }
   },
   mounted() {
+    this.setDarkLightMode();
+
     if (this.store.getters.getUser.id === '') {
       try {
         const userCookie = Cookies.get(COOKIE_NAMES.USER)
@@ -111,6 +113,9 @@ export default {
     },
   },
   methods: {
+    setDarkLightMode() {
+      
+    },
     navigateTo(routeName) {
       this.$router.push({ name: routeName })
     },
