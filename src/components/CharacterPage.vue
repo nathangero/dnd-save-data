@@ -2910,7 +2910,9 @@ export default {
 
     nav .jump-to-menu {
       background-color: var(--black);
+      border-radius: 0 0 var(--border-radius) 0;
     }
+    
     .body {
       background-color: black;
       color: white;

@@ -68,3 +68,5 @@ My friends and I are brand new D&D players as of the creation of this project, a
 [vue.config.js optimization](https://medium.com/codex/slash-your-load-times-shrink-the-chunk-vendors-js-size-in-vue3-72072428dd2a)
 
 [Media query for x-small screens](https://blisk.io/devices/details/iphone-se-2020)
+
+[Placeholder color](https://www.w3schools.com/howto/howto_css_placeholder.asp)

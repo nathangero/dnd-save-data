@@ -1,5 +1,5 @@
 <template>
-  <div id="body">
+  <div class="body">
     <transition name="slide-up" mode="out-in">
       <div>
         <header>
@@ -2091,7 +2091,8 @@ export default {
     margin: 5px 0;
   }
 
-  .new-character .name {
+  .new-character .name,
+  .editing .name {
     width: var(--width-close-to-mobile-screen);
     border: none; /* Remove the default border */
     border-bottom: 1px solid black; /* Add a bottom border */
@@ -2150,16 +2151,6 @@ export default {
   .editing strong {
     margin-bottom: 10px;
     text-decoration: underline;
-  }
-
-  .editing .name {
-    width: var(--width-close-to-mobile-screen);
-    border: none; /* Remove the default border */
-    border-bottom: 1px solid black; /* Add a bottom border */
-    outline: none;
-    text-align: center;
-    margin: 15px auto;
-    font-size: var(--stat-font-size);
   }
 
   .editing textarea,
@@ -2305,5 +2296,44 @@ export default {
     width: 100%;
     margin: 0 auto;
     text-wrap: warp;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    nav {
+      background-color: rgb(49, 49, 49);
+    }
+
+    nav .jump-to-menu {
+      background-color: var(--black);
+      border-radius: 0 0 var(--border-radius) 0;
+    }
+
+    section li input {
+      background-color: var(--black);
+      color: var(--white);
+      border: none;
+      border-bottom: 1px solid var(--white);
+    }
+
+    .new-character .name,
+    .editing .name {
+      width: var(--width-close-to-mobile-screen);
+      border: none; /* Remove the default border */
+      border-bottom: 1px solid var(--white); /* Add a bottom border */
+      color: var(--white);
+      outline: none;
+      text-align: center;
+      margin: 10px auto;
+      font-size: var(--stat-font-size);
+    }
+
+    .new-character .name::placeholder {
+      color: var(--white);
+    }
+
+    .body {
+      background-color: black;
+      color: white;
+    }
   }
 </style>
