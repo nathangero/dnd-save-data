@@ -3,7 +3,7 @@ name: Vue 3.0 CI
 on:
   push:
     branches:
-      - main
+      - "!main"
   pull_request:
     branches:
       - main
