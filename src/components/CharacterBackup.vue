@@ -965,6 +965,9 @@ export default {
     font-size: var(--stat-font-size);
   }
 
+  ul {
+    list-style: none;
+  }
 
   /* Navigation Bar */
   nav {
