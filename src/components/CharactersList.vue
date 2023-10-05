@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="slide-up" mode="out-in">
-      <div v-if="isShowingCharacterList">
+      <div class="overflow-auto" v-if="isShowingCharacterList">
         <side-menu @click="toggleMenu"></side-menu>
         
         <h1>{{ getUserInfo.name }}'s characters</h1>
@@ -10,7 +10,7 @@
         
         <!-- Character summary -->
         <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-          <character-summary :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
+          <character-summary id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
         </template>
 
         <nav>
@@ -182,6 +182,11 @@ export default {
 
 <style scoped>
 
+div {
+  overflow-y: auto;
+  
+}
+
 button {
   color: var(--white);
   padding: 5px 10px;
@@ -192,6 +197,8 @@ button {
   background-color: var(--dimgray);
 }
 
-
+#character-summary {
+  margin-bottom: 70px;
+}
 
 </style>

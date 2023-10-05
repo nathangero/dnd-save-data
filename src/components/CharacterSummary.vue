@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex justify-content-center">
     <template v-if="listOfCharacters">
-      <div id="character-card" class="card w-75 border border-dark border-4 custom-card">
-        <ul v-for="(character, id) in listOfCharacters" :key="id" class="p-0 m-0">
-          <li @click="onPressCharacterSummary(id)">
+      <div class="d-flex flex-column w-75 justify-content-center p-0 m-auto">
+        <ul class="p-0" v-for="(character, id) in listOfCharacters" :key="id">
+          <li class="card border border-dark border-4 p-0 m-0 custom-card" @click="onPressCharacterSummary(id)">
             <div class="card-header pb-0 border-0">
               <div class="d-flex justify-content-between text-dark mb-0 border-0">
                 <p class="fs-1 mb-1 border-0"><strong>{{ character.name }}</strong></p>
@@ -88,6 +88,8 @@ export default {
 </script>
 
 <style scoped>
+
+
 
 li {
   list-style-type: none;
