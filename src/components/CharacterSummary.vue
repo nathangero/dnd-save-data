@@ -53,20 +53,23 @@ export default {
     }
   },
   mounted: function mounted() {
-    this.setupCharacters(this.listOfCharacters)    
-    this.isDarkMode = this.darkModeMediaQuery.matches;
-
-    // Watch for changes
-    this.darkModeMediaQuery.addEventListener("change", () => {
-      // Remove the existing cards
-      document.getElementById("card-container").children[0].remove()
-      this.setupCharacters(this.listOfCharacters)   
-    })
+    this.handleTheme(this.listOfCharacters)
   },
   watch: {
 
   },
   methods: {
+    handleTheme(characters) {
+      this.setupCharacters(characters)    
+      this.isDarkMode = this.darkModeMediaQuery.matches;
+
+      // Watch for changes
+      this.darkModeMediaQuery.addEventListener("change", () => {
+        // Remove the existing cards
+        document.getElementById("card-container").children[0].remove()
+        this.setupCharacters(characters)   
+      })
+    },
     setupCharacters(characters) {
       let isDarkMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? true : false
       // console.log("dark mode?", isDarkMode)
@@ -79,14 +82,7 @@ export default {
       for(const id in characters) {
         let character = characters[id]
 
-        let card = document.createElement("li")
-        card.setAttribute("id", "character-card")
-        card.setAttribute("class", isDarkMode ? THEME_DARK.CARD : THEME_LIGHT.CARD)
-        card.addEventListener("click", (event) => {
-          event.preventDefault()
-          this.onPressCharacterSummary(id)
-        })
-
+        let card = this.setupCard(isDarkMode, id)
         let cardHeader = this.setupCardHeader(character)
         let cardBody = this.setupCardBody(character)
 
@@ -94,6 +90,17 @@ export default {
         cards.appendChild(card)
         cardContainer.appendChild(cards)
       }
+    },
+    setupCard(isDarkMode, id) {
+      let card = document.createElement("li")
+      card.setAttribute("id", "character-card")
+      card.setAttribute("class", isDarkMode ? THEME_DARK.CARD : THEME_LIGHT.CARD)
+      card.addEventListener("click", (event) => {
+        event.preventDefault()
+        this.onPressCharacterSummary(id)
+      })
+
+      return card
     },
     setupCardHeader(character) {
       let cardHeader = document.createElement("div")

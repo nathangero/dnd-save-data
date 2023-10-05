@@ -2902,4 +2902,15 @@ export default {
     margin: 0 auto;
     text-wrap: warp;
   }
+
+  /* @media (prefers-color-scheme: dark) {
+    * {
+      background-color: black;
+      color: white;
+    }
+
+    nav {
+      background-color: rgb(49, 49, 49);
+    }
+  } */
 </style>
