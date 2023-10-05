@@ -259,8 +259,8 @@ export default {
 }
 </script>
 
-<style>
-@import '../syles/popup.css';
+<style scoped>
+@import '../styles/popup.css';
 
 
 .center-container {

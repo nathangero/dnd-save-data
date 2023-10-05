@@ -1,28 +1,26 @@
 <template>
   <div>
-    <div class="hamburger-menu" ref="menuRef" @click="toggleMenu">
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-    </div>
-    
-    <transition name="slide-right" mode="out-in">
-      <template v-if="showMenu">
-        <div class="side-menu-overlay">
-          <div class="side-menu">
-            <h1 class="menu-close" @click="toggleMenu">X</h1>
+    <a class="btn d-flex justify-content-start" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
+      <div class="hamburger-menu m-3">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+    </a>
 
-            <ul class="list-side-menu">
-              <!-- <li>Profile</li>
-              <li>Settings</li> -->
-              <li @click="logOut">Log Out</li>
-              
-              <p>Version: {{ APP_VERSION }}</p>
-            </ul>
-          </div>
-        </div>
-      </template>
-    </transition>
+    <div class="offcanvas offcanvas-start w-75" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+      <div class="offcanvas-header">
+        <h1 class="offcanvas-title" id="offcanvasLabel"><strong>{{ getUserInfo().name }}</strong></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body text-start">
+          <h2 class="" @click="logOut">Log Out</h2>
+
+          <br><br>
+          <p class="m-0">-------------------</p>
+          <p>Version: {{ APP_VERSION }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -46,28 +44,16 @@ export default {
     logOut() {
       this.store.commit('signOut')
     },
+    getUserInfo() {
+      const user = this.store.getters.getUser
+      
+      return user
+    },
   }
 }
 </script>
 
-<style>
-.slide-right-enter-active {
-transition: transform 0.3s;
-}
-
-.slide-right-leave-active {
-  transition: transform 0.4s;
-}
-
-.slide-right-enter-from,
-.slide-right-leave-to {
-  transform: translateX(-100%);
-}
-
-.slide-right-enter-to,
-.slide-right-leave {
-  transform: translateX(0);
-}
+<style scoped>
 
 .hamburger-menu {
   margin: 20px 20px;
@@ -83,43 +69,5 @@ transition: transform 0.3s;
   width: 100%;
   height: 3px;
   background-color: #000;
-}
-
-
-.side-menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 70%;
-  height: 100%;
-  background-color: white;
-}
-
-.side-menu {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-}
-
-.side-menu h1 {
-  padding: 20px 12%;
-  margin-bottom: 30px;
-  
-}
-
-.menu-close {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: bold;
-  color: #007aff;
-}
-
-.list-side-menu {
-  list-style: none;
-}
-
-.list-side-menu li {
-  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-  font-size: xx-large;
-  margin-bottom: 10%;
 }
 </style>

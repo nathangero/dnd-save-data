@@ -36,7 +36,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .spinner-background {
   display: flex;
   flex-direction: column;

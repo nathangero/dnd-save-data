@@ -1,1017 +1,1224 @@
 <template>
   <div id="body">
-    <div class="navigation-bar">
-      <button class="button-jump-to" @click="openJumpToMenu">Jump to</button>
-      <template v-if="isShowingJumpToMenu">
-        <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
-          <ul class="list-inputs">
-            <li>
-              <a @click="scrollToSection('character-background')">{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</a>
-            </li>
+    <transition name="slide-up" mode="out-in">
+      <div>
+        <header>
+          <nav>
+            <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
+            <template v-if="isShowingJumpToMenu">
+              <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
+                <ul>
+                  <li @click="scrollToSection('character-background')">
+                    <p>{{ CHARACTER_SECTIONS.CHARACTER_BACKGROUND }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('character-info')">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</a>
-            </li>
+                  <li @click="scrollToSection('character-info')">
+                    <p>{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('ability-scores')">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</a>
-            </li>
+                  <li @click="scrollToSection('ability-scores')">
+                    <p>{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('saving-throws')">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</a>
-            </li>
+                  <li @click="scrollToSection('saving-throws')">
+                    <p>{{ CHARACTER_SECTIONS.SAVING_THROWS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('skills')">{{ CHARACTER_SECTIONS.SKILLS }}</a>
-            </li>
+                  <li @click="scrollToSection('skills')">
+                    <p>{{ CHARACTER_SECTIONS.SKILLS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('features-traits')">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</a>
-            </li>
+                  <li @click="scrollToSection('features-traits')">
+                    <p>{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('weapons')">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</a>
-            </li>
+                  <li @click="scrollToSection('weapons')">
+                    <p>{{ CHARACTER_SECTIONS.WEAPONS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('equipment')">{{ CHARACTER_SECTIONS.EQUIPMENT }}</a>
-            </li>
+                  <li @click="scrollToSection('equipment')">
+                    <p>{{ CHARACTER_SECTIONS.EQUIPMENT }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('treasure')">{{ CHARACTER_SECTIONS.TREASURES }}</a>
-            </li>
+                  <li @click="scrollToSection('treasure')">
+                    <p>{{ CHARACTER_SECTIONS.TREASURES }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('languages')">{{ CHARACTER_SECTIONS.LANGUAGES }}</a>
-            </li>
+                  <li @click="scrollToSection('languages')">
+                    <p>{{ CHARACTER_SECTIONS.LANGUAGES }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('proficiences')">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</a>
-            </li>
+                  <li @click="scrollToSection('proficiencies')">
+                    <p>{{ CHARACTER_SECTIONS.PROFICIENCIES }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('spell-slots')">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</a>
-            </li>
+                  <li @click="scrollToSection('spell-slots')">
+                    <p>{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('spell-casting')">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</a>
-            </li>
+                  <li @click="scrollToSection('spell-casting')">
+                    <p>{{ CHARACTER_SECTIONS.SPELL_CASTING }}</p>
+                  </li>
 
-            <li>
-              <a @click="scrollToSection('create-character')">Create Character</a>
-            </li>
-          </ul>
+                  <li @click="scrollToSection('create-character')">
+                    <p>Create Character</p>
+                  </li>
+                </ul>
+              </div>
+            </template>
+            <button class="nav-bar-button" @click="closeModal">Close</button>
+          </nav>
 
-          <!-- Add more links for other sections -->
-        </div>
-      </template>
-      <button class="button-close" @click="closeModal">Close</button>
-    </div>
+          <section id="character-background">
+            <h1>New Character</h1>
+          </section>
+        </header>
 
-    <div class="character-to-view">
-      <section id="character-background">
-        <div class="input-container">
-          <h1>New Character</h1>
-          <input class="character-description" type="text" v-model="characterName" placeholder="Name" required>
-          <input class="character-description" type="text" v-model="characterBackground" placeholder="Background" required>
-          <input class="character-description" type="text" v-model="characterRace" placeholder="Race" required>
-
-          <div class="container-inputs">
-            <ul class="list-inputs">
-              <li style="padding-top: 10px">
-                <label for="character-alignment" class="stat-label" style="margin-right: 10px;">Alignment:</label>
-                <select class="picker" v-model="characterAlignment">
+        <main>
+          <br>
+          <section class="new-character">
+            <ul>
+              <li>
+                <input class="name" type="text" v-model="newCharacter.name" placeholder="Name" required>
+              </li>
+              
+              <li>
+                <input class="name" type="text" v-model="newCharacter.background" placeholder="Background" required>
+              </li>
+              
+              <li>
+                <input class="name" type="text" v-model="newCharacter.race" placeholder="Race" required>
+              </li>
+              
+              <li>
+                <label for="character-alignment" style="margin-right: 10px;">Alignment:</label>
+                <select class="picker" v-model="newCharacter.alignment">
                   <option v-for="alignment in ALIGNMENT_TYPES" :key="alignment">{{ alignment }}</option>
                 </select>
               </li>
-
-              <li style="margin-top: 20px;">
-                <label for="character-class" class="stat-label">Class:</label>
-                <select class="picker" v-model="characterClass">
+              
+              <li>
+                <label for="character-class">Class:</label>
+                <select class="picker" v-model="newCharacter.class">
                   <option v-for="name in CLASS_NAMES" :key="name" :value="name">{{ name }}</option>
                 </select>
               </li>
             </ul>
-          </div>
-        </div>
-      </section>
-      
-      <br>
-      <section id="character-info">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(characterinfo)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingCharacterInfo" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingCharacterInfo" class="collapse-chevron"/>
-        </div>
+          </section>
+          <hr>
 
-        <collapse-transition dimension="height">
-          <div v-if="isShowingCharacterInfo">
-            <ul class="stat-list">
-              <li>
-                <div class="stat-group">
-                  <label for="stats-level" class="stat-label">Starting level:</label>
-                  <div class="spacer"></div>
-                  <input type="number" id="stats-level" v-model="level" class="input-stats" inputmode="numeric" required>
-                </div>
-              </li>
+          <br>
+          <section id="character-info">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Edit</button>
+                <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Finish</button>
+              </div>
 
-              <li>
-                <div class="stat-group">
-                  <label for="stats-armor-class" class="stat-label">Armor Class: </label>
-                  <div class="spacer"></div>
-                  <input type="number" id="stats-armor-class" v-model="characterArmor" class="input-stats" inputmode="numeric" required>
-                </div>
-              </li>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">{{ CHARACTER_SECTIONS.CHARACTER_INFO }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingCharacterInfo"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingCharacterInfo"/>
+              </div>
 
-              <li style="margin-top: 10px; margin-bottom: 10px;">
-                <div class="stat-group">
-                  <label for="stats-initiative" class="stat-label">Initiative: </label>
-                  <div class="spacer"></div>
-                  <label class="stat-label">{{ getStatBonusSign(scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
-                </div>
-              </li>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Edit</button>
+                <button class="button-edit" v-if="isEditingCharInfo" @click="toggleEditForSection(CHARACTER_SECTIONS.CHARACTER_INFO)">Finish</button>
+              </div>
+            </header>
 
-              <li>
-                <div class="stat-group">
-                  <label for="stats-speed" class="stat-label">Speed (ft): </label>
-                  <div class="spacer"></div>
-                  <input type="number" id="stats-speed" v-model="characterSpeed" class="input-stats" inputmode="numeric" required>
-                </div>
-              </li>
-
-              <li>
-                <div class="stat-group">
-                  <label for="stats-hp" class="stat-label">Hit Points (HP):</label>
-                  <div class="spacer"></div>
-                  <input type="number" id="stats-hp" v-model="hp[HP_KEYS.MAX]" class="input-stats" inputmode="numeric" required>
-                </div>
-              </li>
-
-              <li style="margin-top: 10px;">
-                <div class="stat-group">
-                  <label class="stat-label">Hit Die Type: </label>
-                  <div class="spacer"></div>
-                  <select class="picker" v-model="hp[HP_KEYS.DIE]">
-                    <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                  </select>
-                </div>
-              </li>
-
-              <li>
-                <div class="stat-group">
-                  <label for="stats-hit-die" class="stat-label"># of Hit Die: </label>
-                  <div class="spacer"></div>
-                  <input type="number" id="stats-hit-die" v-model="hp[HP_KEYS.DIE_AMOUNT_MAX]" class="input-stats" inputmode="numeric" required>
-                </div>
-              </li>
-
-              <li style="margin-top: 10px; margin-bottom: 10px;">
-                <div class="stat-group">
-                  <label for="stats-proficiency-bonus" class="stat-label">Proficiency Bonus: </label>
-                  <div class="spacer"></div>
-                  <label class="stat-value">{{ getStatBonusSign(getProficiencyBonus()) }}</label>
-                </div>
-              </li>
-
-              <li style="margin-top: 10px;">
-                <div class="stat-group">
-                  <label class="stat-label">Passive Perception: </label>
-                  <div class="spacer"></div>
-                  <label class="stat-value">{{ calculatePassivePerception() }}</label>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </collapse-transition>
-      </section>
-
-      <br>
-      <section id="ability-scores">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingAbilityScores" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingAbilityScores" class="collapse-chevron"/>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingAbilityScores">
-            <ul class="stat-list">
-              <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                <div class="stat-group">
-                  <label for="stats-label" class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-                  <div class="spacer"></div>
-                  <div style="margin-left: 10px;">
-                    <input type="number" id="stats-label" v-model="scores[stat].value" class="input-stats" inputmode="numeric" required>
-                    <label class="stat-label" style="margin-left: 20px;">Mod: {{ getStatBonusSign(scores[stat].calculateMod()) }}</label>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </collapse-transition>
-      </section>
-        
-      <br>
-      <section id="saving-throws">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingSavingThrows" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingSavingThrows" class="collapse-chevron"/>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSavingThrows">
-            <ul class="stat-list">
-              <li v-for="(stat, key) in STAT_KEYS" :key="key">
-                <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="savingThrows[stat].proficient">
-                  <label class="stat-label">{{ STAT_NAMES[stat] }}:</label>
-
-                  <label class="stat-value" v-if="savingThrows[stat].proficient">
-                    {{ getStatBonusSign(scores[stat].calculateMod() + getProficiencyBonus()) }}
-                  </label>
-                  <label class="stat-value" v-if="!savingThrows[stat][STAT_VALUES_KEYS.PROFICIENT]">
-                    {{ getStatBonusSign(scores[stat].calculateMod()) }}
-                  </label>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </collapse-transition>
-
-      </section>
-
-      <br>
-      <section id="skills">
-        <div class="h3-bar">
-          <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h3>
-          <font-awesome-icon icon="chevron-up" v-if="!isShowingSkills" class="collapse-chevron"/>
-          <font-awesome-icon icon="chevron-down" v-if="isShowingSkills" class="collapse-chevron"/>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSkills">
-            <ul class="stat-list">
-              <li v-for="(skill, key) in SKILL_KEYS" :key="key">
-                <div class="stat-group">
-                  <input type="checkbox" class="checkbox" v-model="skills[skill].proficient">
-                  <label class="stat-label">{{ SKILL_NAMES[skill] }}:</label>
-
-                  <label class="stat-value" v-if="skills[skill].proficient">
-                    {{ getStatBonusSign(scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}
-                  </label>
-                  <label class="stat-value" v-if="!skills[skill].proficient">
-                    {{ getStatBonusSign(scores[SKILL_MODS[skill]].calculateMod()) }}
-                  </label>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </collapse-transition>
-        
-      </section>
-
-      <br>
-      <section id="features-traits">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingFeaturesTraits">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingFeaturesTraits">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.FEATURES)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingFeatures" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingFeatures" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Edit</button>
-            <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForStat(CHARACTER_KEYS.FEATURES)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingFeatures">
-            <!-- Add new -->
-            <div>
-              <input class="item-input" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label">Type:</label>
-                    <select class="picker" v-model="featuresTempType">
-                      <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                    </select>
-                  </li>
-
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label">Action Type:</label>
-                    <select class="picker" v-model="featuresTempAction">
-                      <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
-                    </select>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingCharacterInfo">
+                <ul>
+                  <li>
+                    <label for="stats-level">Starting level:</label>
+                    <div class="spacer"></div>
+                    <input type="number" id="stats-level" v-model="newCharacter.level" inputmode="numeric" required>
                   </li>
 
                   <li>
-                    <label class="stat-label" for="features-input"> # of Uses:</label>
-                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="featuresTempUses"> 
+                    <label for="stats-armor-class">Armor Class: </label>
+                    <div class="spacer"></div>
+                    <input type="number" id="stats-armor-class" v-model="newCharacter.armor" inputmode="numeric" required>
                   </li>
-                </ul>
-              </div>
-              
-              <br>
-              <textarea v-model="featuresTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddFeatures">Add</button>
 
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(featuresTraits) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in featuresTraits" :key="key">
-                    <div v-if="!isEditingFeaturesTraits">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[FEATURES_KEYS.USES] }}</label>
-                      <p class="item-description" style="margin-bottom: 5px;">Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
-                      <p class="item-description" style="margin-bottom: 5px;">Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
-                      <p class="item-description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingFeaturesTraits">
-                      <label class="item-name">{{ key }}</label>
-                      <div class="container-edit">
-                        <div>
-                          <label class="stat-label">Type:</label>
-                          <select class="picker" v-model="item[FEATURES_KEYS.TYPE]">
-                            <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
-                          </select>
-                        </div>
-
-                        <div style="margin-top: 10px;">
-                          <label class="stat-label">Action Type:</label>
-                          <select class="picker" v-model="item[FEATURES_KEYS.ACTION]">
-                            <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label class="stat-label" for="features-input"> # of Uses:</label>
-                          <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
-                        </div>
-                        <br>
-                        <textarea v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                        <div class="buttons-delete-update">
-                          <button class="button-delete" @click="onPressDeleteFeatures(key)">Delete</button>
-                        </div>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>   
-          </div>
-        </collapse-transition>
-        
-      </section>
-
-      <br>
-      <section id="weapons">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingWeapons">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingWeapons">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS_SPELLS }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingWeapons" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingWeapons" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Edit</button>
-            <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForStat(CHARACTER_KEYS.WEAPONS)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingWeapons">
-            <!-- Add new -->
-            <div>
-              <input class="item-input" style="width=70%;" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
-
-              <div class="container-inputs">
-                <ul class="list-inputs">
                   <li>
-                    <label class="stat-label" for="equipment-input">Amount:</label>
-                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="weaponTempAmount"> 
+                    <label for="stats-initiative">Initiative: </label>
+                    <div class="spacer"></div>
+                    <label>{{ getStatBonusSign(newCharacter.scores[STAT_KEYS.DEXTERITY].calculateMod()) }}</label>
                   </li>
 
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" style="margin-right: 10px;">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                    <select class="picker" v-model="weaponsTempAttackModifier">
-                      <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                    </select>
+                  <li>
+                    <label for="stats-speed">Speed (ft): </label>
+                    <div class="spacer"></div>
+                    <input type="number" id="stats-speed" v-model="newCharacter.speed" inputmode="numeric" required>
                   </li>
-                  
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" for="equipment-input">Die Type:</label>
-                    <select class="picker" v-model="weaponTempDieType">
+
+                  <li>
+                    <label for="stats-hp">Hit Points (HP):</label>
+                    <div class="spacer"></div>
+                    <input type="number" id="stats-hp" v-model="newCharacter.hp[HP_KEYS.MAX]" inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label>Hit Die Type: </label>
+                    <div class="spacer"></div>
+                    <select class="picker" v-model="newCharacter.hp[HP_KEYS.DIE]">
                       <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
                     </select>
                   </li>
 
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" for="equipment-input">Category:</label>
-                    <select class="picker" v-model="weaponTempCategory">
-                      <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                  <li>
+                    <label for="stats-hit-die"># of Hit Die: </label>
+                    <div class="spacer"></div>
+                    <input type="number" id="stats-hit-die" v-model="newCharacter.hp[HP_KEYS.DIE_AMOUNT_MAX]"  inputmode="numeric" required>
+                  </li>
+
+                  <li>
+                    <label for="stats-proficiency-bonus">Proficiency Bonus: </label>
+                    <div class="spacer"></div>
+                    <label>{{ getStatBonusSign(getProficiencyBonus()) }}</label>
+                  </li>
+
+                  <li>
+                    <label>Passive Perception: </label>
+                    <div class="spacer"></div>
+                    <label>{{ calculatePassivePerception() }}</label>
+                  </li>
+
+                  <li>
+                    <label for="spells-attack-bonus">Casting Ability:</label>
+                    <select v-model="newCharacter.spellCastStat">
+                      <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
                     </select>
                   </li>
 
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label" for="equipment-input">Proficient:</label>
-                    <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                  <li>
+                    <label>Spell Saving DC: </label>
+                    <label>{{ calculateSpellSavingDc(newCharacter.scores[newCharacter.spellCastStat]) }}</label>
+                  </li>
+
+                  <li>
+                    <label for="stats-proficiency-bonus">Inspriation: </label>
+                    <input type="number" id="stats-inspiration" v-model="newCharacter.inspiration" inputmode="numeric" required>
                   </li>
                 </ul>
               </div>
+            </collapse-transition>
+          </section>
+          <hr>
 
-              <br>
-              <textarea v-model="weaponTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddWeapon">Add</button>
-
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(weapons) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in weapons" :key="key">
-                    <div v-if="!isEditingWeapons">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
-
-                      <div class="spell-list">
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                          <label class="spell-value" v-if="!item[WEAPON_KEYS.PROFICIENT]">
-                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                          </label>
-                          <label class="spell-value" v-if="item[WEAPON_KEYS.PROFICIENT]">
-                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + proficiencyBonus) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                          </label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES.DAMAGE_MOD }}:</label>
-                          <label class="spell-value">
-                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
-                          </label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                          <label class="spell-value">{{ item[WEAPON_KEYS.DIE] }}</label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                          <label class="spell-value">{{ item[WEAPON_KEYS.CATEGORY] }}</label>
-                        </div>
-
-                        <div class="spell-group">
-                          <label class="spell-label" style="flex-grow: 1;">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                          <input type="checkbox" class="checkbox" style="margin-right: 0px;" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
-                        </div>
-                      </div>
-                      
-                      <p class="spell-label">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingWeapons">
-                      <label class="item-name">{{ key }}:</label>
-                      
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
-                            <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="item[WEAPON_KEYS.AMOUNT]"> 
-                          </li>
-                          
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
-                              <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
-                            </select>
-                          </li>
-                          
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.DIE]">
-                              <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
-                            </select>
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
-                            <select class="picker" v-model="item[WEAPON_KEYS.CATEGORY]">
-                              <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
-                            </select>
-                          </li>
-
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
-                            <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteWeapon(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
+          <br>
+          <section id="ability-scores">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Edit</button>
+                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Finish</button>
               </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
 
-      <br>
-      <section id="equipment">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingEquipment">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingEquipment">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingEquipment" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingEquipment" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Edit</button>
-            <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForStat(CHARACTER_KEYS.EQUIPMENT)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingEquipment">
-            <ul class="list" style="text-align: center; margin-bottom: 20px">
-              <label class="item-name">Gold:</label>
-              <input type="number" id="spells-casting-duration" style="width: 120px;" v-model="gold" class="input-stats" inputmode="numeric" required>
-            </ul>
-
-            <!-- Add new -->
-            <div>
-              <input class="item-input" style="width=70%;" type="text" v-model="equipmentTempName" placeholder="New item name"> 
-              <div>
-                <label class="stat-label" for="equipment-input">Amount:</label>
-                <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="equipmentTempAmount"> 
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">{{ CHARACTER_SECTIONS.ABILITY_SCORES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingAbilityScores"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingAbilityScores"/>
               </div>
-              <br>
-              <textarea v-model="equipmentTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddEquipment">Add</button>
 
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(equipment) > 0">
-              <div>
-                <ul class="list">                
-                  <li v-for="(item, key) in equipment" :key="key">
-                    <div v-if="!isEditingEquipment">
-                      <label class="item-name">{{ key }}</label>
-                      <label class="item-amount">x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
-                      <p class="item-description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingEquipment">
-                      <label class="item-name">{{ key }}:</label>
-                      <div class="container-edit">
-                        <div>
-                          <label class="stat-label" for="equipment-input">Amount:</label>
-                          <input class="input-stats" style="width=70%; margin-bottom: 10px;" type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
-                        </div>
-                        <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteEquipment(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Edit</button>
+                <button class="button-edit" v-if="isEditingAbilityScores" @click="toggleEditForSection(CHARACTER_SECTIONS.ABILITY_SCORES)">Finish</button>
               </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
-        
-      <br>
-      <section id="languages">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingLanguages">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingLanguages">Finish</button>
-          </div>
+            </header>
 
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingLanguages" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingLanguages" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Edit</button>
-            <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForStat(CHARACTER_KEYS.LANGUAGES)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingLanguages">
-            <!-- Add new -->
-            <div class="language-container">
-              <input class="item-input" type="text" v-model="languagesTempName" placeholder="New language name"> 
-              <div style="margin-top: 10px;">
-                <label class="stat-label" style="margin-right: 10px;">Proficiency: </label>
-                <select class="picker" v-model="languagesTempProficiency">
-                  <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
-                </select>
-              </div>
-              <br>
-              <button class="button-add" @click="onPressAddLanguage">Add</button>
-
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(languages) > 0">
-              <div>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingAbilityScores">
                 <ul>
-                  <li v-for="(item, key) in languages" :key="key">
-                    <div v-if="!isEditingLanguages">
-                      <div class="language-group">
-                        <p class="language-label">{{ key }}:</p>
-                        <p class="language-value">{{ item }}</p>
-                      </div>
+                  <li v-for="(score, key) in STAT_KEYS" :key="key">
+                    <label for="score">{{ STAT_NAMES[score] }}:</label>
+                    <div>
+                      <input type="number" id="score" v-model="newCharacter.scores[score].value" inputmode="numeric" required>
+                      <label class="mod">Mod: <strong>{{ getStatBonusSign(newCharacter.scores[score].calculateMod()) }}</strong></label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr>
+
+          <br>
+          <section id="saving-throws">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SAVING_THROWS)">{{ CHARACTER_SECTIONS.SAVING_THROWS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSavingThrows"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSavingThrows"/>
+              </div>
+
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSavingThrows" @click="toggleEditForSection(CHARACTER_SECTIONS.SAVING_THROWS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSavingThrows">
+                <ul>
+                  <li v-for="(stat, key) in STAT_KEYS" :key="key">
+                    <div>
+                      <input type="checkbox" class="checkbox" v-model="newCharacter.savingThrows[stat].proficient">
+                      <label>{{ STAT_NAMES[stat] }}:</label>
                     </div>
 
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingLanguages">
-                      <div style="margin-top: 10px; text-align: left;">
-                        <label class="item-name">{{ key }}:</label>
-                        <select class="picker" v-model="languages[key]">
-                          <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                    <label v-if="newCharacter.savingThrows[stat].proficient">
+                      <strong>{{ getStatBonusSign(newCharacter.scores[stat].calculateMod() + getProficiencyBonus()) }}</strong>
+                    </label>
+                    <label v-if="!newCharacter.savingThrows[stat].proficient">
+                      <strong>{{ getStatBonusSign(newCharacter.scores[stat].calculateMod()) }}</strong>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr>
+
+          <br>
+          <section id="skills">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SKILLS)">{{ CHARACTER_SECTIONS.SKILLS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSkills"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSkills"/>
+              </div>
+
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSkills" @click="toggleEditForSection(CHARACTER_SECTIONS.SKILLS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSkills">
+                <ul>
+                  <li v-for="(skill, key) in SKILL_KEYS" :key="key">
+                      <div>
+                        <input type="checkbox" class="checkbox" v-model="newCharacter.skills[skill].proficient">
+                        <label>{{ SKILL_NAMES[skill] }}:</label>
+                        <label class="skill-score">&nbsp;{{ SKILL_NAME_SCORES[skill] }}</label>
+                      </div>
+
+                      <label class="mod" v-if="newCharacter.skills[skill].proficient">
+                        <strong>{{ getStatBonusSign(newCharacter.scores[SKILL_MODS[skill]].calculateMod() + getProficiencyBonus()) }}</strong>
+                      </label>
+                      <label class="mod" v-if="!newCharacter.skills[skill].proficient">
+                        <strong>{{ getStatBonusSign(newCharacter.scores[SKILL_MODS[skill]].calculateMod()) }}</strong>
+                      </label>
+                  </li>
+                </ul>
+              </div>
+            </collapse-transition>
+            
+          </section>
+          <hr>
+
+          <br>
+          <section id="features-traits">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Edit</button>
+                <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">{{ CHARACTER_SECTIONS.FEATURES_TRAITS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingFeatures"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingFeatures"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Edit</button>
+                <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingFeatures">
+                <template v-if="isEditingFeaturesTraits">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="featuresTempName" placeholder="New feature/trait name"> 
+                      </li>
+                      <li>
+                        <label>Type:</label>
+                        <select v-model="featuresTempType">
+                          <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
                         </select>
-                      </div>
+                      </li>
 
-                      <div class="buttons-delete-update">
-                        <br>
-                        <button class="button-delete" @click="onPressDeleteLanguage(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
+                      <li>
+                        <label>Action Type:</label>
+                        <select v-model="featuresTempAction">
+                          <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="features-input"> # of Uses:</label>
+                        <input ßtype="number" inputmode="numeric" v-model="featuresTempUses"> 
+                      </li>
+                    </ul>
                     
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </div>
-        </collapse-transition>
-        
-      </section>   
-        
-      <br>
-      <section id="proficiences">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingProficiencies">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingProficiencies">Finish</button>
-          </div>
+                    <br>
+                    <textarea class="description" v-model="featuresTempDescription" rows="6" placeholder="Description"></textarea>
 
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingProficiencies" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingProficiencies" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Edit</button>
-            <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForStat(CHARACTER_KEYS.PROFICIENCIES)">Finish</button>
-          </div>
-        </div>
-        
-        <collapse-transition dimension="height">
-          <div v-if="isShowingProficiencies">
-            <!-- Add new -->
-            <div class="proficiency-container">
-              <input class="item-input" style="margin-bottom: 20px" v-model="proficiencyTempName" placeholder="New proficiency name"> 
-              <br>
-              <textarea v-model="proficiencyTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddProficiency">Add</button>
+                    <br>
+                    <button class="button-add" @click="onPressAddFeatures">Add</button>
 
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
+                    <hr>
+                  </div>
+                </template>
 
-            <template v-if="getDictionarySize(proficiencies) > 0">
-              <div>
-                <ul class="list">
-                  <li v-for="(item, key) in proficiencies" :key="key">
-                    <div v-if="!isEditingProficiencies">
-                      <label class="item-name">{{ key }}</label>
-                      <p class="item-description">{{ item }}</p>
-                    </div>
+                <template v-if="getDictionarySize(newCharacter.featuresTraits) > 0">
+                  <div class="viewing" v-if="!isEditingFeaturesTraits">
+                    <ul v-for="(item, key) in newCharacter.featuresTraits" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[FEATURES_KEYS.USES] }}</label>
+                        <p>Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                        <p>Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
+                        <p class="description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
+                      </li>
 
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingProficiencies">
-                      <label class="item-name">{{ key }}:</label>
-                      <div class="container-edit">
-                        <textarea v-model="proficiencies[key]" rows="4" placeholder="Description"></textarea>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteProficiency(key)">Delete</button>
-                      </div>
-                      
                       <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingFeaturesTraits">
+                    <ul v-for="(item, key) in newCharacter.featuresTraits" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label>Type:</label>
+                        <select v-model="item[FEATURES_KEYS.TYPE]">
+                          <option v-for="feat in FEATURES_TYPES" :key="feat" :value="feat">{{ feat }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label>Action Type:</label>
+                        <select v-model="item[FEATURES_KEYS.ACTION]">
+                          <option v-for="action in ACTION_TYPES" :key="action" :value="action">{{ action }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label> # of Uses:</label>
+                        <input type="number" inputmode="numeric" v-model="item[FEATURES_KEYS.USES]"> 
+                      </li>
+
+                      <br>
+                      <textarea  v-model="item[FEATURES_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.FEATURES)">Delete</button>
+                      </li>
+                      
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
               </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
+            </collapse-transition>
+            
+          </section>
+          <hr>
 
-      <br>
-      <section id="spell-slots">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingSpellSlots">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingSpellSlots">Finish</button>
-          </div>
-
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingSpellSlots" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingSpellSlots" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Edit</button>
-            <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForStat(CHARACTER_KEYS.SPELL_SLOTS)">Finish</button>
-          </div>
-        </div>
-
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSpellSlots">
-            <!-- Add new -->
-            <div>
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li style="margin-top: 10px;">
-                    <label class="stat-label">Level:</label>
-                    <select class="picker" v-model="spellSlotTempLevel">
-                      <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
-                    </select>
-                  </li>
-
-                  <li>
-                    <label class="stat-label" for="equipment-input"># of slots:</label>
-                    <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="spellSlotTempSlots"> 
-                  </li>
-                </ul>
+          <br>
+          <section id="weapons">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Edit</button>
+                <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Finish</button>
               </div>
 
-              <br>
-              <button class="button-add" @click="onPressAddSpellSlot">Add</button>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.WEAPONS)">{{ CHARACTER_SECTIONS.WEAPONS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingWeapons"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingWeapons"/>
+              </div>
 
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(spellSlots) > 0">
               <div>
-                <ul class="list">
-                  <li v-for="(item, key) in spellSlots" :key="key">
-                    <div v-if="!isEditingSpellSlots">
-                      <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
-                      <label class="item-amount">{{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
-                    </div>
-
-                    <!-- Edit and Delete -->
-                    <div v-if="isEditingSpellSlots">
-                      <label class="item-name">{{ SPELL_CASTING_NAMES[key] }}:</label>
-                      
-                      <div class="container-inputs">
-                        <ul class="list-inputs">
-                          <li style="margin-top: 10px;">
-                            <label class="stat-label" for="equipment-input"># of slots:</label>
-                            <input class="input-stats" style="width=70%;" type="number" inputmode="numeric" v-model="item[SPELL_SLOT_KEYS.MAX]"> 
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="buttons-delete-update">
-                        <button class="button-delete" @click="onPressDeleteSpellSlot(key)">Delete</button>
-                      </div>
-                      
-                      <hr class="list-divider">
-                    </div>
-                  </li>
-                </ul>
+                <button class="button-edit" v-if="!isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Edit</button>
+                <button class="button-edit" v-if="isEditingWeapons" @click="toggleEditForSection(CHARACTER_SECTIONS.WEAPONS)">Finish</button>
               </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
+            </header>
 
-      <br>
-      <section id="spell-casting">
-        <div class="edit-buttons">
-          <div>
-            <button class="button-edit-spacer" v-if="!isEditingSpellCasting">Edit</button>
-            <button class="button-edit-spacer" v-if="isEditingSpellCasting">Finish</button>
-          </div>
+            <collapse-transition dimension="height">
+              <div v-if="isShowingWeapons">
+                <template v-if="isEditingWeapons">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="weaponTempName" placeholder="New weapon/spell name"> 
+                      </li>
 
-          <div class="h3-bar">
-            <h3 @click="toggleCollapseForStat(CHARACTER_KEYS.SPELLS)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h3>
-            <font-awesome-icon icon="chevron-up" v-if="!isShowingSpells" class="collapse-chevron"/>
-            <font-awesome-icon icon="chevron-down" v-if="isShowingSpells" class="collapse-chevron"/>
-          </div>
-          
-          <div>
-            <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Edit</button>
-            <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForStat(CHARACTER_KEYS.SPELLS)">Finish</button>
-          </div>
-        </div>
+                      <li>
+                        <label for="equipment-input">Amount:</label>
+                        <input type="number" inputmode="numeric" v-model="weaponTempAmount"> 
+                      </li>
 
-        <collapse-transition dimension="height">
-          <div v-if="isShowingSpells">
-            <div class="container-inputs">
-              <ul class="list-inputs">
-                <li style="margin-top: 10px;">
-                  <label for="spells-attack-bonus" class="stat-label" style="margin-right: 10px;">Casting Ability:</label>
-                  <select class="picker" v-model="spellCastStat">
-                    <option v-for="stat in STAT_KEYS" :key="stat" :value="stat">{{ STAT_NAMES[stat] }}</option>
-                  </select>
-                </li>
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                        <select v-model="weaponsTempAttackModifier">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                        </select>
+                      </li>
+                      
+                      <li>
+                        <label for="equipment-input">Die Type:</label>
+                        <select v-model="weaponTempDieType">
+                          <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                        </select>
+                      </li>
 
-                <li style="margin-top: 5px;">
-                  <label class="stat-label">Spell Saving DC: </label>
-                  <label class="stat-label">{{ calculateSpellSavingDc(getProficiencyBonus(), getStatModFromKey(spellCastStat)) }}</label>
-                </li>
-              </ul>
-            </div>
+                      <li>
+                        <label for="equipment-input">Category:</label>
+                        <select v-model="weaponTempCategory">
+                          <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                        </select>
+                      </li>
 
-            <!-- Add new -->
-            <div>
-              <input class="item-input" style="margin-bottom: 10px;" type="text" v-model="spellTempName" placeholder="New spell name"> 
-              <div class="container-inputs">
-                <ul class="list-inputs">
-                  <li>
-                    <label class="stat-label" for="spells-level">Level:</label>
-                    <select class="picker" v-model="spellTempLevel">
-                      <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
-                    </select>
-                  </li>
+                      <li>
+                        <label for="equipment-input">Proficient:</label>
+                        <input type="checkbox" class="checkbox" v-model="weaponTempIsProficient">
+                      </li>
+                    </ul>
+
+                    <br>
+                    <textarea v-model="weaponTempDescription" rows="6" placeholder="Description"></textarea>
+                    <br>
+                    <button class="button-add" @click="onPressAddWeapon">Add</button>
+                    
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.weapons) > 0">
+                  <div class="viewing" v-if="!isEditingWeapons">
+                    <ul v-for="(item, key) in newCharacter.weapons" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+
+                          <label v-if="!item[WEAPON_KEYS.PROFICIENT]">
+                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                          </label>
+                          <label v-if="item[WEAPON_KEYS.PROFICIENT]">
+                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]) + getProficiencyBonus()) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                          </label>
+                        </div>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES.DAMAGE_MOD }}:</label>
+                          <label>
+                            {{ getStatBonusSign(getStatModFromKey(item[WEAPON_KEYS.ATTACK_DAMAGE_STAT])) }} ({{ STAT_NAMES[item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]] }})
+                          </label>
+                        </div>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                          <label>{{ item[WEAPON_KEYS.DIE] }}</label>
+                        </div>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                          <label>{{ item[WEAPON_KEYS.CATEGORY] }}</label>
+                        </div>
+
+                        <div>
+                          <label>{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                          <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]" :disabled="!isEditingWeapons">
+                        </div>
+
+                        <p class="description">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
+                      </li>
+
+                      <hr class="list-divider">
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingWeapons">
+                    <ul v-for="(item, key) in newCharacter.weapons" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.AMOUNT] }}:</label>
+                        <input type="number" inputmode="numeric" v-model="item[WEAPON_KEYS.AMOUNT]"> 
+                      </li>
+                        
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.ATTACK_DAMAGE_STAT] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.ATTACK_DAMAGE_STAT]">
+                          <option v-for="mod in WEAPON_MODS" :key="mod" :value="mod">{{ STAT_NAMES[mod] }}</option>
+                        </select>
+                      </li>
+                      
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.DIE] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.DIE]">
+                          <option v-for="die in DIE_TYPE" :key="die" :value="die">{{ die }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.CATEGORY] }}:</label>
+                        <select v-model="item[WEAPON_KEYS.CATEGORY]">
+                          <option v-for="category in WEAPON_CATEGORY" :key="category" :value="category">{{ category }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">{{ WEAPON_NAMES[WEAPON_KEYS.PROFICIENT] }}:</label>
+                        <input type="checkbox" class="checkbox" v-model="item[WEAPON_KEYS.PROFICIENT]">
+                      </li>
+
+                      <br>
+                      <textarea v-model="item[WEAPON_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.WEAPONS)">Delete</button>
+                      </li>
+                      
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr>
+
+          <br>
+          <section id="equipment">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForSection(CHARACTER_SECTIONS.EQUIPMENT)">Edit</button>
+                <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForSection(CHARACTER_SECTIONS.EQUIPMENT)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.EQUIPMENT)">{{ CHARACTER_SECTIONS.EQUIPMENT }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingEquipment"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingEquipment"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingEquipment" @click="toggleEditForSection(CHARACTER_SECTIONS.EQUIPMENT)">Edit</button>
+                <button class="button-edit" v-if="isEditingEquipment" @click="toggleEditForSection(CHARACTER_SECTIONS.EQUIPMENT)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingEquipment">
+                <template v-if="isEditingEquipment">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="equipmentTempName" placeholder="New item name"> 
+                      </li>
+
+                      <li>
+                        <label for="equipment-input">Amount:</label>
+                        <input v-model="equipmentTempAmount" type="number" inputmode="numeric"> 
+                      </li>
+                    </ul>
+
+                  <br>
+                  <textarea v-model="equipmentTempDescription" rows="6" placeholder="Description"></textarea>
+
+                  <br>
+                  <button class="button-add" @click="onPressAddEquipment">Add</button>
+
+                  <hr>
+                  </div>
+                </template>
+
+                <div id="gold">
+                  <div class="viewing" v-if="!isEditingEquipment">
+                  <ul>
+                    <li><label class="name-and-count"><strong>Gold</strong>&emsp;x{{ newCharacter.gold }}</label></li>
+                  </ul>
+                </div>
+
+                <div class="editing-languages" v-if="isEditingEquipment">
+                  <ul>
+                    <li class="inline">
+                      <label>Gold:</label>
+                      <input type="number" v-model="newCharacter.gold" inputmode="numeric" required>
+                    </li>
+                  </ul>
+                </div>
+                </div>
                   
-                  <li>
-                    <label class="stat-label" for="spells-casting-time">Casting Time (# of actions):</label>
-                    <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" class="input-stats" inputmode="numeric" required>
-                  </li>
+                <template v-if="getDictionarySize(newCharacter.equipment) > 0">
+                  <div class="viewing" v-if="!isEditingEquipment">
+                    <ul v-for="(item, key) in newCharacter.equipment" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                        <p class="description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                      </li>
 
-                  <li style="margin-top: 20px">
-                    <label class="stat-label" style="margin: 0;">Duration:</label>
-                    <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spellTempDuration" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+                      <hr class="list-divider">
+                    </ul>
+                  </div>
+                  
+                  <div class="editing" v-if="isEditingEquipment">
+                    <ul v-for="(item, key) in newCharacter.equipment" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
 
-                    <select class="picker" v-model="spellTempDurationType">
-                      <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
-                    </select>
-                  </li>
+                      <li>
+                        <label>Amount:</label>
+                        <input v-model="item[EQUIPMENT_KEYS.AMOUNT]" type="number" inputmode="numeric"> 
+                      </li>
 
-                  <li>
-                    <label class="stat-label" for="spells-range">Range (in feet):</label>
-                    <input type="number" id="spells-range" v-model="spellTempRange" class="input-stats" inputmode="numeric" required>
-                  </li>
-                </ul>
+                      <br>
+                      <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.EQUIPMENT)">Delete</button>
+                      </li>
+                      
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr>
+
+          <br>
+          <section id="treasure">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Edit</button>
+                <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Finish</button>
               </div>
 
-              <br>
-              <textarea v-model="spellTempDescription" rows="4" placeholder="Description"></textarea>
-              <br>
-              <button class="button-add" @click="onPressAddSpell">Add</button>
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.TREASURES)">{{ CHARACTER_SECTIONS.TREASURES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingTreasure"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingTreasure"/>
+              </div>
 
-              <ul class="list">
-                <hr class="list-divider">
-              </ul>
-            </div>
-
-            <template v-if="getDictionarySize(spells) > 0">
               <div>
-                <ul class="list">
-                  <li v-for="(levelDict, level) in spells" :key="level">
-                    <template v-if="getDictionarySize(levelDict) > 0">
-                      <label class="item-name">{{ SPELL_CASTING_NAMES[level] }}:</label>
+                <button class="button-edit" v-if="!isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Edit</button>
+                <button class="button-edit" v-if="isEditingTreasure" @click="toggleEditForSection(CHARACTER_SECTIONS.TREASURES)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingTreasure">
+                <template v-if="isEditingTreasure">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="treasureTempName" placeholder="New treasure name"> 
+                      </li>
+
+                      <li>
+                        <label>Amount:</label>
+                        <input type="number" inputmode="numeric" v-model="treasureTempAmount"> 
+                      </li>
+                    </ul>
+
+                    <br>
+                    <textarea v-model="treasureTempDescription" rows="6" placeholder="Description"></textarea>
+
+                    <br>
+                    <button class="button-add" @click="onPressAddTreasure">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.treasures) > 0">
+                  <div class="viewing" v-if="!isEditingTreasure">
+                    <ul  v-for="(item, key) in newCharacter.treasures" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
+                        <p class="description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
+                      </li>
+
+                      <hr class="list-divider">
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingTreasure">
+                    <ul  v-for="(item, key) in newCharacter.treasures" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label>Amount:</label>
+                        <input type="number" inputmode="numeric" v-model="item[EQUIPMENT_KEYS.AMOUNT]"> 
+                      </li>
+
+                      <br>
+                      <textarea v-model="item[EQUIPMENT_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.TREASURES)">Delete</button>
+                      </li>
+
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+
+          </section>
+          <hr>
+
+          <br>
+          <section id="languages">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Edit</button>
+                <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.LANGUAGES)">{{ CHARACTER_SECTIONS.LANGUAGES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingLanguages"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingLanguages"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Edit</button>
+                <button class="button-edit" v-if="isEditingLanguages" @click="toggleEditForSection(CHARACTER_SECTIONS.LANGUAGES)">Finish</button>
+              </div>
+            </header>
+
+            <div id="collapse">
+              <collapse-transition dimension="height">
+                <div v-if="isShowingLanguages">
+                  <template v-if="isEditingLanguages">
+                    <div class="editing">
                       <ul>
-                        <li v-for="(spell, spellName) in levelDict" :key="spellName">
-                          <div v-if="!isEditingSpellCasting">
-                            <label class="item-name">{{ spellName }}</label>
-                            <br>
-                            <div class="spell-list">
-                              <div class="spell-group">
-                                <label class="spell-label">Casting Time:</label>
-                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
-                              </div>
+                        <li>
+                          <input class="name" type="text" v-model="languagesTempName" placeholder="New language name"> 
+                        </li>
 
-                              <div class="spell-group">
-                                <label class="spell-label">Duration:</label>
-                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
-                              </div>
-
-                              <div class="spell-group">
-                                <label class="spell-label">Range:</label>
-                                <label class="spell-value">{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
-                              </div>
-                            </div>
-                            <label class="spell-description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</label>
-                          </div>
-
-                          <div v-if="isEditingSpellCasting">
-                            <label class="item-name">{{ spellName }}</label>
-                            <div class="container-inputs">
-                              <ul class="list-inputs">
-                                <li>
-                                  <label for="spells-casting-time" class="stat-label">Casting Time (# of actions):</label>
-                                  <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" class="input-stats" inputmode="numeric" required>
-                                </li>
-
-                                <li style="margin-top: 20px">
-                                  <label class="stat-label" style="margin: 0;">Duration:</label>
-                                  <input type="number" id="spells-casting-duration" style="width: 80px" v-model="spell[SPELL_CASTING_KEYS.DURATION]" class="input-stats" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
-
-                                  <select class="picker" v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
-                                    <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
-                                  </select>
-                                </li>
-                                
-                                <li>
-                                  <label for="spells-range" class="stat-label">Range (in feet):</label>
-                                  <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" class="input-stats" inputmode="numeric" required>
-                                </li>
-                              </ul>
-                            </div>
-                            
-                            <br>
-                            <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="4" placeholder="Description"></textarea>
-                            <div class="buttons-delete-update">
-                              <button class="button-delete" @click="onPressDeleteSpell(level, spellName)">Delete</button>
-                            </div>
-                      
-                            <hr class="list-divider">
-                          </div>
+                        <li>
+                          <label>Proficiency: </label>
+                          <select v-model="languagesTempProficiency">
+                            <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                          </select>
                         </li>
                       </ul>
-                    </template>
-                  </li>
-                </ul>
+                        
+                      <br>
+                      <button class="button-add" @click="onPressAddLanguage">Add</button>
+
+                      <hr>
+                    </div>
+                  </template>
+
+                  <template v-if="getDictionarySize(newCharacter.languages) > 0">
+                    <div class="viewing" v-if="!isEditingLanguages">
+                      <ul v-for="(item, key) in newCharacter.languages" :key="key">
+                        <li class="inline">
+                          <label><strong>{{ key }}</strong>:</label>
+                          <p>{{ item }}</p>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="editing-languages" v-if="isEditingLanguages">
+                      <ul v-for="(item, key) in newCharacter.languages" :key="key">
+                        <li class="inline">
+                          <label><strong>{{ key }}</strong>:</label>
+                          <select v-model="newCharacter.languages[key]">
+                            <option v-for="prof in LANGUAGE_PROFICIENCY" :key="prof" :value="prof">{{ prof }}</option>
+                          </select>
+                        </li>
+
+                        <li class="container-update-delete">
+                          <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.LANGUAGES)">Delete</button>
+                        </li>
+
+                        <li>
+                          <hr class="list-divider">
+                        </li>
+                      </ul>
+                    </div>
+                  </template>
+                </div>
+              </collapse-transition>
+            </div>
+
+            
+          </section> 
+          <hr>
+
+          <br>
+          <section id="proficiencies">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Edit</button>
+                <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Finish</button>
               </div>
-            </template>
-          </div>
-        </collapse-transition>
-      </section>
-    </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.PROFICIENCIES)">{{ CHARACTER_SECTIONS.PROFICIENCIES }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingProficiencies"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingProficiencies"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Edit</button>
+                <button class="button-edit" v-if="isEditingProficiencies" @click="toggleEditForSection(CHARACTER_SECTIONS.PROFICIENCIES)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingProficiencies">
+                <template v-if="isEditingProficiencies">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" v-model="proficiencyTempName" placeholder="New proficiency name"> 
+                      </li>
+                    </ul>
+                    
+                    <br>
+                    <textarea v-model="proficiencyTempDescription" rows="6" placeholder="Description"></textarea>
+                    
+                    <br>
+                    <button class="button-add" @click="onPressAddProficiency">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.proficiencies) > 0">
+                  <div class="viewing" v-if="!isEditingProficiencies">
+                    <ul v-for="(item, key) in newCharacter.proficiencies" :key="key">
+                      <li>
+                        <label class="name-and-count"><strong>{{ key }}</strong></label>
+                        <p class="description">{{ item }}</p>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingProficiencies">
+                    <ul v-for="(item, key) in newCharacter.proficiencies" :key="key">
+                      <li>
+                        <label><strong>{{ key }}</strong></label>
+                      </li>
+
+                      <br>
+                      <textarea v-model="newCharacter.proficiencies[key]" rows="6" placeholder="Description"></textarea>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.PROFICIENCIES)">Delete</button>
+                      </li>
+
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+            
+          </section>
+          <hr>
+
+          <br>
+          <section id="spell-slots">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">{{ CHARACTER_SECTIONS.SPELL_SLOTS }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSpellSlots"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSpellSlots"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellSlots" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_SLOTS)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSpellSlots">
+                <template v-if="isEditingSpellSlots">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <p>Level:</p>
+                        <select v-model="spellSlotTempLevel">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="level">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
+                      </li>
+
+                      <li>
+                        <label># of slots:</label>
+                        <select v-model="spellSlotTempSlots">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="SPELL_SLOT_NAMES_PICKER[level]">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
+                      </li>
+                    </ul>
+
+                    <br>
+                    <button class="button-add" @click="onPressAddSpellSlot">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.spellSlots) > 0">
+                  <div class="viewing" v-if="!isEditingSpellSlots">
+                    <ul v-for="(item, key) in newCharacter.spellSlots" :key="key">
+                      <li class="inline">
+                        <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</label>
+                        <label>{{ item[SPELL_SLOT_KEYS.MAX] }} slot(s)</label>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="editing" v-if="isEditingSpellSlots">
+                    <ul v-for="(item, key) in newCharacter.spellSlots" :key="key">
+                      <li>
+                        <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong></label>
+                      </li>
+
+                      <li>
+                        <label># of slots:</label>
+                        <select v-model="item[SPELL_SLOT_KEYS.MAX]">
+                          <option v-for="level in SPELL_CASTING_LEVELS" :key="level" :value="SPELL_SLOT_NAMES_PICKER[level]">{{ SPELL_SLOT_NAMES_PICKER[level] }}</option>
+                        </select>
+                      </li>
+
+                      <li class="container-update-delete">
+                        <button class="button-delete" @click="onPressDeleteStat(key, CHARACTER_KEYS.SPELL_SLOTS)">Delete</button>
+                      </li>
+
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+          </section>
+          <hr>
+
+          <br>
+          <section id="spell-casting">
+            <header>
+              <div class="spacer">
+                <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_CASTING)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_CASTING)">Finish</button>
+              </div>
+
+              <div class="section-title">
+                <h2 @click="toggleCollapseForSection(CHARACTER_SECTIONS.SPELL_CASTING)">{{ CHARACTER_SECTIONS.SPELL_CASTING }}</h2>
+                <font-awesome-icon icon="chevron-up" class="collapse-chevron" v-if="!isShowingSpells"/>
+                <font-awesome-icon icon="chevron-down" class="collapse-chevron" v-if="isShowingSpells"/>
+              </div>
+
+              <div>
+                <button class="button-edit" v-if="!isEditingSpellCasting" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_CASTING)">Edit</button>
+                <button class="button-edit" v-if="isEditingSpellCasting" @click="toggleEditForSection(CHARACTER_SECTIONS.SPELL_CASTING)">Finish</button>
+              </div>
+            </header>
+
+            <collapse-transition dimension="height">
+              <div v-if="isShowingSpells">
+                <template v-if="isEditingSpellCasting">
+                  <div class="editing">
+                    <ul>
+                      <li>
+                        <input class="name" type="text" v-model="spellTempName" placeholder="New spell name"> 
+                      </li>
+
+                      <li>
+                        <label for="spells-level">Level:</label>
+                        <select v-model="spellTempLevel">
+                          <option v-for="levels in SPELL_CASTING_LEVELS" :key="levels" :value="levels">{{ SPELL_CASTING_NAMES_PICKER[levels] }}</option>
+                        </select>
+                      </li>
+                        
+                      <li>
+                        <label for="spells-casting-time">Cast Time (# of actions):</label>
+                        <input type="number" id="spells-casting-time" v-model="spellTempCastingTime" inputmode="numeric" required>
+                      </li>
+
+                      <li>
+                        <label>Duration:</label>
+
+                        <div>
+                          <input type="number" v-model="spellTempDuration" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+                          
+                          <select v-model="spellTempDurationType">
+                            <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                          </select>
+                        </div>
+                      </li>
+
+                      <li>
+                        <label for="spells-range">Range (in feet):</label>
+                        <input type="number" id="spells-range" v-model="spellTempRange" inputmode="numeric" required>
+                      </li>
+
+                      <br>
+                      <textarea v-model="spellTempDescription" rows="6" placeholder="Description"></textarea>
+                    </ul>
+
+                    <br>
+                    <button class="button-add" @click="onPressAddSpell">Add</button>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <template v-if="getDictionarySize(newCharacter.spells) > 0">
+                  <div class="viewing-spells" v-if="!isEditingSpellCasting">
+                    <ul v-for="(levelDict, level) in newCharacter.spells" :key="level">
+                      <template v-if="getDictionarySize(levelDict) > 0">
+                        <li class="spell-level">
+                          <label><strong>{{ SPELL_CASTING_NAMES[level] }}</strong></label>
+                        </li>
+
+                        <ul v-for="(spell, spellName) in levelDict" :key="spellName">
+                          <li class="spell-name">
+                            <label><strong>{{ spellName }}</strong></label>
+                          </li>
+
+                          <li>
+                            <label>Cast Time:</label>
+                            <label>{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                          </li>
+
+                          <li>
+                            <label>Duration:</label>
+                            <label>{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
+                          </li>
+
+                          <li>
+                            <label>Range:</label>
+                            <label>{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                          </li>
+
+                          <li>
+                            <p class="description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</p>
+                          </li>
+                        </ul>
+                      </template>
+                      
+                      <!-- Show the divider after every spell level -->
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div class="editing-spells" v-if="isEditingSpellCasting">
+                    <ul v-for="(levelDict, level) in newCharacter.spells" :key="level">
+                      <template v-if="getDictionarySize(levelDict) > 0">
+                        <li class="spell-level">
+                          <label><strong>{{ SPELL_CASTING_NAMES[level] }}</strong></label>
+                        </li>
+
+                        <ul v-for="(spell, spellName) in levelDict" :key="spellName">
+                          <li class="spell-name">
+                            <label><strong>{{ spellName }}</strong></label>
+                          </li>
+
+                          <li>
+                            <label for="spells-casting-time">Cast Time (# of actions):</label>
+                            <input type="number" id="spells-casting-time" v-model="spell[SPELL_CASTING_KEYS.CASTING_TIME]" inputmode="numeric" required>
+                          </li>
+
+                          <li>
+                            <label>Duration:</label>
+                            
+                            <div>
+                              <input type="number" id="spells-casting-duration" v-model="spell[SPELL_CASTING_KEYS.DURATION]" inputmode="numeric" required :class="{ 'disabled-button': spellTempDurationType == [SPELL_CASTING_DURATION_TYPES.INSTANT]}">
+
+                              <select v-model="spell[SPELL_CASTING_KEYS.DURATION_TYPE]">
+                                <option v-for="dType in SPELL_CASTING_DURATION_TYPES" :key="dType" :value="dType">{{ dType }}</option>
+                              </select>
+                            </div>
+                          </li>
+                          
+                          <li>
+                            <label for="spells-range">Range (in feet):</label>
+                            <input type="number" id="spells-range" v-model="spell[SPELL_CASTING_KEYS.RANGE]" inputmode="numeric" required>
+                          </li>
+                              
+                          <br>
+                          <textarea v-model="spell[SPELL_CASTING_KEYS.DESCRIPTION]" rows="6" placeholder="Description"></textarea>
+
+                          <li class="container-update-delete">
+                            <button class="button-delete" @click="onPressDeleteSpell(level, spellName, CHARACTER_KEYS.SPELLS)">Delete</button>
+                          </li>
+                        </ul>
+                      </template>
+                      
+                      <!-- Show the divider after every spell level -->
+                      <li>
+                        <hr class="list-divider">
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </div>
+            </collapse-transition>
+          </section>
+        </main>
+      </div>
+    </transition>
 
     <br>
-    <button id="create-character" class="button-create-character" @click="createCharacter" :class="{ 'disabled-button': !checkIfCreateCharacterButtonIsDisabled() }">Create Character</button>
+    <button id="create-character" class="button-create-character" @click="createCharacter" :class="{ 'disabled-button': !canCreateCharacter() }">Create Character</button>
 
   </div>
 </template>
@@ -1035,7 +1242,7 @@ import { CLASS_NAMES } from '@/enums/dbKeys/class-keys.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
 import { HP_KEYS } from '@/enums/dbKeys/hp-keys.js'
 import { DEATH_SAVES_KEYS } from '@/enums/dbKeys/death-saves-keys.js'
-import { SKILL_KEYS, SKILL_NAMES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
+import { SKILL_KEYS, SKILL_NAMES, SKILL_NAME_SCORES, SKILL_MODS } from '@/enums/dbKeys/skill-keys.js'
 import { STAT_KEYS, STAT_VALUES_KEYS, STAT_NAMES } from '@/enums/dbKeys/stat-keys.js'
 import { SPELL_CASTING_KEYS, SPELL_CASTING_LEVELS, SPELL_CASTING_NAMES, SPELL_CASTING_NAMES_PICKER, SPELL_SLOT_NAMES_PICKER, SPELL_CASTING_DURATION_TYPES } from '@/enums/dbKeys/spell-casting-keys'
 import { SPELL_SLOT_KEYS } from '@/enums/dbKeys/spell-slot-keys'
@@ -1044,19 +1251,9 @@ import { WEAPON_KEYS, WEAPON_CATEGORY, WEAPON_PROPERTY, WEAPON_NAMES } from '@/e
 // TODO: Will be replaced by Firebase Remote Config
 const MAX_VALUES = {
   LEVEL: 20,
-  HP: 600,
-  HIT_DIE: 10,
   SCORES: 20,
-  STATS_BONUS: 5,
-  SAVING_THROWS: 5,
-  SKILLS: 15,
 }
 
-const MIN_VALUES = {
-  LEVEL: 1,
-  HP: 10,
-  HIT_DIE: 1,
-}
 
 export default {
   components: {
@@ -1065,20 +1262,14 @@ export default {
   data() {
     return {
       store: useStore(),
-      isModalNewCharacterOpen: false,
-      isModalViewCharacterOpen: false,
-      isEditingCharInfo: false,
-      isEditingAbilityScores: false,
-      isEditingSavingThrows: false,
-      isEditingSkills: false,
-      isEditingFeaturesTraits: false,
-      isEditingWeapons: false,
-      isEditingEquipment: false,
-      isEditingTreasure: false,
-      isEditingLanguages: false,
-      isEditingProficiencies: false,
-      isEditingSpellCasting: false,
-      isEditingSpellSlots: false,
+      isEditingFeaturesTraits: true,
+      isEditingWeapons: true,
+      isEditingEquipment: true,
+      isEditingTreasure: true,
+      isEditingLanguages: true,
+      isEditingProficiencies: true,
+      isEditingSpellCasting: true,
+      isEditingSpellSlots: true,
       isShowingCharacterInfo: true,
       isShowingAbilityScores: true,
       isShowingSavingThrows: true,
@@ -1091,8 +1282,6 @@ export default {
       isShowingProficiencies: true,
       isShowingSpells: true,
       isShowingSpellSlots: true,
-      isMenuOpen: false,
-      isNavBarOpen: true, // show by default
       isShowingJumpToMenu: false,
       usersCharacters: {},
       CHARACTER_SECTIONS: CHARACTER_SECTIONS,
@@ -1118,6 +1307,7 @@ export default {
       SPELL_CASTING_LEVELS: SPELL_CASTING_LEVELS,
       SPELL_CASTING_NAMES: SPELL_CASTING_NAMES,
       SPELL_CASTING_NAMES_PICKER: SPELL_CASTING_NAMES_PICKER,
+      SKILL_NAME_SCORES: SKILL_NAME_SCORES,
       SPELL_SLOT_KEYS: SPELL_SLOT_KEYS,
       SPELL_SLOT_NAMES_PICKER: SPELL_SLOT_NAMES_PICKER,
       SPELL_CASTING_DURATION_TYPES: SPELL_CASTING_DURATION_TYPES,
@@ -1126,8 +1316,9 @@ export default {
       WEAPON_PROPERTY: WEAPON_PROPERTY,
       WEAPON_NAMES: WEAPON_NAMES,
       WEAPON_MODS: ['', STAT_KEYS.STRENGTH, STAT_KEYS.DEXTERITY, STAT_KEYS.CONSTITUTION, STAT_KEYS.INTELLIGENCE, STAT_KEYS.WISDOM, STAT_KEYS.CHARISMA],
+
       equipment: {},
-      featuresTraits: {},
+      // featuresTraits: {},
       languages: {},
       proficiencies: {},
       spells: {},
@@ -1181,6 +1372,7 @@ export default {
         [SKILL_KEYS.STEALTH]: new Skill(),
         [SKILL_KEYS.SURVIVAL]: new Skill(),
       },
+      newCharacter: new Character(),
       characterName: '',
       characterAlignment: '',
       characterBackground: '',
@@ -1215,6 +1407,9 @@ export default {
       spellTempLevel: '',
       spellSlotTempLevel: '',
       spellSlotTempSlots: '',
+      treasureTempName: '',
+      treasureTempAmount: '',
+      treasureTempDescription: '',
       weaponTempName: '',
       weaponTempCategory: '', // e.g. finesse
       weaponTempAmount: '',
@@ -1226,14 +1421,14 @@ export default {
     }
   },
   mounted() {
-    
+
   },
   watch: {
-    'hp.max': function(newValue) {
-      this.hp[HP_KEYS.CURRENT] = newValue
+    'newCharacter.hp.max': function(newValue) {
+      this.newCharacter.hp[HP_KEYS.CURRENT] = newValue
     },
-    'hp.dieAmountMax': function(newValue) {
-      this.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
+    'newCharacter.hp.dieAmountMax': function(newValue) {
+      this.newCharacter.hp[HP_KEYS.DIE_AMOUNT_CURR] = newValue
     },
     'spellTempDurationType': function(newValue) {
       if (newValue === SPELL_CASTING_DURATION_TYPES.INSTANT) {
@@ -1281,11 +1476,11 @@ export default {
         [FEATURES_KEYS.ACTION]: this.featuresTempAction,
         [FEATURES_KEYS.DESCRIPTION]: this.featuresTempDescription,
         [FEATURES_KEYS.TYPE]: this.featuresTempType,
-        [FEATURES_KEYS.USES]: this.featuresTempUses
+        [FEATURES_KEYS.USES]: parseInt(this.featuresTempUses)
       }
       
 
-      this.featuresTraits[this.featuresTempName] = newFeat
+      this.newCharacter.featuresTraits[this.featuresTempName] = newFeat
 
       this.featuresTempName = ''
       this.featuresTempAction = ''
@@ -1318,22 +1513,16 @@ export default {
         this.weaponTempIsProficient = false
       }
 
-      // if (this.weaponTempProperties === '') {
-      //   alert("Please enter a weapon properties")
-      //   return
-      // }
-
       const newItem = {
-        [WEAPON_KEYS.AMOUNT]: this.weaponTempAmount,
+        [WEAPON_KEYS.AMOUNT]: parseInt(this.weaponTempAmount),
         [WEAPON_KEYS.ATTACK_DAMAGE_STAT]: this.weaponsTempAttackModifier,
         [WEAPON_KEYS.CATEGORY]: this.weaponTempCategory,
         [WEAPON_KEYS.DESCRIPTION]: this.weaponTempDescription,
         [WEAPON_KEYS.DIE]: this.weaponTempDieType,
         [WEAPON_KEYS.PROFICIENT]: this.weaponTempIsProficient,
-        // [WEAPON_KEYS.PROPERTIES]: this.weaponTempProperties,
       }      
 
-      this.weapons[this.weaponTempName] = newItem
+      this.newCharacter.weapons[this.weaponTempName] = newItem
       
       this.weaponTempName = ''
       this.weaponTempAmount = ''
@@ -1356,21 +1545,38 @@ export default {
         return
       }
 
-      // if (this.equipmentTempDescription === '') {
-      //   alert("Please enter an equipment description")
-      //   return
-      // }
-
       const newItem = {
-        [EQUIPMENT_KEYS.AMOUNT]: this.equipmentTempAmount,
+        [EQUIPMENT_KEYS.AMOUNT]: parseInt(this.equipmentTempAmount),
         [EQUIPMENT_KEYS.DESCRIPTION]: this.equipmentTempDescription
       }
 
-      this.equipment[this.equipmentTempName] = newItem
+      this.newCharacter.equipment[this.equipmentTempName] = newItem
       
       this.equipmentTempName = ''
       this.equipmentTempAmount = ''
       this.equipmentTempDescription = ''
+    },
+    onPressAddTreasure() {
+      if (this.treasureTempName === '') {
+        alert("Please enter an treasure name")
+        return
+      }
+
+      if (this.treasureTempAmount === '') {
+        alert("Please enter an treasure amount")
+        return
+      }
+
+      const newItem = {
+        [EQUIPMENT_KEYS.AMOUNT]: parseInt(this.treasureTempAmount),
+        [EQUIPMENT_KEYS.DESCRIPTION]: this.treasureTempDescription
+      }
+
+      this.newCharacter.treasures[this.treasureTempName] = newItem
+      
+      this.treasureTempName = ''
+      this.treasureTempAmount = ''
+      this.treasureTempDescription = ''
     },
     onPressAddLanguage() {
       if (this.languagesTempName === '') {
@@ -1383,7 +1589,7 @@ export default {
         return
       }
 
-      this.languages[this.languagesTempName] = this.languagesTempProficiency
+      this.newCharacter.languages[this.languagesTempName] = this.languagesTempProficiency
       
       this.languagesTempName = ''
       this.languagesTempProficiency = ''
@@ -1399,10 +1605,31 @@ export default {
         return
       }
 
-      this.proficiencies[this.proficiencyTempName] = this.proficiencyTempDescription
+      this.newCharacter.proficiencies[this.proficiencyTempName] = this.proficiencyTempDescription
       
       this.proficiencyTempName = ''
       this.proficiencyTempDescription = ''
+    },
+    onPressAddSpellSlot() {
+      if (this.spellSlotTempLevel === '') {
+        alert("Selected a spell level")
+        return
+      }
+
+      if (this.spellSlotTempSlots === '') {
+        alert("Enter slot amount")
+        return
+      }
+
+      const slot = {
+        [SPELL_SLOT_KEYS.CURRENT]: parseInt(this.spellSlotTempSlots),
+        [SPELL_SLOT_KEYS.MAX]: parseInt(this.spellSlotTempSlots),
+      }
+      console.log("slot:", slot)
+      this.newCharacter.spellSlots[this.spellSlotTempLevel] = slot
+      
+      this.spellSlotTempLevel = ''
+      this.spellSlotTempSlots = ''
     },
     onPressAddSpell() {
       if (this.spellTempName === '') {
@@ -1435,23 +1662,18 @@ export default {
         return
       }
 
-      // if (this.spellTempDescription === '') {
-      //   alert("Please enter a Casting Description")
-      //   return
-      // }
-
 
       const newSpell = {
-        [SPELL_CASTING_KEYS.CASTING_TIME]: this.spellTempCastingTime,
+        [SPELL_CASTING_KEYS.CASTING_TIME]: parseInt(this.spellTempCastingTime),
         [SPELL_CASTING_KEYS.DESCRIPTION]: this.spellTempDescription,
-        [SPELL_CASTING_KEYS.DURATION]: this.spellTempDuration,
+        [SPELL_CASTING_KEYS.DURATION]: parseInt(this.spellTempDuration),
         [SPELL_CASTING_KEYS.DURATION_TYPE]: this.spellTempDurationType,
-        [SPELL_CASTING_KEYS.RANGE]: this.spellTempRange
+        [SPELL_CASTING_KEYS.RANGE]: parseInt(this.spellTempRange)
       }
       
-      if (this.spellTempLevel in this.spells) {
+      if (this.spellTempLevel in this.newCharacter.spells) {
         // If there's a level key already in the dictionary
-        this.spells[this.spellTempLevel][this.spellTempName] = newSpell
+        this.newCharacter.spells[this.spellTempLevel][this.spellTempName] = newSpell
         
       } else {
         // If there's a new entry for the level key
@@ -1459,10 +1681,10 @@ export default {
           [this.spellTempName]: newSpell
         }
 
-        this.spells[this.spellTempLevel] = newEntry
+        this.newCharacter.spells[this.spellTempLevel] = newEntry
       }
 
-      // console.info('this.spells:', this.spells)
+      console.info('this.spells:', this.newCharacter.spells)
       
       this.spellTempName = ''
       this.spellTempLevel = ''
@@ -1472,229 +1694,96 @@ export default {
       this.spellTempDurationType = ''
       this.spellTempRange = ''
     },
-    onPressAddSpellSlot() {
-      if (this.spellSlotTempLevel === '') {
-        alert("Selected a spell level")
-        return
-      }
-
-      if (this.spellSlotTempSlots === '') {
-        alert("Enter slot amount")
-        return
-      }
-
-      const slot = {
-        [SPELL_SLOT_KEYS.CURRENT]: this.spellSlotTempSlots,
-        [SPELL_SLOT_KEYS.MAX]: this.spellSlotTempSlots,
-      }
-
-      this.spellSlots[this.spellSlotTempLevel] = slot
-      
-      this.spellSlotTempLevel = ''
-      this.spellSlotTempSlots = ''
-    },
-    onPressDeleteFeatures(key) {
-      if (key in this.featuresTraits) {
-        delete this.featuresTraits[key]
-      }
-    },
-    onPressDeleteWeapon(key) {
-      if (key in this.weapons) {
-        delete this.weapons[key]
-      }
-    },
-    onPressDeleteEquipment(key) {
-      if (key in this.equipment) {
-        delete this.equipment[key]
-      }
-    },
-    onPressDeleteLanguage(key) {
-      if (key in this.languages) {
-        delete this.languages[key]
-      }
-    },
-    onPressDeleteProficiency(key) {
-      if (key in this.proficiencies) {
-        delete this.proficiencies[key]
+    onPressDeleteStat(key, statRef) {
+      if (key in this.newCharacter[statRef]) {
+        delete this.newCharacter[statRef][key]
       }
     },
     onPressDeleteSpell(level, spellName) {
-      if (level in this.spells) {
-        const levelDict = this.spells[level]
+      if (level in this.newCharacter.spells) {
+        const levelDict = this.newCharacter.spells[level]
         if (spellName in levelDict) {
-          delete this.spells[level][spellName]
+          delete this.newCharacter.spells[level][spellName]
 
           // If there's nothing left in the level 
           if (this.getDictionarySize(levelDict) == 0) {
-            delete this.spells[level]
+            delete this.newCharacter.spells[level]
           }
         }
       }
     },
-    onPressDeleteSpellSlot(key) {
-      if (key in this.spellSlots) {
-        delete this.spellSlots[key]
-      }
+    canCreateCharacter() {
+      return this.isValidCharacterInfo() && this.isValidAbilityScores()
     },
-    checkIfCreateCharacterButtonIsDisabled() {
-      // console.info("@checkIfAllValid")
-      if (this.characterName === '') {
+    isValidCharacterInfo() {
+      if (this.newCharacter.name == '') {
         return false
       }
 
-      if (this.characterAlignment === '') {
+      if (this.newCharacter.background == '') {
         return false
       }
 
-      if (this.characterBackground === '') {
+      if (this.newCharacter.race == '') {
         return false
       }
 
-      if (this.characterRace === '') {
+      if (this.newCharacter.alignment == '') {
         return false
       }
 
-      if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
+      if (this.newCharacter.class == '') {
+        return false
+      }
+
+      if (this.newCharacter.armor == '') {
+        return false
+      }
+
+      if (this.newCharacter.speed == '') {
+        return false
+      }
+
+      if (this.newCharacter.hp[HP_KEYS.MAX] == '') {
+        return false
+      }
+
+      if (this.newCharacter.hp[HP_KEYS.DIE] == '') {
+        return false
+      }
+
+      if (this.newCharacter.hp[HP_KEYS.DIE_AMOUNT_MAX] == '') {
         return false
       }
       
-      if (this.hp.max < MIN_VALUES.HP || this.hp.max.MAX_VALUES) {
-        return false
-      } 
-      
-      if (this.hp.dieAmount < MIN_VALUES.HIT_DIE || this.hp.dieAmount > MAX_VALUES.HIT_DIE) {
-        return false
-      }
-
-      if (this.hp.die == '') {
-        return false
-      }
-      
-      if (!this.checkIfStatsValid()) {
-        return false
-      }
-
-      if (!this.checkIfThrowsValid()) {
-        return false
-      }
-
-      if (!this.checkIfSkillsValid()) {
-        return false
-      }
-
-      if (this.spellCastStat === '') {
+      if (this.newCharacter.spellCastStat == '') {
         return false
       }
 
       return true
     },
-    checkIfAllValid() {
-      // console.info("@checkIfAllValid")
-      if (this.characterName === '') {
-        alert("Please enter a character name")
+    isValidAbilityScores() {
+      if (this.newCharacter.scores[STAT_KEYS.STRENGTH].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.characterAlignment === '') {
-        alert("Please enter an alignment")
+      if (this.newCharacter.scores[STAT_KEYS.DEXTERITY].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.characterBackground === '') {
-        alert("Please enter a background")
+      if (this.newCharacter.scores[STAT_KEYS.CONSTITUTION].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.characterRace === '') {
-        alert("Please enter a race")
+      if (this.newCharacter.scores[STAT_KEYS.INTELLIGENCE].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.level < MIN_VALUES.LEVEL || this.level > MAX_VALUES.LEVEL) { 
-        alert(`Starting level must be between ${MIN_VALUES.LEVEL} - ${MAX_VALUES.LEVEL}`)
-        return false
-      }
-      
-      if (this.hp.max < MIN_VALUES.HP || this.hp.max.MAX_VALUES) {
-        alert(`Starting HP must be between ${MIN_VALUES.HP} - ${MAX_VALUES.HP}`)
-        return false
-      } 
-      
-      if (this.hp.dieAmount < MIN_VALUES.HIT_DIE || this.hp.dieAmount > MAX_VALUES.HIT_DIE) {
-        alert(`Starting Hit Die amount must be between ${MIN_VALUES.HIT_DIE} - ${MAX_VALUES.HIT_DIE}`)
+      if (this.newCharacter.scores[STAT_KEYS.WISDOM].value > MAX_VALUES.SCORES) {
         return false
       }
 
-      if (this.hp.die == '') {
-        alert(`Please pick a Hit Die type`)
-        return false
-      }
-      
-      if (!this.checkIfStatsValid()) {
-        alert(`Scores cannot be blank or greater than ${MAX_VALUES.SCORES} and Bonuses cannot be blank or greater than ${MAX_VALUES.STATS_BONUS}`)
-        return false
-      }
-
-      if (!this.checkIfThrowsValid()) {
-        alert(`Saving Throws cannot be blank or greater than ${MAX_VALUES.SAVING_THROWS}`)
-        return false
-      }
-
-      if (!this.checkIfSkillsValid()) {
-        alert(`Skills cannot be blank or greater than ${MAX_VALUES.SKILLS}`)
-        return false
-      }
-
-      if (this.spellCastStat === '') {
-        alert("Please select a stat your spell casting will be based off of")
-        return false
-      }
-
-      return true
-    },
-    checkIfStatsValid() {
-      // console.info("@checkIfStatsValid")
-      
-      if (this.scores.statsStr === '' || this.scores.statsDex === '' || this.scores.statsCon === '' || this.scores.statsInt === '' || this.scores.statsWis === '' || this.scores.statsCha === '' ||
-          this.scores.statsStrBonus === '' || this.scores.statsDexBonus === '' || this.scores.statsConBonus === '' || this.scores.statsIntBonus === '' || this.scores.statsWisBonus === '' || this.scores.statsChaBonus === '') {
-            return false
-      }
-
-      if (this.scores.statsStr > MAX_VALUES.SCORES && this.scores.statsDex > MAX_VALUES.SCORES && this.scores.statsCon > MAX_VALUES.SCORES && this.scores.statsInt > MAX_VALUES.SCORES && this.scores.statsWis > MAX_VALUES.SCORES && this.scores.statsCha > MAX_VALUES.SCORES &&
-          this.scores.statsStrBonus > MAX_VALUES.STATS_BONUS && this.scores.statsDexBonus > MAX_VALUES.STATS_BONUS && this.scores.statsConBonus > MAX_VALUES.STATS_BONUS && this.scores.statsIntBonus > MAX_VALUES.STATS_BONUS && this.scores.statsWisBonus > MAX_VALUES.STATS_BONUS && this.scores.statsChaBonus > MAX_VALUES.STATS_BONUS) {
-        return false
-
-      }
-      
-      return true
-
-    },
-    checkIfThrowsValid() {
-      // console.info("@checkIfThrowsValid")
-      if (this.savingThrows.savingStr === '' || this.savingThrows.savingDex === '' || this.savingThrows.savingCon === '' || this.savingThrows.savingInt === '' || this.savingThrows.savingWis === '' || this.savingThrows.savingCha === '') {
-        return false
-      }
-      
-      if (this.savingThrows.savingStr > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingDex > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingCon > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingInt > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingWis > MAX_VALUES.SAVING_THROWS && this.savingThrows.savingCha > MAX_VALUES.SAVING_THROWS) {
-        return false
-      }
-
-      return true
-    },
-    checkIfSkillsValid() {
-      if (this.skills.skillsAcrobatics === '' || this.skills.skillsAnimalHandling === '' || this.skills.skillsArcana === '' || this.skills.skillsAthletics === '' || 
-          this.skills.skillsDeception === '' || this.skills.skillsHistory === '' || this.skills.skillsInsight === '' || this.skills.skillsIntimidation === '' || 
-          this.skills.skillsInvestigation === '' || this.skills.skillsMedicine === '' || this.skills.skillsNature === '' || this.skills.skillsPerception === '' || 
-          this.skills.skillsPerformance === '' || this.skills.skillsPersuasion === '' || this.skills.skillsReligion === '' || this.skills.skillsSleightOfHand === '' || 
-          this.skills.skillsStealth === '' || this.skills.skillsSurvival === '') {
-        return false
-      }
-
-      if (this.skills.skillsAcrobatics > MAX_VALUES.SKILLS || this.skills.skillsAnimalHandling > MAX_VALUES.SKILLS || this.skills.skillsArcana > MAX_VALUES.SKILLS || this.skills.skillsAthletics > MAX_VALUES.SKILLS || 
-          this.skills.skillsDeception > MAX_VALUES.SKILLS || this.skills.skillsHistory > MAX_VALUES.SKILLS || this.skills.skillsInsight > MAX_VALUES.SKILLS || this.skills.skillsIntimidation > MAX_VALUES.SKILLS || 
-          this.skills.skillsInvestigation > MAX_VALUES.SKILLS || this.skills.skillsMedicine > MAX_VALUES.SKILLS || this.skills.skillsNature > MAX_VALUES.SKILLS || this.skills.skillsPerception > MAX_VALUES.SKILLS || 
-          this.skills.skillsPerformance > MAX_VALUES.SKILLS || this.skills.skillsPersuasion > MAX_VALUES.SKILLS || this.skills.skillsReligion > MAX_VALUES.SKILLS || this.skills.skillsSleightOfHand > MAX_VALUES.SKILLS || 
-          this.skills.skillsStealth > MAX_VALUES.SKILLS || this.skills.skillsSurvival > MAX_VALUES.SKILLS) {
+      if (this.newCharacter.scores[STAT_KEYS.CHARISMA].value > MAX_VALUES.SCORES) {
         return false
       }
 
@@ -1702,12 +1791,11 @@ export default {
     },
     createCharacter() {
       // console.info("@createCharacter")
-      if (this.checkIfAllValid()) {
-        const newCharacter = this.createCharacterDictionary()
-        console.info('character:', newCharacter)
-        this.store.dispatch("addCharacterToDb", newCharacter).then((success => {
+      if (this.canCreateCharacter()) {
+        console.info('character:', this.newCharacter)
+        this.store.dispatch("addCharacterToDb", this.newCharacter).then((success => {
           if (success) {
-            alert(`Created new character, ${this.characterName}!`)
+            alert(`Created new character, ${this.newCharacter.name}!`)
             this.$emit('close'); // Tell parent to close this modal
           } else {
             alert("An error occurred creating your character. Please try again")
@@ -1745,18 +1833,20 @@ export default {
       return newCharacter
     },
     calculatePassivePerception() {
-      const result = 10 + this.scores[STAT_KEYS.WISDOM].calculateMod()
+      const result = 10 + this.newCharacter.scores[STAT_KEYS.WISDOM].calculateMod()
       return result
     },
     calculateBaseStatBonus(stat) {
       return (stat - 10) / 2
     },
-    calculateSpellSavingDc(profBonus, mod) {
-      if (profBonus === '') {
-        return 8 + mod
+    calculateSpellSavingDc(abilityScore) {
+      let profBonus = this.getProficiencyBonus()
+
+      if (abilityScore === undefined) {
+        return 8 + profBonus
       }
-      const result = 8 + profBonus + mod
-      return result
+      
+      return 8 + profBonus + abilityScore.calculateMod()
     },
     getDictionarySize(dict) {
       if (dict) {
@@ -1794,110 +1884,502 @@ export default {
         return 6
       }
     },
-    toggleCollapseForStat(statRef) {
-      switch (statRef) {
-        case CHARACTER_KEYS.SCORES:
+    toggleCollapseForSection(section) {
+      switch (section) {
+        case CHARACTER_SECTIONS.CHARACTER_INFO:
+          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+          break
+
+        case CHARACTER_SECTIONS.ABILITY_SCORES:
           this.isShowingAbilityScores = !this.isShowingAbilityScores
           break
+
         
-        case CHARACTER_KEYS.SAVING_THROWS:
+        case CHARACTER_SECTIONS.SAVING_THROWS:
           this.isShowingSavingThrows = !this.isShowingSavingThrows
           break
+
         
-        case CHARACTER_KEYS.SKILLS:
+        case CHARACTER_SECTIONS.SKILLS:
           this.isShowingSkills = !this.isShowingSkills
           break
+
         
-        case CHARACTER_KEYS.FEATURES:
+        case CHARACTER_SECTIONS.FEATURES_TRAITS:
           this.isShowingFeatures = !this.isShowingFeatures
           break
+
         
-        case CHARACTER_KEYS.WEAPONS:
+        case CHARACTER_SECTIONS.WEAPONS:
           this.isShowingWeapons = !this.isShowingWeapons
           break
 
-        case CHARACTER_KEYS.EQUIPMENT:
+        
+        case CHARACTER_SECTIONS.EQUIPMENT:
           this.isShowingEquipment = !this.isShowingEquipment
           break
 
-        case CHARACTER_KEYS.TREASURES:
+        
+        case CHARACTER_SECTIONS.TREASURES:
           this.isShowingTreasure = !this.isShowingTreasure
           break
+
         
-        case CHARACTER_KEYS.LANGUAGES:
+        case CHARACTER_SECTIONS.LANGUAGES:
           this.isShowingLanguages = !this.isShowingLanguages
           break
+
         
-        case CHARACTER_KEYS.PROFICIENCIES:
+        case CHARACTER_SECTIONS.PROFICIENCIES:
           this.isShowingProficiencies = !this.isShowingProficiencies
           break
 
-        case CHARACTER_KEYS.SPELLS:
+        
+        case CHARACTER_SECTIONS.SPELL_CASTING:
           this.isShowingSpells = !this.isShowingSpells
           break
 
-        case CHARACTER_KEYS.SPELL_SLOTS:
+        case CHARACTER_SECTIONS.SPELL_SLOTS:
           this.isShowingSpellSlots = !this.isShowingSpellSlots
-          break
-
-        default:
-          this.isShowingCharacterInfo = !this.isShowingCharacterInfo
+          break          
       }
     },
-    toggleEditForStat(statRef) {
-      switch (statRef) {
-        case CHARACTER_KEYS.SCORES:
+    toggleEditForSection(section) {
+      switch (section) {
+        case CHARACTER_SECTIONS.CHARACTER_INFO:
+          this.isEditingCharInfo = !this.isEditingCharInfo
+          break
+
+        case CHARACTER_SECTIONS.ABILITY_SCORES:
           this.isEditingAbilityScores = !this.isEditingAbilityScores
           break
 
-        case CHARACTER_KEYS.SAVING_THROWS:
+        case CHARACTER_SECTIONS.SAVING_THROWS:
           this.isEditingSavingThrows = !this.isEditingSavingThrows
           break
-        
-        case CHARACTER_KEYS.SKILLS:
+
+        case CHARACTER_SECTIONS.SKILLS:
           this.isEditingSkills = !this.isEditingSkills
           break
         
-        case CHARACTER_KEYS.FEATURES:
+        case CHARACTER_SECTIONS.FEATURES_TRAITS:
           this.isEditingFeaturesTraits = !this.isEditingFeaturesTraits
           break
         
-        case CHARACTER_KEYS.WEAPONS:
+        case CHARACTER_SECTIONS.WEAPONS:
           this.isEditingWeapons = !this.isEditingWeapons
           break
-        
-        case CHARACTER_KEYS.EQUIPMENT:
+
+        case CHARACTER_SECTIONS.EQUIPMENT:
           this.isEditingEquipment = !this.isEditingEquipment
           break
-
-        case CHARACTER_KEYS.TREASURES:
+        
+        case CHARACTER_SECTIONS.TREASURES:
           this.isEditingTreasure = !this.isEditingTreasure
           break
 
-        case CHARACTER_KEYS.LANGUAGES:
+        case CHARACTER_SECTIONS.LANGUAGES:
           this.isEditingLanguages = !this.isEditingLanguages
           break
-        
-        case CHARACTER_KEYS.PROFICIENCIES:
+
+        case CHARACTER_SECTIONS.PROFICIENCIES:
           this.isEditingProficiencies = !this.isEditingProficiencies
           break
-        
-        case CHARACTER_KEYS.SPELLS:
+
+        case CHARACTER_SECTIONS.SPELL_CASTING:
           this.isEditingSpellCasting = !this.isEditingSpellCasting
           break
 
-        case CHARACTER_KEYS.SPELL_SLOTS:
+        case CHARACTER_SECTIONS.SPELL_SLOTS:
           this.isEditingSpellSlots = !this.isEditingSpellSlots
           break
-        
-        default:
-          this.isEditingCharInfo = !this.isEditingCharInfo
       }
     },
   }
 }
 </script>
 
-<style scoped> /* TODO: Need to make this scoped and have separate css files for styles */
-@import '../syles/character-info-scores.css';
+<style scoped>
+  @import "../styles/global-constants.css";
+  /* @import '../styles/character-info-scores.css'; */
+  @import '../styles/popup.css';
+  /* @import '../styles/transitions.css'; */
+
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  p {
+    display: inherit;
+    align-items: center;
+    font-size: var(--stat-font-size);
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  /* Navigation Bar */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    z-index: 9999; /* Ensure this is always on top */
+  }
+
+  nav button:disabled {
+    opacity: 0.3;
+  }
+
+  nav .nav-bar-button {
+    font-size: 20px;
+    color: var(--white);
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--dimgray);
+  }
+
+  nav .jump-to-menu {
+    position: absolute;
+    top: 100%; /* Position the menu below the button */
+    background-color: var(--white);
+    border-bottom: 3px solid dimgray; /* Add a border to the bottom */
+    border-right: 3px solid dimgray; /* Add a border to the right */
+    border-radius: var(--border-radius);
+    max-height: 340px; /* Adjust the height as needed */
+    overflow-y: auto;
+  }
+
+  nav .jump-to-menu ul {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    font-size: var(--stat-font-size);
+  }
+
+  nav .jump-to-menu li {
+    border-bottom: 1px solid var(--gray); /* Add a border below each link */
+    width: 100%;
+    margin: 0;
+    padding: 8px 16px;
+  }
+
+  nav .jump-to-menu p {
+    margin: 0;
+  }
+
+  nav .jump-to-menu li:last-child {
+    border-bottom: none; /* Remove the border on the last link */
+  }
+
+
+  /* Sections */
+  section header {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  section header .spacer {
+    visibility: hidden;
+  }
+
+  section header .collapse-chevron {
+    margin: 5px;
+  }
+
+  section .section-title {
+    display: flex;
+  }
+
+  section ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  section li {
+    display: inherit;
+    justify-content: space-between;
+    width: 85%;
+    margin: 5px 0;
+    text-wrap: warp;
+  }
+
+  section li label {
+    font-size: var(--stat-font-size);
+  }
+
+  section li input {
+    width: 65px; /* Adjust the width as needed */
+    margin-left: 5px; /* Adjust the spacing between the label and input */
+    border: none; /* Remove the default border */
+    border-bottom: 1px solid black; /* Add a bottom border */
+    outline: none;
+    text-align: center;
+    padding-bottom: 5px;
+    font-size: var(--stat-font-size);
+  }
+
+  section li select {
+    font-size: var(--select-font-size);
+    padding: 10px;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    border-radius: var(--border-radius);
+  }
+
+  section li .checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    padding: 0;
+  }
+  section li .mod {
+    margin-left: 10px;
+  }
+
+  section li .skill-score {
+    font-style: italic;
+    font-size: var(--select-font-size);
+  }
+
+  section .viewing,
+  section .editing {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  section .viewing p {
+    font-size: var(--stat-font-size);
+    margin: 5px 0;
+  }
+
+  .new-character .name {
+    width: var(--width-close-to-mobile-screen);
+    border: none; /* Remove the default border */
+    border-bottom: 1px solid black; /* Add a bottom border */
+    outline: none;
+    text-align: center;
+    margin: 10px auto;
+    font-size: var(--stat-font-size);
+  }
+
+  .viewing ul li {
+    display: inherit;
+    flex-direction: column;
+    padding: 0;
+    width: var(--width-close-to-mobile-screen);
+  }
+
+  .viewing ul li div {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    margin: 5px 0;
+  }
+
+  .viewing .description {
+    white-space: pre-wrap;
+    text-align: left;
+  }
+
+  .viewing .inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .viewing p {
+    align-items: center;
+  }
+
+  .viewing-spells .description {
+    text-align: left;
+    white-space: pre-wrap;
+  }
+
+  .editing ul li {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    width: var(--width-close-to-mobile-screen);
+  }
+
+  .editing ul li:first-child label {
+    margin: 0 auto;
+  }
+
+  .editing strong {
+    margin-bottom: 10px;
+    text-decoration: underline;
+  }
+
+  .editing .name {
+    width: var(--width-close-to-mobile-screen);
+    border: none; /* Remove the default border */
+    border-bottom: 1px solid black; /* Add a bottom border */
+    outline: none;
+    text-align: center;
+    margin: 15px auto;
+    font-size: var(--stat-font-size);
+  }
+
+  .editing textarea,
+  .editing-spells textarea {
+    width: var(--width-close-to-mobile-screen);
+    padding: 10px;
+    margin: 0 auto;
+    /* font-family: var(--font-family-sans-serif); */
+    font-size: var(--select-font-size);
+    border-radius: var(--border-radius);
+  }
+
+  .editing button {
+    font-size: 20px;
+    color: var(--white);
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+  }
+
+  .editing .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px auto;
+  }
+
+  .editing .languages strong {
+    text-decoration: none;
+  }
+
+  .viewing-spells ul,
+  .editing-spells ul,
+  .editing-languages ul {
+    width: 100%;
+  }
+
+  .viewing-spells li,
+  .editing-spells li,
+  .editing-languages li {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .editing-spells li label,
+  .editing-languages li label {
+    display: flex;
+    align-items: center;
+  }
+
+  .viewing-spells .spell-level,
+  .editing-spells .spell-level {
+    text-decoration: underline;
+    justify-content: center;
+  }
+
+  .editing-spells .container-update-delete,
+  .editing-languages .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px auto;
+  }
+
+  .button-edit {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: -5px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--dimgray);
+  }
+
+  .container-update {
+    display: flex;
+    justify-content: center;
+  }
+
+  .container-update-delete {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .container-update button,
+  .container-update-delete button {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--stat-font-size);
+  }
+
+  .button-delete {
+    background-color: var(--red);
+  }
+
+  .button-add,
+  .button-update,
+  .button-backup {
+    background-color: var(--blue);
+  }
+
+  .button-create-character {
+    color: var(--white);
+    padding: 5px 10px;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 2em;
+    background-color: var(--blue);
+  }
+
+  .name-and-count {
+    text-align: left;
+    margin-right: 10px;
+    word-wrap: normal;
+  }
+
+  .list-divider {
+    width: var(--width-close-to-mobile-screen);
+    margin: 5px auto;
+    margin-top: -5px;
+  }
+
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  #character-background {
+    margin-top: 80px;
+  }
+
+  #character-background p {
+    font-size: var(--stat-font-size);
+    margin: 0;
+  }
+
+  #features-traits .viewing {
+    text-align: start;
+    width: 100%;
+    margin: 0 auto;
+    text-wrap: warp;
+  }
 </style>
