@@ -1,21 +1,23 @@
 <template>
-  <div class="body">
-    <transition name="slide-up" mode="out-in">
-      <div class="overflow-auto" v-if="isShowingCharacterList">
-        <side-menu @click="toggleMenu"></side-menu>
-        
-        <h1>{{ getUserInfo.name }}'s characters</h1>
-        <button @click="toggleModalForCreateCharacter">Create Character</button>
-        <hr>
-        
-        <!-- Character summary -->
-        <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-          <character-summary id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
-        </template>
+  <div>
+    <div class="main">
+      <transition name="slide-up" mode="out-in">
+        <div id="character-list" class="overflow-auto" v-if="isShowingCharacterList">
+          <side-menu @click="toggleMenu"></side-menu>
+          
+          <h1>{{ getUserInfo.name }}'s characters</h1>
+          <button @click="toggleModalForCreateCharacter">Create Character</button>
+          <hr>
+          
+          <!-- Character summary -->
+          <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
+            <character-summary id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
+          </template>
 
-        <nav-bar :activeTab="ROUTER_NAMES.CHARACTERS"></nav-bar>
-      </div>
-    </transition>
+          <nav-bar :activeTab="ROUTER_NAMES.CHARACTERS"></nav-bar>
+        </div>
+      </transition>
+    </div>
 
     <!-- View a character -->
     <transition name="slide-up" mode="out-in">
@@ -61,8 +63,6 @@ export default {
   },
   data() {
     return {
-      darkModeMediaQuery: window.matchMedia('(prefers-color-scheme: dark)'),
-      isDarkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
       store: useStore(),
       isShowingCharacterList: true,
       isShowingModal: false,
@@ -79,8 +79,6 @@ export default {
     }
   },
   mounted: function() {
-    // this.handleThemeChange()
-
     if (this.store.getters.getUser.id === '') {
       try {
         const userCookie = Cookies.get(COOKIE_NAMES.USER)
@@ -103,14 +101,6 @@ export default {
     },
   },
   methods: {
-    handleThemeChange() {
-      this.isDarkMode = this.darkModeMediaQuery.matches;
-
-      // Watch for changes
-      this.darkModeMediaQuery.addEventListener("change", () => {
-        console.log("@CharacterList theme changed")
-      })
-    },
     navigateTo(routeName) {
       this.$router.push({ name: routeName })
     },
@@ -202,7 +192,7 @@ button {
 }
 
 @media (prefers-color-scheme: dark) {
-  .body {
+  .main {
     background-color: black;
     color: white;
   }
