@@ -2000,8 +2000,6 @@ export default {
 </script>
 
 <style scoped>
-  @import '../styles/reset.css';
-  @import "../styles/colors.css";
   @import "../styles/global-constants.css";
   /* @import '../styles/character-info-scores.css'; */
   @import '../styles/popup.css';
@@ -2018,6 +2016,9 @@ export default {
     font-size: var(--stat-font-size);
   }
 
+  ul {
+    list-style: none;
+  }
 
   /* Navigation Bar */
   nav {

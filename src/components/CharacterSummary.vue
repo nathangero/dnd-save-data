@@ -1,19 +1,19 @@
 <template>
-  <div>
+  <div class="d-flex justify-content-center">
     <template v-if="listOfCharacters">
-      <div class="list-container-characters">
-        <ul class="list-characters">
-          <li v-for="(character, id) in listOfCharacters" :key="id">
-            <div @click="onPressCharacterSummary(id)">
-              <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                <label class="summary-name">{{ character.name }}</label>
-                <label class="summary-amount" style="white-space: nowrap;">Level: {{ character.level }}</label>
+      <div id="character-card" class="card w-75 border border-dark border-4 custom-card">
+        <ul v-for="(character, id) in listOfCharacters" :key="id" class="p-0 m-0">
+          <li @click="onPressCharacterSummary(id)">
+            <div class="card-header pb-0 border-0">
+              <div class="d-flex justify-content-between text-dark mb-0 border-0">
+                <p class="fs-1 mb-1 border-0"><strong>{{ character.name }}</strong></p>
+                <p class="fs-2 mt-1 mb-0 border-0">Level: {{ character.level }}</p>
               </div>
-              
-              <label class="summary-description">{{ character.class }}</label>
-              <label class="summary-description">{{ character.race }}</label>
-              <label class="summary-description">Current HP: {{ character.hp[HP_KEYS.CURRENT] }}</label>
-              <!-- <label class="summary-description">Campaign: {{ character[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
+            </div>
+            <div class="card-body d-flex flex-column text-start py-0">
+              <p class="fs-3 p-0 mb-2">{{ character.class }}</p>
+              <p class="fs-3 p-0 mb-2">{{ character.race }}</p>
+              <p class="fs-3 p-0 mb-0 border-0">HP: {{ character.hp[HP_KEYS.CURRENT] }}/{{ character.hp[HP_KEYS.MAX] }}</p>
             </div>
           </li>
         </ul>
@@ -21,16 +21,18 @@
     </template>
 
     <template v-if="character">
-      <div @click="onPressCharacterSummary(id)">
-        <div style="display: flex; flex-direction: row; justify-content: space-between;">
-          <label class="summary-name">{{ character.name }}</label>
-          <label class="summary-amount" style="white-space: nowrap;">Level: {{ character.level }}</label>
+      <div id="character-card" class="card w-100 border border-4 custom-card">
+        <div class="card-header pb-0 border-0">
+          <div class="d-flex justify-content-between text-dark mb-0 border-0">
+            <p class="fs-1 mb-1 border-0"><strong>{{ character.name }}</strong></p>
+            <p class="fs-2 mt-1 mb-0 border-0">Level: {{ character.level }}</p>
+          </div>
         </div>
-        
-        <label class="summary-description">{{ character.class }}</label>
-        <label class="summary-description">{{ character.race }}</label>
-        <label class="summary-description">Current HP: {{ character.hp[HP_KEYS.CURRENT] }}</label>
-        <!-- <label class="summary-description">Campaign: {{ character[CHARACTER_KEYS.CAMPAIGNS] }}</label> -->
+        <div class="card-body d-flex flex-column text-start py-0">
+          <p class="fs-3 p-0 mb-2">{{ character.class }}</p>
+          <p class="fs-3 p-0 mb-2">{{ character.race }}</p>
+          <p class="fs-3 p-0 mb-0 border-0">HP: {{ character.hp[HP_KEYS.CURRENT] }}/{{ character.hp[HP_KEYS.MAX] }}</p>
+        </div>
       </div>
     </template>
   </div>
@@ -58,8 +60,16 @@ export default {
     }
   },
   mounted() {
-    // console.info('listOfCharacters:', this.listOfCharacters)
-    // console.info('character:', this.character)
+    // let card = document.getElementById("character-card")
+    // if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    //   console.log(card.attributes[2].value)
+    //   card.attributes[2].value = "card w-75 border border-light border-4 custom-card"
+    //   console.log(card.attributes[2].value)
+    // } else {
+    //   console.log(card.attributes[2].value)
+    //   card.attributes[2].value = "card w-75 border border-dark border-4 custom-card"
+    //   console.log(card.attributes[2].value)
+    // }
   },
   methods: {
     onPressCharacterSummary(charId) {
@@ -78,6 +88,19 @@ export default {
 </script>
 
 <style scoped>
-@import '../styles/reset.css';
-@import '../styles/character-summary.css';
+
+li {
+  list-style-type: none;
+}
+
+.custom-card {
+  border-radius: var(--border-radius);
+}
+
+/* @media (prefers-color-scheme: dark) {
+  .custom-card {
+    background-color: black;
+    color: white;
+  }
+} */
 </style>
