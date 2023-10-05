@@ -79,6 +79,11 @@ export default {
     border-right: 1px solid var(--dimgray);
   }
 
+  #offcanvas button {
+    background-color: var(--white);
+    opacity: 0.8;
+  }
+
   .hamburger-line {
     background-color: var(--white);
   }
