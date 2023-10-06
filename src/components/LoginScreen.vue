@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="body">
+    <div class="body vh-100">
       <header>
         <img class="w-25" src="../assets/icons8-dungeons-and-dragons-480-light.png" alt="Dungeon's and Dragon's logo by Icons 8">
         <h1>D&D Save Data</h1>
@@ -217,5 +217,10 @@ export default {
     background-color: var(--light-gray);
   }
 
-  
+  @media (prefers-color-scheme: dark) {
+    .body {
+      background-color: var(--black);
+      color: var(--white)
+    }
+  }
 </style>
