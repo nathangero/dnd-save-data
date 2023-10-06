@@ -2,12 +2,19 @@
   <div>
     <div class="body vh-100">
       <header>
-        <img class="w-25" src="../assets/icons8-dungeons-and-dragons-480-light.png" alt="Dungeon's and Dragon's logo by Icons 8">
+        <img class="img-fluid w-25" src="../assets/icons8-dungeons-and-dragons-480-light.png" alt="Dungeon's and Dragon's logo by Icons 8">
         <h1>D&D Save Data</h1>
       </header>
 
+      <br>
+      
       <main>
-
+        <form class="d-flex flex-column align-items-center">
+          <input id="email" class="form-control fs-3 w-75 border-0 border-bottom  mb-3" type="email" v-model="emailLogin" placeholder="Email">
+          <input id="password" class="form-control fs-3 w-75 border-0 border-bottom mb-3" type="password" v-model="passwordLogin" placeholder="Password">
+          <button id="button-login" class="btn fs-1">Login</button>
+          <div v-if="error" class="error">{{ error }}</div>
+        </form>
       </main>
     </div>
 
@@ -59,6 +66,7 @@ export default {
   },
   mounted() {
     // console.info('@LoginScreen')
+    document.getElementById("button-login").addEventListener("click", this.login)
   },
   methods: {
     async resetPassword() {
@@ -77,7 +85,10 @@ export default {
       }
       
     },
-    async login() {
+    async login(event) {
+      event.preventDefault()
+      event.stopPropagation()
+
       try {
         this.isLoggingIn = true
         await signInWithEmailAndPassword(auth, this.emailLogin, this.passwordLogin)
@@ -217,10 +228,19 @@ export default {
     background-color: var(--light-gray);
   }
 
+  #button-login {
+    background-color: var(--blue);
+    border-radius: var(--border-radius);
+  }
+
   @media (prefers-color-scheme: dark) {
     .body {
       background-color: var(--black);
       color: var(--white)
+    }
+
+    #button-login {
+      color: var(--white);
     }
   }
 </style>
