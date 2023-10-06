@@ -1,77 +1,25 @@
 <template>
-  <div class="body">
-    <h1 style="margin-top: 60px;">DND Save Data</h1>
-    <div class="center-container">
-      <div class="login-screen-container">
-        <div class="form">
-          <input type="email" id="email" v-model="emailLogin" placeholder="Email">
-          <br>
-          <input type="password" id="password" v-model="passwordLogin" placeholder="Password">
-          <br>
-          <button class="login-button" @click="login">Login</button>
-          <div v-if="error" class="error">{{ error }}</div>
-        </div>
+  <div>
+    <div class="body">
+      <header>
+        <img class="w-25" src="../assets/icons8-dungeons-and-dragons-480-light.png" alt="Dungeon's and Dragon's logo by Icons 8">
+        <h1>D&D Save Data</h1>
+      </header>
 
-        <div style="display: flex; flex-direction: column; text-align: center;">
-          <p class="sign-up-text">New user? Please make a new account <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a>.</p>
-          <p class="password-reset-text">Forgot your password? Reset <a href="#" class="signup-link" @click.prevent="showResetPasswordPopup">here</a>.</p>
-          <p>Version: {{ APP_VERSION }}</p>
-        </div>
+      <main>
 
-        <!-- Sign Up Popup -->
-        <transition name="fade" appear>
-          <div class="overlay" v-if="showSignup">
-            <div class="popup">
-              <div class="form">
-                <h1>Sign up</h1>
-                <input type="text" id="name" v-model="name" placeholder="Name">
-                <br>
-                <input type="email" id="email" v-model="emailSignup" placeholder="Email">
-                <br>
-                <input type="password" id="password" v-model="passwordSignup" placeholder="Password">
-                <br>
-                <input type="password" id="passwordConfirm" v-model="passwordConfirm" placeholder="Confirm Password">
-                <br>
-                <p>Password must be at least 6 characters</p>
-                <div class="signup-buttons">
-                  <button @click="hideSignupPopup">Cancel</button>
-                  <button class="sign-up-button" @click="signup">Sign Up</button>
-                </div>
-                <div v-if="error" class="error">{{ error }}</div>
-              </div>
-              
-            </div>
-          </div>
-        </transition>
+      </main>
+    </div>
 
-        <!-- Reset Email Popup -->
-        <transition name="fade" appear>
-          <div class="overlay" v-if="showResetPassword">
-            <div class="popup">
-              <div class="form">
-                <h1>Password Reset</h1>
-                <input type="email" id="email" v-model="emailReset" placeholder="Email">
-                <br>
-                <div class="signup-buttons">
-                  <button @click="hideResetPasswordPopup">Cancel</button>
-                  <button class="sign-up-button" @click="resetPassword">Reset</button>
-                </div>
-                <div v-if="error" class="error">{{ error }}</div>
-              </div>
-              
-            </div>
-          </div>
-        </transition>
-
-        <!-- Loading Spinner -->
-        <div v-show="isLoggingIn">
-          <loading-spinner :loadingText="LOADING_TEXT.LOGGING_IN"></loading-spinner>
-        </div>
-        
-        <footer class="footer">
-          <a target="_blank" href="https://icons8.com/icon/104704/dungeons-and-dragons">Dungeons and Dragons</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
-        </footer>
-      </div>
+    <footer class="nav fixed-bottom d-flex justify-content-center p-3">
+      <a target="_blank" href="https://icons8.com/icon/104704/dungeons-and-dragons">Dungeons and Dragons</a>
+      <span class="mx-2"> icon by </span>
+      <a target="_blank" href="https://icons8.com">Icons8</a>
+    </footer>
+    
+    <!-- Loading Spinner -->
+    <div v-show="isLoggingIn">
+      <loading-spinner :loadingText="LOADING_TEXT.LOGGING_IN"></loading-spinner>
     </div>
   </div>
 </template>
@@ -261,95 +209,13 @@ export default {
 
 <style scoped>
 
-.center-container {
-  display: flex;
-  justify-content: center;
-}
+  h1 {
+    font-size: 2.5em;
+  }
 
-.login-screen-container {
-  text-align: left;
-}
+  footer {
+    background-color: var(--light-gray);
+  }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form label,
-.form input,
-.form button {
-  margin: 0em 0;
-}
-
-input {
-  padding: 10px 20px;
-}
-
-.login-button {
-  display: block;
-  margin: 0 auto;
-  padding: 10px 20px;
-}
-
-.sign-up-text {
-  margin: 1em 0;
-}
-
-.error {
-  color: red;
-}
-
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 200ms ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-
-.signup-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.cancel-button {
-  background-color: gray;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.signup-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.signup-buttons button {
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: #f5f5f5;
-  text-align: center;
-  padding: 10px;
-}
-
+  
 </style>
