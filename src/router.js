@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import LoginScreen from './components/LoginScreen.vue'
-import DashBoard from './components/DashBoard.vue'
 import Campaigns from './components/CampaignsList.vue'
 import Characters from './components/CharactersList.vue'
 import Sessions from './components/SessionsList.vue'
@@ -13,11 +12,6 @@ const routes = [
     path: ROUTER_PATHS.LOGIN,
     name: ROUTER_NAMES.LOGIN,
     component: LoginScreen
-  },
-  {
-    path: ROUTER_PATHS.CHARACTERS,
-    name: ROUTER_NAMES.DASHBOARD,
-    component: DashBoard
   },
   {
     path: ROUTER_PATHS.CAMPAIGNS,

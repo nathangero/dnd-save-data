@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-center body p-0">
+  <div class="d-flex justify-content-center p-0 body ">
     <template v-if="character">
       <div id="card-container-single" class="d-flex flex-column w-100 justify-content-center p-0 m-0"></div>
     </template>
