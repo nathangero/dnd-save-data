@@ -139,6 +139,10 @@ export default {
 
 <style scoped>
 
+#card-container-many {
+  height: 100svh;
+}
+
 li {
   list-style-type: none;
 }
