@@ -1,20 +1,13 @@
 <template>
   <div class="d-flex justify-content-center body">
-
-    <template v-if="character">
-    </template>
-    <template v-else>
-      <div id="card-container" class="d-flex flex-column w-75 justify-content-center p-0 m-auto">
-        <!-- <ul id="character-list" class="p-0">
-        </ul> -->
-      </div>
+    <template v-if="listOfCharacters">
+      <div id="card-container-many" class="d-flex flex-column w-75 justify-content-center p-0 m-auto"></div>
     </template>
   </div>
 </template>
 
 <script>
 
-import Character from '@/models/character'
 import THEME_LIGHT from '@/enums/styles/theme-light.js'
 import THEME_DARK from '@/enums/styles/theme-dark.js'
 import { CHARACTER_KEYS } from '@/enums/dbKeys/character-keys.js'
@@ -25,12 +18,6 @@ export default {
     listOfCharacters: {
       type: Object,
     },
-    character: {
-      type: Character
-    },
-    characterBackupId: {
-      type: String
-    }
   },
   data() {
     return {
@@ -47,12 +34,8 @@ export default {
   },
   mounted: function() {
     this.isDarkMode = this.darkModeMediaQuery.matches;
-    if (this.character) {
-      // Make into an object
-      let charObject = { [this.characterBackupId]: Character.convertCharacterToObj(this.character) }
-      this.setupCharacters(charObject)
-
-    } else if (this.listOfCharacters) {
+    
+    if (this.listOfCharacters) {
       this.setupCharacters(this.listOfCharacters)
     }   
     this.setThemeListener()
@@ -65,13 +48,9 @@ export default {
       // Watch for changes
       this.darkModeMediaQuery.addEventListener("change", () => {
         // Remove the existing cards
-        if (document.getElementById("card-container")) {
-          document.getElementById("card-container").children[0].remove()
-          if (this.character) {
-            let charObject = { [this.characterBackupId]: Character.convertCharacterToObj(this.character) }
-            this.setupCharacters(charObject)
-
-          } else if (this.listOfCharacters) {
+        if (document.getElementById("card-container-many")) {
+          document.getElementById("card-container-many").children[0].remove()
+          if (this.listOfCharacters) {
             this.setupCharacters(this.listOfCharacters)
           }          
         }
@@ -81,7 +60,7 @@ export default {
       let isDarkMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? true : false
       // console.log("@Character Summary dark mode?", isDarkMode)
 
-      let cardContainer = document.getElementById("card-container")
+      let cardContainer = document.getElementById("card-container-many")
       let cards = document.createElement("ul")
       cards.setAttribute("id", "character-list")
       cards.setAttribute("class", "p-0")

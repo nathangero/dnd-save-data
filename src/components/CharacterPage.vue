@@ -1410,10 +1410,10 @@
               <p>(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
                 <ul class="overflow-auto" v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" @click="selectBackup(timestamp, backup)">
-                  <li id="card-container" :class="{ 'selected': selectedBackupTimestamp === timestamp }">
+                  <li :class="{ 'selected': selectedBackupTimestamp === timestamp }">
                     <p>{{ convertTimestampToString(timestamp) }}</p>
                     <hr>
-                    <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
+                    <character-summary-single :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary-single>
                   </li>
                 </ul>
 
@@ -1450,7 +1450,7 @@
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
-import CharacterSummary from './CharacterSummary.vue';
+import CharacterSummarySingle from './CharacterSummarySingle.vue';
 import CharacterBackup from './CharacterBackup.vue';
 import Character from '@/models/character'
 import { CHARACTER_SECTIONS } from "@/enums/character-sections"
@@ -1491,7 +1491,7 @@ export default {
   components: {
     CollapseTransition,
     LoadingSpinner,
-    CharacterSummary,
+    CharacterSummarySingle,
     CharacterBackup
   },
   props: {
@@ -2845,6 +2845,7 @@ export default {
     border-radius: var(--border-radius);
     padding: 20px;
     width: var(--width-popup);
+    max-height: var(--width-popup);
   }
 
   .popup-character-action ul {

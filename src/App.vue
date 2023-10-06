@@ -38,7 +38,7 @@ export default {
   mounted: function() {
     this.darkModeMediaQuery.addEventListener("change", () => {
       this.isDarkMode = this.darkModeMediaQuery.matches;
-      console.log("is dark mode?", this.isDarkMode)
+      // console.log("@App is dark mode?", this.isDarkMode)
 
       document.querySelector('meta[name="theme-color"]').setAttribute("content", this.isDarkMode ? "#000000" : "#ffffff")
     })

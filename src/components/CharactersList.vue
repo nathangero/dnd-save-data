@@ -11,7 +11,7 @@
           
           <!-- Character summary -->
           <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-            <character-summary id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
+            <character-summary-many id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary-many>
           </template>
 
           <nav-bar :activeTab="ROUTER_NAMES.CHARACTERS"></nav-bar>
@@ -39,7 +39,7 @@
 <script>
 import { useStore } from 'vuex'
 import CharacterCreate from './CharacterCreate.vue';
-import CharacterSummary from './CharacterSummary.vue';
+import CharacterSummaryMany from './CharacterSummaryMany.vue';
 import CharacterPage from '@/components/CharacterPage.vue'
 import NavBar from './NavBar.vue';
 import SideMenu from '@/components/SideMenu.vue'
@@ -56,7 +56,7 @@ const TIMEOUT_TRANSITION = 200
 export default {
   components: {
     CharacterCreate,
-    CharacterSummary,
+    CharacterSummaryMany,
     CharacterPage,
     NavBar,
     SideMenu,
