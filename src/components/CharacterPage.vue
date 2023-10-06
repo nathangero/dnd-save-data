@@ -1,10 +1,10 @@
 <template>
   <div class="body">
     <!-- Character Page -->
-    <transition name="slide-up" mode="out-in">
+    <transition name="slide-down" mode="out">
       <div v-if="!isShowingBackup">
         <header :class="{ 'disabled-page': isPopupOpen() }">
-          <nav>
+          <nav class="fixed-top">
             <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
             <template v-if="isShowingJumpToMenu">
               <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
@@ -1607,6 +1607,9 @@ export default {
       weaponTempDescription: '',
     }
   },
+  created() {
+    
+  },
   mounted() {
     window.scrollTo(0,0);
     this.characterToView = Character.convertCharacterToObj(this.store.getters.getUserCharacters[this.characterToViewId])
@@ -2477,13 +2480,11 @@ export default {
 
   /* Navigation Bar */
   nav {
-    position: fixed;
-    top: 0;
     width: 100%;
     background-color: var(--light-gray);
     display: flex;
     justify-content: space-between;
-    z-index: 9999; /* Ensure this is always on top */
+    z-index: 9999;
   }
 
   nav button:disabled {

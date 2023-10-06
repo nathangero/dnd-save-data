@@ -51,6 +51,7 @@ export default {
 @import "./styles/global-constants.css";
 @import "./styles/colors.css";
 @import './styles/popup.css';
+@import './styles/transitions.css';
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

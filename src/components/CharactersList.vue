@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="main">
-      <transition name="slide-up" mode="out-in">
+      <transition name="slide-up" mode="in">
         <div id="character-list" class="overflow-auto" v-if="isShowingCharacterList">
           <side-menu @click="toggleMenu"></side-menu>
           
           <h1>{{ getUserInfo.name }}'s characters</h1>
-          <button @click="toggleModalForCreateCharacter">Create Character</button>
+          <button class="btn btn-secondary fs-5" type="button" @click="toggleModalForCreateCharacter">Create Character</button>
           <hr>
           
           <!-- Character summary -->
@@ -20,14 +20,14 @@
     </div>
 
     <!-- View a character -->
-    <transition name="slide-up" mode="out-in">
+    <transition name="slide-down" mode="in">
       <template v-if="isModalViewCharacterOpen">
         <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalForViewCharacter"></character-page>          
       </template>
     </transition>
 
     <!-- Create a new character -->
-    <transition name="slide-up" mode="out-in">
+    <transition name="slide-down" mode="in">
       <template v-if="isModalNewCharacterOpen">
         <character-create v-if="isModalNewCharacterOpen" @close="toggleModalForCreateCharacter" @created-character="toggleModalForCreateCharacter"></character-create>
       </template>
@@ -123,6 +123,8 @@ export default {
     },
     toggleModalViewCharacter() {
       this.isModalViewCharacterOpen = !this.isModalViewCharacterOpen
+      document.querySelector("body").style.height = "100vh"
+
     },
     toggleModalForViewCharacter(charId) {
       // console.info('charId:', charId)
@@ -177,7 +179,7 @@ div {
   
 }
 
-button {
+/* button {
   color: var(--white);
   padding: 5px 10px;
   margin-top: 10px;
@@ -185,7 +187,7 @@ button {
   border-radius: var(--border-radius);
   font-size: var(--stat-font-size);
   background-color: var(--dimgray);
-}
+} */
 
 #character-summary {
   margin-bottom: 70px;

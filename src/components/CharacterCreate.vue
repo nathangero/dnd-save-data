@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <transition name="slide-up" mode="out-in">
+    <transition name="slide-down" mode="out-in">
       <div>
         <header>
           <nav>
