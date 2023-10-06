@@ -47,6 +47,11 @@ export default {
 </script>
 
 <style scoped>
+/* @import '../styles/reset.css'; */
+@import "./styles/global-constants.css";
+@import "./styles/colors.css";
+@import './styles/popup.css';
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
