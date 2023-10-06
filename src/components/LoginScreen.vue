@@ -25,11 +25,6 @@
       </main>
     </div>
 
-    <footer class="nav fixed-bottom d-flex justify-content-center p-3">
-      <a target="_blank" href="https://icons8.com/icon/104704/dungeons-and-dragons">Dungeons and Dragons</a>
-      <span class="mx-2"> icon by </span>
-      <a target="_blank" href="https://icons8.com">Icons8</a>
-    </footer>
 
     <!-- Reset Email Popup -->
     <div class="popup-overlay" v-if="isOpenPopupResetPassword">
@@ -57,7 +52,7 @@
             <input class="form-control w-100 fs-4 border-0 border-bottom mb-3 mx-auto" type="email" v-model="emailSignup" placeholder="Email">
             <input class="form-control w-100 fs-4 border-0 border-bottom mb-3 mx-auto" type="password" v-model="passwordSignup" placeholder="Password">
             <input class="form-control w-100 fs-4 border-0 border-bottom mb-3 mx-auto" type="password" v-model="passwordConfirm" placeholder="Confirm Password">
-            <p>Password must be at least 6 characters</p>
+            <p class="fs-4">Password must have at least 6 characters, number, and special character</p>
 
             <button class="btn btn-secondary fs-3 mx-3" @click.prevent="togglePopupSignup">Cancel</button>
             <button id="button-signup" class="btn btn-info fs-3 mx-3 " @click.prevent="signup">Sign Up</button>

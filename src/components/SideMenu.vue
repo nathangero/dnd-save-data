@@ -20,6 +20,14 @@
           <p class="m-0">-------------------</p>
           <p>Version: {{ APP_VERSION }}</p>
       </div>
+
+      <footer class="fixed-bottom d-flex flex-column justify-content-center w-75 p-3">
+        <a target="_blank" href="https://icons8.com/icon/104704/dungeons-and-dragons">Dungeons and Dragons</a>
+        <div>
+          <span class="mx-2"> icon by </span>
+          <a target="_blank" href="https://icons8.com">Icons8</a>
+        </div>
+      </footer>
     </div>
   </div>
 </template>
