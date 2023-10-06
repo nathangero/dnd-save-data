@@ -1,25 +1,25 @@
 <template>
   <div>
     <div class="body vh-100">
-      <header>
+      <header :class="{ 'disabled-page': isPopupOpen() }">
         <img class="img-fluid site-logo" src="../assets/icons8-dungeons-and-dragons-480.png" alt="Dungeon's and Dragon's logo by Icons 8">
         <h1>D&D Save Data</h1>
       </header>
 
       <br>
       
-      <main>
+      <main :class="{ 'disabled-page': isPopupOpen() }">
         <form class="d-flex flex-column align-items-center">
-          <input id="email" class="form-control fs-3 border-0 border-bottom  mb-3" type="email" v-model="emailLogin" placeholder="Email">
-          <input id="password" class="form-control fs-3 border-0 border-bottom mb-3" type="password" v-model="passwordLogin" placeholder="Password">
+          <input id="email" class="form-control fs-4 border-0 border-bottom  mb-3" type="email" v-model="emailLogin" placeholder="Email">
+          <input id="password" class="form-control fs-4 border-0 border-bottom mb-3" type="password" v-model="passwordLogin" placeholder="Password">
           <button id="button-login" class="btn fs-1" @click.prevent="login">Login</button>
           <div v-if="error" class="error">{{ error }}</div>
         </form>
 
-        <br><br><br>
-        <div class="mt-5">
-          <p class="fs-3">New user? Signup <a href="#" class="signup-link" @click.prevent="showSignupPopup">here</a></p>
-          <p class="fs-5">Forgot your password? Reset <a href="#" class="signup-link" @click.prevent="showResetPasswordPopup">here</a></p>
+        <br>
+        <div>
+          <p class="fs-3">New user? Signup <a href="#" class="signup-link" @click.prevent="togglePopupSignup">here</a></p>
+          <p class="fs-5">Forgot your password? Reset <a href="#" class="signup-link" @click.prevent="togglePopupResetPassword">here</a></p>
           <p>Version: {{ APP_VERSION }}</p>
         </div>
       </main>
@@ -30,6 +30,42 @@
       <span class="mx-2"> icon by </span>
       <a target="_blank" href="https://icons8.com">Icons8</a>
     </footer>
+
+    <!-- Reset Email Popup -->
+    <div class="popup-overlay" v-if="isOpenPopupResetPassword">
+      <transition name="fade" appear>
+        <div class="d-flex flex-column rounded p-3 popup-form">
+          <h1>Password Reset</h1>
+          <form>
+            <input id="email" class="form-control w-100 fs-3 border-0 border-bottom mb-3 mx-auto" type="email" v-model="emailReset" placeholder="Email">
+
+            <button class="btn btn-secondary fs-3 mx-3" @click.prevent="togglePopupResetPassword">Cancel</button>
+            <button class="btn btn-danger fs-3 mx-3" @click.prevent="resetPassword">Reset</button>
+            <div v-if="error" class="error">{{ error }}</div>
+          </form>
+        </div>
+      </transition>
+    </div>
+
+    <!-- Signup Popup -->
+    <div class="popup-overlay" v-if="isOpenPopupSignup">
+      <transition name="fade" appear>
+        <div class="d-flex flex-column rounded p-3 popup-form">
+          <h1>Sign Up</h1>
+          <form>
+            <input class="form-control w-100 fs-4 border-0 border-bottom mb-3 mx-auto" type="text" v-model="name" placeholder="Name">
+            <input class="form-control w-100 fs-4 border-0 border-bottom mb-3 mx-auto" type="email" v-model="emailSignup" placeholder="Email">
+            <input class="form-control w-100 fs-4 border-0 border-bottom mb-3 mx-auto" type="password" v-model="passwordSignup" placeholder="Password">
+            <input class="form-control w-100 fs-4 border-0 border-bottom mb-3 mx-auto" type="password" v-model="passwordConfirm" placeholder="Confirm Password">
+            <p>Password must be at least 6 characters</p>
+
+            <button class="btn btn-secondary fs-3 mx-3" @click.prevent="togglePopupSignup">Cancel</button>
+            <button id="button-signup" class="btn btn-info fs-3 mx-3 " @click.prevent="signup">Sign Up</button>
+            <div v-if="error" class="error">{{ error }}</div>
+          </form>
+        </div>
+      </transition>
+    </div>
     
     <!-- Loading Spinner -->
     <div v-show="isLoggingIn">
@@ -64,8 +100,8 @@ export default {
       passwordSignup: '',
       passwordConfirm: '',
       error: null,
-      showSignup: false,
-      showResetPassword: false,
+      isOpenPopupSignup: false,
+      isOpenPopupResetPassword: false,
       isLoggingIn: false,
       APP_VERSION: APP_VERSION,
       LOADING_TEXT: LOADING_TEXT,
@@ -79,12 +115,12 @@ export default {
       if (this.emailReset !== '') {
         await sendPasswordResetEmail(auth, this.emailReset).then(() => {
           alert('Password reset email sent. Please check your email')
-          this.hideResetPasswordPopup()
+          this.togglePopupResetPassword()
         })
         .catch((error) => {
           console.error(error)
           alert("Email doesn't exist")
-          this.hideResetPasswordPopup()
+          this.togglePopupResetPassword()
         });
       } else {
         alert("Fill in an email")
@@ -107,7 +143,7 @@ export default {
             setTimeout(() => {
               this.isLoggingIn = false
               this.$router.push(ROUTER_PATHS.CHARACTERS)
-            }, 1500)
+            }, 1200)
           }).catch(() => {
             this.isLoggingIn = false
             alert("User doesn't exist")
@@ -138,6 +174,7 @@ export default {
 
           writeUserInDb(user.uid, this.name, this.emailSignup).then(() => {
             this.store.dispatch('getUserInfo', user.uid)
+            this.$router.push(ROUTER_PATHS.CHARACTERS)
           })
           
         })
@@ -157,7 +194,7 @@ export default {
         }).finally(() => {
           this.isLoggingIn = false
           if (this.name !== '' && this.emailSignup !== '' && this.passwordSignup !== '' && this.passwordConfirm !== '') {
-            this.hideSignupPopup()
+            this.togglePopupSignup()
           }
           
         })
@@ -180,30 +217,21 @@ export default {
 
       return true
     },
-    showSignupPopup() {
-      // Set the showSignup data property to true to display the popup
-      this.showSignup = true
+    isPopupOpen() {
+      return 
+    },
+    togglePopupSignup() {
+      // Set the isOpenPopupSignup data property to true to display the popup
+      this.isOpenPopupSignup = !this.isOpenPopupSignup
       this.name = ''
       this.emailSignup = ''
       this.passwordSignup = ''
       this.passwordConfirm = ''
     },
-    showResetPasswordPopup() {
-      this.showResetPassword = true
+    togglePopupResetPassword() {
+      this.isOpenPopupResetPassword = !this.isOpenPopupResetPassword
       this.emailReset = ''
     },
-    hideSignupPopup() {
-      // Set the showSignup data property to false to hide the popup
-      this.showSignup = false
-      this.name = ''
-      this.emailSignup = ''
-      this.passwordSignup = ''
-      this.passwordConfirm = ''
-    },
-    hideResetPasswordPopup() {
-      this.showResetPassword = false
-      this.emailReset = ''
-    }
   }, // height: 100px; width: 100px; border-width: 5px; border-style: solid; border-color: rgb(93, 197, 150) rgb(93, 197, 150) transparent; border-radius: 100%; background: transparent;
   computed: {
     spinnerStyle () {
@@ -240,9 +268,22 @@ export default {
     height: auto;
   }
 
-  #button-login {
+  .popup-form {
+    background-color: var(--white);
+  }
+
+  .disabled-page {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none; 
+    visibility: hidden;
+  }
+
+  #button-login,
+  #button-signup {
     background-color: var(--blue);
     border-radius: var(--border-radius);
+    color: var(--white);
   }
 
   @media screen and (min-width: 600px) {
@@ -290,7 +331,16 @@ export default {
       color: var(--a-dark);
     }
 
-    #button-login {
+    .popup-form {
+      background-color: var(--black);
+      border: 2px solid var(--white);
+    }
+
+    .popup-form p {
+      color: var(--white);
+    }
+
+    .popup-form h1 {
       color: var(--white);
     }
   }

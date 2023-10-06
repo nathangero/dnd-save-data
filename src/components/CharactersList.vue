@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="main">
+    <div class="main vh-100">
       <transition name="slide-up" mode="out-in">
         <div id="character-list" class="overflow-auto" v-if="isShowingCharacterList">
           <side-menu @click="toggleMenu"></side-menu>
