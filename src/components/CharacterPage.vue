@@ -1,10 +1,10 @@
 <template>
   <div class="body">
     <!-- Character Page -->
-    <transition name="slide-up" mode="out-in">
+    <transition name="slide-down" mode="out">
       <div v-if="!isShowingBackup">
         <header :class="{ 'disabled-page': isPopupOpen() }">
-          <nav>
+          <nav class="fixed-top">
             <button class="nav-bar-button" @click="openJumpToMenu">Jump to</button>
             <template v-if="isShowingJumpToMenu">
               <div class="jump-to-menu" :class="{ 'show-menu': isShowingJumpToMenu }">
@@ -1409,11 +1409,11 @@
               <h1>Select a backup to view</h1>
               <p>(Showing most recent {{ CONST_NUMS.BACKUP_LIMIT }} backups)</p>
 
-                <ul v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" @click="selectBackup(timestamp, backup)">
+                <ul class="overflow-auto" v-for="(backup, timestamp) in store.getters.getCharacterBackups[this.characterToViewId]" :key="timestamp" @click="selectBackup(timestamp, backup)">
                   <li :class="{ 'selected': selectedBackupTimestamp === timestamp }">
                     <p>{{ convertTimestampToString(timestamp) }}</p>
                     <hr>
-                    <character-summary :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary>
+                    <character-summary-single :character="backup" :characterBackupId="characterToViewId" @openModal="toggleModalViewCharacter"></character-summary-single>
                   </li>
                 </ul>
 
@@ -1450,7 +1450,7 @@
 import { useStore } from 'vuex'
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
-import CharacterSummary from './CharacterSummary.vue';
+import CharacterSummarySingle from './CharacterSummarySingle.vue';
 import CharacterBackup from './CharacterBackup.vue';
 import Character from '@/models/character'
 import { CHARACTER_SECTIONS } from "@/enums/character-sections"
@@ -1491,7 +1491,7 @@ export default {
   components: {
     CollapseTransition,
     LoadingSpinner,
-    CharacterSummary,
+    CharacterSummarySingle,
     CharacterBackup
   },
   props: {
@@ -1606,6 +1606,9 @@ export default {
       weaponTempProperties: '', // e.g. finesse, light
       weaponTempDescription: '',
     }
+  },
+  created() {
+    
   },
   mounted() {
     window.scrollTo(0,0);
@@ -2477,13 +2480,11 @@ export default {
 
   /* Navigation Bar */
   nav {
-    position: fixed;
-    top: 0;
     width: 100%;
     background-color: var(--light-gray);
     display: flex;
     justify-content: space-between;
-    z-index: 9999; /* Ensure this is always on top */
+    z-index: 9999;
   }
 
   nav button:disabled {
@@ -2506,7 +2507,7 @@ export default {
     background-color: var(--white);
     border-bottom: 3px solid dimgray; /* Add a border to the bottom */
     border-right: 3px solid dimgray; /* Add a border to the right */
-    border-radius: var(--border-radius);
+    border-radius: 0 0 var(--border-radius) 0;
     max-height: 340px; /* Adjust the height as needed */
     overflow-y: auto;
   }
@@ -2845,6 +2846,7 @@ export default {
     border-radius: var(--border-radius);
     padding: 20px;
     width: var(--width-popup);
+    max-height: var(--width-popup);
   }
 
   .popup-character-action ul {
@@ -2885,6 +2887,7 @@ export default {
 
   .selected {
     background-color: var(--yellow);
+    color: var(--black);
   }
 
   #character-background {
@@ -2901,5 +2904,71 @@ export default {
     width: 100%;
     margin: 0 auto;
     text-wrap: warp;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    nav {
+      background-color: rgb(49, 49, 49);
+    }
+
+    nav .jump-to-menu {
+      background-color: var(--black);
+      border-radius: 0 0 var(--border-radius) 0;
+    }
+
+    section li input {
+      background-color: var(--black);
+      color: var(--white);
+      border: none;
+      border-bottom: 1px solid var(--white);
+    }
+
+    section li select {
+      font-size: var(--select-font-size);
+      padding: 10px;
+      background-color: var(--black);
+      border: 1px solid var(--white);
+      color: var(--white);
+      border-radius: var(--border-radius);
+    }
+
+    .new-character .name,
+    .editing .name {
+      width: var(--width-close-to-mobile-screen);
+      border: none; /* Remove the default border */
+      border-bottom: 1px solid var(--white); /* Add a bottom border */
+      color: var(--white);
+      outline: none;
+      text-align: center;
+      margin: 10px auto;
+      font-size: var(--stat-font-size);
+    }
+
+
+    .editing textarea,
+    .editing-spells textarea {
+      width: var(--width-close-to-mobile-screen);
+      padding: 10px;
+      margin: 0 auto;
+      font-size: var(--select-font-size);
+      border-color: var(--white);
+      border-radius: var(--border-radius);
+      background-color: var(--black);
+      color: var(--white);
+    }
+
+    .body {
+      background-color: black;
+      color: white;
+    }
+
+    .popup-character-action {
+      background-color: var(--black);
+      border: 2px solid var(--white)
+    }
+
+    #card-container {
+      border: 2px solid var(--white);
+    }
   }
 </style>

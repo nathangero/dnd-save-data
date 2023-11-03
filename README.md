@@ -53,6 +53,7 @@ My friends and I are brand new D&D players as of the creation of this project, a
 - Maybe integrate some API to get descriptions for Equipment, Feats, Traits, etc.?
 
 ## Credits
+
 [Collapsible vue component](https://github.com/ivanvermeyen/vue-collapse-transition)
 
 [Site favicon](https://icons8.com/icon/104704/dungeons-and-dragons)
@@ -67,3 +68,10 @@ My friends and I are brand new D&D players as of the creation of this project, a
 
 [vue.config.js optimization](https://medium.com/codex/slash-your-load-times-shrink-the-chunk-vendors-js-size-in-vue3-72072428dd2a)
 
+[Media query for x-small screens](https://blisk.io/devices/details/iphone-se-2020)
+
+[Placeholder color](https://www.w3schools.com/howto/howto_css_placeholder.asp)
+
+[Password regex](https://www.thepolyglotdeveloper.com/2015/05/use-regex-to-test-password-strength-in-javascript/)
+
+[meta tag for theme-color](https://medium.com/@evkirkiles/coloring-the-webkit-browser-bars-28d75cd8cf7f)

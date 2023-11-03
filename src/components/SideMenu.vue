@@ -1,12 +1,12 @@
 <template>
   <div>
-    <a class="btn d-flex justify-content-start" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
+    <button class="btn d-flex justify-content-start" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
       <div class="hamburger-menu m-3">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
       </div>
-    </a>
+    </button>
 
     <div class="offcanvas offcanvas-start w-75" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
       <div class="offcanvas-header">
@@ -20,6 +20,14 @@
           <p class="m-0">-------------------</p>
           <p>Version: {{ APP_VERSION }}</p>
       </div>
+
+      <footer class="fixed-bottom d-flex flex-column justify-content-center w-75 p-3">
+        <a target="_blank" href="https://icons8.com/icon/104704/dungeons-and-dragons">Dungeons and Dragons</a>
+        <div>
+          <span class="mx-2"> icon by </span>
+          <a target="_blank" href="https://icons8.com">Icons8</a>
+        </div>
+      </footer>
     </div>
   </div>
 </template>
@@ -68,6 +76,24 @@ export default {
 .hamburger-line {
   width: 100%;
   height: 3px;
-  background-color: #000;
+  background-color: var(--black);
+}
+
+@media (prefers-color-scheme: dark) {
+
+  #offcanvas {
+    background-color: var(--black);
+    color: var(--white);
+    border-right: 1px solid var(--dimgray);
+  }
+
+  #offcanvas button {
+    background-color: var(--white);
+    opacity: 0.8;
+  }
+
+  .hamburger-line {
+    background-color: var(--white);
+  }
 }
 </style>

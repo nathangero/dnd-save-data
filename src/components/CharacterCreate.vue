@@ -1,6 +1,6 @@
 <template>
-  <div id="body">
-    <transition name="slide-up" mode="out-in">
+  <div class="body">
+    <transition name="slide-down" mode="out-in">
       <div>
         <header>
           <nav>
@@ -1554,7 +1554,7 @@ export default {
         [SPELL_SLOT_KEYS.CURRENT]: parseInt(this.spellSlotTempSlots),
         [SPELL_SLOT_KEYS.MAX]: parseInt(this.spellSlotTempSlots),
       }
-      console.log("slot:", slot)
+      
       this.newCharacter.spellSlots[this.spellSlotTempLevel] = slot
       
       this.spellSlotTempLevel = ''
@@ -1612,8 +1612,6 @@ export default {
 
         this.newCharacter.spells[this.spellTempLevel] = newEntry
       }
-
-      console.info('this.spells:', this.newCharacter.spells)
       
       this.spellTempName = ''
       this.spellTempLevel = ''
@@ -1719,9 +1717,7 @@ export default {
       return true
     },
     createCharacter() {
-      // console.info("@createCharacter")
       if (this.canCreateCharacter()) {
-        console.info('character:', this.newCharacter)
         this.store.dispatch("addCharacterToDb", this.newCharacter).then((success => {
           if (success) {
             alert(`Created new character, ${this.newCharacter.name}!`)
@@ -1731,35 +1727,6 @@ export default {
           }
         }))
       }
-    },
-    createCharacterDictionary() {
-      var newCharacter = new Character(
-        this.characterAlignment,
-        this.characterArmor,
-        this.characterBackground,
-        this.characterClass,
-        this.deathSaves,
-        this.equipment,
-        this.featuresTraits,
-        this.gold,
-        this.hp,
-        this.languages,
-        this.level,
-        this.characterName,
-        this.proficiencies,
-        this.characterRace,
-        this.savingThrows,
-        this.skills,
-        this.characterSpeed,
-        this.spellCastStat,
-        this.spells,
-        this.spellSlots,
-        this.scores,
-        this.weapons,
-        new Date().getTime()
-      )
-
-      return newCharacter
     },
     calculatePassivePerception() {
       const result = 10 + this.newCharacter.scores[STAT_KEYS.WISDOM].calculateMod()
@@ -1789,7 +1756,7 @@ export default {
       if (stat === '') {
         return 0
       } else {
-        return this.scores[stat].calculateMod()
+        return this.newCharacter.scores[stat].calculateMod()
       }
       
     },
@@ -1801,13 +1768,14 @@ export default {
       }
     },
     getProficiencyBonus() {
-      if (this.level <= 4) {
+      let charLevel = this.newCharacter.level
+      if (charLevel <= 4) {
         return 2
-      } else if (this.level <= 8) {
+      } else if (charLevel <= 8) {
         return 3
-      } else if (this.level <= 12) {
+      } else if (charLevel <= 12) {
         return 4
-      } else if (this.level <= 16) {
+      } else if (charLevel <= 16) {
         return 5
       } else {
         return 6
@@ -2058,7 +2026,7 @@ export default {
   section li select {
     font-size: var(--select-font-size);
     padding: 10px;
-    background-color: white;
+    /* background-color: white; */
     border: 1px solid black;
     color: black;
     border-radius: var(--border-radius);
@@ -2091,7 +2059,8 @@ export default {
     margin: 5px 0;
   }
 
-  .new-character .name {
+  .new-character .name,
+  .editing .name {
     width: var(--width-close-to-mobile-screen);
     border: none; /* Remove the default border */
     border-bottom: 1px solid black; /* Add a bottom border */
@@ -2150,16 +2119,6 @@ export default {
   .editing strong {
     margin-bottom: 10px;
     text-decoration: underline;
-  }
-
-  .editing .name {
-    width: var(--width-close-to-mobile-screen);
-    border: none; /* Remove the default border */
-    border-bottom: 1px solid black; /* Add a bottom border */
-    outline: none;
-    text-align: center;
-    margin: 15px auto;
-    font-size: var(--stat-font-size);
   }
 
   .editing textarea,
@@ -2305,5 +2264,62 @@ export default {
     width: 100%;
     margin: 0 auto;
     text-wrap: warp;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    nav {
+      background-color: rgb(49, 49, 49);
+    }
+
+    nav .jump-to-menu {
+      background-color: var(--black);
+      border-radius: 0 0 var(--border-radius) 0;
+    }
+
+    section li input {
+      background-color: var(--black);
+      color: var(--white);
+      border: none;
+      border-bottom: 1px solid var(--white);
+    }
+
+    section li select {
+      font-size: var(--select-font-size);
+      padding: 10px;
+      background-color: var(--black);
+      border: 1px solid var(--white);
+      color: var(--white);
+      border-radius: var(--border-radius);
+    }
+
+    .new-character .name,
+    .editing .name {
+      width: var(--width-close-to-mobile-screen);
+      border: none; /* Remove the default border */
+      border-bottom: 1px solid var(--white); /* Add a bottom border */
+      color: var(--white);
+      outline: none;
+      text-align: center;
+      margin: 10px auto;
+      font-size: var(--stat-font-size);
+    }
+
+
+    .editing textarea,
+    .editing-spells textarea {
+      width: var(--width-close-to-mobile-screen);
+      padding: 10px;
+      margin: 0 auto;
+      font-size: var(--select-font-size);
+      border-color: var(--white);
+      border-radius: var(--border-radius);
+      background-color: var(--black);
+      color: var(--white);
+    }
+
+    .body {
+      background-color: black;
+      color: white;
+    }
   }
 </style>

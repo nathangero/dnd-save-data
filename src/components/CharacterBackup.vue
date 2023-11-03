@@ -587,7 +587,7 @@
           <h1>Overwrite existing data for <strong>{{ characterToView.name }}</strong>?</h1>
           <p>This action can't be undone</p>
           <div class="popup-buttons">
-            <button class="button-delete" @click="toggleOverwritePopup">Cancel</button>
+            <button class="button-cancel" @click="toggleOverwritePopup"><strong>Cancel</strong></button>
             <button class="button-backup" @click="onPressOverwriteSave">Yes</button>
           </div>
         </div>
@@ -601,8 +601,8 @@
           <h1>Delete backup for <strong>{{ characterToView.name }}</strong>?</h1>
           <p>This action can't be undone</p>
           <div class="popup-buttons">
-            <button class="button-delete" @click="toggleDeleteBackupPopup">Cancel</button>
-            <button class="button-backup" @click="onPressDeleteBackup">Yes</button>
+            <button class="button-cancel" @click="toggleDeleteBackupPopup"><strong>Cancel</strong></button>
+            <button class="button-delete" @click="onPressDeleteBackup">Yes</button>
           </div>
         </div>
       </transition>
@@ -1296,5 +1296,25 @@ export default {
     width: 100%;
     margin: 0 auto;
     text-wrap: warp;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    nav {
+      background-color: rgb(49, 49, 49);
+    }
+    nav .jump-to-menu {
+      background-color: var(--black);
+      border-radius: 0 0 var(--border-radius) 0;
+    }
+
+    .body {
+      background-color: black;
+      color: white;
+    }
+
+    .popup-character-action {
+      background-color: var(--black);
+      border: 2px solid var(--white)
+    }
   }
 </style>

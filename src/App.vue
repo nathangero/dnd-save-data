@@ -14,17 +14,45 @@ export default {
   components: {
     
   },
+  data() {
+    return {
+      darkModeMediaQuery: window.matchMedia('(prefers-color-scheme: dark)'),
+      isDarkMode: true,
+    }
+  },
   computed: {
     ...mapState(['isLoggedIn'])
   },
   created() {
-    
     document.title = "DND Save Data";
+
+    this.isDarkMode = this.darkModeMediaQuery.matches;
+
+    // Make the status bar on mobile match the background color
+    const metaTag = document.createElement("meta");
+    metaTag.name = "theme-color";
+    metaTag.content = this.isDarkMode ? "#000000" : "#ffffff"; // Make black or white 
+    document.head.children[3]
+    document.head.appendChild(metaTag);
+  },
+  mounted: function() {
+    this.darkModeMediaQuery.addEventListener("change", () => {
+      this.isDarkMode = this.darkModeMediaQuery.matches;
+      // console.log("@App is dark mode?", this.isDarkMode)
+
+      document.querySelector('meta[name="theme-color"]').setAttribute("content", this.isDarkMode ? "#000000" : "#ffffff")
+    })
   }
 }
 </script>
 
 <style scoped>
+/* @import '../styles/reset.css'; */
+@import "./styles/global-constants.css";
+@import "./styles/colors.css";
+@import './styles/popup.css';
+@import './styles/transitions.css';
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

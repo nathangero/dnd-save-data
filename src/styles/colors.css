@@ -7,4 +7,13 @@
   --red: #dd3528;
   --blue: #42B6E8;
   --yellow: yellow;
+
+  --nav-bg-light: rgb(246, 246, 246);
+  --nav-active-bg-light: white;
+  --nav-bg-dark: rgb(49, 49, 49);
+  --nav-active-bg-dark: black;
+
+  --a-dark: #49BCFF;
+
+  --placeholder-opacity: 0.7;
 }

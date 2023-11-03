@@ -1,45 +1,33 @@
 <template>
   <div>
-    <transition name="slide-up" mode="out-in">
-      <div class="overflow-auto" v-if="isShowingCharacterList">
-        <side-menu @click="toggleMenu"></side-menu>
-        
-        <h1>{{ getUserInfo.name }}'s characters</h1>
-        <button @click="toggleModalForCreateCharacter">Create Character</button>
-        <hr>
-        
-        <!-- Character summary -->
-        <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
-          <character-summary id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary>
-        </template>
+    <div class="main">
+      <transition name="slide-up" mode="in">
+        <div id="character-list" class="overflow-auto" v-if="isShowingCharacterList">
+          <side-menu @click="toggleMenu"></side-menu>
+          
+          <h1>{{ getUserInfo.name }}'s characters</h1>
+          <button class="btn btn-secondary fs-5" type="button" @click="toggleModalForCreateCharacter">Create Character</button>
+          <hr>
+          
+          <!-- Character summary -->
+          <template v-if="getDictionarySize(store.getters.getUserCharacters) > 0">
+            <character-summary-many id="character-summary" :list-of-characters="store.getters.getUserCharacters" @openModal="toggleModalForViewCharacter"></character-summary-many>
+          </template>
 
-        <nav>
-          <ul class="nav justify-content-between fixed-bottom text-capitalize fs-5 custom-navbar">
-            <li class="nav-item" @click="navigateTo(ROUTER_NAMES.CAMPAIGNS)">
-              <a class="nav-link text-dark text-lg-center p-3">{{ ROUTER_NAMES.CAMPAIGNS }}</a>
-            </li>
-            
-            <li class="nav-item custom-active" @click="navigateTo(ROUTER_NAMES.CHARACTERS)">
-              <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.CHARACTERS }}</a>
-            </li>
-
-            <li class="nav-item" @click="navigateTo(ROUTER_NAMES.SESSIONS)">
-              <a class="nav-link text-dark p-3">{{ ROUTER_NAMES.SESSIONS }}</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </transition>
+          <nav-bar :activeTab="ROUTER_NAMES.CHARACTERS"></nav-bar>
+        </div>
+      </transition>
+    </div>
 
     <!-- View a character -->
-    <transition name="slide-up" mode="out-in">
+    <transition name="slide-down" mode="in">
       <template v-if="isModalViewCharacterOpen">
         <character-page v-if="isModalViewCharacterOpen" :characterToViewId="characterToViewId" @close="toggleModalForViewCharacter"></character-page>          
       </template>
     </transition>
 
     <!-- Create a new character -->
-    <transition name="slide-up" mode="out-in">
+    <transition name="slide-down" mode="in">
       <template v-if="isModalNewCharacterOpen">
         <character-create v-if="isModalNewCharacterOpen" @close="toggleModalForCreateCharacter" @created-character="toggleModalForCreateCharacter"></character-create>
       </template>
@@ -51,8 +39,9 @@
 <script>
 import { useStore } from 'vuex'
 import CharacterCreate from './CharacterCreate.vue';
-import CharacterSummary from './CharacterSummary.vue';
+import CharacterSummaryMany from './CharacterSummaryMany.vue';
 import CharacterPage from '@/components/CharacterPage.vue'
+import NavBar from './NavBar.vue';
 import SideMenu from '@/components/SideMenu.vue'
 import Character from '@/models/character'
 import Cookies from 'js-cookie'
@@ -67,8 +56,9 @@ const TIMEOUT_TRANSITION = 200
 export default {
   components: {
     CharacterCreate,
-    CharacterSummary,
+    CharacterSummaryMany,
     CharacterPage,
+    NavBar,
     SideMenu,
   },
   data() {
@@ -88,7 +78,7 @@ export default {
       HP_KEYS: HP_KEYS,
     }
   },
-  mounted() {
+  mounted: function() {
     if (this.store.getters.getUser.id === '') {
       try {
         const userCookie = Cookies.get(COOKIE_NAMES.USER)
@@ -133,6 +123,8 @@ export default {
     },
     toggleModalViewCharacter() {
       this.isModalViewCharacterOpen = !this.isModalViewCharacterOpen
+      document.querySelector("body").style.height = "100vh"
+
     },
     toggleModalForViewCharacter(charId) {
       // console.info('charId:', charId)
@@ -187,7 +179,7 @@ div {
   
 }
 
-button {
+/* button {
   color: var(--white);
   padding: 5px 10px;
   margin-top: 10px;
@@ -195,10 +187,23 @@ button {
   border-radius: var(--border-radius);
   font-size: var(--stat-font-size);
   background-color: var(--dimgray);
-}
+} */
 
 #character-summary {
   margin-bottom: 70px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .main {
+    background-color: black;
+    color: white;
+  }
+}
+
+@media only screen and (min-width: 768px) and (prefers-color-scheme: dark) {
+  #character-list {
+    height: 100vh;
+  }
 }
 
 </style>
