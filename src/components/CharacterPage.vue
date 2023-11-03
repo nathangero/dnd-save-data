@@ -103,8 +103,8 @@
             <collapse-transition dimension="height">
               <div v-if="isShowingCharacterInfo"> 
                 <div v-if="!isEditingCharInfo">
-                  <ul>
-                    <li>
+                  <ul class="card bg-light p-3 m-3" :class="{ 'bg-dark': isDarkMode }">
+                    <li class="">
                       <label>Level:</label>
                       <label><strong>{{ characterToView.level }}</strong></label>
                     </li>
@@ -318,7 +318,7 @@
             <collapse-transition dimension="height">
               <div v-if="isShowingAbilityScores">
                 <div v-if="!isEditingAbilityScores">
-                  <ul>
+                  <ul class="card bg-light p-2 m-3" :class="{ 'bg-dark': isDarkMode }">
                     <li v-for="(score, key) in STAT_KEYS" :key="key">
                       <label>{{ STAT_NAMES[score] }}:</label>
                       <div>
@@ -372,7 +372,7 @@
 
             <collapse-transition dimension="height">
               <div v-if="isShowingSavingThrows">
-                <ul>
+                <ul class="card bg-light p-2 m-3" :class="{ 'bg-dark': isDarkMode }">
                   <li v-for="(stat, key) in STAT_KEYS" :key="key">
                     <div>
                       <input type="checkbox" class="checkbox" v-model="characterToView.savingThrows[stat].proficient" :disabled="!isEditingSavingThrows">
@@ -419,7 +419,7 @@
 
             <collapse-transition dimension="height">
               <div v-if="isShowingSkills">
-                <ul>
+                <ul class="card bg-light p-2 m-3" :class="{ 'bg-dark': isDarkMode }">
                   <li v-for="(skill, key) in SKILL_KEYS" :key="key">
                       <div>
                         <input type="checkbox" class="checkbox" v-model="characterToView.skills[skill].proficient" :disabled="!isEditingSkills">
@@ -448,7 +448,7 @@
 
           <br>
           <section id="features-traits">
-            <header>
+            <header class="">
               <div class="spacer">
                 <button class="button-edit" v-if="!isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Edit</button>
                 <button class="button-edit" v-if="isEditingFeaturesTraits" @click="toggleEditForSection(CHARACTER_SECTIONS.FEATURES_TRAITS)">Finish</button>
@@ -508,14 +508,21 @@
                 <template v-if="getDictionarySize(characterToView.featuresTraits) > 0">
                   <div class="viewing" v-if="!isEditingFeaturesTraits">
                     <ul v-for="(item, key) in characterToView.featuresTraits" :key="key">
-                      <li>
+                      <!-- <li>
                         <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[FEATURES_KEYS.USES] }}</label>
                         <p>Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
                         <p>Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
                         <p class="description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
                       </li>
+                      <hr class="list-divider"> -->
 
-                      <hr class="list-divider">
+                      <li class="card bg-light p-3" :class="{ 'bg-dark': isDarkMode }">
+                        <label class="card-title name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[FEATURES_KEYS.USES] }}</label>
+                        <p>Type: {{ item[FEATURES_KEYS.TYPE] }}</p>
+                        <p>Action Type: {{ item[FEATURES_KEYS.ACTION] }}</p>
+                        <p class="description">{{ item[FEATURES_KEYS.DESCRIPTION] }}</p>
+                      </li>
+
                     </ul>
                   </div>
 
@@ -638,7 +645,7 @@
                 <template v-if="getDictionarySize(characterToView.weapons) > 0">
                   <div class="viewing" v-if="!isEditingWeapons">
                     <ul v-for="(item, key) in characterToView.weapons" :key="key">
-                      <li>
+                      <li class="card bg-light p-3" :class="{ 'bg-dark': isDarkMode }">
                         <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[WEAPON_KEYS.AMOUNT] }}</label>
 
                         <div>
@@ -677,7 +684,7 @@
                         <p class="description">{{ item[WEAPON_KEYS.DESCRIPTION] }}</p>
                       </li>
 
-                      <hr class="list-divider">
+                      <!-- <hr class="list-divider"> -->
                     </ul>
                   </div>
 
@@ -786,7 +793,9 @@
                 <div id="gold">
                   <div class="viewing" v-if="!isEditingEquipment">
                     <ul>
-                      <li><label class="name-and-count"><strong>Gold</strong>&emsp;x{{ characterToView.gold }}</label></li>
+                      <li class="card bg-light p-3" :class="{ 'bg-dark': isDarkMode }">
+                        <label class="name-and-count"><strong>Gold</strong>&emsp;x{{ characterToView.gold }}</label>
+                      </li>
                     </ul>
                   </div>
 
@@ -806,12 +815,12 @@
                 <template v-if="getDictionarySize(characterToView.equipment) > 0">
                   <div class="viewing" v-if="!isEditingEquipment">
                     <ul v-for="(item, key) in characterToView.equipment" :key="key">
-                      <li>
+                      <li class="card bg-light p-3" :class="{ 'bg-dark': isDarkMode }">
                         <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
                         <p class="description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
                       </li>
 
-                      <hr class="list-divider">
+                      <!-- <hr class="list-divider"> -->
                     </ul>
                   </div>
                   
@@ -895,12 +904,12 @@
                 <template v-if="getDictionarySize(characterToView.treasures) > 0">
                   <div class="viewing" v-if="!isEditingTreasure">
                     <ul  v-for="(item, key) in characterToView.treasures" :key="key">
-                      <li>
+                      <li class="card bg-light p-3" :class="{ 'bg-dark': isDarkMode }">
                         <label class="name-and-count"><strong>{{ key }}</strong>&emsp;x{{ item[EQUIPMENT_KEYS.AMOUNT] }}</label>
                         <p class="description">{{ item[EQUIPMENT_KEYS.DESCRIPTION] }}</p>
                       </li>
 
-                      <hr class="list-divider">
+                      <!-- <hr class="list-divider"> -->
                     </ul>
                   </div>
 
@@ -984,7 +993,7 @@
                   <template v-if="getDictionarySize(characterToView.languages) > 0">
                     <div class="viewing" v-if="!isEditingLanguages">
                       <ul v-for="(item, key) in characterToView.languages" :key="key">
-                        <li class="inline">
+                        <li class="card bg-light inline p-3" :class="{ 'bg-dark': isDarkMode }">
                           <label><strong>{{ key }}</strong>:</label>
                           <p>{{ item }}</p>
                         </li>
@@ -1063,7 +1072,7 @@
                 <template v-if="getDictionarySize(characterToView.proficiencies) > 0">
                   <div class="viewing" v-if="!isEditingProficiencies">
                     <ul v-for="(item, key) in characterToView.proficiencies" :key="key">
-                      <li>
+                      <li class="card bg-light p-3" :class="{ 'bg-dark': isDarkMode }">
                         <label class="name-and-count"><strong>{{ key }}</strong></label>
                         <p class="description">{{ item }}</p>
                       </li>
@@ -1147,7 +1156,7 @@
                 <template v-if="getDictionarySize(characterToView.spellSlots) > 0">
                   <div class="viewing" v-if="!isEditingSpellSlots">
                     <ul v-for="(item, key) in characterToView.spellSlots" :key="key">
-                      <li class="inline">
+                      <li class="card bg-light inline p-3" :class="{ 'bg-dark': isDarkMode }">
                         <label><strong>{{ SPELL_CASTING_NAMES[key] }}</strong>:</label>
                         <div class="spell-slot-row">
                           <label>{{ item[SPELL_SLOT_KEYS.CURRENT] }} / {{ item[SPELL_SLOT_KEYS.MAX] }} slots</label>
@@ -1273,35 +1282,37 @@
                         </li>
 
                         <ul v-for="(spell, spellName) in levelDict" :key="spellName">
-                          <li class="spell-name">
-                            <label><strong>{{ spellName }}</strong></label>
-                          </li>
+                          <div class="card bg-light p-3 my-2 mx-3" :class="{ 'bg-dark': isDarkMode }">
+                            <li class="spell-name">
+                              <label><strong>{{ spellName }}</strong></label>
+                            </li>
 
-                          <li>
-                            <label>Cast Time:</label>
-                            <label>{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
-                          </li>
+                            <li class="inline">
+                              <label>Cast Time:</label>
+                              <label>{{ spell[[SPELL_CASTING_KEYS.CASTING_TIME]] }} action(s)</label>
+                            </li>
 
-                          <li>
-                            <label>Duration:</label>
-                            <label>{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
-                          </li>
+                            <li>
+                              <label>Duration:</label>
+                              <label>{{ spell[[SPELL_CASTING_KEYS.DURATION]] }} {{ spell[[SPELL_CASTING_KEYS.DURATION_TYPE]] }}</label>
+                            </li>
 
-                          <li>
-                            <label>Range:</label>
-                            <label>{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
-                          </li>
+                            <li>
+                              <label>Range:</label>
+                              <label>{{ spell[[SPELL_CASTING_KEYS.RANGE]] }} ft</label>
+                            </li>
 
-                          <li>
-                            <p class="description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</p>
-                          </li>
+                            <li>
+                              <p class="description">{{ spell[[SPELL_CASTING_KEYS.DESCRIPTION]] }}</p>
+                            </li>
+                          </div>
                         </ul>
                       </template>
                       
                       <!-- Show the divider after every spell level -->
-                      <li>
+                      <!-- <li>
                         <hr class="list-divider">
-                      </li>
+                      </li> -->
                     </ul>
                   </div>
                   
@@ -1605,6 +1616,8 @@ export default {
       weaponTempIsProficient: '', // e.g. d8
       weaponTempProperties: '', // e.g. finesse, light
       weaponTempDescription: '',
+      darkModeListener: window.matchMedia('(prefers-color-scheme: dark)'),
+      isDarkMode: true,
     }
   },
   created() {
@@ -1614,6 +1627,8 @@ export default {
     window.scrollTo(0,0);
     this.characterToView = Character.convertCharacterToObj(this.store.getters.getUserCharacters[this.characterToViewId])
     // console.info('this.characterToView:', this.characterToView)
+    this.isDarkMode = this.darkModeListener.matches;
+    this.darkModeListener.addEventListener("change", () => this.isDarkMode = this.darkModeListener.matches)
   },
   watch: {
     'spellTempDurationType': function(newValue) {
@@ -2567,7 +2582,7 @@ export default {
   section li {
     display: inherit;
     justify-content: space-between;
-    width: 85%;
+    width: 100%;
     margin: 5px 0;
     text-wrap: warp;
   }
