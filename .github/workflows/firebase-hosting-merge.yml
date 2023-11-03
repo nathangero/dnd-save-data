@@ -28,6 +28,9 @@ jobs:
 
       - name: Check Firebase CLI version
         run: firebase --version
+
+      - name: Build dist
+        run: npm run build
         
       - name: Set Firebase token
         run: echo FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }} >> $GITHUB_ENV
